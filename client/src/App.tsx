@@ -1,8 +1,16 @@
 import React from 'react';
+import { Route, Switch } from 'react-router-dom';
+import GlobalStyles from './GlobalStyles';
+import HomePage from './pages/HomePage';
 
 function App() {
   return (
-    <div></div>
+    <>
+      <GlobalStyles />
+      <Switch>
+        <Route path="/" exact component={HomePage} />
+      </Switch>
+    </>
   );
 }
 

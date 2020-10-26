@@ -1,5 +1,5 @@
 import React from 'react'
-import styled, {css} from 'styled-components';
+import styled from 'styled-components';
 import palette from '../../lib/styles/palette';
 
 export interface IdTextProps {
@@ -13,16 +13,13 @@ function IdText({text}: IdTextProps) {
   )
 }
 
-const idStyle = css`
+const IdDiv = styled.div`
   font-weight: 300;
   font-style: italic;
-  color: ${palette.gray7};
+  color: ${palette.gray[7]};
   font-size: 1rem;
   display: inline-flex;
   align-items: center;
 `
-const IdDiv = styled.div`
-  ${idStyle}
-`;
 
 export default IdText
