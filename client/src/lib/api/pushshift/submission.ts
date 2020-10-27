@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-export async function getSubmissions(subredditName: string) {
-  const response = await axios.get<{data: Submission[]}>(
+export async function getSubmissionsAPI(subredditName: string) {
+  const response = await axios.get<{ data: Submission[] }>(
     `https://api.pushshift.io/reddit/search/submission/?subreddit=${subredditName}`,
   );
   return response.data.data;

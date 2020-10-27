@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { Submission } from '../../lib/api/pushshift/submission';
 import palette, { actionColorMap } from '../../lib/styles/palette';
-import { selectSubmission } from '../../modules/post';
+import { selectSubmission } from '../../modules/post/slice';
 import AuthorText from '../common/AuthorText';
 import BodyText from '../common/BodyText';
 import FlairText from '../common/FlairText';

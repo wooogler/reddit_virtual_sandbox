@@ -1,10 +1,16 @@
-import { takeEvery } from "redux-saga/effects";
-import { getSubmissions } from "../../lib/api/pushshift/submission";
-import { createAsyncSaga } from "../../lib/utils";
-import { getSubmissionsAsync, GET_SUBMISSIONS } from "./actions";
+import { call, put, takeEvery } from "redux-saga/effects";
+import { getSubmissionsAPI, Submission } from "../../lib/api/pushshift/submission";
+import { getSubmissions, getSubmissionsError, getSubmissionsSuccess } from "./slice";
 
-const getSubmissionsSaga = createAsyncSaga(getSubmissionsAsync, getSubmissions);
+function* getSubmissionsSaga(action: ReturnType<typeof getSubmissions>) {
+  try {
+    const result: Submission[] = yield call(getSubmissionsAPI, action.payload);
+    yield put(getSubmissionsSuccess(result));
+  } catch(err) {
+    yield put(getSubmissionsError(err));
+  }
+}
 
 export function* postSaga() {
-  yield takeEvery(GET_SUBMISSIONS, getSubmissionsSaga);
+  yield takeEvery(getSubmissions, getSubmissionsSaga);
 }
