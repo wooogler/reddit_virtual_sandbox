@@ -1,8 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import PostHeader from './PostHeader';
-import PostListContainer from '../../containers/post/PostListContainer';
-import PostDetailContainer from '../../containers/post/PostDetailContainer';
+import SubmissionListContainer from '../../containers/post/SubmissionListContainer';
+import SubmissionDetailContainer from '../../containers/post/SubmissionDetailContainer';
+import CommentListContainer from '../../containers/post/CommentListContainer';
 
 interface PostLayoutProps {}
 
@@ -13,10 +14,11 @@ function PostLayout({}: PostLayoutProps) {
         <PostHeader />
       </Header>
       <List>
-        <PostListContainer />
+        <SubmissionListContainer />
       </List>
       <Detail>
-        <PostDetailContainer/>
+        <SubmissionDetailContainer/>
+        <CommentListContainer/>
       </Detail>
     </Grid>
   );
@@ -41,6 +43,9 @@ const List = styled.div`
 
 const Detail = styled.div`
   background-color: yellow;
+  display: flex;
+  flex-direction: column;
+  overflow: auto;
 `;
 
 export default PostLayout;

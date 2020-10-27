@@ -1,6 +1,6 @@
 import React from 'react';
 import { Story, Meta } from '@storybook/react';
-import PostItem, { PostItemProps } from '../PostItem';
+import SubmissionItem, { SubmissionItemProps } from '../SubmissionItem';
 import { Submission } from '../../../lib/api/pushshift/submission';
 
 const samplePost: Partial<Submission> = {
@@ -18,8 +18,8 @@ const samplePost: Partial<Submission> = {
 };
 
 export default {
-  title: 'components/post/PostItem',
-  component: PostItem,
+  title: 'components/post/SubmissionItem',
+  component: SubmissionItem,
   argTypes: {
     ellipsis: { control: 'boolean' },
     action: {
@@ -31,7 +31,7 @@ export default {
   },
 } as Meta;
 
-const Template: Story<PostItemProps> = (args) => <PostItem {...args} />;
+const Template: Story<SubmissionItemProps> = (args) => <SubmissionItem {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {
