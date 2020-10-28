@@ -1,6 +1,9 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 import palette from '../../lib/styles/palette'
+import {AllHtmlEntities} from 'html-entities';
+
+const entities = new AllHtmlEntities();
 
 export interface BodyTextProps {
   text: string,
@@ -11,7 +14,7 @@ function BodyText({text, ellipsis }: BodyTextProps) {
   if(text==='null') return null;
   return (
     <TextBlock ellipsis={ellipsis}>
-      {text}
+      {entities.decode(text)}
     </TextBlock>
   )
 }

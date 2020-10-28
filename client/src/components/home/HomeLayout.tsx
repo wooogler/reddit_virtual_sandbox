@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import PostLayout from '../post/PostLayout';
+import RuleLayout from '../rule/RuleLayout';
 
 interface HomeLayoutProps {
 }
@@ -9,7 +10,7 @@ function HomeLayout({}: HomeLayoutProps) {
   return (
     <Grid>
       <Post><PostLayout/></Post>
-      <Rule>rule</Rule>
+      <Rule><RuleLayout/></Rule>
     </Grid>
   );
 }

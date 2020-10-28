@@ -30,7 +30,7 @@ export const initialState: PostState = {
   selectedSubmission: undefined,
 };
 
-const slice = createSlice({
+const postSlice = createSlice({
   name: 'post',
   initialState,
   reducers: {
@@ -76,7 +76,7 @@ const slice = createSlice({
   },
 });
 
-const { actions, reducer } = slice;
+const { actions, reducer } = postSlice;
 export const {
   getSubmissions,
   getSubmissionsSuccess,
