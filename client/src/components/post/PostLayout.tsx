@@ -5,9 +5,7 @@ import SubmissionListContainer from '../../containers/post/SubmissionListContain
 import SubmissionDetailContainer from '../../containers/post/SubmissionDetailContainer';
 import CommentListContainer from '../../containers/post/CommentListContainer';
 
-interface PostLayoutProps {}
-
-function PostLayout({}: PostLayoutProps) {
+function PostLayout() {
   return (
     <Grid>
       <Header>

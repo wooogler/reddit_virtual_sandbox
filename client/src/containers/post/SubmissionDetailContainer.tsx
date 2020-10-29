@@ -3,9 +3,7 @@ import { useSelector } from 'react-redux';
 import SubmissionDetail from '../../components/post/SubmissionDetail';
 import { RootState } from '../../modules';
 
-interface SubmissionDetailContainerProps {}
-
-function SubmissionDetailContainer({}: SubmissionDetailContainerProps) {
+function SubmissionDetailContainer() {
   const { selectedSubmission } = useSelector((state: RootState) => state.post);
 
   return (

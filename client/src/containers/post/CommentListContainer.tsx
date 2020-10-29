@@ -3,9 +3,7 @@ import { useSelector } from 'react-redux';
 import CommentList from '../../components/post/CommentList';
 import { RootState } from '../../modules';
 
-interface CommentListContainerProps {}
-
-function CommentListContainer({}: CommentListContainerProps) {
+function CommentListContainer() {
   const { data, loading, error } = useSelector(
     (state: RootState) => state.post.comments,
   );

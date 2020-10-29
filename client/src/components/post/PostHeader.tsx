@@ -1,8 +1,6 @@
 import React from 'react';
 
-interface PostHeaderProps {}
-
-function PostHeader({}: PostHeaderProps) {
+function PostHeader() {
   return <div>PostHeader</div>;
 }
 

@@ -1,14 +1,19 @@
-import React, { useState } from 'react';
+import React from 'react';
 import AceEditor from 'react-ace';
 import 'ace-builds/src-noconflict/mode-yaml';
 import 'ace-builds/src-noconflict/theme-github';
+import { useDispatch } from 'react-redux';
+import { updateRuleValue } from '../../modules/rule/slice';
 
-export interface RuleEditorProps {}
+export interface RuleEditorProps {
+  code: string,
+}
 
-function RuleEditor({}: RuleEditorProps) {
-  const [code, setCode] = useState('');
-  const handleChange = (value: string) => {
-    setCode(value);
+function RuleEditor({code}: RuleEditorProps) {
+  const dispatch = useDispatch();
+
+  const handleChange = (input: string) => {
+    dispatch(updateRuleValue(input))
   };
   return (
     <AceEditor

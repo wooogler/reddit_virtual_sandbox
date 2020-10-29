@@ -4,9 +4,7 @@ import SubmissionList from '../../components/post/SubmissionList';
 import { RootState } from '../../modules';
 import { getSubmissions } from '../../modules/post/slice';
 
-interface SubmissionListContainerProps {}
-
-function SubmissionListContainer({}: SubmissionListContainerProps) {
+function SubmissionListContainer() {
   const { data, loading, error } = useSelector(
     (state: RootState) => state.post.submissions,
   );

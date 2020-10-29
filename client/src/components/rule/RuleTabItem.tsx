@@ -1,21 +1,28 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import palette from '../../lib/styles/palette';
+import { changeTab, closeRule } from '../../modules/rule/slice';
 import { CloseIcon } from '../../static/svg';
 
 export interface RuleTabItemProps extends React.HTMLProps<HTMLButtonElement> {
   active: boolean;
-  onClose: React.MouseEvent;
-  tabId: number;
+  tab: number;
 }
 
-function RuleTabItem({ children, active = false, tabId }: RuleTabItemProps) {
-  const handleClose = () => {
-    console.log('close');
+function RuleTabItem({ children, active = false, tab }: RuleTabItemProps) {
+  const dispatch = useDispatch();
+  const handleClose = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
+    e.stopPropagation();
+    dispatch(changeTab(0));
+    dispatch(closeRule(tab));
+  }
+  const handleClick = () => {
+    dispatch(changeTab(tab));
   }
 
   return (
-    <TabBlock active={active}>
+    <TabBlock active={active} onClick={handleClick}>
       {children}
       {active && (
         <CloseButton onClick={handleClose}>

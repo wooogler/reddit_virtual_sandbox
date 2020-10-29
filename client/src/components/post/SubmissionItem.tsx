@@ -1,14 +1,18 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
+import BodyTextContainer from '../../containers/common/BodyTextContainer';
 import { Submission } from '../../lib/api/pushshift/submission';
 import palette, { actionColorMap } from '../../lib/styles/palette';
 import { getComments, selectSubmission } from '../../modules/post/slice';
 import AuthorText from '../common/AuthorText';
-import BodyText from '../common/BodyText';
 import FlairText from '../common/FlairText';
 import IdText from '../common/IdText';
 import TitleText from '../common/TitleText';
+
+type Bolds = {
+  body: string[]
+}
 
 export interface SubmissionItemProps {
   submission: Submission;
@@ -16,7 +20,7 @@ export interface SubmissionItemProps {
   action?: 'remove' | 'report';
 }
 
-function SubmissionItem({ submission, ellipsis, action }: SubmissionItemProps) {
+function SubmissionItem({ submission, ellipsis, action}: SubmissionItemProps) {
   const dispatch = useDispatch();
   const handleClick = (submissionId: string) => {
     dispatch(selectSubmission(submissionId));
@@ -36,7 +40,7 @@ function SubmissionItem({ submission, ellipsis, action }: SubmissionItemProps) {
         )}
         <IdText text={submission.id} />
       </div>
-      <BodyText text={submission.selftext} ellipsis={ellipsis} />
+      <BodyTextContainer text={submission.selftext} ellipsis={ellipsis}/>
       <div className="author-info">
         <AuthorText text={submission.author} />
         {submission.author_flair_text && (

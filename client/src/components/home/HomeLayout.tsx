@@ -3,10 +3,7 @@ import styled from 'styled-components';
 import PostLayout from '../post/PostLayout';
 import RuleLayout from '../rule/RuleLayout';
 
-interface HomeLayoutProps {
-}
-
-function HomeLayout({}: HomeLayoutProps) {
+function HomeLayout() {
   return (
     <Grid>
       <Post><PostLayout/></Post>

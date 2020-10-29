@@ -1,17 +1,23 @@
 import React from 'react';
 import styled from 'styled-components';
-import RuleEditor from './RuleEditor';
+import RuleActionsContainer from '../../containers/rule/RuleActionsContainer';
+import RuleEditorContainer from '../../containers/rule/RuleEditorContainer';
+import RuleTabListContainer from '../../containers/rule/RuleTabListContainer';
+import palette from '../../lib/styles/palette';
 
-interface RuleLayoutProps {}
+function RuleLayout() {
 
-function RuleLayout({}: RuleLayoutProps) {
   return (
     <Grid>
-      <TabsFrame>tabs</TabsFrame>
+      <TabsFrame>
+        <RuleTabListContainer />
+      </TabsFrame>
       <EditorFrame>
-        <RuleEditor />
+        <RuleEditorContainer/>
       </EditorFrame>
-      <EditorActionFrame></EditorActionFrame>
+      <ActionsFrame>
+        <RuleActionsContainer/>
+      </ActionsFrame>
     </Grid>
   );
 }
@@ -24,7 +30,7 @@ const Grid = styled.div`
 
 const TabsFrame = styled.div`
   display: flex;
-  background-color: yellow;
+  background-color: ${palette.gray[2]};
 `;
 
 const EditorFrame = styled.div`
@@ -33,9 +39,12 @@ const EditorFrame = styled.div`
   padding: 1rem;
 `;
 
-const EditorActionFrame = styled.div`
+const ActionsFrame = styled.div`
   display: flex;
-  background-color: red;
+  justify-content: flex-end;
+  background-color: ${palette.gray[2]};
+  align-items: center;
+  padding: 0 1rem;
 `;
 
 export default RuleLayout;

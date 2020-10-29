@@ -16,4 +16,5 @@ export const Default = Template.bind({});
 Default.args = {
   text:
     'Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit officia veniam distinctio fugit. Rem tempore hic non corporis saepe quas nostrum eligendi reiciendis, deserunt debitis iusto quisquam, cupiditate dolore culpa.',
+  bolds: ['ipsum']
 };

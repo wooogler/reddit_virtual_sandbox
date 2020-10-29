@@ -60,6 +60,9 @@ const ButtonBlock = styled.button<{
       height: 2.3rem;
       padding: 0 1rem;
       font-size: 1.3rem;
+      & + & {
+        margin-left: 1rem;
+      }
     `}
   ${(props) =>
     props.size === 'small' &&

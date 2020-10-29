@@ -2,14 +2,26 @@ import React from 'react';
 import styled from 'styled-components';
 import palette from '../../lib/styles/palette';
 import { PlusIcon } from '../../static/svg';
+import {addRule, changeTab} from '../../modules/rule/slice'
+import { useDispatch } from 'react-redux';
 
 export interface RuleTabAddProps {
-  
+  newTab: number
 }
 
-function RuleTabAdd({}: RuleTabAddProps) {
+function RuleTabAdd({newTab}: RuleTabAddProps) {
+  const dispatch = useDispatch();
+  const handleClick = () => {
+    dispatch(addRule({
+      tab: newTab,
+      title: 'rule.yml',
+      value: '',
+    }));
+    dispatch(changeTab(newTab));
+  }
+
   return (
-    <TabAddBlock>
+    <TabAddBlock onClick={handleClick}>
       <PlusIcon/>
     </TabAddBlock>
   )
