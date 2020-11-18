@@ -44,3 +44,5 @@ class DataHandlerView(viewsets.ViewSet):
     @action(methods=['post'], detail=False)
     def set_password(self, request):
         return Response({'set': 1})
+
+

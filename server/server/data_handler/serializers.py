@@ -5,7 +5,7 @@ from .models import Submission, Comment
 class SubmissionSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Submission
-        fields = ['content', 'pub_date']
+        fields = ['id','title','selftext','content', 'pub_date']
 
 
 class CommentSerializer(serializers.HyperlinkedModelSerializer):

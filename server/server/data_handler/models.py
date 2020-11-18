@@ -5,6 +5,10 @@ from django.utils import timezone
 # Create your models here.
 
 class Submission(models.Model):
+    objects = models.Manager() # [Django] class has no objects member error fix
+    id = models.CharField(max_length=6, primary_key=True) # ex) jvwgmt
+    title = models.TextField('submission title', default='')
+    selftext = models.TextField('submission body', default='')
     content = models.CharField(max_length=200)
     pub_date = models.DateTimeField('date published')
     
