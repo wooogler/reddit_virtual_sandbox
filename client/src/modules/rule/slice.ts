@@ -14,7 +14,7 @@ export type RuleState = {
   };
   selectedTab: number;
   parsed: {
-    data: undefined
+    data: undefined;
     error: any;
   };
 };
@@ -23,7 +23,8 @@ export interface RuleQuery {
   check: string;
   value: string[] | object;
   modifier: string[] | undefined;
-  id: number;
+  ruleId: number;
+  lineId: number;
 }
 
 export const initialState: RuleState = {
@@ -44,26 +45,70 @@ export const initialState: RuleState = {
 };
 
 const arrayToQuery = (parsedDocuments: object[]) => {
-  return parsedDocuments.reduce((ruleQuerys: RuleQuery[], parsedDocument) => {
-    const regexForKey = /^(~?[^\s(]+)\s*(?:\((.+)\))?$/;
-    if (parsedDocument !== null) {
-      for (const [index, [key, value]] of Object.entries(Object.entries(parsedDocument))) {
-        const result = key.match(regexForKey);
-        //result[0]: body+title, result[1]: "undefined" | includes, regex
-        if(result != null) {
-          const checkArray = String(result[1]).split(/\s*\+\s*/);
-          const modifierArray = String(result[2]).split(/\s*,\s*/);
-          const valueArray = typeof value ==='string' ? [value] : value as string[]
-          checkArray.forEach((check) => {
-            ruleQuerys.push({check, value: valueArray, modifier: modifierArray, id:parseInt(index)})
-          })
+  return parsedDocuments.reduce(
+    (ruleQuerys: RuleQuery[], parsedDocument, ruleIndex) => {
+      const regexForKey = /^(~?[^\s(]+)\s*(?:\((.+)\))?$/;
+      if (parsedDocument !== null) {
+        for (const [lineIndex, [key, value]] of Object.entries(
+          Object.entries(parsedDocument),
+        )) {
+          const result = key.match(regexForKey);
+          //result[0]: body+title, result[1]: "undefined" | includes, regex
+          if (result != null) {
+            const isNot = result[1].startsWith('~');
+            const modifierArray =
+              result[2] === undefined ? [] : String(result[2]).split(/\s*,\s*/);
+            if (isNot) {
+              modifierArray.push('not');
+            }
+            const checkArray = String(
+              isNot ? result[1].substring(1) : result[1],
+            ).split(/\s*\+\s*/);
+            const valueArray =
+              typeof value === 'string' ? [value] : (value as string[]);
+            checkArray.forEach((check) => {
+              ruleQuerys.push({
+                check,
+                value: valueArray,
+                modifier: modifierArray,
+                lineId: parseInt(lineIndex),
+                ruleId: ruleIndex,
+              });
+            });
+          }
         }
       }
-    }
-    return ruleQuerys;
-  }, [])
-}
-// parsedDocument: 
+      return ruleQuerys;
+    },
+    [],
+  );
+};
+
+// const objectToQuery = (parsedDocument: object) => {
+//   let ruleQuerys: RuleQuery[] = [];
+//   const regexForKey = /^(~?[^\s(]+)\s*(?:\((.+)\))?$/;
+//   for (const [index, [key, value]] of Object.entries(Object.entries(parsedDocument))) {
+//     const result = key.match(regexForKey);
+//     //result[0]: body+title, result[1]: "undefined" | includes, regex
+//     if(result != null) {
+//       const isNot = result[1].startsWith('~');
+//       const modifierArray = result[2]===undefined ? [] : String(result[2]).split(/\s*,\s*/);
+//       if(isNot) {
+//         modifierArray.push('not');
+//       }
+//       const checkArray = String(
+//         isNot ? result[1].substring(1) : result[1]
+//       ).split(/\s*\+\s*/);
+//       const valueArray = typeof value ==='string' ? [value] : value as string[]
+//       checkArray.forEach((check) => {
+//         ruleQuerys.push({check, value: valueArray, modifier: modifierArray, id:parseInt(index)})
+//       })
+//     }
+//   }
+//   return ruleQuerys;
+// }
+
+// parsedDocument:
 // {
 //   body: "hi",
 //   body+title (includes , regex): ["hello"]
@@ -103,10 +148,12 @@ const ruleSlice = createSlice({
           },
         );
         console.log(parsedData);
-        const parsedDocuments = parsedData.map(item => JSON.parse(JSON.stringify(item)));
+        const parsedDocuments = parsedData.map((item) =>
+          JSON.parse(JSON.stringify(item)),
+        );
         console.log(arrayToQuery(parsedDocuments));
       } catch (e) {
-        console.log('YAML Errors: ',typeof e, e);
+        console.log('YAML Errors: ', typeof e, e);
       }
     },
   },
