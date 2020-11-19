@@ -9,11 +9,16 @@ interface BodyTextContainerProps {
   ellipsis: boolean;
 }
 
+interface parsedData {
+  body?: string[];
+}
+
 function BodyTextContainer({text, ellipsis}: BodyTextContainerProps) {
-  const parsedData = useSelector((state:RootState) => state.rule.parsed.data)
-  const bolds = parsedData && flatten(parsedData.map(data => {
-    return data.toJSON().body;
-  }));
+  // const parsedData = useSelector((state:RootState) => state.rule.parsed.data)
+  // const bolds = parsedData && flatten(parsedData.map(data => {
+  //   return data.toJSON().body;
+  // }));
+  const bolds = undefined
   return (
     <>
       <BodyText text={text} ellipsis={ellipsis} bolds={bolds} />
