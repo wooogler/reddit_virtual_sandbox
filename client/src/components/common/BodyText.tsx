@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
 import palette from '../../lib/styles/palette';
 import { AllHtmlEntities } from 'html-entities';
@@ -8,11 +8,12 @@ const entities = new AllHtmlEntities();
 
 export interface BodyTextProps {
   text: string;
-  ellipsis: boolean;
   bolds?: string[];
 }
 
-function BodyText({ text, ellipsis, bolds }: BodyTextProps) {
+function BodyText({ text, bolds }: BodyTextProps) {
+  const [ellipsis, setEllipsis] = useState(true);
+
   if (text === 'null') return null;
   const words = entities.decode(text).split(' ');
   const boldMap = bolds?.map((bold) => {
@@ -44,6 +45,7 @@ function BodyText({ text, ellipsis, bolds }: BodyTextProps) {
         }
         return `${word} `;
       })}
+      <ToggleSpanButton onClick={() => setEllipsis(state => !state)}>{ellipsis ? '▽ span' : '△ close'}</ToggleSpanButton>
     </TextBlock>
   );
 }
@@ -61,5 +63,11 @@ const TextBlock = styled.div<{ ellipsis: boolean }>`
       overflow: hidden;
     `}
 `;
+
+const ToggleSpanButton = styled.div`
+  font-size: 0.8rem;
+  color: ${palette.gray[6]};
+  cursor: pointer;
+`
 
 export default BodyText;

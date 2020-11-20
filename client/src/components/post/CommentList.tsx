@@ -11,7 +11,7 @@ function CommentList({comments}: CommentListProps) {
   return (
     <CommentListBlock>
       {comments && comments.map(comment => (
-        <CommentItem comment={comment} ellipsis={false} key={comment.id}/>
+        <CommentItem comment={comment} key={comment.id}/>
       ))}
     </CommentListBlock>  
   );

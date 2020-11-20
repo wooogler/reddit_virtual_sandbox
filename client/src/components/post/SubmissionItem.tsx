@@ -8,6 +8,7 @@ import { getComments, selectSubmission } from '../../modules/post/slice';
 import AuthorText from '../common/AuthorText';
 import FlairText from '../common/FlairText';
 import IdText from '../common/IdText';
+import LinkText from '../common/LinkText';
 import TitleText from '../common/TitleText';
 
 type Bolds = {
@@ -21,36 +22,37 @@ export interface SubmissionItemProps {
 }
 
 function SubmissionItem({ submission, ellipsis, action}: SubmissionItemProps) {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const handleClick = (submissionId: string) => {
-    dispatch(selectSubmission(submissionId));
-    dispatch(getComments(submissionId));
+    // dispatch(selectSubmission(submissionId));
+    // dispatch(getComments(submissionId));
   };
 
   return (
     <SubmissionItemDiv action={action} onClick={() => handleClick(submission.id)}>
       <TitleText text={submission.title} ellipsis={ellipsis} />
       <div className="submission-info">
-        {submission.link_flair_text && (
+        {/* {submission.link_flair_text && (
           <FlairText
             text={submission.link_flair_text}
             color={submission.link_flair_text_color}
             background={submission.link_flair_background_color}
           />
-        )}
+        )} */}
         <IdText text={submission.id} />
+        <LinkText text='open submission link' url={submission.full_link}/>
       </div>
       <BodyTextContainer text={submission.selftext} ellipsis={ellipsis}/>
       <div className="author-info">
         <AuthorText text={submission.author} />
-        {submission.author_flair_text && (
+        {/* {submission.author_flair_text && (
           <FlairText
             text={submission.author_flair_text}
             color={submission.author_flair_text_color}
             background={submission.author_flair_background_color}
           />
         )}
-        <IdText text={submission.author_fullname} />
+        <IdText text={submission.author_fullname} /> */}
       </div>
     </SubmissionItemDiv>
   );
@@ -68,6 +70,9 @@ const SubmissionItemDiv = styled.div<{ action?: 'remove' | 'report' }>`
     display: flex;
     margin: 0.5rem 0;
     div + div {
+      margin-left: 0.5rem;
+    }
+    div + a {
       margin-left: 0.5rem;
     }
   }
