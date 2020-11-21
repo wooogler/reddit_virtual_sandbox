@@ -1,20 +1,27 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { forEach } from 'underscore';
 import YAML from 'yaml';
+import { arrayToQuery, valueToLine } from '../../lib/utils';
 
 export type Rule = {
   tab: number;
   title: string;
   value: string;
+  mode: 'editor' | 'selector';
+  lines?: Line[];
+};
+
+export type Line = {
+  content: string;
+  ruleId: number;
+  lineId: number;
+  selected: boolean;
 };
 
 export type RuleState = {
-  rules: {
-    data: Rule[];
-  };
+  rules: Rule[];
   selectedTab: number;
   parsed: {
-    data: undefined;
+    query: undefined | RuleQuery[];
     error: any;
   };
 };
@@ -28,132 +35,59 @@ export interface RuleQuery {
 }
 
 export const initialState: RuleState = {
-  rules: {
-    data: [
-      {
-        title: 'rule.yml',
-        value: '',
-        tab: 0,
-      },
-    ],
-  },
+  rules: [
+    {
+      title: 'rule.yml',
+      value: '',
+      tab: 0,
+      mode: 'editor',
+    },
+  ],
   selectedTab: 0,
   parsed: {
-    data: undefined,
+    query: undefined,
     error: '',
   },
 };
-
-const arrayToQuery = (parsedDocuments: object[]) => {
-  return parsedDocuments.reduce(
-    (ruleQuerys: RuleQuery[], parsedDocument, ruleIndex) => {
-      const regexForKey = /^(~?[^\s(]+)\s*(?:\((.+)\))?$/;
-      if (parsedDocument !== null) {
-        for (const [lineIndex, [key, value]] of Object.entries(
-          Object.entries(parsedDocument),
-        )) {
-          const result = key.match(regexForKey);
-          //result[0]: body+title, result[1]: "undefined" | includes, regex
-          if (result != null) {
-            const isNot = result[1].startsWith('~');
-            const modifierArray =
-              result[2] === undefined ? [] : String(result[2]).split(/\s*,\s*/);
-            if (isNot) {
-              modifierArray.push('not');
-            }
-            const checkArray = String(
-              isNot ? result[1].substring(1) : result[1],
-            ).split(/\s*\+\s*/);
-            const valueArray =
-              typeof value === 'string' ? [value] : (value as string[]);
-            checkArray.forEach((check) => {
-              ruleQuerys.push({
-                check,
-                value: valueArray,
-                modifier: modifierArray,
-                lineId: parseInt(lineIndex),
-                ruleId: ruleIndex,
-              });
-            });
-          }
-        }
-      }
-      return ruleQuerys;
-    },
-    [],
-  );
-};
-
-// const objectToQuery = (parsedDocument: object) => {
-//   let ruleQuerys: RuleQuery[] = [];
-//   const regexForKey = /^(~?[^\s(]+)\s*(?:\((.+)\))?$/;
-//   for (const [index, [key, value]] of Object.entries(Object.entries(parsedDocument))) {
-//     const result = key.match(regexForKey);
-//     //result[0]: body+title, result[1]: "undefined" | includes, regex
-//     if(result != null) {
-//       const isNot = result[1].startsWith('~');
-//       const modifierArray = result[2]===undefined ? [] : String(result[2]).split(/\s*,\s*/);
-//       if(isNot) {
-//         modifierArray.push('not');
-//       }
-//       const checkArray = String(
-//         isNot ? result[1].substring(1) : result[1]
-//       ).split(/\s*\+\s*/);
-//       const valueArray = typeof value ==='string' ? [value] : value as string[]
-//       checkArray.forEach((check) => {
-//         ruleQuerys.push({check, value: valueArray, modifier: modifierArray, id:parseInt(index)})
-//       })
-//     }
-//   }
-//   return ruleQuerys;
-// }
-
-// parsedDocument:
-// {
-//   body: "hi",
-//   body+title (includes , regex): ["hello"]
-// }
-// ruleQuery:
-// [
-//   {check: 'body', search: ['hi'], modifier: undefined, id: 0},
-//   {check: 'body', search: ['hello'], modifier: ['includes', 'regex'], id:1}
-//   {check: 'title', search: ['hello'], modifier: ['includes', 'regex'], id:1}
-// ]
 
 const ruleSlice = createSlice({
   name: 'rule',
   initialState,
   reducers: {
     addRule: (state, action: PayloadAction<Rule>) => {
-      state.rules.data.push(action.payload);
+      state.rules.push(action.payload);
     },
     closeRule: (state, action: PayloadAction<number>) => {
-      const index = state.rules.data.findIndex(
+      const index = state.rules.findIndex(
         (rule) => rule.tab === action.payload,
       );
-      state.rules.data.splice(index, 1);
+      state.rules.splice(index, 1);
     },
     updateRuleValue: (state, action: PayloadAction<string>) => {
-      state.rules.data[state.selectedTab].value = action.payload;
+      state.rules[state.selectedTab].value = action.payload;
     },
     changeTab: (state, action: PayloadAction<number>) => {
       state.selectedTab = action.payload;
     },
     parseRuleValue: (state) => {
       try {
-        const parsedData = YAML.parseAllDocuments(
-          state.rules.data[state.selectedTab].value,
-          {
+        const mode = state.rules[state.selectedTab].mode;
+        if (mode === 'editor') {
+          const value = state.rules[state.selectedTab].value;
+          const parsedData = YAML.parseAllDocuments(value, {
             prettyErrors: true,
-          },
-        );
-        console.log(parsedData);
-        const parsedDocuments = parsedData.map((item) =>
-          JSON.parse(JSON.stringify(item)),
-        );
-        console.log(arrayToQuery(parsedDocuments));
+          });
+          const parsedDocuments = parsedData.map((item) =>
+            JSON.parse(JSON.stringify(item)),
+          );
+          state.parsed.query = arrayToQuery(parsedDocuments);
+          state.rules[state.selectedTab].mode = 'selector';
+          state.rules[state.selectedTab].lines = valueToLine(value);
+        } else {
+          state.rules[state.selectedTab].mode = 'editor';
+        }
       } catch (e) {
-        console.log('YAML Errors: ', typeof e, e);
+        state.parsed.error = 'YAML Errors: ' + String(e);
       }
     },
   },

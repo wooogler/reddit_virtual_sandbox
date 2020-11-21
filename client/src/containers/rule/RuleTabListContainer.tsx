@@ -9,7 +9,7 @@ function RuleTabListContainer() {
   return (
     <>
       <RuleTabList
-        rules={ruleState.rules.data}
+        rules={ruleState.rules}
         selectedTab={ruleState.selectedTab}
       />
     </>

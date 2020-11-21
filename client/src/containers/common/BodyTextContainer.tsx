@@ -21,7 +21,7 @@ function BodyTextContainer({text, ellipsis}: BodyTextContainerProps) {
   const bolds = undefined
   return (
     <>
-      <BodyText text={text} ellipsis={ellipsis} bolds={bolds} />
+      <BodyText text={text} bolds={bolds} />
     </>
   )
 }

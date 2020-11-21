@@ -16,6 +16,7 @@ function RuleTabAdd({newTab}: RuleTabAddProps) {
       tab: newTab,
       title: 'rule.yml',
       value: '',
+      mode: 'editor',
     }));
     dispatch(changeTab(newTab));
   }

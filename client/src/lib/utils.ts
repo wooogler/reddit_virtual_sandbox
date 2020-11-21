@@ -1,10 +1,81 @@
 import { AsyncActionCreatorBuilder, PayloadAction, getType } from "typesafe-actions";
 import { AnyAction } from 'redux';
 import {call, put} from 'redux-saga/effects';
+import { Line, RuleQuery } from "../modules/rule/slice";
 
 type PromiseCreatorFunction<P, T> =
   | ((payload: P) => Promise<T>)
   | (() => Promise<T>);
+
+// parsedDocument:
+// {
+//   body: "hi",
+//   body+title (includes , regex): ["hello"]
+// }
+// ruleQuery:
+// [
+//   {check: 'body', search: ['hi'], modifier: undefined, id: 0},
+//   {check: 'body', search: ['hello'], modifier: ['includes', 'regex'], id:1}
+//   {check: 'title', search: ['hello'], modifier: ['includes', 'regex'], id:1}
+// ]
+
+export const valueToLine = (value: string) => {
+  let lines: Line[] = [];
+  let ruleId = 0;
+  let lineId = 0;
+  value.split('\n').forEach((line, index) => {
+    if(line.includes(':')) {
+      lines.push({content: line, lineId: lineId++, ruleId: ruleId, selected: false});
+    }
+    if(line.includes('---')) {
+      if(index!==0){
+        lineId=0;
+        ruleId++;
+      }
+    }
+  })
+  return lines;
+};
+
+export const arrayToQuery = (parsedDocuments: object[]) => {
+  return parsedDocuments.reduce(
+    (ruleQuerys: RuleQuery[], parsedDocument, ruleIndex) => {
+      const regexForKey = /^(~?[^\s(]+)\s*(?:\((.+)\))?$/;
+      if (parsedDocument !== null) {
+        for (const [lineIndex, [key, value]] of Object.entries(
+          Object.entries(parsedDocument),
+        )) {
+          const result = key.match(regexForKey);
+          //result[0]: body+title, result[1]: "undefined" | includes, regex
+          if (result != null) {
+            const isNot = result[1].startsWith('~');
+            const modifierArray =
+              result[2] === undefined ? [] : String(result[2]).split(/\s*,\s*/);
+            if (isNot) {
+              modifierArray.push('not');
+            }
+            const checkArray = String(
+              isNot ? result[1].substring(1) : result[1],
+            ).split(/\s*\+\s*/);
+            const valueArray =
+              typeof value === 'string' ? [value] : (value as string[]);
+            checkArray.forEach((check) => {
+              ruleQuerys.push({
+                check,
+                value: valueArray,
+                modifier: modifierArray,
+                lineId: parseInt(lineIndex),
+                ruleId: ruleIndex,
+              });
+            });
+          }
+        }
+      }
+      return ruleQuerys;
+    },
+    [],
+  );
+};
 
 function isPayloadAction<P>(action: any): action is PayloadAction<string, P> {
   return action.payload !== undefined;

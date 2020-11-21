@@ -15,6 +15,7 @@ function RuleEditor({code}: RuleEditorProps) {
   const handleChange = (input: string) => {
     dispatch(updateRuleValue(input))
   };
+  
   return (
     <AceEditor
       mode="yaml"
