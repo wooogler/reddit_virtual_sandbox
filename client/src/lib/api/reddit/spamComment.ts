@@ -7,11 +7,11 @@ export interface SpamComment {
   banned_at_utc: number;
   removed: boolean;
   author: string;
-  parent_id: string;
   body: string;
   spam: boolean;
   approved: boolean;
   permalink: string;
   subreddit: string;
   created_utc: number;
+  filter_id: string[];
 }

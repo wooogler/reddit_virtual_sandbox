@@ -1,5 +1,5 @@
 export interface SpamSubmission {
-  type: 'spam_submision';
+  type: 'spam_submission';
   subreddit: string;
   selftext: string;
   title: string;
@@ -11,6 +11,7 @@ export interface SpamSubmission {
   author: string;
   approved: boolean;
   permalink: string;
-  url: string;
   created_utc: number;
+  filter_id: string[];
+  removal_reason: string | null;
 }

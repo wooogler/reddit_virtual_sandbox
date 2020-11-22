@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import {Comment} from '../../lib/api/pushshift/comment';
+import { SpamComment } from '../../lib/api/reddit/spamComment';
 import palette, { actionColorMap } from '../../lib/styles/palette';
 import AuthorText from '../common/AuthorText';
 import BodyText from '../common/BodyText';
@@ -10,7 +11,7 @@ import LinkText from '../common/LinkText';
 
 
 export interface CommentItemProps {
-  comment: Comment;
+  comment: Comment | SpamComment;
   action?: 'remove' | 'report';
 }
 
