@@ -5,14 +5,16 @@ import SubmissionItem from './SubmissionItem';
 
 interface SubmissionListProps {
   submissions: Submission[] | null;
+  selectedId: string[];
 }
 
-function SubmissionList({submissions}: SubmissionListProps) {
+function SubmissionList({submissions, selectedId}: SubmissionListProps) {
   return (
     <SubmissionListBlock>
-      {submissions && submissions.map(submission => (
-        <SubmissionItem submission={submission} ellipsis={true} key={submission.id}/>
-      ))}
+      {submissions && submissions.map(submission => {
+        const selected = selectedId.filter(item => submission.filter_id.includes(item))
+        return (<SubmissionItem submission={submission} ellipsis={true} key={submission.id} action={selected.length === 0 ? undefined : 'remove'}/>)
+      })}
     </SubmissionListBlock>  
   );
 }

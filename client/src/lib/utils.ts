@@ -25,7 +25,7 @@ export const valueToLine = (value: string) => {
   let lineId = 0;
   value.split('\n').forEach((line, index) => {
     if(line.includes(':')) {
-      lines.push({content: line, lineId: lineId++, ruleId: ruleId, selected: false});
+      lines.push({content: line, lineId: lineId++, ruleId: ruleId, selected: true});
     }
     if(line.includes('---')) {
       if(index!==0){

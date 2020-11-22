@@ -13,9 +13,8 @@ function RuleEditorContainer() {
     {
       ruleState.rules[ruleIndex].mode === 'editor' ?
       <RuleEditor code={ruleState.rules[ruleIndex].value}/> :
-      <RuleSelector/>
+      <RuleSelector lines={ruleState.rules[ruleIndex].lines}/>
     }
-      
     </>
   )
 }

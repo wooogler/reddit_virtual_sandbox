@@ -13,5 +13,6 @@ export const submissionData: { submission: Submission } = {
     subreddit: 'hanguk',
     title:
       'Twenty-two US troops test positive for coronavirus after flying to South Korea from States',
+    filter_id: ['0-0'],
   },
 };
