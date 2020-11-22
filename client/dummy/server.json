@@ -60,11 +60,10 @@
   ],
   "spam_posts": [
     {
-      "type": "spam_submissions",
+      "type": "spam_submission",
       "subreddit": "KIXModSandbox",
       "selftext": "",
       "title": "23 y/o make, in NY, degree in psychology. Any suggestions on career paths, which pay well?",
-      "removed_by_category": "moderator",
       "banned_by": "leesang627",
       "banned_at_utc": 1605835588,
       "spam": false,
@@ -77,23 +76,22 @@
       "permalink": "/r/KIXModSandbox/comments/jqt8kc/23_yo_make_in_ny_degree_in_psychology_any/",
       "url": "https://www.reddit.com/r/KIXModSandbox/comments/jqt8kc/23_yo_make_in_ny_degree_in_psychology_any/",
       "created_utc": 1604906632.0
-      }
-    ],
-  "spam_comments": [{
-    "type": "spam_comments",
-    "banned_by": "AutoModerator",
-    "removal_reason": null,
-    "link_id": "t3_jqtd8f",
-    "id": "gcwa148",
-    "banned_at_utc": 1605835862,
-    "removed": false,
-    "author": "leesang627",
-    "parent_id": "t3_jqtd8f",
-    "body": "fuck",
-    "spam": false,
-    "approved": false,
-    "permalink": "/r/KIXModSandbox/comments/jqtd8f/you_get_to_download_all_the_knowledge_of_a_single/gcwa148/",
-    "subreddit": "KIXModSandbox",
-    "created_utc": 1605835862.0
-  }]
+    },
+    {
+      "type": "spam_comment",
+      "banned_by": "AutoModerator",
+      "removal_reason": null,
+      "link_id": "t3_jqtd8f",
+      "id": "gcwa148",
+      "banned_at_utc": 1605835862,
+      "removed": false,
+      "author": "leesang627",
+      "body": "fuck",
+      "spam": false,
+      "approved": false,
+      "permalink": "/r/KIXModSandbox/comments/jqtd8f/you_get_to_download_all_the_knowledge_of_a_single/gcwa148/",
+      "subreddit": "KIXModSandbox",
+      "created_utc": 1605835862.0
+    }
+  ]
 }

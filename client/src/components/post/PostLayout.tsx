@@ -11,13 +11,13 @@ function PostLayout() {
       <Header>
         <PostHeader />
       </Header>
-      <List>
+      <PostListLayout>
         <PostListContainer />
-      </List>
-      <Detail>
+      </PostListLayout>
+      <SpamPostListLayout>
         <SubmissionDetailContainer />
         <CommentListContainer />
-      </Detail>
+      </SpamPostListLayout>
     </Grid>
   );
 }
@@ -34,12 +34,12 @@ const Header = styled.div`
   grid-row: 1 / 2;
   background-color: red;
 `;
-const List = styled.div`
+const PostListLayout = styled.div`
   background-color: blue;
   overflow: auto;
 `;
 
-const Detail = styled.div`
+const SpamPostListLayout = styled.div`
   background-color: yellow;
   display: flex;
   flex-direction: column;
