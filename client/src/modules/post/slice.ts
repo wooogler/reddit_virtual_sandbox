@@ -34,7 +34,7 @@ const postSlice = createSlice({
   name: 'post',
   initialState,
   reducers: {
-    getSubmissions: {
+    getPosts: {
       reducer: (state) => {
         state.posts.loading = true;
         state.posts.data = null;
@@ -43,11 +43,11 @@ const postSlice = createSlice({
         payload: subredditName,
       }),
     },
-    getSubmissionsSuccess: (state, action: PayloadAction<Submission[]>) => {
+    getPostsSuccess: (state, action: PayloadAction<Submission[]>) => {
       state.posts.data = action.payload;
       state.posts.loading = false;
     },
-    getSubmissionsError: (state, action: PayloadAction<Error>) => {
+    getPostsError: (state, action: PayloadAction<Error>) => {
       state.posts.error = action.payload;
       state.posts.loading = false;
     },
@@ -78,9 +78,9 @@ const postSlice = createSlice({
 
 const { actions, reducer } = postSlice;
 export const {
-  getSubmissions,
-  getSubmissionsSuccess,
-  getSubmissionsError,
+  getPosts,
+  getPostsSuccess,
+  getPostsError,
   // selectSubmission,
   getComments,
   getCommentsSuccess,

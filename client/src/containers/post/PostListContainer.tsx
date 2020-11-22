@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import PostList from '../../components/post/PostList';
 import { RootState } from '../../modules';
-import { getSubmissions } from '../../modules/post/slice';
+import { getPosts } from '../../modules/post/slice';
 
 function PostListContainer() {
   const { data, loading, error } = useSelector(
@@ -13,7 +13,7 @@ function PostListContainer() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getSubmissions('heroesofthestorm'));
+    dispatch(getPosts('heroesofthestorm'));
   }, [dispatch]);
 
   return (

@@ -31,7 +31,6 @@ function PostList({ posts, selectedId }: PostListProps) {
               comment={post}
               action={selected.length === 0 ? undefined : 'remove'}
             />
-
           );
         })}
     </PostListBlock>

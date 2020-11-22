@@ -1,5 +1,5 @@
 {
-  "submissions": [
+  "posts": [
     {
       "type": "submission",
       "author": "Interceptor88LH",
@@ -35,9 +35,7 @@
       "subreddit": "heroesofthestorm",
       "title": "Old brawl portraits",
       "filter_id": ["0-0", "0-1"]
-    }
-  ],
-  "comments": [
+    },
     {
       "type": "comment",
       "author": "MrWilbus",
@@ -46,7 +44,8 @@
       "id": "gaa0m0y",
       "link_id": "t3_jilxe1",
       "permalink": "/r/heroesofthestorm/comments/jilxe1/meet_the_ccl_teams_draft_recap/gaa0m0y/",
-      "subreddit": "heroesofthestorm"
+      "subreddit": "heroesofthestorm",
+      "filter_id": ["0-0"]
     },
     {
       "type": "comment",
@@ -59,25 +58,29 @@
       "subreddit": "heroesofthestorm"
     }
   ],
-  "spam_submissions": [{
-    "subreddit": "KIXModSandbox",
-    "selftext": "",
-    "title": "23 y/o make, in NY, degree in psychology. Any suggestions on career paths, which pay well?",
-    "removed_by_category": "moderator",
-    "banned_by": "leesang627",
-    "banned_at_utc": 1605835588,
-    "spam": false,
-    "removed": true,
-    "removed_by": "leesang627",
-    "removal_reason": null,
-    "id": "jqt8kc",
-    "author": "woogler627",
-    "approved": false,
-    "permalink": "/r/KIXModSandbox/comments/jqt8kc/23_yo_make_in_ny_degree_in_psychology_any/",
-    "url": "https://www.reddit.com/r/KIXModSandbox/comments/jqt8kc/23_yo_make_in_ny_degree_in_psychology_any/",
-    "created_utc": 1604906632.0
-  }],
+  "spam_posts": [
+    {
+      "type": "spam_submissions",
+      "subreddit": "KIXModSandbox",
+      "selftext": "",
+      "title": "23 y/o make, in NY, degree in psychology. Any suggestions on career paths, which pay well?",
+      "removed_by_category": "moderator",
+      "banned_by": "leesang627",
+      "banned_at_utc": 1605835588,
+      "spam": false,
+      "removed": true,
+      "removed_by": "leesang627",
+      "removal_reason": null,
+      "id": "jqt8kc",
+      "author": "woogler627",
+      "approved": false,
+      "permalink": "/r/KIXModSandbox/comments/jqt8kc/23_yo_make_in_ny_degree_in_psychology_any/",
+      "url": "https://www.reddit.com/r/KIXModSandbox/comments/jqt8kc/23_yo_make_in_ny_degree_in_psychology_any/",
+      "created_utc": 1604906632.0
+      }
+    ],
   "spam_comments": [{
+    "type": "spam_comments",
     "banned_by": "AutoModerator",
     "removal_reason": null,
     "link_id": "t3_jqtd8f",
