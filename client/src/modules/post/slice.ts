@@ -3,8 +3,8 @@ import { Submission } from '../../lib/api/pushshift/submission';
 import { Comment } from '../../lib/api/pushshift/comment';
 
 export type PostState = {
-  submissions: {
-    data: Submission[] | null;
+  posts: {
+    data: Submission[] | Comment[] | null;
     loading: boolean;
     error: Error | null;
   };
@@ -17,7 +17,7 @@ export type PostState = {
 };
 
 export const initialState: PostState = {
-  submissions: {
+  posts: {
     data: null,
     loading: false,
     error: null,
@@ -36,20 +36,20 @@ const postSlice = createSlice({
   reducers: {
     getSubmissions: {
       reducer: (state) => {
-        state.submissions.loading = true;
-        state.submissions.data = null;
+        state.posts.loading = true;
+        state.posts.data = null;
       },
       prepare: (subredditName: string) => ({
         payload: subredditName,
       }),
     },
     getSubmissionsSuccess: (state, action: PayloadAction<Submission[]>) => {
-      state.submissions.data = action.payload;
-      state.submissions.loading = false;
+      state.posts.data = action.payload;
+      state.posts.loading = false;
     },
     getSubmissionsError: (state, action: PayloadAction<Error>) => {
-      state.submissions.error = action.payload;
-      state.submissions.loading = false;
+      state.posts.error = action.payload;
+      state.posts.loading = false;
     },
     getComments: {
       reducer: (state) => {
@@ -68,11 +68,11 @@ const postSlice = createSlice({
       state.comments.loading = false;
       state.comments.error = action.payload;
     },
-    selectSubmission: (state, action: PayloadAction<string>) => {
-      state.selectedSubmission = state.submissions.data?.find(
-        (submission) => submission.id === action.payload,
-      );
-    },
+    // selectSubmission: (state, action: PayloadAction<string>) => {
+    //   state.selectedSubmission = state.posts.data?.find(
+    //     (submission) => submission.id === action.payload,
+    //   );
+    // },
   },
 });
 
@@ -81,7 +81,7 @@ export const {
   getSubmissions,
   getSubmissionsSuccess,
   getSubmissionsError,
-  selectSubmission,
+  // selectSubmission,
   getComments,
   getCommentsSuccess,
   getCommentsError,

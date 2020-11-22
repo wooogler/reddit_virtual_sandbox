@@ -1,6 +1,7 @@
 {
   "submissions": [
     {
+      "type": "submission",
       "author": "Interceptor88LH",
       "created_utc": 1605734854,
       "full_link": "https://www.reddit.com/r/heroesofthestorm/comments/jwoutn/gillyweed_ccl_interview_w_the_one_and_only_lutano/",
@@ -12,6 +13,7 @@
       "filter_id": ["0-0"]
     },
     {
+      "type": "submission",
       "author": "Spazzo965",
       "created_utc": 1605734018,
       "full_link": "https://www.reddit.com/r/heroesofthestorm/comments/jwol2x/ccl_season_1_week_2_advanced_statistics/",
@@ -23,6 +25,7 @@
       "filter_id": ["0-1"]
     },
     {
+      "type": "submission",
       "author": "Curator4",
       "created_utc": 1605730463,
       "full_link": "https://www.reddit.com/r/heroesofthestorm/comments/jwnexq/old_brawl_portraits/",
@@ -36,6 +39,7 @@
   ],
   "comments": [
     {
+      "type": "comment",
       "author": "MrWilbus",
       "body": "Relatively minor but \" accompanied by EU veterans Nic and Nintorii. \" Nintorii is NA  not EU. Looking good that aside!",
       "created_utc": 1603810811,
@@ -45,6 +49,7 @@
       "subreddit": "heroesofthestorm"
     },
     {
+      "type": "comment",
       "author": "TheUnusuallySpecific",
       "body": "Some good lookin' teams out there! Excited to see who ends up on top- will the teams that have committed early on to having a coach see that pay dividends? How much does the ping REALLY matter when the chips are down? Who will be the first player to drop/be dropped?\n\nThere's a lot to look forward to!",
       "created_utc": 1603757758,

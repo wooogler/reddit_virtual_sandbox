@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import BodyTextContainer from '../../containers/common/BodyTextContainer';
 import { Submission } from '../../lib/api/pushshift/submission';
 import palette, { actionColorMap } from '../../lib/styles/palette';
-import { getComments, selectSubmission } from '../../modules/post/slice';
+import { getComments } from '../../modules/post/slice';
 import AuthorText from '../common/AuthorText';
 import FlairText from '../common/FlairText';
 import IdText from '../common/IdText';

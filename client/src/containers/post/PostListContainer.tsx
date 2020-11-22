@@ -1,16 +1,14 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import SubmissionList from '../../components/post/SubmissionList';
+import PostList from '../../components/post/PostList';
 import { RootState } from '../../modules';
 import { getSubmissions } from '../../modules/post/slice';
 
-function SubmissionListContainer() {
+function PostListContainer() {
   const { data, loading, error } = useSelector(
-    (state: RootState) => state.post.submissions,
+    (state: RootState) => state.post.posts,
   );
-  const {selectedId} = useSelector(
-    (state: RootState) => state.rule
-  );
+  const { selectedId } = useSelector((state: RootState) => state.rule);
 
   const dispatch = useDispatch();
 
@@ -22,9 +20,9 @@ function SubmissionListContainer() {
     <>
       {loading && <p style={{ textAlign: 'center' }}>글 로딩중..</p>}
       {error && <p style={{ textAlign: 'center' }}>에러 발생!</p>}
-      {data && <SubmissionList submissions={data} selectedId={selectedId}/>}
+      {data && <PostList posts={data} selectedId={selectedId} />}
     </>
   );
 }
 
-export default SubmissionListContainer;
+export default PostListContainer;

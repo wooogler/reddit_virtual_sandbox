@@ -2,6 +2,7 @@ import { Submission } from '../submission';
 
 export const submissionData: { submission: Submission } = {
   submission: {
+    type: 'submission',
     author: 'kanaaaaaaaa',
     created_utc: 1602595926,
     full_link:

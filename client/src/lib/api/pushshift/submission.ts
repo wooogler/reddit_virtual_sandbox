@@ -9,6 +9,7 @@ export async function getSubmissionsAPI(subredditName: string) {
 }
 
 export interface Submission {
+  type: 'submission';
   author: string;
   created_utc: number;
   full_link: string;

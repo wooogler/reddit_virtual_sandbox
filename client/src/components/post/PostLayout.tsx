@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import PostHeader from './PostHeader';
-import SubmissionListContainer from '../../containers/post/SubmissionListContainer';
+import PostListContainer from '../../containers/post/PostListContainer';
 import SubmissionDetailContainer from '../../containers/post/SubmissionDetailContainer';
 import CommentListContainer from '../../containers/post/CommentListContainer';
 
@@ -12,11 +12,11 @@ function PostLayout() {
         <PostHeader />
       </Header>
       <List>
-        <SubmissionListContainer />
+        <PostListContainer />
       </List>
       <Detail>
-        <SubmissionDetailContainer/>
-        <CommentListContainer/>
+        <SubmissionDetailContainer />
+        <CommentListContainer />
       </Detail>
     </Grid>
   );
