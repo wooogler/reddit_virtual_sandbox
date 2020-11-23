@@ -19,11 +19,10 @@ type Bolds = {
 
 export interface SubmissionItemProps {
   submission: Submission | SpamSubmission;
-  ellipsis: boolean;
   action?: 'remove' | 'report';
 }
 
-function SubmissionItem({ submission, ellipsis, action}: SubmissionItemProps) {
+function SubmissionItem({submission, action}: SubmissionItemProps) {
   // const dispatch = useDispatch();
   const handleClick = (submissionId: string) => {
     // dispatch(selectSubmission(submissionId));
@@ -32,7 +31,7 @@ function SubmissionItem({ submission, ellipsis, action}: SubmissionItemProps) {
 
   return (
     <SubmissionItemDiv action={action} onClick={() => handleClick(submission.id)}>
-      <TitleText text={submission.title} ellipsis={ellipsis} />
+      <TitleText text={submission.title} ellipsis={true} />
       <div className="submission-info">
         {/* {submission.link_flair_text && (
           <FlairText
@@ -44,7 +43,7 @@ function SubmissionItem({ submission, ellipsis, action}: SubmissionItemProps) {
         <IdText text={submission.id} />
         <LinkText text='open submission link' url={'https://www.reddit.com'+submission.permalink}/>
       </div>
-      <BodyTextContainer text={submission.selftext} ellipsis={ellipsis}/>
+      <BodyTextContainer text={submission.selftext} ellipsis={true}/>
       <div className="author-info">
         <AuthorText text={submission.author} />
         <DatetimeText datetime={submission.created_utc} />

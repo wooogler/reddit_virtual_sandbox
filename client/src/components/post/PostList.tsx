@@ -5,6 +5,7 @@ import { Comment } from '../../lib/api/pushshift/comment';
 import SubmissionItem from './SubmissionItem';
 import CommentItem from './CommentItem';
 import PostItem from './PostItem';
+import ListHeader from './ListHeader';
 
 interface PostListProps {
   posts: (Submission | Comment)[] | null;
@@ -14,6 +15,7 @@ interface PostListProps {
 function PostList({ posts, selectedId }: PostListProps) {
   return (
     <PostListBlock>
+      <ListHeader name='Post List'/>
       {posts &&
         posts.map((post) => {
           const selected = selectedId.filter((item) =>
@@ -23,6 +25,7 @@ function PostList({ posts, selectedId }: PostListProps) {
             <PostItem
               post={post}
               action={selected.length === 0 ? undefined : 'remove'}
+              key={post.id}
             />
           );
         })}

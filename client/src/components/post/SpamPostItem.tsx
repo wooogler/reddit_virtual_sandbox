@@ -15,14 +15,12 @@ function SpamPostItem({ spamPost, action }: SpamPostItemProps) {
     <SpamFrame spamPost={spamPost}>
       <SubmissionItem
         submission={spamPost}
-        ellipsis={true}
-        key={spamPost.id}
         action={action}
       />
     </SpamFrame>
   ) : (
     <SpamFrame spamPost={spamPost}>
-      <CommentItem comment={spamPost} key={spamPost.id} action={action} />
+      <CommentItem comment={spamPost} action={action} />
     </SpamFrame>
   );
 }

@@ -1,7 +1,11 @@
-import { AsyncActionCreatorBuilder, PayloadAction, getType } from "typesafe-actions";
+import {
+  AsyncActionCreatorBuilder,
+  PayloadAction,
+  getType,
+} from 'typesafe-actions';
 import { AnyAction } from 'redux';
-import {call, put} from 'redux-saga/effects';
-import { Line, RuleQuery } from "../modules/rule/slice";
+import { call, put } from 'redux-saga/effects';
+import { Line, RuleQuery } from '../modules/rule/slice';
 
 type PromiseCreatorFunction<P, T> =
   | ((payload: P) => Promise<T>)
@@ -24,16 +28,27 @@ export const valueToLine = (value: string) => {
   let ruleId = 0;
   let lineId = 0;
   value.split('\n').forEach((line, index) => {
-    if(line.includes(':')) {
-      lines.push({content: line, lineId: lineId++, ruleId: ruleId, selected: true});
+    if (line.includes(':')) {
+      lines.push({
+        content: line,
+        lineId: lineId++,
+        ruleId: ruleId,
+        selected: true,
+      });
     }
-    if(line.includes('---')) {
-      if(index!==0){
-        lineId=0;
+    if (line.includes('---')) {
+      lines.push({
+        content: `---`,
+        lineId: -1,
+        ruleId: ruleId,
+        selected: true,
+      });
+      if (index !== 0) {
+        lineId = 0;
         ruleId++;
       }
     }
-  })
+  });
   return lines;
 };
 
@@ -87,19 +102,19 @@ export function createAsyncSaga<T1, P1, T2, P2, T3, P3>(
     [T2, [P2, undefined]],
     [T3, [P3, undefined]]
   >,
-  promiseCreator: PromiseCreatorFunction<P1, P2>
+  promiseCreator: PromiseCreatorFunction<P1, P2>,
 ) {
   return function* saga(action: ReturnType<typeof asyncActionCreator.request>) {
     try {
       const result = isPayloadAction<P1>(action)
-      ? yield call (promiseCreator, action.payload)
-      : yield call (promiseCreator);
+        ? yield call(promiseCreator, action.payload)
+        : yield call(promiseCreator);
       yield put(asyncActionCreator.success(result));
     } catch (e) {
       yield put(asyncActionCreator.failure(e));
     }
-  }
-};
+  };
+}
 
 export type AsyncState<T, E = any> = {
   data: T | null;
@@ -167,7 +182,9 @@ export function createAsyncReducer<
   };
 }
 
-export function transformToArray<AC extends AnyAsyncActionCreator>(asyncActionCreator: AC) {
-  const {request, success, failure} = asyncActionCreator;
+export function transformToArray<AC extends AnyAsyncActionCreator>(
+  asyncActionCreator: AC,
+) {
+  const { request, success, failure } = asyncActionCreator;
   return [request, success, failure];
 }

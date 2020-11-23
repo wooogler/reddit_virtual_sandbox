@@ -32,15 +32,12 @@ const Grid = styled.div`
 const Header = styled.div`
   grid-column: 1 / 3;
   grid-row: 1 / 2;
-  background-color: red;
 `;
 const PostListLayout = styled.div`
-  background-color: blue;
   overflow: auto;
 `;
 
 const SpamPostListLayout = styled.div`
-  background-color: yellow;
   display: flex;
   flex-direction: column;
   overflow: auto;

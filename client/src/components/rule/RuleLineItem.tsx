@@ -17,18 +17,24 @@ function RuleLineItem({ line }: RuleLineItemProps) {
   return (
     <RuleLineItemDiv>
       {line.content} 
-      <input
-        type="checkbox"
-        name="isSelected"
-        checked={line.selected}
-        onChange={handleSelect}
-      />
+      {line.lineId !== -1 && 
+        <input
+          type="checkbox"
+          name="isSelected"
+          checked={line.selected}
+          onChange={handleSelect}
+        />
+      }
     </RuleLineItemDiv>
   );
 }
 
 const RuleLineItemDiv = styled.div`
   display: flex;
+  font-family: 'Menlo';
+  font-size: 14px;
+  align-items: center;
+  height: 19px;
 `;
 
 export default RuleLineItem;

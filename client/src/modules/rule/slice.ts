@@ -39,7 +39,7 @@ export const initialState: RuleState = {
   rules: [
     {
       title: 'rule.yml',
-      value: '',
+      value: 'title: hello\nbody: bi\n---\nbody: hello',
       tab: 0,
       mode: 'editor',
     },

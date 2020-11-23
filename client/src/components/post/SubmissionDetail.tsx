@@ -7,10 +7,10 @@ interface SubmissionDetailProps {
   submission: Submission | undefined;
 }
 
-function SubmissionDetail({submission}: SubmissionDetailProps) {
+function SubmissionDetail({ submission }: SubmissionDetailProps) {
   return (
     <PostDetailBlock>
-      {submission && <SubmissionItem submission={submission} ellipsis={false}/>}
+      {submission && <SubmissionItem submission={submission} />}
     </PostDetailBlock>
   );
 }
@@ -18,7 +18,6 @@ function SubmissionDetail({submission}: SubmissionDetailProps) {
 const PostDetailBlock = styled.div`
   display: flex;
   flex-direction: column;
-`
-
+`;
 
 export default SubmissionDetail;

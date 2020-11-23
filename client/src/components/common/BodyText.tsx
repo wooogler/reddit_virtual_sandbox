@@ -45,7 +45,9 @@ function BodyText({ text, bolds }: BodyTextProps) {
         }
         return `${word} `;
       })}
-      <ToggleSpanButton onClick={() => setEllipsis(state => !state)}>{ellipsis ? '▽ span' : '△ close'}</ToggleSpanButton>
+      {
+        text !== '' &&  <ToggleSpanButton onClick={() => setEllipsis(state => !state)}>{ellipsis ? '▽ span' : '△ close'}</ToggleSpanButton>
+      }
     </TextBlock>
   );
 }

@@ -6,7 +6,7 @@ import { SpamComment } from '../../lib/api/reddit/spamComment';
 
 export type PostState = {
   posts: {
-    data: Submission[] | Comment[] | null;
+    data: (Submission | Comment)[] | null;
     loading: boolean;
     error: Error | null;
   };
@@ -16,11 +16,12 @@ export type PostState = {
     error: Error | null;
   };
   spamPosts: {
-    data: (SpamSubmission|SpamComment)[] | null;
+    data: (SpamSubmission | SpamComment)[] | null;
     loading: boolean;
     error: Error | null;
   }
-  selectedSubmission: Submission | undefined;
+  selectedPostIds: string[];
+  selectedSpamPostIds: string[];
 };
 
 export const initialState: PostState = {
@@ -39,7 +40,8 @@ export const initialState: PostState = {
     loading: false,
     error: null,
   },
-  selectedSubmission: undefined,
+  selectedPostIds: [],
+  selectedSpamPostIds: [],
 };
 
 const postSlice = createSlice({

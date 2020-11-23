@@ -13,8 +13,6 @@ function PostItem({post, action}: PostItemProps) {
   return post.type === 'submission' ? (
     <SubmissionItem
       submission={post}
-      ellipsis={true}
-      key={post.id}
       action={action}
     />
   ) : (

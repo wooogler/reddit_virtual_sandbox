@@ -13,5 +13,4 @@ const Template: Story<SubmissionItemProps> = (args) => <SubmissionItem {...args}
 export const Default = Template.bind({});
 Default.args = {
   submission: submissionData.submission,
-  ellipsis: false,
 };

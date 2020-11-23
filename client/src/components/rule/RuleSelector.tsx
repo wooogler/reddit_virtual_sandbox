@@ -11,7 +11,9 @@ function RuleSelector({lines}: RuleSelectorProps) {
   return (
     <RuleSelectorDiv>
       {
-        lines && lines.map(line => <RuleLineItem line={line} key={`${line.ruleId}-${line.lineId}`}/>)
+        lines && lines.map(line => {
+          return <RuleLineItem line={line} key={`${line.ruleId}-${line.lineId}`}/>
+        })
       }
     </RuleSelectorDiv>
   );
