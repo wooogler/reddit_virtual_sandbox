@@ -16,7 +16,7 @@ function RuleLineItem({ line }: RuleLineItemProps) {
   
   return (
     <RuleLineItemDiv>
-      {line.content} {line.ruleId}-{line.lineId}
+      {line.content} 
       <input
         type="checkbox"
         name="isSelected"

@@ -55,7 +55,8 @@
       "id": "ga80z2z",
       "link_id": "t3_jilxe1",
       "permalink": "/r/heroesofthestorm/comments/jilxe1/meet_the_ccl_teams_draft_recap/ga80z2z/",
-      "subreddit": "heroesofthestorm"
+      "subreddit": "heroesofthestorm",
+      "filter_id": []
     }
   ],
   "spam_posts": [
@@ -75,7 +76,8 @@
       "approved": false,
       "permalink": "/r/KIXModSandbox/comments/jqt8kc/23_yo_make_in_ny_degree_in_psychology_any/",
       "url": "https://www.reddit.com/r/KIXModSandbox/comments/jqt8kc/23_yo_make_in_ny_degree_in_psychology_any/",
-      "created_utc": 1604906632.0
+      "created_utc": 1604906632.0,
+      "filter_id": []
     },
     {
       "type": "spam_comment",
@@ -91,7 +93,8 @@
       "approved": false,
       "permalink": "/r/KIXModSandbox/comments/jqtd8f/you_get_to_download_all_the_knowledge_of_a_single/gcwa148/",
       "subreddit": "KIXModSandbox",
-      "created_utc": 1605835862.0
+      "created_utc": 1605835862.0,
+      "filter_id": ["0-0"]
     }
   ]
 }

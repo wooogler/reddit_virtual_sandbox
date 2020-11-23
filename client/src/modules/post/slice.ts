@@ -1,6 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Submission } from '../../lib/api/pushshift/submission';
 import { Comment } from '../../lib/api/pushshift/comment';
+import { SpamSubmission } from '../../lib/api/reddit/spamSubmission';
+import { SpamComment } from '../../lib/api/reddit/spamComment';
 
 export type PostState = {
   posts: {
@@ -13,6 +15,11 @@ export type PostState = {
     loading: boolean;
     error: Error | null;
   };
+  spamPosts: {
+    data: (SpamSubmission|SpamComment)[] | null;
+    loading: boolean;
+    error: Error | null;
+  }
   selectedSubmission: Submission | undefined;
 };
 
@@ -23,6 +30,11 @@ export const initialState: PostState = {
     error: null,
   },
   comments: {
+    data: null,
+    loading: false,
+    error: null,
+  },
+  spamPosts: {
     data: null,
     loading: false,
     error: null,
@@ -68,6 +80,18 @@ const postSlice = createSlice({
       state.comments.loading = false;
       state.comments.error = action.payload;
     },
+    getSpamPosts: (state) => {
+      state.spamPosts.loading = true;
+      state.spamPosts.data = null;
+    },
+    getSpamPostsSuccess: (state, action: PayloadAction<(SpamSubmission|SpamComment)[]>) => {
+      state.spamPosts.data = action.payload;
+      state.spamPosts.loading = false;
+    },
+    getSpamPostsError: (state, action: PayloadAction<Error>) => {
+      state.spamPosts.error = action.payload;
+      state.spamPosts.loading = false;
+    },
     // selectSubmission: (state, action: PayloadAction<string>) => {
     //   state.selectedSubmission = state.posts.data?.find(
     //     (submission) => submission.id === action.payload,
@@ -85,6 +109,9 @@ export const {
   getComments,
   getCommentsSuccess,
   getCommentsError,
+  getSpamPosts,
+  getSpamPostsSuccess,
+  getSpamPostsError,
 } = actions;
 
 export default reducer;

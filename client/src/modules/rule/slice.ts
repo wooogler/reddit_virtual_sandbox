@@ -97,6 +97,7 @@ const ruleSlice = createSlice({
           }
         } else {
           state.rules[state.selectedTab].mode = 'editor';
+          state.selectedId=[];
         }
       } catch (e) {
         state.parsed.error = 'YAML Errors: ' + String(e);

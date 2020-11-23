@@ -4,6 +4,7 @@ import PostHeader from './PostHeader';
 import PostListContainer from '../../containers/post/PostListContainer';
 import SubmissionDetailContainer from '../../containers/post/SubmissionDetailContainer';
 import CommentListContainer from '../../containers/post/CommentListContainer';
+import SpamPostListContainer from '../../containers/post/SpamPostListContainer';
 
 function PostLayout() {
   return (
@@ -15,8 +16,7 @@ function PostLayout() {
         <PostListContainer />
       </PostListLayout>
       <SpamPostListLayout>
-        <SubmissionDetailContainer />
-        <CommentListContainer />
+        <SpamPostListContainer />
       </SpamPostListLayout>
     </Grid>
   );
