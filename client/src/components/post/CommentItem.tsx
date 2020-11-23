@@ -5,6 +5,7 @@ import { SpamComment } from '../../lib/api/reddit/spamComment';
 import palette, { actionColorMap } from '../../lib/styles/palette';
 import AuthorText from '../common/AuthorText';
 import BodyText from '../common/BodyText';
+import DatetimeText from '../common/DatetimeText';
 import FlairText from '../common/FlairText';
 import IdText from '../common/IdText';
 import LinkText from '../common/LinkText';
@@ -19,17 +20,20 @@ function CommentItem({ comment, action }: CommentItemProps) {
   return (
     <CommentItemDiv action={action}>
       <BodyText text={comment.body}/>
+      <div className="comment-info">
+        <IdText text={comment.id} />
+        <LinkText text="open comment link" url={'https://www.reddit.com'+comment.permalink} />
+      </div>
       <div className="author-info">
         <AuthorText text={comment.author} />
+        <DatetimeText datetime={comment.created_utc} />
         {/* {comment.author_flair_text && (
           <FlairText
             text={comment.author_flair_text}
             color={comment.author_flair_text_color}
             background={comment.author_flair_background_color}
           />
-        )}
-        <IdText text={comment.author_fullname} /> */}
-        <LinkText text="open comment link" url={'https://www.reddit.com'+comment.permalink} />
+        )} */}
       </div>
     </CommentItemDiv>
   );
@@ -50,14 +54,13 @@ const CommentItemDiv = styled.div<{ action?: 'remove' | 'report' }>`
     div + div {
       margin-left: 0.5rem;
     }
+    div + a {
+      margin-left: 0.5rem;
+    }
   }
   .author-info {
     display: flex;
-    margin-top: 0.5rem;
     div + div {
-      margin-left: 0.5rem;
-    }
-    div + a {
       margin-left: 0.5rem;
     }
   }

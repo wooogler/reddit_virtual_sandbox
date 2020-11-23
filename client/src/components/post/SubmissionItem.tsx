@@ -7,6 +7,7 @@ import { SpamSubmission } from '../../lib/api/reddit/spamSubmission';
 import palette, { actionColorMap } from '../../lib/styles/palette';
 import { getComments } from '../../modules/post/slice';
 import AuthorText from '../common/AuthorText';
+import DatetimeText from '../common/DatetimeText';
 import FlairText from '../common/FlairText';
 import IdText from '../common/IdText';
 import LinkText from '../common/LinkText';
@@ -46,6 +47,7 @@ function SubmissionItem({ submission, ellipsis, action}: SubmissionItemProps) {
       <BodyTextContainer text={submission.selftext} ellipsis={ellipsis}/>
       <div className="author-info">
         <AuthorText text={submission.author} />
+        <DatetimeText datetime={submission.created_utc} />
         {/* {submission.author_flair_text && (
           <FlairText
             text={submission.author_flair_text}

@@ -8,11 +8,20 @@ interface AuthorTextProps {
 
 function AuthorText({text}: AuthorTextProps) {
   return (
-    <AuthorDiv>
-      {text}
-    </AuthorDiv>
+    <div>
+      <AuthorSpan>by </AuthorSpan>
+      <AuthorDiv>
+        {text}
+      </AuthorDiv>
+    </div>
+    
   )
 }
+
+const AuthorSpan = styled.span`
+  color: ${palette.gray[7]};
+  font-size: 0.9rem;
+`
 
 const AuthorDiv = styled.div`
   font-weight: 800;
