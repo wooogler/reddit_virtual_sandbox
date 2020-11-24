@@ -11,6 +11,7 @@ import DatetimeText from '../common/DatetimeText';
 import FlairText from '../common/FlairText';
 import IdText from '../common/IdText';
 import LinkText from '../common/LinkText';
+import SubredditText from '../common/SubredditText';
 import TitleText from '../common/TitleText';
 
 type Bolds = {
@@ -40,7 +41,8 @@ function SubmissionItem({submission, action}: SubmissionItemProps) {
             background={submission.link_flair_background_color}
           />
         )} */}
-        <IdText text={submission.id} />
+        {/* <IdText text={submission.id} /> */}
+        <SubredditText text={submission.subreddit} />
         <LinkText text='open submission link' url={'https://www.reddit.com'+submission.permalink}/>
       </div>
       <BodyTextContainer text={submission.selftext} ellipsis={true}/>
@@ -74,7 +76,7 @@ const SubmissionItemDiv = styled.div<{ action?: 'remove' | 'report' }>`
     div + div {
       margin-left: 0.5rem;
     }
-    div + a {
+    a + a {
       margin-left: 0.5rem;
     }
   }

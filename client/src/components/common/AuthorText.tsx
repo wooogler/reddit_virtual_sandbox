@@ -16,7 +16,6 @@ function AuthorText({text}: AuthorTextProps) {
       </AuthorDiv>
       </a>
     </div>
-    
   )
 }
 

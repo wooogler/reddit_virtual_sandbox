@@ -9,6 +9,7 @@ import DatetimeText from '../common/DatetimeText';
 import FlairText from '../common/FlairText';
 import IdText from '../common/IdText';
 import LinkText from '../common/LinkText';
+import SubredditText from '../common/SubredditText';
 
 
 export interface CommentItemProps {
@@ -21,7 +22,8 @@ function CommentItem({ comment, action }: CommentItemProps) {
     <CommentItemDiv action={action}>
       <BodyText text={comment.body}/>
       <div className="comment-info">
-        <IdText text={comment.id} />
+        {/* <IdText text={comment.id} /> */}
+        <SubredditText text={comment.subreddit} />
         <LinkText text="open comment link" url={'https://www.reddit.com'+comment.permalink} />
       </div>
       <div className="author-info">
@@ -54,7 +56,7 @@ const CommentItemDiv = styled.div<{ action?: 'remove' | 'report' }>`
     div + div {
       margin-left: 0.5rem;
     }
-    div + a {
+    a + a {
       margin-left: 0.5rem;
     }
   }
