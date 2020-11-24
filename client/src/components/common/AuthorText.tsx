@@ -10,9 +10,11 @@ function AuthorText({text}: AuthorTextProps) {
   return (
     <div>
       <AuthorSpan>by </AuthorSpan>
+      <a href={`https://www.reddit.com/user/${text}`} target="_blank" rel="noopener noreferrer">
       <AuthorDiv>
         {text}
       </AuthorDiv>
+      </a>
     </div>
     
   )
