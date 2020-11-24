@@ -8,10 +8,16 @@ export interface ListHeaderProps {
 
 type OptionType = { value: string; label: string };
 
-const options: OptionsType<OptionType> = [
+const sortOptions: OptionsType<OptionType> = [
   { value: 'new', label: 'new' },
   { value: 'old', label: 'old' },
   { value: 'smart', label: 'smart' },
+];
+
+const viewOptions: OptionsType<OptionType> = [
+  { value: 'all', label: 'all posts' },
+  { value: 'submission', label: 'submission' },
+  { value: 'comment', label: 'comment' },
 ];
 
 function ListHeader({ name }: ListHeaderProps) {
@@ -27,12 +33,20 @@ function ListHeader({ name }: ListHeaderProps) {
   return (
     <ListHeaderDiv>
       <div className="name">{name}</div>
-      <Select
-        className="select"
-        defaultValue={options[0]}
-        options={options}
-        onChange={(option) => handleChange(option)}
-      />
+      <div className='select-group'>
+        <Select
+          className="select-view"
+          defaultValue={viewOptions[0]}
+          options={viewOptions}
+          onChange={(option) => handleChange(option)}
+        />
+        <Select
+          className="select-sort"
+          defaultValue={sortOptions[0]}
+          options={sortOptions}
+          onChange={(option) => handleChange(option)}
+        />
+      </div>
     </ListHeaderDiv>
   );
 }
@@ -45,9 +59,16 @@ const ListHeaderDiv = styled.div`
     font-size: 1.5rem;
     margin-left: 0.5rem;
   }
-  .select {
+  .select-group {
+    display: flex;
     margin-left: auto;
-    width: 6rem;
+    .select-sort {
+      width: 6rem;
+      margin-left: 1rem;
+    }
+    .select-view {
+      width: 8rem;
+    }
   }
 `;
 

@@ -5,11 +5,9 @@ import Modal from 'react-modal';
 import Draggable from 'react-draggable';
 import PostForm from './PostForm';
 import palette from '../../lib/styles/palette';
-import { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } from 'constants';
-import AuthorText from '../common/AuthorText';
 
 function PostActions() {
-  const [isAddOpen, setIsAddOpen] = useState(true);
+  const [isAddOpen, setIsAddOpen] = useState(false);
 
   const handleClickAdd = () => {
     setIsAddOpen(true);
