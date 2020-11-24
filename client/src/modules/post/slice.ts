@@ -19,7 +19,7 @@ export type PostState = {
     data: (SpamSubmission | SpamComment)[] | null;
     loading: boolean;
     error: Error | null;
-  }
+  };
   selectedPostIds: string[];
   selectedSpamPostIds: string[];
 };
@@ -86,7 +86,10 @@ const postSlice = createSlice({
       state.spamPosts.loading = true;
       state.spamPosts.data = null;
     },
-    getSpamPostsSuccess: (state, action: PayloadAction<(SpamSubmission|SpamComment)[]>) => {
+    getSpamPostsSuccess: (
+      state,
+      action: PayloadAction<(SpamSubmission | SpamComment)[]>,
+    ) => {
       state.spamPosts.data = action.payload;
       state.spamPosts.loading = false;
     },

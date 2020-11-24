@@ -1,17 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
-import PostHeader from './PostHeader';
 import PostListContainer from '../../containers/post/PostListContainer';
-import SubmissionDetailContainer from '../../containers/post/SubmissionDetailContainer';
-import CommentListContainer from '../../containers/post/CommentListContainer';
 import SpamPostListContainer from '../../containers/post/SpamPostListContainer';
+import PostActions from './PostActions';
 
 function PostLayout() {
   return (
     <Grid>
-      <Header>
-        <PostHeader />
-      </Header>
+      <PostHeaderLayout>
+        <PostActions/>
+      </PostHeaderLayout>
       <PostListLayout>
         <PostListContainer />
       </PostListLayout>
@@ -29,9 +27,12 @@ const Grid = styled.div`
   grid-template-rows: 4rem 1fr;
 `;
 
-const Header = styled.div`
+const PostHeaderLayout = styled.div`
   grid-column: 1 / 3;
   grid-row: 1 / 2;
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
 `;
 const PostListLayout = styled.div`
   overflow: auto;
