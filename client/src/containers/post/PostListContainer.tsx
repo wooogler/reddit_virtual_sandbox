@@ -5,13 +5,12 @@ import { RootState } from '../../modules';
 import { getPosts } from '../../modules/post/slice';
 
 function PostListContainer() {
-  const { data, loading, error } = useSelector(
-    (state: RootState) => state.post.posts,
-  );
   const { selectedRuleId } = useSelector((state: RootState) => state.rule);
-  const { selectedPostId } = useSelector(
-    (state: RootState) => state.post,
-  );
+  const {
+    selectedPostId,
+    selectedSpamPostId,
+    posts: { data, loading, error },
+  } = useSelector((state: RootState) => state.post);
 
   const dispatch = useDispatch();
 
@@ -28,6 +27,7 @@ function PostListContainer() {
           posts={data}
           selectedPostId={selectedPostId}
           selectedRuleId={selectedRuleId}
+          selectedSpamPostId={selectedSpamPostId}
         />
       )}
     </>

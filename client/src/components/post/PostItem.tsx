@@ -32,7 +32,7 @@ function PostItem({ post, action, selected }: PostItemProps) {
 }
 
 const PostItemDiv = styled.div<{ selected: boolean }>`
-  > div {
+  > div  {
     box-shadow: 0 0 0 3px
     ${(props) => (props.selected ? `${palette.red[7]}` : 'none')}
     inset;

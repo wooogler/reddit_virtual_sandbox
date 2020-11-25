@@ -1,38 +1,56 @@
 import React from 'react';
-import {useFormik} from 'formik';
+import { useFormik } from 'formik';
 import styled from 'styled-components';
 import Button from '../common/Button';
 import Textarea from 'react-textarea-autosize';
 
 interface PostFormProps {
-  onClickClose: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
+  onClickClose: () => void;
 }
 
-function PostForm({onClickClose}: PostFormProps) {
+function PostForm({ onClickClose }: PostFormProps) {
   const formik = useFormik({
     initialValues: {
       title: '',
       body: '',
       author: 'fake_user',
     },
-    onSubmit: values => {
+    onSubmit: (values) => {
       alert(JSON.stringify(values, null, 2));
-    }
-  })
+      onClickClose();
+    },
+  });
   return (
     <PostFormDiv onSubmit={formik.handleSubmit}>
-      <label htmlFor='title'>Title</label>
-      <input name='title' type='text' onChange={formik.handleChange} value={formik.values.title} />
-      <label htmlFor='title'>Author</label>
-      <input name='author' type='text' onChange={formik.handleChange} value={formik.values.author} />
-      <label htmlFor='body'>Body</label>
-      <Textarea name='body' onChange={formik.handleChange} value={formik.values.body} minRows={10}/>
-      <div className='buttons'>
-        <Button color='red' onClick={onClickClose}>Close</Button>
-        <Button type='submit'>Save</Button>
+      <label htmlFor="title">Title</label>
+      <input
+        name="title"
+        type="text"
+        onChange={formik.handleChange}
+        value={formik.values.title}
+      />
+      <label htmlFor="title">Author</label>
+      <input
+        name="author"
+        type="text"
+        onChange={formik.handleChange}
+        value={formik.values.author}
+      />
+      <label htmlFor="body">Body</label>
+      <Textarea
+        name="body"
+        onChange={formik.handleChange}
+        value={formik.values.body}
+        minRows={10}
+      />
+      <div className="buttons">
+        <Button color="red" onClick={onClickClose}>
+          Close
+        </Button>
+        <Button type="submit">Save</Button>
       </div>
     </PostFormDiv>
-  )
+  );
 }
 
 const PostFormDiv = styled.form`
@@ -49,13 +67,14 @@ const PostFormDiv = styled.form`
     font-size: 1.2rem;
     font-weight: bold;
   }
-  input, textarea {
-    font-size: 1.0rem;
+  input,
+  textarea {
+    font-size: 1rem;
     font-family: sans-serif;
     margin-bottom: 1rem;
     border: 1px solid #ccc;
     padding: 1rem;
   }
-`
+`;
 
-export default PostForm
+export default PostForm;

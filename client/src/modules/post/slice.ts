@@ -84,11 +84,18 @@ const postSlice = createSlice({
     },
     togglePostSelect: (state, action: PayloadAction<string>) => {
       const index = state.selectedPostId.indexOf(action.payload)
-      console.log(index);
       if(index > -1) {
         state.selectedPostId.splice(index, 1)
       } else {
         state.selectedPostId.push(action.payload)
+      }
+    },
+    toggleSpamPostSelect: (state, action: PayloadAction<string>) => {
+      const index = state.selectedSpamPostId.indexOf(action.payload)
+      if(index > -1) {
+        state.selectedSpamPostId.splice(index, 1)
+      } else {
+        state.selectedSpamPostId.push(action.payload)
       }
     },
     getSpamPosts: (state) => {
@@ -108,6 +115,9 @@ const postSlice = createSlice({
     },
     clearSelectedPostId: (state) => {
       state.selectedPostId = [];
+    },
+    clearSelectedSpamPostId: (state) => {
+      state.selectedSpamPostId = [];
     }
     // selectSubmission: (state, action: PayloadAction<string>) => {
     //   state.selectedSubmission = state.posts.data?.find(
@@ -124,6 +134,7 @@ export const {
   getPostsError,
   // selectSubmission,
   togglePostSelect,
+  toggleSpamPostSelect,
   getComments,
   getCommentsSuccess,
   getCommentsError,
@@ -131,6 +142,7 @@ export const {
   getSpamPostsSuccess,
   getSpamPostsError,
   clearSelectedPostId,
+  clearSelectedSpamPostId,
 } = actions;
 
 export default reducer;
