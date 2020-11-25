@@ -3,20 +3,38 @@ import styled from 'styled-components';
 import { SpamComment } from '../../lib/api/reddit/spamComment';
 import { SpamSubmission } from '../../lib/api/reddit/spamSubmission';
 import ListHeader from './ListHeader';
+import OverlayWithButton from '../common/OverlayWithButton';
 import SpamPostItem from './SpamPostItem';
+import { useDispatch } from 'react-redux';
+import { clearSelectedPostId } from '../../modules/post/slice';
 
 interface SpamPostListProps {
   spamPosts: (SpamSubmission | SpamComment)[] | null;
-  selectedId: string[];
+  selectedRuleId: string[];
+  selectedPostId: string[];
 }
 
-function SpamPostList({ spamPosts, selectedId }: SpamPostListProps) {
+function SpamPostList({
+  spamPosts,
+  selectedRuleId,
+  selectedPostId,
+}: SpamPostListProps) {
+  const dispatch = useDispatch();
+
+  const handleClickMove = () => {
+    alert(JSON.stringify(selectedPostId))
+    dispatch(clearSelectedPostId())
+  }
+
   return (
     <SpamPostListBlock>
-      <ListHeader name='Spam List'/>
+      {selectedPostId.length !== 0 && (
+        <OverlayWithButton text="Move to Target" buttonText="Move" onClickButton={handleClickMove}/>
+      )}
+      <ListHeader name="Target" />
       {spamPosts &&
         spamPosts.map((spamPost) => {
-          const selected = selectedId.filter((item) =>
+          const selected = selectedRuleId.filter((item) =>
             spamPost.filter_id.includes(item),
           );
           return (
@@ -34,6 +52,8 @@ function SpamPostList({ spamPosts, selectedId }: SpamPostListProps) {
 const SpamPostListBlock = styled.div`
   display: flex;
   flex-direction: column;
+  position: relative;
+  height: 100%;
 `;
 
 export default SpamPostList;

@@ -20,7 +20,7 @@ function SpamPostItem({ spamPost, action }: SpamPostItemProps) {
     </SpamFrame>
   ) : (
     <SpamFrame spamPost={spamPost}>
-      <CommentItem comment={spamPost} action={action} />
+      <CommentItem comment={spamPost} action={action}/>
     </SpamFrame>
   );
 }

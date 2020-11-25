@@ -42,8 +42,8 @@ function ListHeader({ name }: ListHeaderProps) {
         />
         <Select
           className="select-sort"
-          defaultValue={sortOptions[0]}
           options={sortOptions}
+          placeholder='sort'
           onChange={(option) => handleChange(option)}
         />
       </div>

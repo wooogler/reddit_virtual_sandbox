@@ -20,8 +20,8 @@ export type PostState = {
     loading: boolean;
     error: Error | null;
   };
-  selectedPostIds: string[];
-  selectedSpamPostIds: string[];
+  selectedPostId: string[];
+  selectedSpamPostId: string[];
 };
 
 export const initialState: PostState = {
@@ -40,8 +40,8 @@ export const initialState: PostState = {
     loading: false,
     error: null,
   },
-  selectedPostIds: [],
-  selectedSpamPostIds: [],
+  selectedPostId: [],
+  selectedSpamPostId: [],
 };
 
 const postSlice = createSlice({
@@ -82,6 +82,15 @@ const postSlice = createSlice({
       state.comments.loading = false;
       state.comments.error = action.payload;
     },
+    togglePostSelect: (state, action: PayloadAction<string>) => {
+      const index = state.selectedPostId.indexOf(action.payload)
+      console.log(index);
+      if(index > -1) {
+        state.selectedPostId.splice(index, 1)
+      } else {
+        state.selectedPostId.push(action.payload)
+      }
+    },
     getSpamPosts: (state) => {
       state.spamPosts.loading = true;
       state.spamPosts.data = null;
@@ -97,6 +106,9 @@ const postSlice = createSlice({
       state.spamPosts.error = action.payload;
       state.spamPosts.loading = false;
     },
+    clearSelectedPostId: (state) => {
+      state.selectedPostId = [];
+    }
     // selectSubmission: (state, action: PayloadAction<string>) => {
     //   state.selectedSubmission = state.posts.data?.find(
     //     (submission) => submission.id === action.payload,
@@ -111,12 +123,14 @@ export const {
   getPostsSuccess,
   getPostsError,
   // selectSubmission,
+  togglePostSelect,
   getComments,
   getCommentsSuccess,
   getCommentsError,
   getSpamPosts,
   getSpamPostsSuccess,
   getSpamPostsError,
+  clearSelectedPostId,
 } = actions;
 
 export default reducer;

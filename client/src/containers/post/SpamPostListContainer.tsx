@@ -8,7 +8,8 @@ function SpamPostListContainer() {
   const {data, loading, error} = useSelector(
     (state: RootState) => state.post.spamPosts
   )
-  const {selectedId} = useSelector((state: RootState) => state.rule);
+  const selectedPostId = useSelector((state: RootState) => state.post.selectedPostId);
+  const {selectedRuleId} = useSelector((state: RootState) => state.rule);
 
   const dispatch = useDispatch()
 
@@ -20,7 +21,7 @@ function SpamPostListContainer() {
     <>
       {loading && <p style={{ textAlign: 'center' }}>글 로딩중..</p>}
       {error && <p style={{ textAlign: 'center' }}>에러 발생!</p>}
-      {data && <SpamPostList spamPosts={data} selectedId={selectedId} />}
+      {data && <SpamPostList spamPosts={data} selectedRuleId={selectedRuleId} selectedPostId={selectedPostId}/>}
     </>
   )
 }

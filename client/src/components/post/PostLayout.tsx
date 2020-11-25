@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import PostListContainer from '../../containers/post/PostListContainer';
 import SpamPostListContainer from '../../containers/post/SpamPostListContainer';
 import PostActions from './PostActions';
+import PostListOverlay from '../common/OverlayWithButton';
 
 function PostLayout() {
   return (
@@ -14,6 +15,7 @@ function PostLayout() {
         <PostListContainer />
       </PostListLayout>
       <SpamPostListLayout>
+        
         <SpamPostListContainer />
       </SpamPostListLayout>
     </Grid>
@@ -38,7 +40,8 @@ const PostListLayout = styled.div`
   overflow: auto;
 `;
 
-const SpamPostListLayout = styled.div`
+const SpamPostListLayout = styled.div` 
+  position: relative;
   display: flex;
   flex-direction: column;
   overflow: auto;

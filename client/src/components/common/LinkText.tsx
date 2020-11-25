@@ -10,7 +10,7 @@ export interface LinkTextProps {
 function LinkText({text, url}: LinkTextProps) {
   if(text === '') return null;
   return (
-    <a href={url} target="_blank" rel="noopener noreferrer"><LinkDiv>{text}</LinkDiv></a>
+    <a href={url} onClick={(e) => {e.stopPropagation()}} target="_blank" rel="noopener noreferrer"><LinkDiv>{text}</LinkDiv></a>
   )
 }
 

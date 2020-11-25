@@ -8,7 +8,10 @@ function PostListContainer() {
   const { data, loading, error } = useSelector(
     (state: RootState) => state.post.posts,
   );
-  const { selectedId } = useSelector((state: RootState) => state.rule);
+  const { selectedRuleId } = useSelector((state: RootState) => state.rule);
+  const { selectedPostId } = useSelector(
+    (state: RootState) => state.post,
+  );
 
   const dispatch = useDispatch();
 
@@ -20,7 +23,13 @@ function PostListContainer() {
     <>
       {loading && <p style={{ textAlign: 'center' }}>글 로딩중..</p>}
       {error && <p style={{ textAlign: 'center' }}>에러 발생!</p>}
-      {data && <PostList posts={data} selectedId={selectedId} />}
+      {data && (
+        <PostList
+          posts={data}
+          selectedPostId={selectedPostId}
+          selectedRuleId={selectedRuleId}
+        />
+      )}
     </>
   );
 }

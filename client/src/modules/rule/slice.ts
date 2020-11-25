@@ -24,7 +24,7 @@ export type RuleState = {
     query: undefined | RuleQuery[];
     error: any;
   };
-  selectedId: string[];
+  selectedRuleId: string[];
 };
 
 export interface RuleQuery {
@@ -49,7 +49,7 @@ export const initialState: RuleState = {
     query: undefined,
     error: '',
   },
-  selectedId: [],
+  selectedRuleId: [],
 };
 
 const ruleSlice = createSlice({
@@ -87,17 +87,17 @@ const ruleSlice = createSlice({
           state.rules[state.selectedTab].lines = valueToLine(value);
           const lines = state.rules[state.selectedTab].lines
           if(lines) {
-            let selectedId:string[] = []
+            let selectedRuleId:string[] = []
             lines.forEach((line) => {
               if(line.selected===true) {
-                selectedId.push(`${line.ruleId}-${line.lineId}`)
+                selectedRuleId.push(`${line.ruleId}-${line.lineId}`)
               }
             })
-            state.selectedId = selectedId;
+            state.selectedRuleId = selectedRuleId;
           }
         } else {
           state.rules[state.selectedTab].mode = 'editor';
-          state.selectedId=[];
+          state.selectedRuleId=[];
         }
       } catch (e) {
         state.parsed.error = 'YAML Errors: ' + String(e);
@@ -117,13 +117,13 @@ const ruleSlice = createSlice({
       }
       const lines = state.rules[state.selectedTab].lines
       if(lines) {
-        let selectedId:string[] = []
+        let selectedRuleId:string[] = []
         lines.forEach((line) => {
           if(line.selected===true) {
-            selectedId.push(`${line.ruleId}-${line.lineId}`)
+            selectedRuleId.push(`${line.ruleId}-${line.lineId}`)
           }
         })
-        state.selectedId = selectedId;
+        state.selectedRuleId = selectedRuleId;
       }
     },
   },

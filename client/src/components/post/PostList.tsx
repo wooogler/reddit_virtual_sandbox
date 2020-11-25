@@ -9,23 +9,26 @@ import ListHeader from './ListHeader';
 
 interface PostListProps {
   posts: (Submission | Comment)[] | null;
-  selectedId: string[];
+  selectedRuleId: string[];
+  selectedPostId: string[];
 }
 
-function PostList({ posts, selectedId }: PostListProps) {
+function PostList({ posts, selectedRuleId, selectedPostId }: PostListProps) {
   return (
     <PostListBlock>
-      <ListHeader name='Post List'/>
+      <ListHeader name='Posts'/>
       {posts &&
         posts.map((post) => {
-          const selected = selectedId.filter((item) =>
+          const selectedRule = selectedRuleId.filter((item) =>
             post.filter_id.includes(item),
           );
+          const selected = selectedPostId.includes(post.id)
           return (
             <PostItem
               post={post}
-              action={selected.length === 0 ? undefined : 'remove'}
+              action={selectedRule.length === 0 ? undefined : 'remove'}
               key={post.id}
+              selected={selected}
             />
           );
         })}
