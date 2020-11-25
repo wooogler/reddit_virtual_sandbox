@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Select, { OptionsType, ValueType, StylesConfig } from 'react-select';
+import Select, { OptionsType, ValueType } from 'react-select';
 import styled from 'styled-components';
 
 export interface ListHeaderProps {
@@ -21,13 +21,8 @@ const viewOptions: OptionsType<OptionType> = [
 ];
 
 function ListHeader({ name }: ListHeaderProps) {
-  const [selectedOption, setSelectedOption] = useState<ValueType<OptionType>>(
-    [],
-  );
-
   const handleChange = (option: ValueType<OptionType>) => {
-    console.log(selectedOption);
-    setSelectedOption(option);
+    console.log((option as OptionType).value)
   };
 
   return (
@@ -38,13 +33,13 @@ function ListHeader({ name }: ListHeaderProps) {
           className="select-view"
           defaultValue={viewOptions[0]}
           options={viewOptions}
-          onChange={(option) => handleChange(option)}
+          onChange={handleChange}
         />
         <Select
           className="select-sort"
           options={sortOptions}
           placeholder='sort'
-          onChange={(option) => handleChange(option)}
+          onChange={handleChange}
         />
       </div>
     </ListHeaderDiv>
