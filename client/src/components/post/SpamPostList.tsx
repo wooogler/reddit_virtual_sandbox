@@ -33,7 +33,7 @@ function SpamPostList({
       {selectedPostId.length !== 0 && (
         <OverlayWithButton text="Move to Target" buttonText="Move" onClickButton={handleClickMove}/>
       )}
-      <ListHeader name="Target" />
+      <ListHeader list='target' name="Target" />
       {spamPosts &&
         spamPosts.map((spamPost) => {
           const selectedRule = selectedRuleId.filter((item) =>

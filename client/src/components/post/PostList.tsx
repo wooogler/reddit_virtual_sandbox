@@ -29,7 +29,7 @@ function PostList({ posts, selectedRuleId, selectedPostId, selectedSpamPostId }:
       {selectedSpamPostId.length !== 0 && (
         <OverlayWithButton text="Move to Posts" buttonText="Move" onClickButton={handleClickMove}/>
       )}
-      <ListHeader name='Posts'/>
+      <ListHeader list='posts' name='Posts'/>
       {posts &&
         posts.map((post) => {
           const selectedRule = selectedRuleId.filter((item) =>

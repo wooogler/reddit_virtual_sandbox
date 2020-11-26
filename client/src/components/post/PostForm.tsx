@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useFormik } from 'formik';
+import Select, { OptionsType } from 'react-select';
 import styled from 'styled-components';
 import Button from '../common/Button';
 import Textarea from 'react-textarea-autosize';
@@ -8,9 +9,18 @@ interface PostFormProps {
   onClickClose: () => void;
 }
 
+type OptionType = { value: string; label: string };
+
+const typeOptions: OptionsType<OptionType> = [
+  { value: 'submission', label: 'submission' },
+  { value: 'comment', label: 'comment' },
+];
+
 function PostForm({ onClickClose }: PostFormProps) {
+
   const formik = useFormik({
     initialValues: {
+      type: 'submission',
       title: '',
       body: '',
       author: 'fake_user',
@@ -22,14 +32,28 @@ function PostForm({ onClickClose }: PostFormProps) {
   });
   return (
     <PostFormDiv onSubmit={formik.handleSubmit}>
-      <label htmlFor="title">Title</label>
-      <input
-        name="title"
-        type="text"
-        onChange={formik.handleChange}
-        value={formik.values.title}
+      <label htmlFor="type">Type</label>
+      <Select
+        className='select-type'
+        options={typeOptions}
+        onChange={(option) => {
+          formik.setFieldValue('type', (option as OptionType).value);
+        }}
       />
-      <label htmlFor="title">Author</label>
+      {
+        formik.values.type === 'submission' && 
+        <>
+        <label htmlFor="title">Title</label>
+        <input
+          name="title"
+          type="text"
+          onChange={formik.handleChange}
+          value={formik.values.title}
+        />
+        </>
+      }
+      
+      <label htmlFor="author">Author</label>
       <input
         name="author"
         type="text"
@@ -41,7 +65,7 @@ function PostForm({ onClickClose }: PostFormProps) {
         name="body"
         onChange={formik.handleChange}
         value={formik.values.body}
-        minRows={10}
+        minRows={15}
       />
       <div className="buttons">
         <Button color="red" onClick={onClickClose}>
@@ -73,7 +97,10 @@ const PostFormDiv = styled.form`
     font-family: sans-serif;
     margin-bottom: 1rem;
     border: 1px solid #ccc;
-    padding: 1rem;
+    padding: 0.5rem;
+  }
+  .select-type {
+    margin-bottom: 1rem;
   }
 `;
 

@@ -3,6 +3,7 @@ import Select, { OptionsType, ValueType } from 'react-select';
 import styled from 'styled-components';
 
 export interface ListHeaderProps {
+  list: string;
   name: string;
 }
 
@@ -20,9 +21,13 @@ const viewOptions: OptionsType<OptionType> = [
   { value: 'comment', label: 'comment' },
 ];
 
-function ListHeader({ name }: ListHeaderProps) {
-  const handleChange = (option: ValueType<OptionType>) => {
-    console.log((option as OptionType).value)
+function ListHeader({ list, name }: ListHeaderProps) {
+  const handleChangeView = (option: ValueType<OptionType>) => {
+    alert(`${list}, view, ${(option as OptionType).value}`)
+  };
+
+  const handleChangeSort = (option: ValueType<OptionType>) => {
+    alert(`${list}, sort, ${(option as OptionType).value}`)
   };
 
   return (
@@ -33,13 +38,13 @@ function ListHeader({ name }: ListHeaderProps) {
           className="select-view"
           defaultValue={viewOptions[0]}
           options={viewOptions}
-          onChange={handleChange}
+          onChange={handleChangeView}
         />
         <Select
           className="select-sort"
           options={sortOptions}
           placeholder='sort'
-          onChange={handleChange}
+          onChange={handleChangeSort}
         />
       </div>
     </ListHeaderDiv>
