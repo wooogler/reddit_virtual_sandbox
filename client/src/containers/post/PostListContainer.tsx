@@ -5,7 +5,7 @@ import { RootState } from '../../modules';
 import { getPosts } from '../../modules/post/slice';
 
 function PostListContainer() {
-  const { selectedRuleId } = useSelector((state: RootState) => state.rule);
+  const { selectedLines } = useSelector((state: RootState) => state.rule);
   const {
     selectedPostId,
     selectedSpamPostId,
@@ -26,7 +26,7 @@ function PostListContainer() {
         <PostList
           posts={data}
           selectedPostId={selectedPostId}
-          selectedRuleId={selectedRuleId}
+          selectedLines={selectedLines}
           selectedSpamPostId={selectedSpamPostId}
         />
       )}

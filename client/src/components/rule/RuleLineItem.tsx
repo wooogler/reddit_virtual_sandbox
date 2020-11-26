@@ -1,17 +1,18 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { Line, toggleRuleSelect } from '../../modules/rule/slice';
+import { Line, toggleLineSelect } from '../../modules/rule/slice';
 
 export interface RuleLineItemProps {
   line: Line;
+  selected: boolean;
 }
 
-function RuleLineItem({ line }: RuleLineItemProps) {
+function RuleLineItem({ line, selected }: RuleLineItemProps) {
   const dispatch = useDispatch();
 
   const handleSelect = () => {
-    dispatch(toggleRuleSelect({ruleId: line.ruleId, lineId: line.lineId}))
+    dispatch(toggleLineSelect({ruleId: line.ruleId, lineId: line.lineId}))
   }
   
   return (
@@ -21,7 +22,7 @@ function RuleLineItem({ line }: RuleLineItemProps) {
         <input
           type="checkbox"
           name="isSelected"
-          checked={line.selected}
+          checked={selected}
           onChange={handleSelect}
         />
       }

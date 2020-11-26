@@ -5,7 +5,7 @@ import { RootState } from '../../modules';
 import { getSpamPosts } from '../../modules/post/slice';
 
 function SpamPostListContainer() {
-  const { selectedRuleId } = useSelector((state: RootState) => state.rule);
+  const { selectedLines } = useSelector((state: RootState) => state.rule);
   const {
     selectedPostId,
     selectedSpamPostId,
@@ -25,7 +25,7 @@ function SpamPostListContainer() {
       {data && (
         <SpamPostList
           spamPosts={data}
-          selectedRuleId={selectedRuleId}
+          selectedLines={selectedLines}
           selectedPostId={selectedPostId}
           selectedSpamPostId={selectedSpamPostId}
         />

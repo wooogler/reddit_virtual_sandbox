@@ -1,12 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import YAML from 'yaml';
-import { arrayToQuery, valueToLine } from '../../lib/utils';
+import { arrayToQuery, codeToLines } from '../../lib/utils';
 
-export type Rule = {
+export type File = {
   tab: number;
   title: string;
-  value: string;
-  mode: 'editor' | 'selector';
+  code: string;
+  mode: 'edit' | 'select';
   lines?: Line[];
 };
 
@@ -14,17 +14,16 @@ export type Line = {
   content: string;
   ruleId: number;
   lineId: number;
-  selected: boolean;
 };
 
 export type RuleState = {
-  rules: Rule[];
+  files: File[];
   selectedTab: number;
   parsed: {
     query: undefined | RuleQuery[];
     error: any;
   };
-  selectedRuleId: string[];
+  selectedLines: Omit<Line, 'content'>[];
 };
 
 export interface RuleQuery {
@@ -36,12 +35,12 @@ export interface RuleQuery {
 }
 
 export const initialState: RuleState = {
-  rules: [
+  files: [
     {
       title: 'rule.yml',
-      value: 'title: hello\nbody: bi\n---\nbody: hello',
+      code: 'title: hello\nbody: bi\n---\nbody: hello',
       tab: 0,
-      mode: 'editor',
+      mode: 'edit',
     },
   ],
   selectedTab: 0,
@@ -49,81 +48,64 @@ export const initialState: RuleState = {
     query: undefined,
     error: '',
   },
-  selectedRuleId: [],
+  selectedLines: [],
 };
 
 const ruleSlice = createSlice({
   name: 'rule',
   initialState,
   reducers: {
-    addRule: (state, action: PayloadAction<Rule>) => {
-      state.rules.push(action.payload);
+    addFile: (state, action: PayloadAction<File>) => {
+      state.files.push(action.payload);
     },
-    closeRule: (state, action: PayloadAction<number>) => {
-      const index = state.rules.findIndex(
+    closeFile: (state, action: PayloadAction<number>) => {
+      const index = state.files.findIndex(
         (rule) => rule.tab === action.payload,
       );
-      state.rules.splice(index, 1);
+      state.files.splice(index, 1);
     },
-    updateRuleValue: (state, action: PayloadAction<string>) => {
-      state.rules[state.selectedTab].value = action.payload;
+    updateFileCode: (state, action: PayloadAction<string>) => {
+      state.files[state.selectedTab].code = action.payload;
     },
-    changeTab: (state, action: PayloadAction<number>) => {
+    changeFile: (state, action: PayloadAction<number>) => {
       state.selectedTab = action.payload;
     },
     parseRuleValue: (state) => {
       try {
-        const mode = state.rules[state.selectedTab].mode;
-        if (mode === 'editor') {
-          const value = state.rules[state.selectedTab].value;
-          const parsedData = YAML.parseAllDocuments(value, {
+        const mode = state.files[state.selectedTab].mode;
+        if (mode === 'edit') {
+          const code = state.files[state.selectedTab].code;
+          const parsedCode = YAML.parseAllDocuments(code, {
             prettyErrors: true,
           });
-          const parsedDocuments = parsedData.map((item) =>
+          const parsedArray = parsedCode.map((item) =>
             JSON.parse(JSON.stringify(item)),
           );
-          state.parsed.query = arrayToQuery(parsedDocuments);
-          state.rules[state.selectedTab].mode = 'selector';
-          state.rules[state.selectedTab].lines = valueToLine(value);
-          const lines = state.rules[state.selectedTab].lines
-          if(lines) {
-            let selectedRuleId:string[] = []
-            lines.forEach((line) => {
-              if(line.selected===true) {
-                selectedRuleId.push(`${line.ruleId}-${line.lineId}`)
-              }
-            })
-            state.selectedRuleId = selectedRuleId;
-          }
+          state.parsed.query = arrayToQuery(parsedArray);
+          state.files[state.selectedTab].mode = 'select';
+          state.files[state.selectedTab].lines = codeToLines(code);
         } else {
-          state.rules[state.selectedTab].mode = 'editor';
-          state.selectedRuleId=[];
+          state.files[state.selectedTab].mode = 'edit';
+          state.selectedLines = [];
         }
       } catch (e) {
         state.parsed.error = 'YAML Errors: ' + String(e);
       }
     },
-    toggleRuleSelect: (
+    toggleLineSelect: (
       state,
       action: PayloadAction<{ ruleId: number; lineId: number }>,
     ) => {
-      const line = state.rules[state.selectedTab].lines?.find(
-        (line) => 
+      const index = state.selectedLines.findIndex(
+        (line) =>
           line.lineId === action.payload.lineId &&
           line.ruleId === action.payload.ruleId,
       );
-      if(line) {
-        line.selected = !line.selected
-      }
-      const lines = state.rules[state.selectedTab].lines
-      if(lines) {
-        let selectedRuleId:string[] = []
-        lines.forEach((line) => {
-          if(line.selected===true) {
-            selectedRuleId.push(`${line.ruleId}-${line.lineId}`)
-          }
-        })
-        state.selectedRuleId = selectedRuleId;
+      console.log(index, action.payload);
+      if (index > -1) {
+        state.selectedLines.splice(index);
+      } else {
+        state.selectedLines.push(action.payload);
       }
     },
   },
@@ -132,12 +114,12 @@ const ruleSlice = createSlice({
 const { actions, reducer } = ruleSlice;
 
 export const {
-  addRule,
-  closeRule,
-  updateRuleValue,
-  changeTab,
+  addFile,
+  closeFile,
+  updateFileCode,
+  changeFile,
   parseRuleValue,
-  toggleRuleSelect,
+  toggleLineSelect,
 } = actions;
 
 export default reducer;

@@ -9,15 +9,16 @@ import ListHeader from './ListHeader';
 import OverlayWithButton from '../common/OverlayWithButton';
 import { useDispatch } from 'react-redux';
 import { clearSelectedSpamPostId } from '../../modules/post/slice';
+import { Line } from '../../modules/rule/slice';
 
 interface PostListProps {
   posts: (Submission | Comment)[] | null;
-  selectedRuleId: string[];
+  selectedLines: Omit<Line, 'content'>[];
   selectedPostId: string[];
   selectedSpamPostId: string[];
 }
 
-function PostList({ posts, selectedRuleId, selectedPostId, selectedSpamPostId }: PostListProps) {
+function PostList({ posts, selectedLines, selectedPostId, selectedSpamPostId }: PostListProps) {
   const dispatch = useDispatch();
 
   const handleClickMove = () => {
@@ -32,14 +33,14 @@ function PostList({ posts, selectedRuleId, selectedPostId, selectedSpamPostId }:
       <ListHeader list='posts' name='Posts'/>
       {posts &&
         posts.map((post) => {
-          const selectedRule = selectedRuleId.filter((item) =>
-            post.filter_id.includes(item),
+          const filteredLines = selectedLines.filter((item) =>
+            post.filter_id.includes(`${item.ruleId}-${item.lineId}`),
           );
           const selected = selectedPostId.includes(post.id)
           return (
             <PostItem
               post={post}
-              action={selectedRule.length === 0 ? undefined : 'remove'}
+              action={filteredLines.length === 0 ? undefined : 'remove'}
               key={post.id}
               selected={selected}
             />
