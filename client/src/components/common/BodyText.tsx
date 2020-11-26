@@ -31,9 +31,9 @@ function BodyText({ text, bolds }: BodyTextProps) {
   const boldIndexResult = boldMap && union(...boldMap);
 
   const handleClickSpan = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    setEllipsis(state => !state);
+    setEllipsis((state) => !state);
     e.stopPropagation();
-  }
+  };
 
   return (
     <TextBlock ellipsis={ellipsis}>
@@ -50,9 +50,13 @@ function BodyText({ text, bolds }: BodyTextProps) {
         }
         return `${word} `;
       })}
-      {
-        text !== '' &&  <ToggleSpanButton onClick={handleClickSpan}>{ellipsis ? '▽ span' : '△ close'}</ToggleSpanButton>
-      }
+      {text !== '' && (
+        <div className='span-div'>
+          <ToggleSpanButton onClick={handleClickSpan}>
+            {ellipsis ? '▽ span' : '△ close'}
+          </ToggleSpanButton>
+        </div>
+      )}
     </TextBlock>
   );
 }
@@ -69,12 +73,15 @@ const TextBlock = styled.div<{ ellipsis: boolean }>`
       white-space: nowrap;
       overflow: hidden;
     `}
+  .span-div {
+    display:flex;
+  }
 `;
 
-const ToggleSpanButton = styled.div`
+const ToggleSpanButton = styled.span`
   font-size: 0.8rem;
   color: ${palette.gray[6]};
   cursor: pointer;
-`
+`;
 
 export default BodyText;

@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Button from '../common/Button';
-import Modal from 'react-modal';
-import Draggable from 'react-draggable';
 import PostForm from './PostForm';
-import palette from '../../lib/styles/palette';
 import DraggableModal from '../common/DraggableModal';
 
 function PostActions() {

@@ -1,15 +1,11 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import BodyTextContainer from '../../containers/common/BodyTextContainer';
 import { Submission } from '../../lib/api/pushshift/submission';
 import { SpamSubmission } from '../../lib/api/reddit/spamSubmission';
 import palette, { actionColorMap } from '../../lib/styles/palette';
-import { getComments } from '../../modules/post/slice';
 import AuthorText from '../common/AuthorText';
 import DatetimeText from '../common/DatetimeText';
-import FlairText from '../common/FlairText';
-import IdText from '../common/IdText';
 import LinkText from '../common/LinkText';
 import SubredditText from '../common/SubredditText';
 import TitleText from '../common/TitleText';
@@ -24,14 +20,9 @@ export interface SubmissionItemProps {
 }
 
 function SubmissionItem({submission, action}: SubmissionItemProps) {
-  // const dispatch = useDispatch();
-  const handleClick = (submissionId: string) => {
-    // dispatch(selectSubmission(submissionId));
-    // dispatch(getComments(submissionId));
-  };
 
   return (
-    <SubmissionItemDiv action={action} onClick={() => handleClick(submission.id)}>
+    <SubmissionItemDiv action={action}>
       <TitleText text={submission.title} ellipsis={true} />
       <div className="submission-info">
         {/* {submission.link_flair_text && (

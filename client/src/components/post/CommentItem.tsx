@@ -6,8 +6,6 @@ import palette, { actionColorMap } from '../../lib/styles/palette';
 import AuthorText from '../common/AuthorText';
 import BodyText from '../common/BodyText';
 import DatetimeText from '../common/DatetimeText';
-import FlairText from '../common/FlairText';
-import IdText from '../common/IdText';
 import LinkText from '../common/LinkText';
 import SubredditText from '../common/SubredditText';
 

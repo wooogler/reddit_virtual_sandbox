@@ -6,7 +6,7 @@ import ListHeader from './ListHeader';
 import OverlayWithButton from '../common/OverlayWithButton';
 import SpamPostItem from './SpamPostItem';
 import { useDispatch } from 'react-redux';
-import { clearSelectedPostId, clearSelectedSpamPostId } from '../../modules/post/slice';
+import { clearSelectedPostId } from '../../modules/post/slice';
 import { Line } from '../../modules/rule/slice';
 
 interface SpamPostListProps {
@@ -37,14 +37,17 @@ function SpamPostList({
       <ListHeader list='target' name="Target" />
       {spamPosts &&
         spamPosts.map((spamPost) => {
-          const filteredLines = selectedLines.filter((item) =>
-            spamPost.filter_id.includes(`${item.ruleId}-${item.lineId}`),
-          );
+          const isFiltered =
+            selectedLines.length === 0
+              ? false
+              : selectedLines.every((item) =>
+                  spamPost.filter_id.includes(`${item.ruleId}-${item.lineId}`),
+                );
           const selected = selectedSpamPostId.includes(spamPost.id);
           return (
             <SpamPostItem
               spamPost={spamPost}
-              action={filteredLines.length === 0 ? undefined : 'remove'}
+              action={isFiltered ? 'remove' : undefined}
               key={spamPost.id}
               selected={selected}
             />

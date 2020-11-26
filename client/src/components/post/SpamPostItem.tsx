@@ -48,6 +48,7 @@ const SpamPostItemDiv = styled.div<{ selected: boolean }>`
     inset;
   }
   background-color: ${palette.gray[3]};
+  cursor: default;
 `;
 
 export default SpamPostItem;

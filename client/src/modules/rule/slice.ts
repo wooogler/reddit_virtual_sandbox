@@ -101,9 +101,8 @@ const ruleSlice = createSlice({
           line.lineId === action.payload.lineId &&
           line.ruleId === action.payload.ruleId,
       );
-      console.log(index, action.payload);
       if (index > -1) {
-        state.selectedLines.splice(index);
+        state.selectedLines.splice(index, 1);
       } else {
         state.selectedLines.push(action.payload);
       }
