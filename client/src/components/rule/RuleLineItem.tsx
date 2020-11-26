@@ -32,10 +32,13 @@ function RuleLineItem({ line, selected }: RuleLineItemProps) {
 
 const RuleLineItemDiv = styled.div`
   display: flex;
-  font-family: 'Menlo';
-  font-size: 14px;
+  font-family: 'Courier';
+  font-size: 16px;
   align-items: center;
-  height: 19px;
+  height: 18px;
+  input {
+    margin-left: 0.5rem;
+  }
 `;
 
 export default RuleLineItem;

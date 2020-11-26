@@ -1,7 +1,7 @@
 import React from 'react';
 import AceEditor from 'react-ace';
 import 'ace-builds/src-noconflict/mode-yaml';
-import 'ace-builds/src-noconflict/theme-github';
+import 'ace-builds/src-noconflict/theme-tomorrow';
 import { useDispatch } from 'react-redux';
 import { updateFileCode } from '../../modules/rule/slice';
 
@@ -19,14 +19,15 @@ function RuleEditor({code}: RuleEditorProps) {
   return (
     <AceEditor
       mode="yaml"
-      theme="github"
+      theme="tomorrow"
       onChange={handleChange}
       value={code}
-      fontSize={14}
       width='100%'
       height='100%'
       setOptions={{
-        showGutter: false
+        showGutter: false,
+        fontFamily: 'Courier',
+        fontSize: '16px'
       }}
     />
   );
