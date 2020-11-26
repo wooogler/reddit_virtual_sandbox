@@ -23,37 +23,31 @@ type PromiseCreatorFunction<P, T> =
 //   {check: 'title', search: ['hello'], modifier: ['includes', 'regex'], id:1}
 // ]
 
-export const valueToLine = (value: string) => {
+export const codeToLines = (code: string) => {
   let lines: Line[] = [];
   let ruleId = 0;
   let lineId = 0;
-  value.split('\n').forEach((line, index) => {
-    if (line.includes(':')) {
+  code.split('\n').forEach((line, index) => {
+    if (line.includes('---')) {
+      lineId = 0;
+      lines.push({
+        content: `---`,
+        lineId: -1,
+        ruleId: index === 0 ? ruleId : ruleId++,
+      });
+    } else {
       lines.push({
         content: line,
         lineId: lineId++,
         ruleId: ruleId,
-        selected: true,
       });
-    }
-    if (line.includes('---')) {
-      lines.push({
-        content: `---`,
-        lineId: -1,
-        ruleId: ruleId,
-        selected: true,
-      });
-      if (index !== 0) {
-        lineId = 0;
-        ruleId++;
-      }
     }
   });
   return lines;
 };
 
-export const arrayToQuery = (parsedDocuments: object[]) => {
-  return parsedDocuments.reduce(
+export const arrayToQuery = (parsedArray: object[]) => {
+  return parsedArray.reduce(
     (ruleQuerys: RuleQuery[], parsedDocument, ruleIndex) => {
       const regexForKey = /^(~?[^\s(]+)\s*(?:\((.+)\))?$/;
       if (parsedDocument !== null) {

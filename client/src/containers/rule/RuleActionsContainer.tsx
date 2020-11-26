@@ -6,11 +6,11 @@ import { RootState } from '../../modules';
 function RuleActionsContainer() {
   const ruleState = useSelector((state: RootState) => state.rule);
   const error = ruleState.parsed.error;
-  const ruleIndex = ruleState.rules.findIndex(rule => rule.tab === ruleState.selectedTab);
+  const fileIndex = ruleState.files.findIndex(file => file.tab === ruleState.selectedTab);
 
   return (
     <>
-      <RuleActions message={String(error)} mode={ruleState.rules[ruleIndex].mode}/>
+      <RuleActions message={String(error)} mode={ruleState.files[fileIndex].mode}/>
     </>
   )
 }

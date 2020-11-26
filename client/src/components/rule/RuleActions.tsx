@@ -6,7 +6,7 @@ import Button from '../common/Button';
 
 interface RuleActionsProps {
   message: string;
-  mode: 'editor' | 'selector';
+  mode: 'edit' | 'select';
 }
 
 function RuleActions({ message, mode }: RuleActionsProps) {
@@ -20,7 +20,7 @@ function RuleActions({ message, mode }: RuleActionsProps) {
     <RuleActionsBlock>
       <span>{message}</span>
       <Button onClick={handleClickRun} color="blue" size="large">
-        {mode === "editor" ? 'Run' : 'Edit'}
+        {mode === "edit" ? 'Run' : 'Edit'}
       </Button>
       <Button color="red" size="large">
         Export YAML

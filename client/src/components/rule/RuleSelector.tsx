@@ -5,22 +5,29 @@ import RuleLineItem from './RuleLineItem';
 
 interface RuleSelectorProps {
   lines?: Line[];
+  selectedLines: Omit<Line, 'content'>[];
 }
 
-function RuleSelector({lines}: RuleSelectorProps) {
+function RuleSelector({ lines, selectedLines }: RuleSelectorProps) {
   return (
     <RuleSelectorDiv>
-      {
-        lines && lines.map(line => {
-          return <RuleLineItem line={line} key={`${line.ruleId}-${line.lineId}`}/>
-        })
-      }
+      {lines &&
+        lines.map((line) => {
+          return (
+            <RuleLineItem
+              selected={selectedLines.some(item => (
+                line.ruleId === item.ruleId &&
+                line.lineId === item.lineId
+              ))}
+              line={line}
+              key={`${line.ruleId}-${line.lineId}`}
+            />
+          );
+        })}
     </RuleSelectorDiv>
   );
 }
 
-const RuleSelectorDiv = styled.div`
-
-`;
+const RuleSelectorDiv = styled.div``;
 
 export default RuleSelector;

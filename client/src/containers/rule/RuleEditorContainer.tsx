@@ -6,14 +6,14 @@ import { RootState } from '../../modules'
 
 function RuleEditorContainer() {
   const ruleState = useSelector((state: RootState) => state.rule);
-  const ruleIndex = ruleState.rules.findIndex(rule => rule.tab === ruleState.selectedTab);
+  const fileIndex = ruleState.files.findIndex(file => file.tab === ruleState.selectedTab);
 
   return (
     <>
     {
-      ruleState.rules[ruleIndex].mode === 'editor' ?
-      <RuleEditor code={ruleState.rules[ruleIndex].value}/> :
-      <RuleSelector lines={ruleState.rules[ruleIndex].lines}/>
+      ruleState.files[fileIndex].mode === 'edit' ?
+      <RuleEditor code={ruleState.files[fileIndex].code}/> :
+      <RuleSelector lines={ruleState.files[fileIndex].lines} selectedLines={ruleState.selectedLines}/>
     }
     </>
   )
