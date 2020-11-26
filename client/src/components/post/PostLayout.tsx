@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import PostListContainer from '../../containers/post/PostListContainer';
 import SpamPostListContainer from '../../containers/post/SpamPostListContainer';
 import PostActions from './PostActions';
-import PostListOverlay from '../common/OverlayWithButton';
 
 function PostLayout() {
   return (

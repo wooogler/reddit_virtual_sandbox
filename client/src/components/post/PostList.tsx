@@ -2,8 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { Submission } from '../../lib/api/pushshift/submission';
 import { Comment } from '../../lib/api/pushshift/comment';
-import SubmissionItem from './SubmissionItem';
-import CommentItem from './CommentItem';
 import PostItem from './PostItem';
 import ListHeader from './ListHeader';
 import OverlayWithButton from '../common/OverlayWithButton';

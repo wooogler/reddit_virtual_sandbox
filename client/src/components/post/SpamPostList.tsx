@@ -6,7 +6,7 @@ import ListHeader from './ListHeader';
 import OverlayWithButton from '../common/OverlayWithButton';
 import SpamPostItem from './SpamPostItem';
 import { useDispatch } from 'react-redux';
-import { clearSelectedPostId, clearSelectedSpamPostId } from '../../modules/post/slice';
+import { clearSelectedPostId } from '../../modules/post/slice';
 import { Line } from '../../modules/rule/slice';
 
 interface SpamPostListProps {

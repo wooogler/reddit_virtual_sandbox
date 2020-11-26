@@ -1,8 +1,5 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
 import BodyText from '../../components/common/BodyText';
-import { RootState } from '../../modules'
-import {flatten} from 'underscore'
 
 interface BodyTextContainerProps {
   text: string;

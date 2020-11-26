@@ -3,7 +3,6 @@ import Draggable from 'react-draggable';
 import Modal from 'react-modal';
 import styled from 'styled-components';
 import palette from '../../lib/styles/palette';
-import Button from './Button';
 
 interface DraggableModalProps {
   isOpen: boolean;

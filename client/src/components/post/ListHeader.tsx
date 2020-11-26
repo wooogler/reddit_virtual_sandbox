@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Select, { OptionsType, ValueType } from 'react-select';
 import styled from 'styled-components';
 
