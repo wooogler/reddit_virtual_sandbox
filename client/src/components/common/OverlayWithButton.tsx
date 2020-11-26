@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Button from './Button';
+import Overlay from './Overlay';
 
 export interface OverlayWithButtonProps {
   text: string;
@@ -14,31 +15,18 @@ function OverlayWithButton({ text, buttonText, onClickButton }: OverlayWithButto
   }
 
   return (
-    <OverlayWithButtonDiv>
-      <div className="text">{text}</div>
+    <Overlay>
+      <TextDiv className="text">{text}</TextDiv>
       <Button color="blue" size="large" onClick={handleClickButton}>
         {buttonText}
       </Button>
-    </OverlayWithButtonDiv>
+    </Overlay>
   );
 }
 
-const OverlayWithButtonDiv = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  background-color: rgba(255, 255, 255, 0.8);
-  width: 100%;
-  height: 100%;
-  z-index: 100;
-  .text {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-  }
+const TextDiv = styled.div`
+  font-size: 2rem;
+  margin-bottom: 1rem;
 `;
 
 export default OverlayWithButton;
