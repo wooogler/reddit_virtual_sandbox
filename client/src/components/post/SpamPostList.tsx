@@ -37,14 +37,17 @@ function SpamPostList({
       <ListHeader list='target' name="Target" />
       {spamPosts &&
         spamPosts.map((spamPost) => {
-          const filteredLines = selectedLines.filter((item) =>
-            spamPost.filter_id.includes(`${item.ruleId}-${item.lineId}`),
-          );
+          const isFiltered =
+            selectedLines.length === 0
+              ? false
+              : selectedLines.every((item) =>
+                  spamPost.filter_id.includes(`${item.ruleId}-${item.lineId}`),
+                );
           const selected = selectedSpamPostId.includes(spamPost.id);
           return (
             <SpamPostItem
               spamPost={spamPost}
-              action={filteredLines.length === 0 ? undefined : 'remove'}
+              action={isFiltered ? 'remove' : undefined}
               key={spamPost.id}
               selected={selected}
             />

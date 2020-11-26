@@ -16,29 +16,41 @@ interface PostListProps {
   selectedSpamPostId: string[];
 }
 
-function PostList({ posts, selectedLines, selectedPostId, selectedSpamPostId }: PostListProps) {
+function PostList({
+  posts,
+  selectedLines,
+  selectedPostId,
+  selectedSpamPostId,
+}: PostListProps) {
   const dispatch = useDispatch();
 
   const handleClickMove = () => {
-    alert(JSON.stringify(selectedSpamPostId))
-    dispatch(clearSelectedSpamPostId())
-  }
+    alert(JSON.stringify(selectedSpamPostId));
+    dispatch(clearSelectedSpamPostId());
+  };
   return (
     <PostListBlock>
       {selectedSpamPostId.length !== 0 && (
-        <OverlayWithButton text="Move to Posts" buttonText="Move" onClickButton={handleClickMove}/>
+        <OverlayWithButton
+          text="Move to Posts"
+          buttonText="Move"
+          onClickButton={handleClickMove}
+        />
       )}
-      <ListHeader list='posts' name='Posts'/>
+      <ListHeader list="posts" name="Posts" />
       {posts &&
         posts.map((post) => {
-          const filteredLines = selectedLines.filter((item) =>
-            post.filter_id.includes(`${item.ruleId}-${item.lineId}`),
-          );
-          const selected = selectedPostId.includes(post.id)
+          const isFiltered =
+            selectedLines.length === 0
+              ? false
+              : selectedLines.every((item) =>
+                  post.filter_id.includes(`${item.ruleId}-${item.lineId}`),
+                );
+          const selected = selectedPostId.includes(post.id);
           return (
             <PostItem
               post={post}
-              action={filteredLines.length === 0 ? undefined : 'remove'}
+              action={isFiltered ? 'remove' : undefined}
               key={post.id}
               selected={selected}
             />

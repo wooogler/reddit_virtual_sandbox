@@ -10,7 +10,7 @@
       "selftext": "",
       "subreddit": "heroesofthestorm",
       "title": "Gillyweed CCL interview w/ the one and only: Lutano!",
-      "filter_id": ["0-0"]
+      "filter_id": ["0-0", "0-1"]
     },
     {
       "type": "submission",
@@ -96,5 +96,12 @@
       "created_utc": 1605835862.0,
       "filter_id": ["0-0"]
     }
-  ]
+  ],
+  "stat": {
+    "postsNum": 5,
+    "targetNum": 2,
+    "lineStats": [{
+      "filter_id": "0-0"
+    }]
+  }
 }
