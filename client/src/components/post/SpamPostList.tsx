@@ -32,7 +32,7 @@ function SpamPostList({
     alert(JSON.stringify(selectedPostId));
     dispatch(clearSelectedPostId());
   };
-  
+
   const handleClickDelete = () => {
     alert(JSON.stringify(selectedPostId));
     dispatch(clearSelectedPostId());
@@ -45,7 +45,7 @@ function SpamPostList({
         : selectedLines.every((item) =>
             post.filter_id.includes(`${item.ruleId}-${item.lineId}`),
           );
-    const selected = selectedPostId.includes(post.id);
+    const selected = selectedSpamPostId.includes(post.id);
     return { post, isFiltered, selected };
   });
 
@@ -71,9 +71,9 @@ function SpamPostList({
             split="horizontal"
             defaultSize="50%"
             style={{ position: 'relative' }}
-            paneStyle={{ overflow: 'auto' }}
+            paneStyle={{ overflow: 'auto', width: '100%' }}
           >
-            <div>
+            <div className='split-pane'>
               {labeledSpamPosts
                 ?.filter((item) => item.isFiltered)
                 .map((item) => {
@@ -88,7 +88,7 @@ function SpamPostList({
                   );
                 })}
             </div>
-            <div>
+            <div className='split-pane'>
               {labeledSpamPosts
                 ?.filter((item) => !item.isFiltered)
                 .map((item) => {
@@ -132,11 +132,14 @@ const SpamPostListBlock = styled.div`
   .list {
     height: 100%;
     overflow-y: auto;
+    .split-pane {
+      width: 100%;
+    }
   }
   .Resizer.horizontal {
     height: 11px;
     margin: -5px 0;
-    background-color: ${palette.blue[3]};
+    background-color: ${palette.blue[2]};
     cursor: row-resize;
     width: 100%;
     z-index: 100;

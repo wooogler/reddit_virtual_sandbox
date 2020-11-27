@@ -25,7 +25,7 @@ const OverlayDiv = styled.div<{opacity: number}>`
   background-color: rgba(255, 255, 255, ${props => props.opacity});
   width: 100%;
   height: 100%;
-  z-index: 100;
+  z-index: 200;
 `;
 
 export default Overlay

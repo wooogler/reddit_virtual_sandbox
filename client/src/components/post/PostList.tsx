@@ -59,7 +59,7 @@ function PostList({
           text="Move to Posts"
           buttonText1="Move"
           onClickButton1={handleClickMove}
-          buttonText2='Delete'
+          buttonText2="Delete"
           onClickButton2={handleClickDelete}
         />
       )}
@@ -69,9 +69,9 @@ function PostList({
             split="horizontal"
             defaultSize="50%"
             style={{ position: 'relative' }}
-            paneStyle={{overflow: 'auto'}}
+            paneStyle={{ overflow: 'auto' }}
           >
-            <div>
+            <div className="split-pane">
               {labeledPosts
                 ?.filter((item) => item.isFiltered)
                 .map((item) => {
@@ -86,7 +86,7 @@ function PostList({
                   );
                 })}
             </div>
-            <div>
+            <div className="split-pane">
               {labeledPosts
                 ?.filter((item) => !item.isFiltered)
                 .map((item) => {
@@ -130,11 +130,14 @@ const PostListBlock = styled.div`
   .list {
     height: 100%;
     overflow-y: auto;
+    .split-pane: {
+      width: 100%;
+    }
   }
   .Resizer.horizontal {
     height: 11px;
     margin: -5px 0;
-    background-color: ${palette.blue[3]};
+    background-color: ${palette.blue[2]};
     cursor: row-resize;
     width: 100%;
     z-index: 100;

@@ -25,6 +25,7 @@ function SpamFrame({ spamPost, children }: SpamFrameProps) {
 }
 
 const SpamFrameDiv = styled.div`
+  width: 100%;
   .spam-info {
     display:flex;
     margin: 0.3rem 0;
