@@ -1,11 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import Button from '../common/Button';
-import PostForm from './PostForm';
-import DraggableModal from '../common/DraggableModal';
 
 function PostActions() {
-
   return (
     <PostActionsDiv>
       <Button color="blue" size="large">

@@ -9,7 +9,6 @@ import { useDispatch } from 'react-redux';
 import { clearSelectedSpamPostId } from '../../modules/post/slice';
 import { Line } from '../../modules/rule/slice';
 import SplitPane from 'react-split-pane';
-import { relative } from 'path';
 import palette from '../../lib/styles/palette';
 
 interface PostListProps {
@@ -30,11 +29,15 @@ function PostList({
   const dispatch = useDispatch();
 
   const handleClickMove = () => {
-    alert(JSON.stringify(selectedSpamPostId));
+    alert(JSON.stringify(selectedSpamPostId)); // move request
+    dispatch(clearSelectedSpamPostId());
+  };
+  const handleClickDelete = () => {
+    alert(JSON.stringify(selectedSpamPostId)); // delete request
     dispatch(clearSelectedSpamPostId());
   };
 
-  const filteredPosts = posts?.map((post) => {
+  const labeledPosts = posts?.map((post) => {
     const isFiltered =
       selectedLines.length === 0
         ? false
@@ -45,77 +48,77 @@ function PostList({
     return { post, isFiltered, selected };
   });
   return (
-    <>
-      <PostListBlock>
-        <ListHeader
-          list="subreddit posts"
-          name="Subreddit Posts"
-          splitView={splitView}
+    <PostListBlock>
+      <ListHeader
+        list="subreddit posts"
+        name="Subreddit Posts"
+        splitView={splitView}
+      />
+      {selectedSpamPostId.length !== 0 && (
+        <OverlayWithButton
+          text="Move to Posts"
+          buttonText1="Move"
+          onClickButton1={handleClickMove}
+          buttonText2='Delete'
+          onClickButton2={handleClickDelete}
         />
-        {selectedSpamPostId.length !== 0 && (
-          <OverlayWithButton
-            text="Move to Posts"
-            buttonText="Move"
-            onClickButton={handleClickMove}
-          />
+      )}
+      <div className="list">
+        {splitView ? (
+          <SplitPane
+            split="horizontal"
+            defaultSize="50%"
+            style={{ position: 'relative' }}
+            paneStyle={{overflow: 'auto'}}
+          >
+            <div>
+              {labeledPosts
+                ?.filter((item) => item.isFiltered)
+                .map((item) => {
+                  const { post, isFiltered, selected } = item;
+                  return (
+                    <PostItem
+                      post={post}
+                      action={isFiltered ? 'remove' : undefined}
+                      key={post.id}
+                      selected={selected}
+                    />
+                  );
+                })}
+            </div>
+            <div>
+              {labeledPosts
+                ?.filter((item) => !item.isFiltered)
+                .map((item) => {
+                  const { post, isFiltered, selected } = item;
+                  return (
+                    <PostItem
+                      post={post}
+                      action={isFiltered ? 'remove' : undefined}
+                      key={post.id}
+                      selected={selected}
+                    />
+                  );
+                })}
+            </div>
+          </SplitPane>
+        ) : (
+          <>
+            {labeledPosts?.map((item) => {
+              const { post, isFiltered, selected } = item;
+              return (
+                <PostItem
+                  post={post}
+                  action={isFiltered ? 'remove' : undefined}
+                  key={post.id}
+                  selected={selected}
+                />
+              );
+            })}
+          </>
         )}
-        <div className="list">
-          {splitView ? (
-            <SplitPane
-              split="horizontal"
-              defaultSize="50%"
-              style={{ position: 'relative' }}
-              paneStyle={{overflow: 'auto'}}
-            >
-              <div>
-                {filteredPosts
-                  ?.filter((item) => item.isFiltered)
-                  .map((item) => {
-                    const { post, isFiltered, selected } = item;
-                    return (
-                      <PostItem
-                        post={post}
-                        action={isFiltered ? 'remove' : undefined}
-                        key={post.id}
-                        selected={selected}
-                      />
-                    );
-                  })}
-              </div>
-              <div>
-                {filteredPosts
-                  ?.filter((item) => !item.isFiltered)
-                  .map((item) => {
-                    const { post, isFiltered, selected } = item;
-                    return (
-                      <PostItem
-                        post={post}
-                        action={isFiltered ? 'remove' : undefined}
-                        key={post.id}
-                        selected={selected}
-                      />
-                    );
-                  })}
-              </div>
-            </SplitPane>
-          ) : (
-            <>
-              {filteredPosts?.map((item) => {
-                const { post, isFiltered, selected } = item;
-                return (
-                  <PostItem
-                    post={post}
-                    action={isFiltered ? 'remove' : undefined}
-                    key={post.id}
-                    selected={selected}
-                  />
-                );
-              })}
-            </>
-          )}
-        </div>
-      </PostListBlock>
-    </>
+      </div>
+    </PostListBlock>
   );
 }
 

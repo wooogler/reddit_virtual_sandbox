@@ -7,7 +7,9 @@ import OverlayWithButton from '../common/OverlayWithButton';
 import SpamPostItem from './SpamPostItem';
 import { useDispatch } from 'react-redux';
 import { clearSelectedPostId } from '../../modules/post/slice';
+import SplitPane from 'react-split-pane';
 import { Line } from '../../modules/rule/slice';
+import palette from '../../lib/styles/palette';
 
 interface SpamPostListProps {
   spamPosts: (SpamSubmission | SpamComment)[] | null;
@@ -22,39 +24,102 @@ function SpamPostList({
   selectedLines,
   selectedSpamPostId,
   selectedPostId,
-  splitView
+  splitView,
 }: SpamPostListProps) {
   const dispatch = useDispatch();
 
   const handleClickMove = () => {
-    alert(JSON.stringify(selectedPostId))
-    dispatch(clearSelectedPostId())
-  }
+    alert(JSON.stringify(selectedPostId));
+    dispatch(clearSelectedPostId());
+  };
+  
+  const handleClickDelete = () => {
+    alert(JSON.stringify(selectedPostId));
+    dispatch(clearSelectedPostId());
+  };
+
+  const labeledSpamPosts = spamPosts?.map((post) => {
+    const isFiltered =
+      selectedLines.length === 0
+        ? false
+        : selectedLines.every((item) =>
+            post.filter_id.includes(`${item.ruleId}-${item.lineId}`),
+          );
+    const selected = selectedPostId.includes(post.id);
+    return { post, isFiltered, selected };
+  });
 
   return (
     <SpamPostListBlock>
       {selectedPostId.length !== 0 && (
-        <OverlayWithButton text="Move to Target" buttonText="Move" onClickButton={handleClickMove}/>
+        <OverlayWithButton
+          text="Move to Target"
+          buttonText1="Move"
+          onClickButton1={handleClickMove}
+          buttonText2='Delete'
+          onClickButton2={handleClickDelete}
+        />
       )}
-      <ListHeader list='spammed posts' name="Spammed Posts" splitView={splitView} />
-      {spamPosts &&
-        spamPosts.map((spamPost) => {
-          const isFiltered =
-            selectedLines.length === 0
-              ? false
-              : selectedLines.every((item) =>
-                  spamPost.filter_id.includes(`${item.ruleId}-${item.lineId}`),
-                );
-          const selected = selectedSpamPostId.includes(spamPost.id);
-          return (
-            <SpamPostItem
-              spamPost={spamPost}
-              action={isFiltered ? 'remove' : undefined}
-              key={spamPost.id}
-              selected={selected}
-            />
-          );
-        })}
+      <ListHeader
+        list="spammed posts"
+        name="Spammed Posts"
+        splitView={splitView}
+      />
+      <div className="list">
+        {splitView ? (
+          <SplitPane
+            split="horizontal"
+            defaultSize="50%"
+            style={{ position: 'relative' }}
+            paneStyle={{ overflow: 'auto' }}
+          >
+            <div>
+              {labeledSpamPosts
+                ?.filter((item) => item.isFiltered)
+                .map((item) => {
+                  const { post, isFiltered, selected } = item;
+                  return (
+                    <SpamPostItem
+                      spamPost={post}
+                      action={isFiltered ? 'remove' : undefined}
+                      key={post.id}
+                      selected={selected}
+                    />
+                  );
+                })}
+            </div>
+            <div>
+              {labeledSpamPosts
+                ?.filter((item) => !item.isFiltered)
+                .map((item) => {
+                  const { post, isFiltered, selected } = item;
+                  return (
+                    <SpamPostItem
+                      spamPost={post}
+                      action={isFiltered ? 'remove' : undefined}
+                      key={post.id}
+                      selected={selected}
+                    />
+                  );
+                })}
+            </div>
+          </SplitPane>
+        ) : (
+          <>
+            {labeledSpamPosts?.map((item) => {
+              const { post, isFiltered, selected } = item;
+              return (
+                <SpamPostItem
+                  spamPost={post}
+                  action={isFiltered ? 'remove' : undefined}
+                  key={post.id}
+                  selected={selected}
+                />
+              );
+            })}
+          </>
+        )}
+      </div>
     </SpamPostListBlock>
   );
 }
@@ -64,6 +129,18 @@ const SpamPostListBlock = styled.div`
   flex-direction: column;
   position: relative;
   height: 100%;
+  .list {
+    height: 100%;
+    overflow-y: auto;
+  }
+  .Resizer.horizontal {
+    height: 11px;
+    margin: -5px 0;
+    background-color: ${palette.blue[3]};
+    cursor: row-resize;
+    width: 100%;
+    z-index: 100;
+  }
 `;
 
 export default SpamPostList;

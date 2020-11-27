@@ -1,6 +1,6 @@
 import React from 'react';
 import { useFormik } from 'formik';
-import Select, { OptionsType, Styles } from 'react-select';
+import { OptionsType } from 'react-select';
 import styled from 'styled-components';
 import Button from '../common/Button';
 import Textarea from 'react-textarea-autosize';

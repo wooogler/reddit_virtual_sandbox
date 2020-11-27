@@ -23,7 +23,7 @@ function SubmissionItem({submission, action}: SubmissionItemProps) {
 
   return (
     <SubmissionItemDiv action={action}>
-      <TitleText text={submission.title} ellipsis={true} />
+      <TitleText text={submission.title} ellipsis={false} />
       <div className="submission-info">
         {/* {submission.link_flair_text && (
           <FlairText

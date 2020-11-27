@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import palette from '../../lib/styles/palette';
 import { AllHtmlEntities } from 'html-entities';
 import { union } from 'underscore';
+import Truncate from 'react-truncate';
 
 const entities = new AllHtmlEntities();
 
@@ -36,20 +37,22 @@ function BodyText({ text, bolds }: BodyTextProps) {
   };
 
   return (
-    <TextBlock ellipsis={ellipsis}>
-      {words.map((word, index) => {
-        if (boldIndexResult?.includes(index)) {
-          return (
-            <span
-              key={index}
-              style={{ fontWeight: 'bold', color: palette.blue[8] }}
-            >
-              {word}{' '}
-            </span>
-          );
-        }
-        return `${word} `;
-      })}
+    <TextBlock>
+      <Truncate lines={ellipsis ? 1 : false}>
+        {words.map((word, index) => {
+          if (boldIndexResult?.includes(index)) {
+            return (
+              <span
+                key={index}
+                style={{ fontWeight: 'bold', color: palette.blue[8] }}
+              >
+                {word}{' '}
+              </span>
+            );
+          }
+          return `${word} `;
+        })}
+      </Truncate>
       {text !== '' && (
         <div className='span-div'>
           <ToggleSpanButton onClick={handleClickSpan}>
@@ -61,18 +64,9 @@ function BodyText({ text, bolds }: BodyTextProps) {
   );
 }
 
-const TextBlock = styled.div<{ ellipsis: boolean }>`
+const TextBlock = styled.div`
   font-size: 0.9rem;
   color: ${palette.gray[7]};
-  width: auto;
-  display: block;
-  ${(props) =>
-    props.ellipsis &&
-    css`
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      overflow: hidden;
-    `}
   .span-div {
     display:flex;
   }

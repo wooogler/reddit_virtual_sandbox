@@ -66,7 +66,7 @@ function ListHeader({ list, name, splitView }: ListHeaderProps) {
         </Button>
         <DraggableModal
           isOpen={isAddOpen}
-          position={{ x: 900, y: 150 }}
+          position={{ x: 800, y: 150 }}
           handleText={`Add new post to ${list}`}
         >
           <PostForm onClickClose={handleClickCloseModal} list={list} />
@@ -85,14 +85,15 @@ function ListHeader({ list, name, splitView }: ListHeaderProps) {
           placeholder="sort"
           onChange={handleChangeSort}
         />
-        <label>
+        <div className='checkbox'>
+          <label htmlFor='split' >Split List</label>
           <input
             type="checkbox"
+            name='split'
             checked={splitView}
             onChange={handleChangeSplitView}
           />
-          Split
-        </label>
+        </div>
       </div>
     </ListHeaderDiv>
   );
@@ -115,6 +116,7 @@ const ListHeaderDiv = styled.div`
   .select-group {
     width: 100%;
     display: flex;
+    align-items: center;
     .select-sort {
       width: 6rem;
       margin-left: 1rem;
@@ -125,7 +127,15 @@ const ListHeaderDiv = styled.div`
     .react-select__indicator {
       padding: 0.2rem;
     }
+    .checkbox {
+      display: flex;
+      margin-left: auto;
+      input {
+        margin-left: 0.2rem;
+      }
+    }
   }
+  
 `;
 
 export default ListHeader;
