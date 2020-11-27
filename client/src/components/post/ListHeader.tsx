@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import Select, { OptionsType, Styles, ValueType } from 'react-select';
+import { useDispatch } from 'react-redux';
+import { OptionsType, ValueType } from 'react-select';
 import styled from 'styled-components';
+import { toggleSplitPostList, toggleSplitSpamPostList } from '../../modules/post/slice';
 import Button from '../common/Button';
 import CustomSelect from '../common/CustomSelect';
 import DraggableModal from '../common/DraggableModal';
@@ -9,6 +11,7 @@ import PostForm from './PostForm';
 export interface ListHeaderProps {
   list: string;
   name: string;
+  splitView: boolean;
 }
 
 type OptionType = { value: string; label: string };
@@ -25,7 +28,8 @@ const viewOptions: OptionsType<OptionType> = [
   { value: 'comment', label: 'comment' },
 ];
 
-function ListHeader({ list, name }: ListHeaderProps) {
+function ListHeader({ list, name, splitView }: ListHeaderProps) {
+  const dispatch = useDispatch()
   const [isAddOpen, setIsAddOpen] = useState(false);
 
   const handleClickAddPost = () => {
@@ -37,18 +41,29 @@ function ListHeader({ list, name }: ListHeaderProps) {
   };
 
   const handleChangeView = (option: ValueType<OptionType>) => {
-    alert(`${list}, view, ${(option as OptionType).value}`)
+    alert(`${list}, view, ${(option as OptionType).value}`);
   };
 
   const handleChangeSort = (option: ValueType<OptionType>) => {
-    alert(`${list}, sort, ${(option as OptionType).value}`)
+    alert(`${list}, sort, ${(option as OptionType).value}`);
   };
+
+  const handleChangeSplitView = () => {
+    if(list === 'subreddit posts') {
+      dispatch(toggleSplitPostList());
+    }
+    if(list === 'spammed posts') {
+      dispatch(toggleSplitSpamPostList());
+    }
+  }
 
   return (
     <ListHeaderDiv>
       <div className="list-info">
-        <div className='name'>{name}</div>
-        <Button size='small' onClick={handleClickAddPost}>add post</Button>
+        <div className="name">{name}</div>
+        <Button size="small" onClick={handleClickAddPost}>
+          add post
+        </Button>
         <DraggableModal
           isOpen={isAddOpen}
           position={{ x: 900, y: 150 }}
@@ -57,7 +72,7 @@ function ListHeader({ list, name }: ListHeaderProps) {
           <PostForm onClickClose={handleClickCloseModal} list={list} />
         </DraggableModal>
       </div>
-      <div className='select-group'>
+      <div className="select-group">
         <CustomSelect
           className="select-view"
           defaultValue={viewOptions[0]}
@@ -67,21 +82,20 @@ function ListHeader({ list, name }: ListHeaderProps) {
         <CustomSelect
           className="select-sort"
           options={sortOptions}
-          placeholder='sort'
+          placeholder="sort"
           onChange={handleChangeSort}
         />
+        <label>
+          <input
+            type="checkbox"
+            checked={splitView}
+            onChange={handleChangeSplitView}
+          />
+          Split
+        </label>
       </div>
     </ListHeaderDiv>
   );
-}
-
-const selectStyles: Partial<Styles> = {
-  control: (base) => ({
-    ...base,
-    minHeight: '2rem',
-    height: '2rem',
-    fontSize: '1rem',
-  }),
 }
 
 const ListHeaderDiv = styled.div`

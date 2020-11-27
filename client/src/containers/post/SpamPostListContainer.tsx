@@ -9,6 +9,7 @@ function SpamPostListContainer() {
   const {
     selectedPostId,
     selectedSpamPostId,
+    splitSpamPostList,
     spamPosts: { data, loading, error },
   } = useSelector((state: RootState) => state.post);
 
@@ -28,6 +29,7 @@ function SpamPostListContainer() {
           selectedLines={selectedLines}
           selectedPostId={selectedPostId}
           selectedSpamPostId={selectedSpamPostId}
+          splitView={splitSpamPostList}
         />
       )}
     </>

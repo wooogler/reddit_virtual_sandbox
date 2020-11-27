@@ -14,6 +14,7 @@ interface SpamPostListProps {
   selectedLines: Omit<Line, 'content'>[];
   selectedSpamPostId: string[];
   selectedPostId: string[];
+  splitView: boolean;
 }
 
 function SpamPostList({
@@ -21,6 +22,7 @@ function SpamPostList({
   selectedLines,
   selectedSpamPostId,
   selectedPostId,
+  splitView
 }: SpamPostListProps) {
   const dispatch = useDispatch();
 
@@ -34,7 +36,7 @@ function SpamPostList({
       {selectedPostId.length !== 0 && (
         <OverlayWithButton text="Move to Target" buttonText="Move" onClickButton={handleClickMove}/>
       )}
-      <ListHeader list='spammed posts' name="Spammed Posts" />
+      <ListHeader list='spammed posts' name="Spammed Posts" splitView={splitView} />
       {spamPosts &&
         spamPosts.map((spamPost) => {
           const isFiltered =

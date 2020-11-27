@@ -22,6 +22,8 @@ export type PostState = {
   };
   selectedPostId: string[];
   selectedSpamPostId: string[];
+  splitPostList: boolean;
+  splitSpamPostList: boolean;
 };
 
 export const initialState: PostState = {
@@ -42,6 +44,8 @@ export const initialState: PostState = {
   },
   selectedPostId: [],
   selectedSpamPostId: [],
+  splitPostList: false,
+  splitSpamPostList: false,
 };
 
 const postSlice = createSlice({
@@ -118,12 +122,13 @@ const postSlice = createSlice({
     },
     clearSelectedSpamPostId: (state) => {
       state.selectedSpamPostId = [];
+    },
+    toggleSplitPostList: (state) => {
+      state.splitPostList = !state.splitPostList
+    },
+    toggleSplitSpamPostList: (state) => {
+      state.splitSpamPostList = !state.splitSpamPostList
     }
-    // selectSubmission: (state, action: PayloadAction<string>) => {
-    //   state.selectedSubmission = state.posts.data?.find(
-    //     (submission) => submission.id === action.payload,
-    //   );
-    // },
   },
 });
 
@@ -143,6 +148,8 @@ export const {
   getSpamPostsError,
   clearSelectedPostId,
   clearSelectedSpamPostId,
+  toggleSplitPostList,
+  toggleSplitSpamPostList
 } = actions;
 
 export default reducer;
