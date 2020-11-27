@@ -34,7 +34,7 @@ function SpamPostList({
       {selectedPostId.length !== 0 && (
         <OverlayWithButton text="Move to Target" buttonText="Move" onClickButton={handleClickMove}/>
       )}
-      <ListHeader list='target' name="Target" />
+      <ListHeader list='spammed posts' name="Spammed Posts" />
       {spamPosts &&
         spamPosts.map((spamPost) => {
           const isFiltered =

@@ -1,6 +1,10 @@
-import React from 'react';
-import Select, { OptionsType, ValueType } from 'react-select';
+import React, { useState } from 'react';
+import Select, { OptionsType, Styles, ValueType } from 'react-select';
 import styled from 'styled-components';
+import Button from '../common/Button';
+import CustomSelect from '../common/CustomSelect';
+import DraggableModal from '../common/DraggableModal';
+import PostForm from './PostForm';
 
 export interface ListHeaderProps {
   list: string;
@@ -22,6 +26,16 @@ const viewOptions: OptionsType<OptionType> = [
 ];
 
 function ListHeader({ list, name }: ListHeaderProps) {
+  const [isAddOpen, setIsAddOpen] = useState(false);
+
+  const handleClickAddPost = () => {
+    setIsAddOpen(true);
+  };
+
+  const handleClickCloseModal = () => {
+    setIsAddOpen(false);
+  };
+
   const handleChangeView = (option: ValueType<OptionType>) => {
     alert(`${list}, view, ${(option as OptionType).value}`)
   };
@@ -32,15 +46,25 @@ function ListHeader({ list, name }: ListHeaderProps) {
 
   return (
     <ListHeaderDiv>
-      <div className="name">{name}</div>
+      <div className="list-info">
+        <div className='name'>{name}</div>
+        <Button size='small' onClick={handleClickAddPost}>add post</Button>
+        <DraggableModal
+          isOpen={isAddOpen}
+          position={{ x: 900, y: 150 }}
+          handleText={`Add new post to ${list}`}
+        >
+          <PostForm onClickClose={handleClickCloseModal} list={list} />
+        </DraggableModal>
+      </div>
       <div className='select-group'>
-        <Select
+        <CustomSelect
           className="select-view"
           defaultValue={viewOptions[0]}
           options={viewOptions}
           onChange={handleChangeView}
         />
-        <Select
+        <CustomSelect
           className="select-sort"
           options={sortOptions}
           placeholder='sort'
@@ -51,23 +75,41 @@ function ListHeader({ list, name }: ListHeaderProps) {
   );
 }
 
+const selectStyles: Partial<Styles> = {
+  control: (base) => ({
+    ...base,
+    minHeight: '2rem',
+    height: '2rem',
+    fontSize: '1rem',
+  }),
+}
+
 const ListHeaderDiv = styled.div`
-  display: flex;
-  align-items: center;
   padding: 0.2rem;
-  .name {
-    font-size: 1.5rem;
-    margin-left: 0.5rem;
+  .list-info {
+    display: flex;
+    width: 100%;
+    .name {
+      font-size: 1.5rem;
+      margin-left: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+    button {
+      margin-left: auto;
+    }
   }
   .select-group {
+    width: 100%;
     display: flex;
-    margin-left: auto;
     .select-sort {
       width: 6rem;
       margin-left: 1rem;
     }
     .select-view {
       width: 8rem;
+    }
+    .react-select__indicator {
+      padding: 0.2rem;
     }
   }
 `;

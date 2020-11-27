@@ -34,7 +34,7 @@ const Content = styled.div`
   border-radius: 4px;
   background: white;
   border: 1px solid rgb(204, 204, 204);
-  width: 30rem;
+  width: 35rem;
   padding: 0;
   pointer-events: all;
   overflow: hidden;

@@ -1,12 +1,14 @@
 import React from 'react';
 import { useFormik } from 'formik';
-import Select, { OptionsType } from 'react-select';
+import Select, { OptionsType, Styles } from 'react-select';
 import styled from 'styled-components';
 import Button from '../common/Button';
 import Textarea from 'react-textarea-autosize';
+import CustomSelect from '../common/CustomSelect';
 
 interface PostFormProps {
   onClickClose: () => void;
+  list: string;
 }
 
 type OptionType = { value: string; label: string };
@@ -16,7 +18,7 @@ const typeOptions: OptionsType<OptionType> = [
   { value: 'comment', label: 'comment' },
 ];
 
-function PostForm({ onClickClose }: PostFormProps) {
+function PostForm({ onClickClose, list }: PostFormProps) {
 
   const formik = useFormik({
     initialValues: {
@@ -32,8 +34,9 @@ function PostForm({ onClickClose }: PostFormProps) {
   });
   return (
     <PostFormDiv onSubmit={formik.handleSubmit}>
+      <div className='title'>Add new posts to {list}</div> 
       <label htmlFor="type">Type</label>
-      <Select
+      <CustomSelect
         className='select-type'
         options={typeOptions}
         onChange={(option) => {
@@ -81,6 +84,11 @@ const PostFormDiv = styled.form`
   display: flex;
   flex-direction: column;
   margin: 20px;
+  .title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
   .buttons {
     display: flex;
     margin-left: auto;

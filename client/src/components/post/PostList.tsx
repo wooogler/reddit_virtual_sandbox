@@ -37,7 +37,7 @@ function PostList({
           onClickButton={handleClickMove}
         />
       )}
-      <ListHeader list="posts" name="Posts" />
+      <ListHeader list="subreddit posts" name="Subreddit Posts" />
       {posts &&
         posts.map((post) => {
           const isFiltered =
