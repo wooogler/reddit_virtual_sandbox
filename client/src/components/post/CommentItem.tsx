@@ -1,37 +1,39 @@
 import React from 'react';
 import styled from 'styled-components';
 import {Comment} from '../../lib/api/pushshift/comment';
+import { SpamComment } from '../../lib/api/reddit/spamComment';
 import palette, { actionColorMap } from '../../lib/styles/palette';
 import AuthorText from '../common/AuthorText';
 import BodyText from '../common/BodyText';
-import FlairText from '../common/FlairText';
-import IdText from '../common/IdText';
+import DatetimeText from '../common/DatetimeText';
+import LinkText from '../common/LinkText';
+import SubredditText from '../common/SubredditText';
 
 
 export interface CommentItemProps {
-  comment: Comment;
-  ellipsis: boolean;
+  comment: Comment | SpamComment;
   action?: 'remove' | 'report';
 }
 
-function CommentItem({ comment, ellipsis, action }: CommentItemProps) {
-
+function CommentItem({ comment, action }: CommentItemProps) {
   return (
     <CommentItemDiv action={action}>
-      <BodyText text={comment.body} ellipsis={ellipsis} />
+      <BodyText text={comment.body}/>
+      <div className="comment-info">
+        {/* <IdText text={comment.id} /> */}
+        <SubredditText text={comment.subreddit} />
+        <LinkText text="open comment link" url={'https://www.reddit.com'+comment.permalink} />
+      </div>
       <div className="author-info">
         <AuthorText text={comment.author} />
-        {comment.author_flair_text && (
+        <DatetimeText datetime={comment.created_utc} />
+        {/* {comment.author_flair_text && (
           <FlairText
             text={comment.author_flair_text}
             color={comment.author_flair_text_color}
             background={comment.author_flair_background_color}
           />
-        )}
-        <IdText text={comment.author_fullname} />
-      </div>
-      <div className="comment-info">
-        <IdText text={comment.id} />
+        )} */}
       </div>
     </CommentItemDiv>
   );
@@ -42,6 +44,7 @@ const CommentItemDiv = styled.div<{ action?: 'remove' | 'report' }>`
   display: flex;
   flex-direction: column;
   padding: 0.5rem;
+  margin-left: 1rem;
   border: 1px solid ${palette.gray[2]};
   background-color: ${(props) =>
     props.action ? actionColorMap[props.action].background : 'white'};
@@ -51,10 +54,12 @@ const CommentItemDiv = styled.div<{ action?: 'remove' | 'report' }>`
     div + div {
       margin-left: 0.5rem;
     }
+    a + a {
+      margin-left: 0.5rem;
+    }
   }
   .author-info {
     display: flex;
-    margin-top: 0.5rem;
     div + div {
       margin-left: 0.5rem;
     }

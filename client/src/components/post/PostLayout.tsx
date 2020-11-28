@@ -1,23 +1,22 @@
 import React from 'react';
 import styled from 'styled-components';
-import PostHeader from './PostHeader';
-import SubmissionListContainer from '../../containers/post/SubmissionListContainer';
-import SubmissionDetailContainer from '../../containers/post/SubmissionDetailContainer';
-import CommentListContainer from '../../containers/post/CommentListContainer';
+import PostListContainer from '../../containers/post/PostListContainer';
+import SpamPostListContainer from '../../containers/post/SpamPostListContainer';
+import PostActions from './PostActions';
 
 function PostLayout() {
   return (
     <Grid>
-      <Header>
-        <PostHeader />
-      </Header>
-      <List>
-        <SubmissionListContainer />
-      </List>
-      <Detail>
-        <SubmissionDetailContainer/>
-        <CommentListContainer/>
-      </Detail>
+      <PostHeaderLayout>
+        <PostActions/>
+      </PostHeaderLayout>
+      <PostListLayout>
+        <PostListContainer />
+      </PostListLayout>
+      <SpamPostListLayout>
+        
+        <SpamPostListContainer />
+      </SpamPostListLayout>
     </Grid>
   );
 }
@@ -29,18 +28,19 @@ const Grid = styled.div`
   grid-template-rows: 4rem 1fr;
 `;
 
-const Header = styled.div`
+const PostHeaderLayout = styled.div`
   grid-column: 1 / 3;
   grid-row: 1 / 2;
-  background-color: red;
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
 `;
-const List = styled.div`
-  background-color: blue;
+const PostListLayout = styled.div`
   overflow: auto;
 `;
 
-const Detail = styled.div`
-  background-color: yellow;
+const SpamPostListLayout = styled.div` 
+  position: relative;
   display: flex;
   flex-direction: column;
   overflow: auto;

@@ -2,7 +2,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import palette from '../../lib/styles/palette';
-import { changeTab, closeRule } from '../../modules/rule/slice';
+import { changeFile, closeFile } from '../../modules/rule/slice';
 import { CloseIcon } from '../../static/svg';
 
 export interface RuleTabItemProps extends React.HTMLProps<HTMLButtonElement> {
@@ -14,11 +14,11 @@ function RuleTabItem({ children, active = false, tab }: RuleTabItemProps) {
   const dispatch = useDispatch();
   const handleClose = (e: React.MouseEvent<HTMLSpanElement, MouseEvent>) => {
     e.stopPropagation();
-    dispatch(changeTab(0));
-    dispatch(closeRule(tab));
+    dispatch(changeFile(0));
+    dispatch(closeFile(tab));
   }
   const handleClick = () => {
-    dispatch(changeTab(tab));
+    dispatch(changeFile(tab));
   }
 
   return (

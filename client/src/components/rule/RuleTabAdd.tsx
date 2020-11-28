@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import palette from '../../lib/styles/palette';
 import { PlusIcon } from '../../static/svg';
-import {addRule, changeTab} from '../../modules/rule/slice'
+import {addFile, changeFile} from '../../modules/rule/slice'
 import { useDispatch } from 'react-redux';
 
 export interface RuleTabAddProps {
@@ -12,12 +12,13 @@ export interface RuleTabAddProps {
 function RuleTabAdd({newTab}: RuleTabAddProps) {
   const dispatch = useDispatch();
   const handleClick = () => {
-    dispatch(addRule({
+    dispatch(addFile({
       tab: newTab,
       title: 'rule.yml',
-      value: '',
+      code: '',
+      mode: 'edit',
     }));
-    dispatch(changeTab(newTab));
+    dispatch(changeFile(newTab));
   }
 
   return (

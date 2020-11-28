@@ -1,13 +1,13 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import BodyTextContainer from '../../containers/common/BodyTextContainer';
 import { Submission } from '../../lib/api/pushshift/submission';
+import { SpamSubmission } from '../../lib/api/reddit/spamSubmission';
 import palette, { actionColorMap } from '../../lib/styles/palette';
-import { getComments, selectSubmission } from '../../modules/post/slice';
 import AuthorText from '../common/AuthorText';
-import FlairText from '../common/FlairText';
-import IdText from '../common/IdText';
+import DatetimeText from '../common/DatetimeText';
+import LinkText from '../common/LinkText';
+import SubredditText from '../common/SubredditText';
 import TitleText from '../common/TitleText';
 
 type Bolds = {
@@ -15,42 +15,39 @@ type Bolds = {
 }
 
 export interface SubmissionItemProps {
-  submission: Submission;
-  ellipsis: boolean;
+  submission: Submission | SpamSubmission;
   action?: 'remove' | 'report';
 }
 
-function SubmissionItem({ submission, ellipsis, action}: SubmissionItemProps) {
-  const dispatch = useDispatch();
-  const handleClick = (submissionId: string) => {
-    dispatch(selectSubmission(submissionId));
-    dispatch(getComments(submissionId));
-  };
+function SubmissionItem({submission, action}: SubmissionItemProps) {
 
   return (
-    <SubmissionItemDiv action={action} onClick={() => handleClick(submission.id)}>
-      <TitleText text={submission.title} ellipsis={ellipsis} />
+    <SubmissionItemDiv action={action}>
+      <TitleText text={submission.title} ellipsis={false} />
       <div className="submission-info">
-        {submission.link_flair_text && (
+        {/* {submission.link_flair_text && (
           <FlairText
             text={submission.link_flair_text}
             color={submission.link_flair_text_color}
             background={submission.link_flair_background_color}
           />
-        )}
-        <IdText text={submission.id} />
+        )} */}
+        {/* <IdText text={submission.id} /> */}
+        <SubredditText text={submission.subreddit} />
+        <LinkText text='open submission link' url={'https://www.reddit.com'+submission.permalink}/>
       </div>
-      <BodyTextContainer text={submission.selftext} ellipsis={ellipsis}/>
+      <BodyTextContainer text={submission.selftext} ellipsis={true}/>
       <div className="author-info">
         <AuthorText text={submission.author} />
-        {submission.author_flair_text && (
+        <DatetimeText datetime={submission.created_utc} />
+        {/* {submission.author_flair_text && (
           <FlairText
             text={submission.author_flair_text}
             color={submission.author_flair_text_color}
             background={submission.author_flair_background_color}
           />
         )}
-        <IdText text={submission.author_fullname} />
+        <IdText text={submission.author_fullname} /> */}
       </div>
     </SubmissionItemDiv>
   );
@@ -68,6 +65,9 @@ const SubmissionItemDiv = styled.div<{ action?: 'remove' | 'report' }>`
     display: flex;
     margin: 0.5rem 0;
     div + div {
+      margin-left: 0.5rem;
+    }
+    a + a {
       margin-left: 0.5rem;
     }
   }
