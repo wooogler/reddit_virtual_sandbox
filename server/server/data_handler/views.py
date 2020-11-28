@@ -1,8 +1,11 @@
+import logging
+from datetime import datetime, timezone
+
 from django.shortcuts import render
 
 # Create your views here.
 
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -20,8 +23,9 @@ from .serializers import SubmissionSerializer, CommentSerializer
 #     queryset = Comment.objects.all()
 #     serializer_class = CommentSerializer
 
+logger = logging.getLogger(__name__)
+
 class DataHandlerView(viewsets.ViewSet):
-    
     def list(self, request):
         """GET /data/ 
         """
@@ -41,23 +45,32 @@ class DataHandlerView(viewsets.ViewSet):
     @action(methods=['post'], detail=False)
     def save_to_database(self, request):
         """POST /data/save_to_database/
+        Crawl posts (submissions or comments) from Reddit
+        and save to corresponding database.
         """
-        # TODO: Check if request is valid format.
-        
-        subreddit = request.data['subreddit']
-        start_time = request.data['start_time']
-        end_time = request.data['end_time']
-        try:
-            start_ts = math.ceil(datetime.strptime(args.start_date, "%Y-%m-%d-%H:%M:%S").timestamp())
-            end_ts = math.ceil(datetime.strptime(args.end_date, "%Y-%m-%d-%H:%M:%S").timestamp())
-            
-            reddit = reddit_handler.RedditHandler()
-            status = reddit.get_and_save_posts(
-                subreddit=subreddit, start_at=start_ts, end_at=end_ts,
-                submission_table=Submission, comment_table=Comment
-            )
-            status = 200 if status == True else 500
-            return Response({'status': status})
 
+        try:
+            subreddit = request.data['subreddit']
+            start_time = request.data['start_time']
+            end_time = request.data['end_time']
+            post_type = request.data.get('post_type', 'submission')
+            
+            start_ts = int(datetime.strptime(start_time, "%Y-%m-%d-%H:%M:%S").replace(tzinfo=timezone.utc).timestamp())
+            end_ts = int(datetime.strptime(end_time, "%Y-%m-%d-%H:%M:%S").replace(tzinfo=timezone.utc).timestamp())
         except:
-            return Response({'status': 500})
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            logger.info(f'Request: subreddit({subreddit}), start_time({start_time}), end_time({end_time}), start_ts({start_ts}), end_ts({end_ts}), post_type({post_type})')
+            reddit = RedditHandler()
+            if reddit.get_and_save_posts(
+                subreddit=subreddit, start_ts=start_ts, end_ts=end_ts,
+                post_type=post_type,
+                submission_table=Submission, comment_table=Comment
+            ):
+                return Response(status=status.HTTP_201_CREATED)
+
+        except Exception as e:
+            logger.error(e)
+
+        return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
