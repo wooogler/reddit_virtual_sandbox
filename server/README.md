@@ -23,6 +23,7 @@ $ python manage.py flush
 
 ### POST /data/save_to_database/
 - Description: Save posts to database. Posts have two types: Submission & Comment.
+- Warning: It may "skip" some posts inside the designated time interval passed by the user. (it's implemented with this limitation to simplify the implementation considering the fact that pushshift.io returns 500 posts at maximum for one request... But if I get any better idea, I will definitely modify the implementation! Please let me know!)
 
 - Example
     - Save submissions.
