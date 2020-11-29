@@ -27,20 +27,32 @@ logger = logging.getLogger(__name__)
 
 class DataHandlerView(viewsets.ViewSet):
     def list(self, request):
-        """GET /data/ 
+        """GET /data/, /data/?post_type=comment
         """
-        queryset = Submission.objects.all()
-        serializer = SubmissionSerializer(queryset, many=True)
+        post_type = request.query_params.get('post_type', 'submission')
+        logger.info(f'Request: {post_type}')
+        if post_type == 'submission':
+            queryset = Submission.objects.all()
+            serializer = SubmissionSerializer(queryset, many=True)
+        else:
+            queryset = Comment.objects.all()
+            serializer = CommentSerializer(queryset, many=True)
         return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
-        """GET /data/{pk}
+        """GET /data/{pk}, /data/{pk}/?link_comments=true
         """
-        queryset = Submission.objects.all()
-        res = get_object_or_404(queryset, pk=pk)
-        serializer = CommentSerializer(res)
+        post = get_object_or_404(Submission, pk=pk)
+        link_comments = request.query_params.get('link_comments', False)
+        submission = SubmissionSerializer(post).data
         
-        return Response(serializer.data)
+        res = {'submission': submission}
+        if link_comments:
+            res['comments'] = []
+            for comment in post.comment_set.all():
+                res['comments'].append(CommentSerializer(comment).data)
+        
+        return Response(res, status=status.HTTP_200_OK)
 
     @action(methods=['post'], detail=False)
     def save_to_database(self, request):
@@ -61,7 +73,9 @@ class DataHandlerView(viewsets.ViewSet):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            logger.info(f'Request: subreddit({subreddit}), start_time({start_time}), end_time({end_time}), start_ts({start_ts}), end_ts({end_ts}), post_type({post_type})')
+            logger.info(f'Request: subreddit({subreddit}), '
+            f'start_time({start_time}), end_time({end_time}), '
+            f'start_ts({start_ts}), end_ts({end_ts}), post_type({post_type})')
             reddit = RedditHandler()
             if reddit.get_and_save_posts(
                 subreddit=subreddit, start_ts=start_ts, end_ts=end_ts,

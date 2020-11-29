@@ -68,7 +68,7 @@ class RedditHandler():
             'full_link': 'https://www.reddit.com' + post['permalink'],
             '_id': post['id'],
             'subreddit': post['subreddit'],
-            'link_id': post['link_id'][3:]  # link_id always starts with 't3_' --> id of a submission that this comment is linked to.
+            'link_id': post['link_id'][3:]  # link_id always starts with 't3_'--> id of a submission that this comment is linked to.
         }
 
     def get_and_save_posts(self, subreddit, start_ts, end_ts, post_type,
@@ -107,7 +107,8 @@ class RedditHandler():
                 linked_submissions = Submission.objects.filter(pk__in=comment_id2submission_id.values())
                 for submission in linked_submissions:
                     submission_id2object[submission._id] = submission
-                missing_submission_ids = [_id for _id in comment_id2submission_id.values() if _id not in submission_id2object]
+                missing_submission_ids = [_id for _id in comment_id2submission_id.values()
+                                          if _id not in submission_id2object]
                 if missing_submission_ids:
                     parents = self.get_posts_from_reddit(self.submission_endpoint, {'ids': missing_submission_ids})
                     for parent in parents:
@@ -120,7 +121,8 @@ class RedditHandler():
                     submission_id = comment_id2submission_id[post['_id']]
                     linked_submission = submission_id2object.get(submission_id, None)
                     if linked_submission:
-                        post.pop('link_id')  # Redundant as it is same with automatically generated foreign key column (submission_id)
+                        # link_id is redundant as it is same with foreign key column (submission_id)
+                        post.pop('link_id')
                         obj, created = Comment.objects.get_or_create(submission=linked_submission, **post)
                         if created:
                             save_cnt['comment'] += 1
@@ -132,5 +134,6 @@ class RedditHandler():
             start_ts = int(datetime.timestamp(posts[-1]['created_utc'])) + 1  # Might skip some posts.
         logger.info(f'Last data + 1 sec is {datetime.fromtimestamp(start_ts, tz=timezone.utc)}')
 
-        logger.info('Number of posts newly inserted into database: submissions(%d), comments(%d)' % (save_cnt['submission'], save_cnt['comment']))
+        logger.info('Number of posts newly inserted into database: submissions(%d), comments(%d)'
+                    % (save_cnt['submission'], save_cnt['comment']))
         return True

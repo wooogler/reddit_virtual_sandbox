@@ -18,11 +18,11 @@ class Submission(models.Model):
 
 class Comment(models.Model):
     submission = models.ForeignKey(Submission, on_delete=models.CASCADE)
+    _id = models.CharField(max_length=300, primary_key=True)
     author = models.CharField(max_length=300)
     body = models.TextField()
     created_utc = models.DateTimeField()
     full_link = models.URLField()
-    _id = models.CharField(max_length=300, primary_key=True)
     subreddit = models.CharField(max_length=300)
     # link_id = models.CharField(max_length=300)  # 없애고자 함.
     
