@@ -2,13 +2,15 @@ from rest_framework import serializers
 
 from .models import Submission, Comment
 
-class SubmissionSerializer(serializers.HyperlinkedModelSerializer):
+class SubmissionSerializer(serializers.ModelSerializer):
+    """Serializer for Submission Model."""
     class Meta:
         model = Submission
-        fields = ['id','title','selftext','content', 'pub_date']
+        fields = ['_id', 'author', 'body', 'created_utc', 'full_link', 'subreddit', 'title']
 
 
-class CommentSerializer(serializers.HyperlinkedModelSerializer):
+class CommentSerializer(serializers.ModelSerializer):
+    """Serializer for Comment Model."""
     class Meta:
         model = Comment
-        fields = ['submission', 'content', 'votes']
+        fields = ['submission', '_id', 'author', 'body', 'created_utc', 'full_link', 'subreddit']
