@@ -27,7 +27,7 @@ $ python manage.py flush
 | /data/, /data/?post_type=submission | Return all posts from submission database.                   |         |
 | /data/?post_type=comment            | Return all posts from comment database.                      |         |
 | /data/{id}                          | Return submission with the given id.                         |         |
-| /data/{id}/?link_comments=true      | Return submission with the given id + all comments liked to that submission. |         |
+| /data/{id}/?link_comments=true      | Return submission with the given id + all comments linked to that submission. |         |
 
 ### 2-2. POST
 
