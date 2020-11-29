@@ -15,8 +15,9 @@ $ python manage.py migrate
 # 3. Run server.
 $ python manage.py runserver
 
-# (4. You can use this command to clean the database.)
-$ python manage.py flush
+# (4. Other utils)
+$ python manage.py flush  # You can use this command to clean the database.
+$ python manage.py shell  # Interactive shell.
 ```
 
 ## 2. Available API Interface
