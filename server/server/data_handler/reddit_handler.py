@@ -11,8 +11,6 @@ import numpy as np
 import praw
 import requests
 
-from django.db.models import Q
-
 from .models import Submission, Comment
 
 logger = logging.getLogger(__name__)
