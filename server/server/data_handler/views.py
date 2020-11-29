@@ -43,7 +43,8 @@ class DataHandlerView(viewsets.ViewSet):
         """GET /data/{pk}, /data/{pk}/?link_comments=true
         """
         post = get_object_or_404(Submission, pk=pk)
-        link_comments = request.query_params.get('link_comments', False)
+        link_comments = request.query_params.get('link_comments', 'false')
+        link_comments = True if link_comments == 'true' else False
         submission = SubmissionSerializer(post).data
         
         res = {'submission': submission}
