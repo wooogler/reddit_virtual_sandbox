@@ -2,5 +2,6 @@
   "emmet.excludeLanguages": [
     "markdown"
   ],
-  "emmet.extensionsPath": ""
+  "emmet.extensionsPath": "",
+  "git.ignoreLimitWarning": true
 }
