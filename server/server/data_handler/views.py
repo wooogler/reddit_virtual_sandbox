@@ -13,6 +13,7 @@ from django.shortcuts import get_object_or_404
 
 from .models import Submission, Comment
 from .reddit_handler import RedditHandler
+from .rule_handler import RuleHandler
 from .serializers import SubmissionSerializer, CommentSerializer 
 
 # class SubmissionViewSet(viewsets.ModelViewSet):
@@ -88,4 +89,29 @@ class DataHandlerView(viewsets.ViewSet):
         except Exception as e:
             logger.error(e)
 
+        return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    @action(methods=['post'], detail=False)
+    def apply_rules(self, request):
+        """POST /data/apply_rules/, /data/apply_rules/?reset=false
+        Default (reset=true):
+            1. Reset rule_id, line_id columns in database.
+            2. Apply moderation rules (given as json format in request.body) to posts saved in database & save the results in rule_id, line_id columns in database.
+
+        reset=false:
+            Skip 1. and perform 2. straight away.
+        """
+        is_reset = request.query_params.get('reset', 'true')
+        is_reset = True if is_reset == 'true' else False
+        rules = request.data
+
+        try:
+            logger.info(f'Request: is_reset({is_reset}), apply rules ({rules})')
+            rule_handler = RuleHandler()
+            if is_reset:
+                rule_handler.reset_rules()
+            if rule_handler.apply_rules(rules):
+                return Response(status=status.HTTP_201_CREATED)
+        except Exception as e:
+            logger.error(e)
         return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)

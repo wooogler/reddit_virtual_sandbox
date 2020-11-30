@@ -12,7 +12,9 @@ class Submission(models.Model):
     full_link = models.URLField()
     subreddit = models.CharField(max_length=300)
     title = models.CharField(max_length=300)
-    
+
+    matching_rules = models.JSONField(null=True)  # List of (rule_id, line_id)
+
     def __str__(self):
         return self.title
 
@@ -24,7 +26,8 @@ class Comment(models.Model):
     created_utc = models.DateTimeField()
     full_link = models.URLField()
     subreddit = models.CharField(max_length=300)
-    # link_id = models.CharField(max_length=300)  # 없애고자 함.
+
+    matching_rules = models.JSONField(null=True)  # List of (rule_id, line_id)
     
     def __str__(self):
         return self.body[:100]
