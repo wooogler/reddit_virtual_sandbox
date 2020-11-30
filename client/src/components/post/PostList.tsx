@@ -50,13 +50,13 @@ function PostList({
   return (
     <PostListBlock>
       <ListHeader
-        list="subreddit posts"
-        name="Subreddit Posts"
+        list="unmoderated"
+        name="Unmoderated"
         splitView={splitView}
       />
       {selectedSpamPostId.length !== 0 && (
         <OverlayWithButton
-          text="Move to Posts"
+          text="Move to Unmoderated"
           buttonText1="Move"
           onClickButton1={handleClickMove}
           buttonText2="Delete"
@@ -130,7 +130,7 @@ const PostListBlock = styled.div`
   .list {
     height: 100%;
     overflow-y: auto;
-    .split-pane: {
+    .split-pane {
       width: 100%;
     }
   }
