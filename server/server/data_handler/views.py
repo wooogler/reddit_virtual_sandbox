@@ -31,13 +31,21 @@ class DataHandlerView(viewsets.ViewSet):
         """GET /data/, /data/?post_type=comment
         """
         post_type = request.query_params.get('post_type', 'submission')
-        logger.info(f'Request: {post_type}')
+        sort = request.query_params.get('sort', 'new')
+        logger.info(f'Request: {post_type}, Sort: {sort}')
         if post_type == 'submission':
             queryset = Submission.objects.all()
-            serializer = SubmissionSerializer(queryset, many=True)
-        else:
+            if sort == 'new':
+                serializer = SubmissionSerializer(queryset.order_by('-created_utc'), many=True)
+            elif sort == 'old':
+                serializer = SubmissionSerializer(queryset.order_by('created_utc'), many=True)
+        elif post_type == 'comment':
             queryset = Comment.objects.all()
-            serializer = CommentSerializer(queryset, many=True)
+            if sort == 'new':
+                serializer = CommentSerializer(queryset.order_by('-created_utc'), many=True)
+            elif sort == 'old':
+                serializer = CommentSerializer(queryset.order_by('created_utc'), many=True)
+            
         return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
