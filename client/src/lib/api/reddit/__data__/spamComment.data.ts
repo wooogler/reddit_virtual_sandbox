@@ -13,7 +13,7 @@ export const spamCommentData: {spam_comment: SpamComment} = {
     body: "fuck",
     spam: false,
     approved: false,
-    permalink: "/r/KIXModSandbox/comments/jqtd8f/you_get_to_download_all_the_knowledge_of_a_single/gcwa148/",
+    full_link: "https://www.reddit.com/r/KIXModSandbox/comments/jqtd8f/you_get_to_download_all_the_knowledge_of_a_single/gcwa148/",
     subreddit: "KIXModSandbox",
     created_utc: 1605835862.0,
     filter_id: ['0-0']

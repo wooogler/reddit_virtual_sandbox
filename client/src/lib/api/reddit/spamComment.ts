@@ -10,7 +10,7 @@ export interface SpamComment {
   body: string;
   spam: boolean;
   approved: boolean;
-  permalink: string;
+  full_link: string;
   subreddit: string;
   created_utc: number;
   filter_id: string[];

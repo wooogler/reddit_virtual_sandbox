@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import {Comment} from '../../lib/api/pushshift/comment';
+import {Comment} from '../../lib/api/modsandbox/post';
 import { SpamComment } from '../../lib/api/reddit/spamComment';
 import palette, { actionColorMap } from '../../lib/styles/palette';
 import AuthorText from '../common/AuthorText';
@@ -22,7 +22,7 @@ function CommentItem({ comment, action }: CommentItemProps) {
       <div className="comment-info">
         {/* <IdText text={comment.id} /> */}
         <SubredditText text={comment.subreddit} />
-        <LinkText text="open comment link" url={'https://www.reddit.com'+comment.permalink} />
+        <LinkText text="open comment link" url={comment.full_link} />
       </div>
       <div className="author-info">
         <AuthorText text={comment.author} />

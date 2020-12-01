@@ -1,6 +1,6 @@
 import { all, call, put, takeLatest } from 'redux-saga/effects';
 import { getCommentsAPI } from '../../lib/api/pushshift/comment';
-import { getPostsAPI, Submission } from '../../lib/api/pushshift/submission';
+import { getAllPostsAPI, Submission } from '../../lib/api/modsandbox/post';
 import { SpamComment } from '../../lib/api/reddit/spamComment';
 import { getSpamPostsAPI } from '../../lib/api/reddit/spamPosts';
 import { SpamSubmission } from '../../lib/api/reddit/spamSubmission';
@@ -8,20 +8,20 @@ import {
   getComments,
   getCommentsError,
   getCommentsSuccess,
-  getPosts,
-  getPostsError,
-  getPostsSuccess,
+  getAllPosts,
+  getAllPostsError,
+  getAllPostsSuccess,
   getSpamPosts,
   getSpamPostsError,
   getSpamPostsSuccess,
 } from './slice';
 
-function* getPostsSaga(action: ReturnType<typeof getPosts>) {
+function* getAllPostsSaga(action: ReturnType<typeof getAllPosts>) {
   try {
-    const result: Submission[] = yield call(getPostsAPI, action.payload);
-    yield put(getPostsSuccess(result));
+    const result: Submission[] = yield call(getAllPostsAPI);
+    yield put(getAllPostsSuccess(result));
   } catch (err) {
-    yield put(getPostsError(err));
+    yield put(getAllPostsError(err));
   }
 }
 
@@ -43,9 +43,11 @@ function* getCommentsSaga(action: ReturnType<typeof getComments>) {
   }
 }
 
+
+
 export function* postSaga() {
   yield all([
-    yield takeLatest(getPosts, getPostsSaga),
+    yield takeLatest(getAllPosts, getAllPostsSaga),
     yield takeLatest(getSpamPosts, getSpamPostsSaga),
     yield takeLatest(getComments, getCommentsSaga),
   ]);

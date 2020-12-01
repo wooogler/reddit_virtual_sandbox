@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import BodyTextContainer from '../../containers/common/BodyTextContainer';
-import { Submission } from '../../lib/api/pushshift/submission';
+import { Submission } from '../../lib/api/modsandbox/post';
 import { SpamSubmission } from '../../lib/api/reddit/spamSubmission';
 import palette, { actionColorMap } from '../../lib/styles/palette';
 import AuthorText from '../common/AuthorText';
@@ -34,9 +34,9 @@ function SubmissionItem({submission, action}: SubmissionItemProps) {
         )} */}
         {/* <IdText text={submission.id} /> */}
         <SubredditText text={submission.subreddit} />
-        <LinkText text='open submission link' url={'https://www.reddit.com'+submission.permalink}/>
+        <LinkText text='open submission link' url={submission.full_link}/>
       </div>
-      <BodyTextContainer text={submission.selftext} ellipsis={true}/>
+      <BodyTextContainer text={submission.body} ellipsis={true}/>
       <div className="author-info">
         <AuthorText text={submission.author} />
         <DatetimeText datetime={submission.created_utc} />

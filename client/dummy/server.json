@@ -74,7 +74,7 @@
     {
       "type": "spam_submission",
       "subreddit": "KIXModSandbox",
-      "selftext": "",
+      "body": "",
       "title": "23 y/o make, in NY, degree in psychology. Any suggestions on career paths, which pay well?",
       "banned_by": "leesang627",
       "banned_at_utc": 1605835588,
@@ -85,7 +85,7 @@
       "id": "jqt8kc",
       "author": "woogler627",
       "approved": false,
-      "permalink": "/r/KIXModSandbox/comments/jqt8kc/23_yo_make_in_ny_degree_in_psychology_any/",
+      "full_link": "https://www.reddit.com/r/KIXModSandbox/comments/jqt8kc/23_yo_make_in_ny_degree_in_psychology_any/",
       "url": "https://www.reddit.com/r/KIXModSandbox/comments/jqt8kc/23_yo_make_in_ny_degree_in_psychology_any/",
       "created_utc": 1604906632.0,
       "filter_id": []
@@ -102,7 +102,7 @@
       "body": "fuck",
       "spam": false,
       "approved": false,
-      "permalink": "/r/KIXModSandbox/comments/jqtd8f/you_get_to_download_all_the_knowledge_of_a_single/gcwa148/",
+      "full_link": "https://www.reddit.com/r/KIXModSandbox/comments/jqtd8f/you_get_to_download_all_the_knowledge_of_a_single/gcwa148/",
       "subreddit": "KIXModSandbox",
       "created_utc": 1605835862.0,
       "filter_id": ["0-0"]

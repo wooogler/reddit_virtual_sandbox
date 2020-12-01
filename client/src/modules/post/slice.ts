@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Submission } from '../../lib/api/pushshift/submission';
-import { Comment } from '../../lib/api/pushshift/comment';
+import { Submission, Comment } from '../../lib/api/modsandbox/post';
 import { SpamSubmission } from '../../lib/api/reddit/spamSubmission';
 import { SpamComment } from '../../lib/api/reddit/spamComment';
 
@@ -52,20 +51,15 @@ const postSlice = createSlice({
   name: 'post',
   initialState,
   reducers: {
-    getPosts: {
-      reducer: (state) => {
-        state.posts.loading = true;
-        state.posts.data = null;
-      },
-      prepare: (subredditName: string) => ({
-        payload: subredditName,
-      }),
+    getAllPosts: (state) => {
+      state.posts.loading = true;
+      state.posts.data = null;
     },
-    getPostsSuccess: (state, action: PayloadAction<Submission[]>) => {
+    getAllPostsSuccess: (state, action: PayloadAction<Submission[]>) => {
       state.posts.data = action.payload;
       state.posts.loading = false;
     },
-    getPostsError: (state, action: PayloadAction<Error>) => {
+    getAllPostsError: (state, action: PayloadAction<Error>) => {
       state.posts.error = action.payload;
       state.posts.loading = false;
     },
@@ -134,9 +128,9 @@ const postSlice = createSlice({
 
 const { actions, reducer } = postSlice;
 export const {
-  getPosts,
-  getPostsSuccess,
-  getPostsError,
+  getAllPosts,
+  getAllPostsSuccess,
+  getAllPostsError,
   // selectSubmission,
   togglePostSelect,
   toggleSpamPostSelect,

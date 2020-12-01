@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Submission } from '../../lib/api/pushshift/submission';
-import { Comment } from '../../lib/api/pushshift/comment';
+import { Submission, Comment } from '../../lib/api/modsandbox/post';
 import PostItem from './PostItem';
 import ListHeader from './ListHeader';
 import OverlayWithButton from '../common/OverlayWithButton';
@@ -42,11 +41,12 @@ function PostList({
       selectedLines.length === 0
         ? false
         : selectedLines.every((item) =>
-            post.filter_id.includes(`${item.ruleId}-${item.lineId}`),
+            post.matching_rules?.includes(`${item.ruleId}-${item.lineId}`),
           );
-    const selected = selectedPostId.includes(post.id);
+    const selected = selectedPostId.includes(post._id);
     return { post, isFiltered, selected };
   });
+
   return (
     <PostListBlock>
       <ListHeader
@@ -80,7 +80,7 @@ function PostList({
                     <PostItem
                       post={post}
                       action={isFiltered ? 'remove' : undefined}
-                      key={post.id}
+                      key={post._id}
                       selected={selected}
                     />
                   );
@@ -95,7 +95,7 @@ function PostList({
                     <PostItem
                       post={post}
                       action={isFiltered ? 'remove' : undefined}
-                      key={post.id}
+                      key={post._id}
                       selected={selected}
                     />
                   );
@@ -110,7 +110,7 @@ function PostList({
                 <PostItem
                   post={post}
                   action={isFiltered ? 'remove' : undefined}
-                  key={post.id}
+                  key={post._id}
                   selected={selected}
                 />
               );

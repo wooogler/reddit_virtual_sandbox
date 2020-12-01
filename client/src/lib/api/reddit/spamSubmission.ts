@@ -1,7 +1,7 @@
 export interface SpamSubmission {
   type: 'spam_submission';
   subreddit: string;
-  selftext: string;
+  body: string;
   title: string;
   banned_by: string;
   banned_at_utc: number;
@@ -10,7 +10,7 @@ export interface SpamSubmission {
   id: string;
   author: string;
   approved: boolean;
-  permalink: string;
+  full_link: string;
   created_utc: number;
   filter_id: string[];
   removal_reason: string | null;

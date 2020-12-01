@@ -1,6 +1,5 @@
 import React from 'react';
-import { Submission } from '../../lib/api/pushshift/submission';
-import { Comment } from '../../lib/api/pushshift/comment';
+import { Submission, Comment, isSubmission } from '../../lib/api/modsandbox/post';
 import SubmissionItem from './SubmissionItem';
 import CommentItem from './CommentItem';
 import styled from 'styled-components';
@@ -17,12 +16,12 @@ interface PostItemProps {
 function PostItem({ post, action, selected }: PostItemProps) {
   const dispatch = useDispatch();
   const handleClickPost = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    dispatch(togglePostSelect(post.id));
+    dispatch(togglePostSelect(post._id));
   };
 
   return (
     <PostItemDiv selected={selected} onClick={handleClickPost}>
-      {post.type === 'submission' ? (
+      {isSubmission(post) ? (
         <SubmissionItem submission={post} action={action} />
       ) : (
         <CommentItem comment={post} action={action} />
