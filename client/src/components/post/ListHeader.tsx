@@ -49,10 +49,10 @@ function ListHeader({ list, name, splitView }: ListHeaderProps) {
   };
 
   const handleChangeSplitView = () => {
-    if(list === 'subreddit posts') {
+    if(list === 'unmoderated') {
       dispatch(toggleSplitPostList());
     }
-    if(list === 'spammed posts') {
+    if(list === 'moderated') {
       dispatch(toggleSplitSpamPostList());
     }
   }
@@ -86,7 +86,7 @@ function ListHeader({ list, name, splitView }: ListHeaderProps) {
           onChange={handleChangeSort}
         />
         <div className='checkbox'>
-          <label htmlFor='split' >Split List</label>
+          <label htmlFor='split' >bot moderated<br/>split view</label>
           <input
             type="checkbox"
             name='split'
@@ -130,8 +130,13 @@ const ListHeaderDiv = styled.div`
     .checkbox {
       display: flex;
       margin-left: auto;
+      align-items: center;
+      label {
+        font-size: 0.9rem;
+        text-align: right;
+      }
       input {
-        margin-left: 0.2rem;
+        margin-left: 0.3rem;
       }
     }
   }

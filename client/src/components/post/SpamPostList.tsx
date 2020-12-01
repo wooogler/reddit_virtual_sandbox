@@ -53,7 +53,7 @@ function SpamPostList({
     <SpamPostListBlock>
       {selectedPostId.length !== 0 && (
         <OverlayWithButton
-          text="Move to Target"
+          text="Move to Moderated"
           buttonText1="Move"
           onClickButton1={handleClickMove}
           buttonText2='Delete'
@@ -61,8 +61,8 @@ function SpamPostList({
         />
       )}
       <ListHeader
-        list="spammed posts"
-        name="Spammed Posts"
+        list="moderated"
+        name="Moderated"
         splitView={splitView}
       />
       <div className="list">
