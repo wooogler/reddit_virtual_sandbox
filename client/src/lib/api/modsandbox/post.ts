@@ -1,24 +1,15 @@
 import axios from 'axios';
 
-export async function getAllPostsAPI() {
-  const submissionResponse = await axios.get<Submission[]>(
-    'http://127.0.0.1:8000/data',
-    {
-      params: {
-        post_type: 'submission',
-      }
-    }
-  );
-  const commentResponse = await axios.get<Comment[]>(
+export async function getAllPostsAPI(postType: string | null) {
+  const response = await axios.get<Submission[]>(
     'http://localhost:8000/data',
     {
       params: {
-        post_type: 'comment',
+        post_type: postType,
       }
     }
-  )
-  const response = {data: [...submissionResponse.data, ...commentResponse.data]}
-  
+  );
+
   return response.data;
 }
 
