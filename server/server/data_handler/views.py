@@ -9,6 +9,7 @@ from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404
 
 from .models import Submission, Comment
@@ -32,19 +33,24 @@ class DataHandlerView(viewsets.ViewSet):
         """
         post_type = request.query_params.get('post_type', 'submission')
         sort = request.query_params.get('sort', 'new')
+        page = request.query_params.get('page', 1)
         logger.info(f'Request: {post_type}, Sort: {sort}')
         if post_type == 'submission':
             queryset = Submission.objects.all()
             if sort == 'new':
-                serializer = SubmissionSerializer(queryset.order_by('-created_utc'), many=True)
+                paginator = Paginator(queryset.order_by('-created_utc'), 100)
+                serializer = SubmissionSerializer(paginator.get_page(page), many=True)
             elif sort == 'old':
-                serializer = SubmissionSerializer(queryset.order_by('created_utc'), many=True)
+                paginator = Paginator(queryset.order_by('created_utc'), 100)
+                serializer = SubmissionSerializer(paginator.get_page(page), many=True)
         elif post_type == 'comment':
             queryset = Comment.objects.all()
             if sort == 'new':
-                serializer = CommentSerializer(queryset.order_by('-created_utc'), many=True)
+                paginator = Paginator(queryset.order_by('-created_utc'), 100)
+                serializer = CommentSerializer(paginator.get_page(page), many=True)
             elif sort == 'old':
-                serializer = CommentSerializer(queryset.order_by('created_utc'), many=True)
+                paginator = Paginator(queryset.order_by('created_utc'), 100)
+                serializer = CommentSerializer(paginator.get_page(page), many=True)
             
         return Response(serializer.data)
 
