@@ -14,7 +14,6 @@ function PostLayout() {
         <PostListContainer />
       </PostListLayout>
       <SpamPostListLayout>
-        
         <SpamPostListContainer />
       </SpamPostListLayout>
     </Grid>

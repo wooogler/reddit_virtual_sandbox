@@ -18,7 +18,7 @@ import {
 
 function* getAllPostsSaga(action: ReturnType<typeof getAllPosts>) {
   try {
-    const result: Submission[] = yield call(getAllPostsAPI);
+    const result: Submission[] = yield call(getAllPostsAPI, action.payload);
     yield put(getAllPostsSuccess(result));
   } catch (err) {
     yield put(getAllPostsError(err));

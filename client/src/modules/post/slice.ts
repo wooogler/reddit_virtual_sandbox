@@ -51,9 +51,14 @@ const postSlice = createSlice({
   name: 'post',
   initialState,
   reducers: {
-    getAllPosts: (state) => {
-      state.posts.loading = true;
-      state.posts.data = null;
+    getAllPosts: {
+      reducer: (state) => {
+        state.posts.loading = true;
+        state.posts.data = null;
+      },
+      prepare: (postType: string | null) => ({
+        payload: postType,
+      }),
     },
     getAllPostsSuccess: (state, action: PayloadAction<Submission[]>) => {
       state.posts.data = action.payload;
@@ -81,19 +86,19 @@ const postSlice = createSlice({
       state.comments.error = action.payload;
     },
     togglePostSelect: (state, action: PayloadAction<string>) => {
-      const index = state.selectedPostId.indexOf(action.payload)
-      if(index > -1) {
-        state.selectedPostId.splice(index, 1)
+      const index = state.selectedPostId.indexOf(action.payload);
+      if (index > -1) {
+        state.selectedPostId.splice(index, 1);
       } else {
-        state.selectedPostId.push(action.payload)
+        state.selectedPostId.push(action.payload);
       }
     },
     toggleSpamPostSelect: (state, action: PayloadAction<string>) => {
-      const index = state.selectedSpamPostId.indexOf(action.payload)
-      if(index > -1) {
-        state.selectedSpamPostId.splice(index, 1)
+      const index = state.selectedSpamPostId.indexOf(action.payload);
+      if (index > -1) {
+        state.selectedSpamPostId.splice(index, 1);
       } else {
-        state.selectedSpamPostId.push(action.payload)
+        state.selectedSpamPostId.push(action.payload);
       }
     },
     getSpamPosts: (state) => {
@@ -118,11 +123,11 @@ const postSlice = createSlice({
       state.selectedSpamPostId = [];
     },
     toggleSplitPostList: (state) => {
-      state.splitPostList = !state.splitPostList
+      state.splitPostList = !state.splitPostList;
     },
     toggleSplitSpamPostList: (state) => {
-      state.splitSpamPostList = !state.splitSpamPostList
-    }
+      state.splitSpamPostList = !state.splitSpamPostList;
+    },
   },
 });
 
@@ -143,7 +148,7 @@ export const {
   clearSelectedPostId,
   clearSelectedSpamPostId,
   toggleSplitPostList,
-  toggleSplitSpamPostList
+  toggleSplitSpamPostList,
 } = actions;
 
 export default reducer;

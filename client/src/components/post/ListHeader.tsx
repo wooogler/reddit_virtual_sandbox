@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { OptionsType, ValueType } from 'react-select';
 import styled from 'styled-components';
-import { toggleSplitPostList, toggleSplitSpamPostList } from '../../modules/post/slice';
+import { getAllPosts, toggleSplitPostList, toggleSplitSpamPostList } from '../../modules/post/slice';
 import Button from '../common/Button';
 import CustomSelect from '../common/CustomSelect';
 import DraggableModal from '../common/DraggableModal';
@@ -23,7 +23,7 @@ const sortOptions: OptionsType<OptionType> = [
 ];
 
 const viewOptions: OptionsType<OptionType> = [
-  { value: 'all', label: 'all posts' },
+  // { value: 'all', label: 'all posts' },
   { value: 'submission', label: 'submission' },
   { value: 'comment', label: 'comment' },
 ];
@@ -41,7 +41,10 @@ function ListHeader({ list, name, splitView }: ListHeaderProps) {
   };
 
   const handleChangeView = (option: ValueType<OptionType>) => {
-    alert(`${list}, view, ${(option as OptionType).value}`);
+    // alert(`${list}, view, ${(option as OptionType).value}`);
+    if(list === 'unmoderated') {
+      dispatch(getAllPosts((option as OptionType).value));
+    }
   };
 
   const handleChangeSort = (option: ValueType<OptionType>) => {
@@ -101,6 +104,7 @@ function ListHeader({ list, name, splitView }: ListHeaderProps) {
 
 const ListHeaderDiv = styled.div`
   padding: 0.2rem;
+  height: 4.5rem;
   .list-info {
     display: flex;
     width: 100%;
