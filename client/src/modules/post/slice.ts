@@ -1,9 +1,10 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Submission, Comment } from '../../lib/api/modsandbox/post';
+import { Submission, Comment, Posts } from '../../lib/api/modsandbox/post';
 import { SpamSubmission } from '../../lib/api/reddit/spamSubmission';
 import { SpamComment } from '../../lib/api/reddit/spamComment';
+import { RootState } from '..';
 
-type Posts = (Submission | Comment)[];
+export type PostType = 'submission' | 'comment';
 
 export type PostState = {
   posts: {
@@ -11,6 +12,7 @@ export type PostState = {
     loading: boolean;
     error: Error | null;
     page: number;
+    type: PostType;
   };
   comments: {
     data: Comment[] | null;
@@ -33,7 +35,8 @@ export const initialState: PostState = {
     data: [],
     loading: false,
     error: null,
-    page: 1,
+    page: 0,
+    type: 'submission',
   },
   comments: {
     data: null,
@@ -55,24 +58,18 @@ const postSlice = createSlice({
   name: 'post',
   initialState,
   reducers: {
-<<<<<<< HEAD
     getAllPosts: (state) => {
       state.posts.loading = true;
+      state.posts.page = 0;
       state.posts.data = [];
-=======
-    getAllPosts: {
-      reducer: (state) => {
-        state.posts.loading = true;
-        state.posts.data = null;
-      },
-      prepare: (postType: string | null) => ({
-        payload: postType,
-      }),
->>>>>>> ada38530388761c2f097973f39e0b1c9224ac98c
     },
-    getAllPostsSuccess: (state, action: PayloadAction<Submission[]>) => {
-      state.posts.data = action.payload;
+    getAllPostsSuccess: (
+      state,
+      action: PayloadAction<{ data: Posts; nextPage: number }>,
+    ) => {
+      state.posts.data = action.payload.data;
       state.posts.loading = false;
+      state.posts.page = action.payload.nextPage;
     },
     getAllPostsError: (state, action: PayloadAction<Error>) => {
       state.posts.error = action.payload;
@@ -95,6 +92,9 @@ const postSlice = createSlice({
     getCommentsError: (state, action: PayloadAction<Error>) => {
       state.comments.loading = false;
       state.comments.error = action.payload;
+    },
+    changePostType: (state, action: PayloadAction<PostType>) => {
+      state.posts.type = action.payload;
     },
     togglePostSelect: (state, action: PayloadAction<string>) => {
       const index = state.selectedPostId.indexOf(action.payload);
@@ -145,23 +145,30 @@ const postSlice = createSlice({
 const selectPage = createSelector<PostState, number, number>(
   (state) => state.posts.page,
   (page) => page,
-)
+);
 
 const selectPosts = createSelector<PostState, Posts, Posts>(
   (state) => state.posts.data,
   (data) => data,
-)
+);
+
+const selectType = createSelector<PostState, PostType, PostType>(
+  (state) => state.posts.type,
+  (data) => data,
+);
 
 export const postSelector = {
-  page: (state: PostState) => selectPage(state),
-  posts: (state: PostState) => selectPosts(state),
-}
+  page: (state: RootState) => selectPage(state.post),
+  posts: (state: RootState) => selectPosts(state.post),
+  type: (state: RootState) => selectType(state.post),
+};
 
 const { actions, reducer } = postSlice;
 export const {
   getAllPosts,
   getAllPostsSuccess,
   getAllPostsError,
+  getAllPostsMore,
   // selectSubmission,
   togglePostSelect,
   toggleSpamPostSelect,
@@ -171,6 +178,7 @@ export const {
   getSpamPosts,
   getSpamPostsSuccess,
   getSpamPostsError,
+  changePostType,
   clearSelectedPostId,
   clearSelectedSpamPostId,
   toggleSplitPostList,

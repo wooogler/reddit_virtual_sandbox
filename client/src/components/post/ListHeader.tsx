@@ -2,7 +2,12 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { OptionsType, ValueType } from 'react-select';
 import styled from 'styled-components';
-import { getAllPosts, toggleSplitPostList, toggleSplitSpamPostList } from '../../modules/post/slice';
+import {
+  changePostType,
+  getAllPosts,
+  toggleSplitPostList,
+  toggleSplitSpamPostList,
+} from '../../modules/post/slice';
 import Button from '../common/Button';
 import CustomSelect from '../common/CustomSelect';
 import DraggableModal from '../common/DraggableModal';
@@ -15,21 +20,23 @@ export interface ListHeaderProps {
 }
 
 type OptionType = { value: string; label: string };
+type SortOptionType = { value: 'new' | 'old' | 'smart'; label: string };
+type ViewOptionType = { value: 'submission' | 'comment'; label: string };
 
-const sortOptions: OptionsType<OptionType> = [
+const sortOptions: OptionsType<SortOptionType> = [
   { value: 'new', label: 'new' },
   { value: 'old', label: 'old' },
   { value: 'smart', label: 'smart' },
 ];
 
-const viewOptions: OptionsType<OptionType> = [
+const viewOptions: OptionsType<ViewOptionType> = [
   // { value: 'all', label: 'all posts' },
   { value: 'submission', label: 'submission' },
   { value: 'comment', label: 'comment' },
 ];
 
 function ListHeader({ list, name, splitView }: ListHeaderProps) {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const [isAddOpen, setIsAddOpen] = useState(false);
 
   const handleClickAddPost = () => {
@@ -41,24 +48,24 @@ function ListHeader({ list, name, splitView }: ListHeaderProps) {
   };
 
   const handleChangeView = (option: ValueType<OptionType>) => {
-    // alert(`${list}, view, ${(option as OptionType).value}`);
-    if(list === 'unmoderated') {
-      dispatch(getAllPosts((option as OptionType).value));
+    if (list === 'unmoderated') {
+      dispatch(changePostType((option as ViewOptionType).value));
+      dispatch(getAllPosts())
     }
   };
 
   const handleChangeSort = (option: ValueType<OptionType>) => {
-    alert(`${list}, sort, ${(option as OptionType).value}`);
+    alert(`${list}, sort, ${(option as SortOptionType).value}`);
   };
 
   const handleChangeSplitView = () => {
-    if(list === 'unmoderated') {
+    if (list === 'unmoderated') {
       dispatch(toggleSplitPostList());
     }
-    if(list === 'moderated') {
+    if (list === 'moderated') {
       dispatch(toggleSplitSpamPostList());
     }
-  }
+  };
 
   return (
     <ListHeaderDiv>
@@ -88,11 +95,15 @@ function ListHeader({ list, name, splitView }: ListHeaderProps) {
           placeholder="sort"
           onChange={handleChangeSort}
         />
-        <div className='checkbox'>
-          <label htmlFor='split' >bot moderated<br/>split view</label>
+        <div className="checkbox">
+          <label htmlFor="split">
+            bot moderated
+            <br />
+            split view
+          </label>
           <input
             type="checkbox"
-            name='split'
+            name="split"
             checked={splitView}
             onChange={handleChangeSplitView}
           />
@@ -144,7 +155,6 @@ const ListHeaderDiv = styled.div`
       }
     }
   }
-  
 `;
 
 export default ListHeader;

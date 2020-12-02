@@ -16,8 +16,10 @@ function PostListContainer() {
 
   const dispatch = useDispatch();
 
+  
+
   useEffect(() => {
-    dispatch(getAllPosts(null));
+    dispatch(getAllPosts());
   }, [dispatch]);
 
   return (

@@ -1,14 +1,12 @@
 import axios from 'axios';
 
-export async function getAllPostsAPI(postType: string | null) {
-  const response = await axios.get<Submission[]>(
-    'http://localhost:8000/data',
-    {
-      params: {
-        post_type: postType,
-      }
-    }
-  );
+export async function getAllPostsAPI(postType: string|null, page: number) {
+  const response = await axios.get<Posts>('http://localhost:8000/data', {
+    params: {
+      post_type: postType,
+      page: page,
+    },
+  });
 
   return response.data;
 }
@@ -16,6 +14,8 @@ export async function getAllPostsAPI(postType: string | null) {
 export function isSubmission(post: Submission | Comment): post is Submission {
   return (post as Submission).title !== undefined;
 }
+
+export type Posts = (Submission | Comment)[];
 
 export interface Comment {
   submission: string;
