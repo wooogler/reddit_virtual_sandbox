@@ -1,10 +1,12 @@
 import axios from 'axios';
+import { PostType, SortType } from '../../../modules/post/slice';
 
-export async function getAllPostsAPI(postType: string|null, page: number) {
+export async function getAllPostsAPI(postType: PostType, sortType: SortType, page: number) {
   const response = await axios.get<Posts>('http://localhost:8000/data', {
     params: {
       post_type: postType,
-      page: page,
+      sort: sortType,
+      page,
     },
   });
 

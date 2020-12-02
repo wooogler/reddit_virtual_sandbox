@@ -5,6 +5,7 @@ import { SpamComment } from '../../lib/api/reddit/spamComment';
 import { RootState } from '..';
 
 export type PostType = 'submission' | 'comment';
+export type SortType = 'new' | 'old';
 
 export type PostState = {
   posts: {
@@ -13,6 +14,7 @@ export type PostState = {
     error: Error | null;
     page: number;
     type: PostType;
+    sort: SortType;
   };
   comments: {
     data: Comment[] | null;
@@ -37,6 +39,7 @@ export const initialState: PostState = {
     error: null,
     page: 0,
     type: 'submission',
+    sort: 'new',
   },
   comments: {
     data: null,
@@ -96,6 +99,9 @@ const postSlice = createSlice({
     changePostType: (state, action: PayloadAction<PostType>) => {
       state.posts.type = action.payload;
     },
+    changeSortType: (state, action: PayloadAction<SortType>) => {
+      state.posts.sort = action.payload;
+    },
     togglePostSelect: (state, action: PayloadAction<string>) => {
       const index = state.selectedPostId.indexOf(action.payload);
       if (index > -1) {
@@ -154,13 +160,19 @@ const selectPosts = createSelector<PostState, Posts, Posts>(
 
 const selectType = createSelector<PostState, PostType, PostType>(
   (state) => state.posts.type,
-  (data) => data,
+  (type) => type,
+);
+
+const selectSort = createSelector<PostState, SortType, SortType>(
+  (state) => state.posts.sort,
+  (sort) => sort,
 );
 
 export const postSelector = {
   page: (state: RootState) => selectPage(state.post),
   posts: (state: RootState) => selectPosts(state.post),
   type: (state: RootState) => selectType(state.post),
+  sort: (state: RootState) => selectSort(state.post),
 };
 
 const { actions, reducer } = postSlice;
@@ -179,6 +191,7 @@ export const {
   getSpamPostsSuccess,
   getSpamPostsError,
   changePostType,
+  changeSortType,
   clearSelectedPostId,
   clearSelectedSpamPostId,
   toggleSplitPostList,

@@ -17,20 +17,24 @@ import {
   postSelector,
   getAllPostsMore,
   PostType,
+  SortType,
 } from './slice';
 
 function* getAllPostsSaga(action: ReturnType<typeof getAllPosts>) {
   try {
     const page: number = yield select(postSelector.page);
     const prevPosts: Posts = yield select(postSelector.posts);
-    const type: PostType = yield select(postSelector.type)
+    const type: PostType = yield select(postSelector.type);
+    const sort: SortType = yield select(postSelector.sort);
     const nextPage = page + 1;
 
-    const newPosts: Posts = yield call(getAllPostsAPI, type, nextPage)
-    yield put(getAllPostsSuccess({
-      data: prevPosts.concat(newPosts),
-      nextPage,
-    }));
+    const newPosts: Posts = yield call(getAllPostsAPI, type, sort, nextPage);
+    yield put(
+      getAllPostsSuccess({
+        data: prevPosts.concat(newPosts),
+        nextPage,
+      }),
+    );
   } catch (err) {
     yield put(getAllPostsError(err));
   }
@@ -38,7 +42,9 @@ function* getAllPostsSaga(action: ReturnType<typeof getAllPosts>) {
 
 function* getSpamPostsSaga(action: ReturnType<typeof getSpamPosts>) {
   try {
-    const result: (SpamSubmission|SpamComment)[] = yield call(getSpamPostsAPI);
+    const result: (SpamSubmission | SpamComment)[] = yield call(
+      getSpamPostsAPI,
+    );
     yield put(getSpamPostsSuccess(result));
   } catch (err) {
     yield put(getSpamPostsError(err));
@@ -53,8 +59,6 @@ function* getCommentsSaga(action: ReturnType<typeof getComments>) {
     yield put(getCommentsError(err));
   }
 }
-
-
 
 export function* postSaga() {
   yield all([

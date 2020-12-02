@@ -4,6 +4,7 @@ import { OptionsType, ValueType } from 'react-select';
 import styled from 'styled-components';
 import {
   changePostType,
+  changeSortType,
   getAllPosts,
   toggleSplitPostList,
   toggleSplitSpamPostList,
@@ -20,13 +21,13 @@ export interface ListHeaderProps {
 }
 
 type OptionType = { value: string; label: string };
-type SortOptionType = { value: 'new' | 'old' | 'smart'; label: string };
+type SortOptionType = { value: 'new' | 'old'; label: string };
 type ViewOptionType = { value: 'submission' | 'comment'; label: string };
 
 const sortOptions: OptionsType<SortOptionType> = [
   { value: 'new', label: 'new' },
   { value: 'old', label: 'old' },
-  { value: 'smart', label: 'smart' },
+  // { value: 'smart', label: 'smart' },
 ];
 
 const viewOptions: OptionsType<ViewOptionType> = [
@@ -55,7 +56,10 @@ function ListHeader({ list, name, splitView }: ListHeaderProps) {
   };
 
   const handleChangeSort = (option: ValueType<OptionType>) => {
-    alert(`${list}, sort, ${(option as SortOptionType).value}`);
+    if (list === 'unmoderated') {
+      dispatch(changeSortType((option as SortOptionType).value));
+      dispatch(getAllPosts())
+    }
   };
 
   const handleChangeSplitView = () => {
