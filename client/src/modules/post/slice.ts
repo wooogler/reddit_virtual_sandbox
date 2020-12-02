@@ -1,13 +1,16 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Submission, Comment } from '../../lib/api/modsandbox/post';
 import { SpamSubmission } from '../../lib/api/reddit/spamSubmission';
 import { SpamComment } from '../../lib/api/reddit/spamComment';
 
+type Posts = (Submission | Comment)[];
+
 export type PostState = {
   posts: {
-    data: (Submission | Comment)[] | null;
+    data: (Submission | Comment)[];
     loading: boolean;
     error: Error | null;
+    page: number;
   };
   comments: {
     data: Comment[] | null;
@@ -27,9 +30,10 @@ export type PostState = {
 
 export const initialState: PostState = {
   posts: {
-    data: null,
+    data: [],
     loading: false,
     error: null,
+    page: 1,
   },
   comments: {
     data: null,
@@ -53,7 +57,7 @@ const postSlice = createSlice({
   reducers: {
     getAllPosts: (state) => {
       state.posts.loading = true;
-      state.posts.data = null;
+      state.posts.data = [];
     },
     getAllPostsSuccess: (state, action: PayloadAction<Submission[]>) => {
       state.posts.data = action.payload;
@@ -63,6 +67,7 @@ const postSlice = createSlice({
       state.posts.error = action.payload;
       state.posts.loading = false;
     },
+    getAllPostsMore: () => {},
     getComments: {
       reducer: (state) => {
         state.comments.loading = true;
@@ -125,6 +130,21 @@ const postSlice = createSlice({
     }
   },
 });
+
+const selectPage = createSelector<PostState, number, number>(
+  (state) => state.posts.page,
+  (page) => page,
+)
+
+const selectPosts = createSelector<PostState, Posts, Posts>(
+  (state) => state.posts.data,
+  (data) => data,
+)
+
+export const postSelector = {
+  page: (state: PostState) => selectPage(state),
+  posts: (state: PostState) => selectPosts(state),
+}
 
 const { actions, reducer } = postSlice;
 export const {

@@ -1,4 +1,4 @@
-import { all, call, put, takeLatest } from 'redux-saga/effects';
+import { all, call, put, select, takeLatest } from 'redux-saga/effects';
 import { getCommentsAPI } from '../../lib/api/pushshift/comment';
 import { getAllPostsAPI, Submission } from '../../lib/api/modsandbox/post';
 import { SpamComment } from '../../lib/api/reddit/spamComment';
@@ -14,10 +14,17 @@ import {
   getSpamPosts,
   getSpamPostsError,
   getSpamPostsSuccess,
+  postSelector,
 } from './slice';
 
 function* getAllPostsSaga(action: ReturnType<typeof getAllPosts>) {
   try {
+    const page: number = yield select(postSelector.page);
+    const prevPosts = yield select(postSelector.posts);
+    const nextPage = page + 1;
+
+    const newPosts = yield call(getAllPostsAPI, )
+
     const result: Submission[] = yield call(getAllPostsAPI);
     yield put(getAllPostsSuccess(result));
   } catch (err) {
