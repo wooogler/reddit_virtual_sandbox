@@ -35,22 +35,27 @@ class DataHandlerView(viewsets.ViewSet):
         sort = request.query_params.get('sort', 'new')
         page = request.query_params.get('page', 1)
         logger.info(f'Request: {post_type}, Sort: {sort}')
+
         if post_type == 'submission':
             queryset = Submission.objects.all()
-            if sort == 'new':
-                paginator = Paginator(queryset.order_by('-created_utc'), 100)
-                serializer = SubmissionSerializer(paginator.get_page(page), many=True)
-            elif sort == 'old':
-                paginator = Paginator(queryset.order_by('created_utc'), 100)
-                serializer = SubmissionSerializer(paginator.get_page(page), many=True)
         elif post_type == 'comment':
             queryset = Comment.objects.all()
-            if sort == 'new':
-                paginator = Paginator(queryset.order_by('-created_utc'), 100)
-                serializer = CommentSerializer(paginator.get_page(page), many=True)
-            elif sort == 'old':
-                paginator = Paginator(queryset.order_by('created_utc'), 100)
-                serializer = CommentSerializer(paginator.get_page(page), many=True)
+
+        if sort == 'new':
+            paginator = Paginator(queryset.order_by('-created_utc'), 100)
+        elif sort == 'old':
+            paginator = Paginator(queryset.order_by('created_utc'), 100)
+        
+        try: 
+            posts = paginator.page(page)
+        except:
+            posts = []
+
+        if post_type == 'submission':
+            serializer = SubmissionSerializer(posts, many=True)
+        elif post_type == 'comment':
+            serializer = CommentSerializer(posts, many=True)
+        
             
         return Response(serializer.data)
 
