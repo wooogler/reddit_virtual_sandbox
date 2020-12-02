@@ -19,6 +19,7 @@ import {
 
 function* getAllPostsSaga(action: ReturnType<typeof getAllPosts>) {
   try {
+<<<<<<< HEAD
     const page: number = yield select(postSelector.page);
     const prevPosts = yield select(postSelector.posts);
     const nextPage = page + 1;
@@ -26,6 +27,9 @@ function* getAllPostsSaga(action: ReturnType<typeof getAllPosts>) {
     const newPosts = yield call(getAllPostsAPI, )
 
     const result: Submission[] = yield call(getAllPostsAPI);
+=======
+    const result: Submission[] = yield call(getAllPostsAPI, action.payload);
+>>>>>>> ada38530388761c2f097973f39e0b1c9224ac98c
     yield put(getAllPostsSuccess(result));
   } catch (err) {
     yield put(getAllPostsError(err));

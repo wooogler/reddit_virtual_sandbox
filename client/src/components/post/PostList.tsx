@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { Submission, Comment } from '../../lib/api/modsandbox/post';
 import PostItem from './PostItem';
-import ListHeader from './ListHeader';
 import OverlayWithButton from '../common/OverlayWithButton';
 import { useDispatch } from 'react-redux';
 import { clearSelectedSpamPostId } from '../../modules/post/slice';
@@ -49,11 +48,6 @@ function PostList({
 
   return (
     <PostListBlock>
-      <ListHeader
-        list="unmoderated"
-        name="Unmoderated"
-        splitView={splitView}
-      />
       {selectedSpamPostId.length !== 0 && (
         <OverlayWithButton
           text="Move to Unmoderated"
@@ -126,7 +120,7 @@ const PostListBlock = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
-  height: 100%;
+  height: calc(100% - 4.5rem);
   .list {
     height: 100%;
     overflow-y: auto;
