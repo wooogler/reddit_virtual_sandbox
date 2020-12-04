@@ -6,25 +6,33 @@ import styled from 'styled-components';
 import palette from '../../lib/styles/palette';
 import { useDispatch } from 'react-redux';
 import { togglePostSelect } from '../../modules/post/slice';
+import { LineIds } from '../../modules/rule/slice';
 
 interface PostItemProps {
   post: Submission | Comment;
-  action?: 'remove' | 'report';
-  selected: boolean;
+  selectedPostId: string[];
+  selectedLines: LineIds;
 }
 
-function PostItem({ post, action, selected }: PostItemProps) {
+function PostItem({ post, selectedPostId, selectedLines }: PostItemProps) {
   const dispatch = useDispatch();
-  const handleClickPost = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  const handleClickPost = () => {
     dispatch(togglePostSelect(post._id));
   };
 
+  const isFiltered =
+    selectedLines.length === 0
+      ? false
+      : selectedLines.every((item) =>
+          post.matching_rules?.includes(`${item.ruleId}-${item.lineId}`),
+        );
+
   return (
-    <PostItemDiv selected={selected} onClick={handleClickPost}>
+    <PostItemDiv selected={selectedPostId.includes(post._id)} onClick={handleClickPost}>
       {isSubmission(post) ? (
-        <SubmissionItem submission={post} action={action} />
+        <SubmissionItem submission={post} action={isFiltered ? 'remove' : undefined} />
       ) : (
-        <CommentItem comment={post} action={action} />
+        <CommentItem comment={post} action={isFiltered ? 'remove' : undefined} />
       )}
     </PostItemDiv>
   );

@@ -1,5 +1,6 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import YAML from 'yaml';
+import { RootState } from '..';
 import { arrayToQuery, codeToLines } from '../../lib/utils';
 
 export type File = {
@@ -16,6 +17,8 @@ export type Line = {
   lineId: number;
 };
 
+export type LineIds = Omit<Line, 'content'>[]
+
 export type RuleState = {
   files: File[];
   selectedTab: number;
@@ -23,7 +26,7 @@ export type RuleState = {
     query: undefined | RuleQuery[];
     error: any;
   };
-  selectedLines: Omit<Line, 'content'>[];
+  selectedLines: LineIds;
 };
 
 export interface RuleQuery {
@@ -109,6 +112,15 @@ const ruleSlice = createSlice({
     },
   },
 });
+
+const selectSelectedLines = createSelector<RuleState, LineIds, LineIds>(
+  (state) => state.selectedLines,
+  (selectedLines) => selectedLines,
+)
+
+export const ruleSelector = {
+  selectedLines: (state: RootState) => selectSelectedLines(state.rule)
+}
 
 const { actions, reducer } = ruleSlice;
 
