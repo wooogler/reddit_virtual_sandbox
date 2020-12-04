@@ -13,5 +13,5 @@ export interface SpamComment {
   full_link: string;
   subreddit: string;
   created_utc: number;
-  filter_id: string[];
+  matching_rules: string[];
 }

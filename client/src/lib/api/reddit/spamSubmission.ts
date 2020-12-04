@@ -12,6 +12,6 @@ export interface SpamSubmission {
   approved: boolean;
   full_link: string;
   created_utc: number;
-  filter_id: string[];
+  matching_rules: string[];
   removal_reason: string | null;
 }

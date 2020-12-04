@@ -43,7 +43,7 @@ function SpamPostList({
       selectedLines.length === 0
         ? false
         : selectedLines.every((item) =>
-            post.filter_id.includes(`${item.ruleId}-${item.lineId}`),
+            post.matching_rules.includes(`${item.ruleId}-${item.lineId}`),
           );
     const selected = selectedSpamPostId.includes(post.id);
     return { post, isFiltered, selected };
