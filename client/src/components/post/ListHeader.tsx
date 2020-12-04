@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { OptionsType, ValueType } from 'react-select';
+import ReactTooltip from 'react-tooltip';
 import styled from 'styled-components';
 import {
   changePostType,
@@ -9,6 +10,7 @@ import {
   toggleSplitPostList,
   toggleSplitSpamPostList,
 } from '../../modules/post/slice';
+import { InfoIcon } from '../../static/svg';
 import Button from '../common/Button';
 import CustomSelect from '../common/CustomSelect';
 import DraggableModal from '../common/DraggableModal';
@@ -18,6 +20,7 @@ export interface ListHeaderProps {
   list: string;
   name: string;
   splitView: boolean;
+  tooltipText?: string;
 }
 
 type OptionType = { value: string; label: string };
@@ -36,7 +39,7 @@ const viewOptions: OptionsType<ViewOptionType> = [
   { value: 'comment', label: 'comment' },
 ];
 
-function ListHeader({ list, name, splitView }: ListHeaderProps) {
+function ListHeader({ list, name, splitView, tooltipText }: ListHeaderProps) {
   const dispatch = useDispatch();
   const [isAddOpen, setIsAddOpen] = useState(false);
 
@@ -75,6 +78,8 @@ function ListHeader({ list, name, splitView }: ListHeaderProps) {
     <ListHeaderDiv>
       <div className="list-info">
         <div className="name">{name}</div>
+        <InfoIcon data-tip={tooltipText} data-for={list}/>
+        <ReactTooltip place="bottom" id={list} effect="solid" multiline={true}/>
         <Button size="small" onClick={handleClickAddPost}>
           add post
         </Button>
@@ -101,9 +106,7 @@ function ListHeader({ list, name, splitView }: ListHeaderProps) {
         />
         <div className="checkbox">
           <label htmlFor="split">
-            bot moderated
-            <br />
-            split view
+            Split view
           </label>
           <input
             type="checkbox"
@@ -123,13 +126,16 @@ const ListHeaderDiv = styled.div`
   .list-info {
     display: flex;
     width: 100%;
+    align-items: center;
     .name {
       font-size: 1.5rem;
-      margin-left: 0.5rem;
-      margin-bottom: 0.5rem;
+      margin: 0.3rem;
     }
     button {
       margin-left: auto;
+    }
+    svg {
+      margin-left: 0.2rem;
     }
   }
   .select-group {

@@ -6,15 +6,15 @@ export async function getAllPostsAPI(
   sortType: SortType,
   page: number,
 ) {
-  const response = await axios.get<Posts>('http://localhost:8000/data', {
-    params: {
-      post_type: postType,
-      sort: sortType,
-      page,
-    },
-  });
+  // const response = await axios.get<Posts>('http://localhost:8000/data', {
+  //   params: {
+  //     post_type: postType,
+  //     sort: sortType,
+  //     page,
+  //   },
+  // });
 
-  // const response = await axios.get<Posts>('http://localhost:4000/posts');
+  const response = await axios.get<Posts>('http://localhost:4000/posts');
 
   return response.data;
 }

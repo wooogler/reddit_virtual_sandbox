@@ -33,8 +33,9 @@ function PostListContainer() {
     <>
       <ListHeader
         list="unmoderated"
-        name="Sampled posts"
+        name="Posts"
         splitView={splitPostList}
+        tooltipText='Posts imported <br/> from real subreddit'
       />
       {loading && <p style={{ textAlign: 'center' }}>글 로딩중..</p>}
       {error && (

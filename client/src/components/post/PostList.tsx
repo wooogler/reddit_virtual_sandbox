@@ -103,7 +103,7 @@ function PostList({
                     />
                   );
                 })}
-                <div ref={setTarget} className='last-item'></div>
+                {/* <div ref={setTarget} className='last-item'></div> */}
             </div>
           </SplitPane>
         ) : (
@@ -116,7 +116,7 @@ function PostList({
                 />
               );
             })}
-            <div ref={setTarget} className='last-item'></div>
+            {/* <div ref={setTarget} className='last-item'></div> */}
           </>
         )}
       </div>

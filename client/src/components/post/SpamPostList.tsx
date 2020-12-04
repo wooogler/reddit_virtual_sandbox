@@ -60,11 +60,6 @@ function SpamPostList({
           onClickButton2={handleClickDelete}
         />
       )}
-      <ListHeader
-        list="moderated"
-        name="Manually moderated posts"
-        splitView={splitView}
-      />
       <div className="list">
         {splitView ? (
           <SplitPane
