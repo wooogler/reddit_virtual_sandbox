@@ -79,6 +79,9 @@ function PostList({
             paneStyle={{ overflow: 'auto' }}
           >
             <div className="split-pane">
+              <div className='pane-label'>
+                ▼ Affected by Automod
+              </div>
               {labeledPosts
                 ?.filter((item) => item.isFiltered)
                 .map((item) => {
@@ -94,6 +97,9 @@ function PostList({
                 })}
             </div>
             <div className="split-pane">
+              <div className='pane-label'>
+                ▼ Not Affected by Automod
+              </div>
               {labeledPosts
                 ?.filter((item) => !item.isFiltered)
                 .map((item) => {
@@ -141,11 +147,19 @@ const PostListBlock = styled.div`
     overflow-y: auto;
     .split-pane {
       width: 100%;
+      .pane-label {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-top: 0.3rem;
+        border-bottom: 0.1rem solid ${palette.gray[2]};
+        font-size: 0.9rem;
+        color: ${palette.gray[7]}
+      }
     }
   }
   .Resizer.horizontal {
-    height: 11px;
-    margin: -5px 0;
+    height: 0.3rem;
     background-color: ${palette.blue[2]};
     cursor: row-resize;
     width: 100%;

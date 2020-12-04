@@ -168,11 +168,17 @@ const selectSort = createSelector<PostState, SortType, SortType>(
   (sort) => sort,
 );
 
+const selectedPostIdSelector = createSelector<PostState, string[], string[]>(
+  (state) => state.selectedPostId,
+  (selectedPostId) => selectedPostId,
+)
+
 export const postSelector = {
   page: (state: RootState) => selectPage(state.post),
   posts: (state: RootState) => selectPosts(state.post),
   type: (state: RootState) => selectType(state.post),
   sort: (state: RootState) => selectSort(state.post),
+  selectedPostId: (state: RootState) => selectedPostIdSelector(state.post),
 };
 
 const { actions, reducer } = postSlice;

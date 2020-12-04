@@ -3,20 +3,20 @@ import { useDispatch, useSelector } from 'react-redux';
 import ListHeader from '../../components/post/ListHeader';
 import PostList from '../../components/post/PostList';
 import { RootState } from '../../modules';
-import { getAllPosts } from '../../modules/post/slice';
+import { getAllPosts, postSelector} from '../../modules/post/slice';
 
 function PostListContainer() {
   const { selectedLines } = useSelector((state: RootState) => state.rule);
   const {
-    selectedPostId,
+    // selectedPostId,
     selectedSpamPostId,
     splitPostList,
     posts: { data, loading, error },
   } = useSelector((state: RootState) => state.post);
 
-  const dispatch = useDispatch();
+  const selectedPostId = useSelector(postSelector.selectedPostId);
 
-  
+  const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getAllPosts());
@@ -26,7 +26,7 @@ function PostListContainer() {
     <>
       <ListHeader
         list="unmoderated"
-        name="Unmoderated"
+        name="Sampled posts"
         splitView={splitPostList}
       />
       {loading && <p style={{ textAlign: 'center' }}>글 로딩중..</p>}
