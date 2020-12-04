@@ -1,16 +1,20 @@
 import axios from 'axios';
 import { PostType, SortType } from '../../../modules/post/slice';
 
-export async function getAllPostsAPI(postType: PostType, sortType: SortType, page: number) {
-  // const response = await axios.get<Posts>('http://localhost:8000/data', {
-  //   params: {
-  //     post_type: postType,
-  //     sort: sortType,
-  //     page,
-  //   },
-  // });
+export async function getAllPostsAPI(
+  postType: PostType,
+  sortType: SortType,
+  page: number,
+) {
+  const response = await axios.get<Posts>('http://localhost:8000/data', {
+    params: {
+      post_type: postType,
+      sort: sortType,
+      page,
+    },
+  });
 
-  const response = await axios.get<Posts>('http://localhost:4000/posts');
+  // const response = await axios.get<Posts>('http://localhost:4000/posts');
 
   return response.data;
 }
@@ -29,7 +33,7 @@ export interface Comment {
   created_utc: string;
   full_link: string;
   subreddit: string;
-  matching_rules: null | string[];
+  matching_rules: string[];
 }
 
 export interface Submission {
@@ -40,5 +44,5 @@ export interface Submission {
   full_link: string;
   subreddit: string;
   title: string;
-  matching_rules: null | string[];
+  matching_rules: string[];
 }

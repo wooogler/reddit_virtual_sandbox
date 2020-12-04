@@ -62,7 +62,7 @@ function SpamPostList({
       )}
       <ListHeader
         list="moderated"
-        name="Moderated"
+        name="Manually moderated posts"
         splitView={splitView}
       />
       <div className="list">
@@ -74,6 +74,9 @@ function SpamPostList({
             paneStyle={{ overflow: 'auto', width: '100%' }}
           >
             <div className='split-pane'>
+              <div className='pane-label'>
+                ▼ Affected by Automod
+              </div>
               {labeledSpamPosts
                 ?.filter((item) => item.isFiltered)
                 .map((item) => {
@@ -89,6 +92,9 @@ function SpamPostList({
                 })}
             </div>
             <div className='split-pane'>
+              <div className='pane-label'>
+                ▼ Not Affected by Automod
+              </div>
               {labeledSpamPosts
                 ?.filter((item) => !item.isFiltered)
                 .map((item) => {
@@ -134,11 +140,19 @@ const SpamPostListBlock = styled.div`
     overflow-y: auto;
     .split-pane {
       width: 100%;
+      .pane-label {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-top: 0.3rem;
+        border-bottom: 0.1rem solid ${palette.gray[2]};
+        font-size: 0.9rem;
+        color: ${palette.gray[7]}
+      }
     }
   }
   .Resizer.horizontal {
-    height: 11px;
-    margin: -5px 0;
+    height: 0.3rem;
     background-color: ${palette.blue[2]};
     cursor: row-resize;
     width: 100%;

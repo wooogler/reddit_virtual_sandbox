@@ -158,6 +158,11 @@ const selectPosts = createSelector<PostState, Posts, Posts>(
   (data) => data,
 );
 
+const selectPostsMatchingRules = createSelector<PostState, Posts, string[][]>(
+  (state) => state.posts.data,
+  (data) => data.map((post) => post.matching_rules)
+)
+
 const selectType = createSelector<PostState, PostType, PostType>(
   (state) => state.posts.type,
   (type) => type,
@@ -168,11 +173,18 @@ const selectSort = createSelector<PostState, SortType, SortType>(
   (sort) => sort,
 );
 
+const selectSelectedPostId = createSelector<PostState, string[], string[]>(
+  (state) => state.selectedPostId,
+  (selectedPostId) => selectedPostId,
+)
+
 export const postSelector = {
   page: (state: RootState) => selectPage(state.post),
   posts: (state: RootState) => selectPosts(state.post),
   type: (state: RootState) => selectType(state.post),
   sort: (state: RootState) => selectSort(state.post),
+  selectedPostId: (state: RootState) => selectSelectedPostId(state.post),
+  postsMatchingRules: (state: RootState) => selectPostsMatchingRules(state.post),
 };
 
 const { actions, reducer } = postSlice;

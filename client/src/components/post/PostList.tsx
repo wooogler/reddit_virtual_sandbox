@@ -1,29 +1,29 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Submission, Comment } from '../../lib/api/modsandbox/post';
-import PostItem from './PostItem';
 import OverlayWithButton from '../common/OverlayWithButton';
 import { useDispatch } from 'react-redux';
 import { clearSelectedSpamPostId, getAllPostsMore } from '../../modules/post/slice';
-import { Line } from '../../modules/rule/slice';
+import { LineIds } from '../../modules/rule/slice';
 import SplitPane from 'react-split-pane';
 import palette from '../../lib/styles/palette';
 import { useInfiniteScroll } from '../../lib/hooks';
+import PostItemContainer from '../../containers/post/PostItemContainer';
 
 interface PostListProps {
-  posts: (Submission | Comment)[] | null;
-  selectedLines: Omit<Line, 'content'>[];
-  selectedPostId: string[];
+  posts: (Submission | Comment)[];
+  selectedLines: LineIds;
   selectedSpamPostId: string[];
+  postsMatchingRules: string[][];
   splitView: boolean;
 }
 
 function PostList({
   posts,
   selectedLines,
-  selectedPostId,
   selectedSpamPostId,
   splitView,
+  postsMatchingRules,
 }: PostListProps) {
   const dispatch = useDispatch();
   const [target, setTarget] = useState<any>(null);
@@ -41,22 +41,20 @@ function PostList({
     alert(JSON.stringify(selectedSpamPostId)); // move request
     dispatch(clearSelectedSpamPostId());
   };
+
   const handleClickDelete = () => {
     alert(JSON.stringify(selectedSpamPostId)); // delete request
     dispatch(clearSelectedSpamPostId());
   };
 
-  
-
-  const labeledPosts = posts?.map((post) => {
+  const labeledArray = postsMatchingRules.map((matchingRules) => {
     const isFiltered =
       selectedLines.length === 0
         ? false
         : selectedLines.every((item) =>
-            post.matching_rules?.includes(`${item.ruleId}-${item.lineId}`),
+            matchingRules.includes(`${item.ruleId}-${item.lineId}`),
           );
-    const selected = selectedPostId.includes(post._id);
-    return { post, isFiltered, selected };
+    return isFiltered;
   });
 
   return (
@@ -79,31 +77,29 @@ function PostList({
             paneStyle={{ overflow: 'auto' }}
           >
             <div className="split-pane">
-              {labeledPosts
-                ?.filter((item) => item.isFiltered)
-                .map((item) => {
-                  const { post, isFiltered, selected } = item;
+              <div className='pane-label'>
+                ▼ Affected by Automod
+              </div>
+              {posts.map((post,index) => {
                   return (
-                    <PostItem
+                    labeledArray[index] &&
+                    <PostItemContainer
                       post={post}
-                      action={isFiltered ? 'remove' : undefined}
                       key={post._id}
-                      selected={selected}
                     />
                   );
                 })}
             </div>
             <div className="split-pane">
-              {labeledPosts
-                ?.filter((item) => !item.isFiltered)
-                .map((item) => {
-                  const { post, isFiltered, selected } = item;
+              <div className='pane-label'>
+                ▼ Not Affected by Automod
+              </div>
+              {posts.map((post, index) => {
                   return (
-                    <PostItem
+                    !labeledArray[index] &&
+                    <PostItemContainer
                       post={post}
-                      action={isFiltered ? 'remove' : undefined}
                       key={post._id}
-                      selected={selected}
                     />
                   );
                 })}
@@ -112,14 +108,11 @@ function PostList({
           </SplitPane>
         ) : (
           <>
-            {labeledPosts?.map((item) => {
-              const { post, isFiltered, selected } = item;
+            {posts.map((post) => {
               return (
-                <PostItem
+                <PostItemContainer
                   post={post}
-                  action={isFiltered ? 'remove' : undefined}
                   key={post._id}
-                  selected={selected}
                 />
               );
             })}
@@ -141,11 +134,19 @@ const PostListBlock = styled.div`
     overflow-y: auto;
     .split-pane {
       width: 100%;
+      .pane-label {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-top: 0.3rem;
+        border-bottom: 0.1rem solid ${palette.gray[2]};
+        font-size: 0.9rem;
+        color: ${palette.gray[7]}
+      }
     }
   }
   .Resizer.horizontal {
-    height: 11px;
-    margin: -5px 0;
+    height: 0.3rem;
     background-color: ${palette.blue[2]};
     cursor: row-resize;
     width: 100%;
