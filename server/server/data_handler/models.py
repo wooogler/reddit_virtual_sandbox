@@ -4,30 +4,18 @@ from django.utils import timezone
 
 # Create your models here.
 
-class Submission(models.Model):
+
+class Post(models.Model):
     _id = models.CharField(max_length=300, primary_key=True)
     author = models.CharField(max_length=300)
     body = models.TextField()
     created_utc = models.DateTimeField()
     full_link = models.URLField()
     subreddit = models.CharField(max_length=300)
-    title = models.CharField(max_length=300)
+    title = models.CharField(max_length=300)  # Note that comment doesn't have title.
 
-    matching_rules = models.JSONField(null=True)  # List of (rule_id, line_id)
+    TYPE_CHOICES = [('submission', 'submission'), ('comment', 'comment')]
+    _type = models.CharField(max_length=10, choices=TYPE_CHOICES)
 
     def __str__(self):
-        return self.title
-
-class Comment(models.Model):
-    submission = models.ForeignKey(Submission, on_delete=models.CASCADE)
-    _id = models.CharField(max_length=300, primary_key=True)
-    author = models.CharField(max_length=300)
-    body = models.TextField()
-    created_utc = models.DateTimeField()
-    full_link = models.URLField()
-    subreddit = models.CharField(max_length=300)
-
-    matching_rules = models.JSONField(null=True)  # List of (rule_id, line_id)
-    
-    def __str__(self):
-        return self.body[:100]
+        return self._type + self.full_link
