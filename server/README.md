@@ -22,25 +22,33 @@ $ python manage.py shell  # Interactive shell.
 
 ## 2. Available API Interface
 ### 2-1. GET
-
-| Endpoint                            | Description                                                  | Example |
-| ----------------------------------- | ------------------------------------------------------------ | ------- |
-| /data/, /data/?post_type=submission | Return all posts from submission database.                   |         |
-| /data/?post_type=comment            | Return all posts from comment database.                      |         |
-| /data/{id}                          | Return submission with the given id.                         |         |
-| /data/{id}/?link_comments=true      | Return submission with the given id + all comments linked to that submission. |         |
+#### 2-1-1. /post/
+- [Available Parameters]
+  - type (str): 'comment', 'submission'
+  - sort (str): 'new', 'old'
+  - page (int): number.
+- [Example]
+  ```bash
+  $ /post/?type=comment&&sort=new
+  $ /post/{id}
+  ```
 
 ### 2-2. POST
 
-| Endpoint               | Description                                                  | Example                                                      |
-| ---------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| /data/save_to_database | Crawl posts (Submission or Comment) from Reddit & Save them to corresponding database. | [Save submissions.]<br />curl -i -XPOST "http://127.0.0.1:8000/data/save_to_database/" -H "Content-Type: application/json" -d '{"subreddit": "Cooking", "start_time": "2020-10-10-00:00:30", "end_time": "2020-10-11-00:30:00"}'<br /><br /><br />[Save comments. (and their linked submissions as well.)]<br />curl -i -XPOST "http://127.0.0.1:8000/data/save_to_database/" -H "Content-Type: application/json" -d '{"subreddit": "Cooking",  "start_time": "2020-10-11-00:00:30", "end_time": "2020-10-11-00:30:00", "post_type": "comment"}' |
+#### 2-2-1. /post/crawl/
+- [Description]
+  - Crawl posts (Submission or Comment) from Reddit & Save them to Post database.
+  - If you are trying to save already saved posts, it will be skipped so it's ok if you run duplicate requests again and again.
+- [Example]
+  ```bash
+  $ curl -i -XPOST "http://127.0.0.1:8000/post/crawl/" -H "Content-Type: application/json" -d '{"subreddit": "Cooking", "start_time": "2020-10-10-00:00:30", "end_time": "2020-10-11-00:30:00", "type": "comment", "max_size": 200}'
 
-#### 2-2-1. /data/save_to_database
+  # (Mandatory) subreddit, start_time, end_time
+  ```
+- [Warning]
+  - It may "skip" some posts inside the designated time interval passed by the user. (it's implemented with this limitation to simplify the implementation considering the fact that pushshift.io returns 500 posts at maximum for one request...But if I get any better idea, I will definitely modify the implementation! Please let me know!)
 
-- Warning: It may "skip" some posts inside the designated time interval passed by the user. (it's implemented with this limitation to simplify the implementation considering the fact that pushshift.io returns 500 posts at maximum for one request...But if I get any better idea, I will definitely modify the implementation! Please let me know!)
 
-- If you are trying to save already saved posts, it will be skipped so it's ok if you run duplicate requests again and again.
 
 
 
