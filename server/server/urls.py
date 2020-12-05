@@ -29,7 +29,7 @@ from .data_handler import views
 router = routers.DefaultRouter()
 # router.register(r'submissions', views.SubmissionViewSet)
 # router.register(r'comments', views.CommentViewSet)
-router.register(r'data', views.DataHandlerView, basename='data')
+router.register(r'post', views.PostHandlerViewSet, basename='post')
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.

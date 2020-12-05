@@ -1,6 +1,6 @@
 import logging
 
-from .models import Submission, Comment
+from .models import Post
 
 logger = logging.getLogger(__name__)
 
@@ -11,13 +11,9 @@ class RuleHandler():
         Returns:
             bool: True if success False otherwise.
         """
-        submissions = Submission.objects.all()
-        comments = Comment.objects.all()
+        posts = Post.objects.all()
 
-        for post in submissions:
-            matching_rules = self._get_matching_rules(post, rules)
-            self._update_status(post, matching_rules)
-        for post in comments:
+        for post in posts:
             matching_rules = self._get_matching_rules(post, rules)
             self._update_status(post, matching_rules)
         logger.info('Updated matching_rules column in database.')
@@ -25,12 +21,8 @@ class RuleHandler():
 
     def reset_rules(self):
         """Reset matching_rules columns."""
-        submissions = Submission.objects.all()
-        comments = Comment.objects.all()
-
-        for post in submissions:
-            self._update_status(post, None)
-        for post in comments:
+        posts = Post.objects.all()
+        for post in posts:
             self._update_status(post, None)
         logger.info('Reset matching_rules column.')
 
