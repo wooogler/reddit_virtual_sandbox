@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { SpamComment } from '../../lib/api/reddit/spamComment';
 import { SpamSubmission } from '../../lib/api/reddit/spamSubmission';
-import ListHeader from './ListHeader';
 import OverlayWithButton from '../common/OverlayWithButton';
 import SpamPostItem from './SpamPostItem';
 import { useDispatch } from 'react-redux';
