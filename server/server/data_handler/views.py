@@ -9,46 +9,68 @@ from rest_framework import viewsets, permissions, status
 from rest_framework.decorators import action
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.pagination import PageNumberPagination
 from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
-from .models import Post
+from .models import Post, Profile, User
 from .reddit_handler import RedditHandler
 from .rule_handler import RuleHandler
-from .serializers import PostSerializer
+from .serializers import PostSerializer, ProfileSerializer
 
 
 logger = logging.getLogger(__name__)
 
+class PostPagination(PageNumberPagination):
+    page_size=50
+
 class PostHandlerViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    # permission_classes ?
+    pagination_class = PostPagination
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
-    def list(self, request):
-        """GET /post/, /post/?type=comment
-        """
-        post_type = request.query_params.get('type', None)
-        sort = request.query_params.get('sort', 'new')
-        page = request.query_params.get('page', 1)
-        logger.info(f'request.query_params: {request.query_params}')
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if self.request.user.is_authenticated:
+            profile = Profile.objects.get(user=self.request.user.id)
+            queryset = queryset.filter(_id__in=profile.used_posts.all())
+        post_type = self.request.query_params.get('type', None)
+        sort = self.request.query_params.get('sort', 'new')
 
         if not post_type:
-            queryset = Post.objects.all()
+            queryset = queryset.all()
         else:
-            queryset = Post.objects.filter(_type=post_type)
-
-        if sort == 'new':
-            paginator = Paginator(queryset.order_by('-created_utc'), 100)
-        elif sort == 'old':
-            paginator = Paginator(queryset.order_by('created_utc'), 100)
+            queryset = queryset.filter(_type=post_type)
         
+        if sort == 'new':
+            queryset = queryset.order_by('-created_utc')
+        elif sort == 'old':
+            queryset = queryset.order_by('created_utc')
+
+        return queryset
+
+
+    @action(methods=['post'], detail=False, name='Bring Reddit Posts')
+    def bring(self, request):
+        """POST /post/bring/
+        update user column in posts with post_ids
+        """
         try: 
-            posts = paginator.page(page)
-        except:
-            posts = []
-        serializer = PostSerializer(posts, many=True)
-        return Response(serializer.data)
+            post_ids = request.data['post_ids']
+        except Exception as e:
+            logger.error(e)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        queryset = super().get_queryset()
+        profile = Profile.objects.get(user=request.user.id)
+        for post in queryset.filter(_id__in=post_ids):
+            profile.used_posts.add(post)
+
+        return Response()
+        
+        
 
     @action(methods=['post'], detail=False, name='Crawl Reddit Posts')
     def crawl(self, request):
