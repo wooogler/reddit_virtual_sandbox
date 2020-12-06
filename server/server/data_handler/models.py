@@ -39,3 +39,15 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
+
+class Rule(models.Model):
+    """
+    Rule Model
+    """
+    rule_id = models.IntegerField
+    line_id = models.IntegerField
+    user = models.ForeignKey(User, related_name='rules', on_delete=models.CASCADE)
+    post = models.ManyToManyField(Post, blank=True)
+
+    def __str__(self):
+        return str(self.rule_id)+'-'+str(self.line_id)
