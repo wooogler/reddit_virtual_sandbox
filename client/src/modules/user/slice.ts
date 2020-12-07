@@ -62,6 +62,23 @@ const userSlice = createSlice({
       state.error = action.payload;
       state.loading = false;
     },
+    getUserInfo: {
+      reducer: (state) => {
+        state.loading = true;
+      }, 
+      prepare: (token: string) => ({
+        payload: token
+      })
+    },
+    getUserInfoSuccess: (state, action: PayloadAction<{userInfo: UserInfo, token: string}>) => {
+      state.me = action.payload.userInfo;
+      state.token = action.payload.token;
+      state.loading = false;
+    },
+    getUserInfoError: (state, action: PayloadAction<Error>) => {
+      state.loading = false;
+      state.error = action.payload;
+    }
   },
 });
 
@@ -82,6 +99,9 @@ export const {
   logout,
   logoutSuccess,
   logoutError,
+  getUserInfo,
+  getUserInfoSuccess,
+  getUserInfoError
 } = actions;
 
 export default reducer;

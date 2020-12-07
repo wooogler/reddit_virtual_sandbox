@@ -1,18 +1,24 @@
 import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import { userSelector } from '../../modules/user/slice';
+import { RootState } from '../../modules';
+import { getUserInfo, login, userSelector } from '../../modules/user/slice';
 
 function AuthContainer() {
   const history = useHistory();
-  const token = useSelector(userSelector.token);
+  const dispatch = useDispatch();
+  const token = useSelector((state: RootState) => state.user.token);
   
   useEffect(() => {
-    if (!token) {
+    console.log(token);
+    const localToken = localStorage.getItem('token');
+    console.log(localToken);
+    if(!localToken) {
       history.push('/login');
+    } else {
+      dispatch(getUserInfo(localToken));
     }
-    return;
-  }, [history, token]);
+  }, [token, history, dispatch]);
   return <div></div>;
 }
 

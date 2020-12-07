@@ -7,6 +7,7 @@ import { RootState } from '../../modules';
 function LoginFormContainer() {
   const token = useSelector((state: RootState) => state.user.token);
   const history = useHistory();
+  
   useEffect(() => {
     if (token) {
       localStorage.setItem('token', token);

@@ -1,14 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
+import PostHeaderContainer from '../../containers/post/PostHeaderContainer';
 import PostListContainer from '../../containers/post/PostListContainer';
 import SpamPostListContainer from '../../containers/post/SpamPostListContainer';
-import PostActions from './PostActions';
 
 function PostLayout() {
   return (
     <Grid>
       <PostHeaderLayout>
-        <PostActions/>
+        <PostHeaderContainer />
       </PostHeaderLayout>
       <PostListLayout>
         <PostListContainer />
@@ -38,7 +38,7 @@ const PostListLayout = styled.div`
   overflow: auto;
 `;
 
-const SpamPostListLayout = styled.div` 
+const SpamPostListLayout = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
