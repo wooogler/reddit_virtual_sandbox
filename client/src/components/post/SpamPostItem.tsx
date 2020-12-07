@@ -18,7 +18,7 @@ export interface SpamPostItemProps {
 function SpamPostItem({ spamPost, action, selected }: SpamPostItemProps) {
   const dispatch = useDispatch();
   const handleClickSpamPost = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    dispatch(toggleSpamPostSelect(spamPost.id));
+    dispatch(toggleSpamPostSelect(spamPost._id));
   };
 
   return (

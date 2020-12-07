@@ -44,7 +44,7 @@ function SpamPostList({
         : selectedLines.every((item) =>
             post.matching_rules.includes(`${item.ruleId}-${item.lineId}`),
           );
-    const selected = selectedSpamPostId.includes(post.id);
+    const selected = selectedSpamPostId.includes(post._id);
     return { post, isFiltered, selected };
   });
 
@@ -79,7 +79,7 @@ function SpamPostList({
                     <SpamPostItem
                       spamPost={post}
                       action={isFiltered ? 'remove' : undefined}
-                      key={post.id}
+                      key={post._id}
                       selected={selected}
                     />
                   );
@@ -97,7 +97,7 @@ function SpamPostList({
                     <SpamPostItem
                       spamPost={post}
                       action={isFiltered ? 'remove' : undefined}
-                      key={post.id}
+                      key={post._id}
                       selected={selected}
                     />
                   );
@@ -112,7 +112,7 @@ function SpamPostList({
                 <SpamPostItem
                   spamPost={post}
                   action={isFiltered ? 'remove' : undefined}
-                  key={post.id}
+                  key={post._id}
                   selected={selected}
                 />
               );

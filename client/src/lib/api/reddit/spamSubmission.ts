@@ -7,7 +7,7 @@ export interface SpamSubmission {
   banned_at_utc: number;
   spam: boolean;
   removed_by: string;
-  id: string;
+  _id: string;
   author: string;
   approved: boolean;
   full_link: string;
