@@ -1,16 +1,26 @@
 import { useFormik } from 'formik';
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { login } from '../../modules/user/slice';
 import Button from '../common/Button';
 
-function LoginForm() {
+interface LoginFormProps {
+  error: Error | null;
+}
+
+function LoginForm({error}: LoginFormProps) {
+  const dispatch = useDispatch();
+
   const formik = useFormik({
     initialValues: {
       username: '',
       password: '',
     },
-    onSubmit: (values) => {},
+    onSubmit: (values) => {
+      dispatch(login(values));
+    },
   });
 
   return (
@@ -29,14 +39,15 @@ function LoginForm() {
         name="password"
         type="password"
         onChange={formik.handleChange}
-        value={formik.values.username}
+        value={formik.values.password}
         autoComplete="off"
       />
+      <div>{error && 'Please check your username and password'}</div>
       <div className="button-group">
         <Button size="large" type="submit">
           LOG IN
         </Button>
-        <Link to='/signup'>
+        <Link to="/signup">
           <Button size="large" color="red">
             SIGN UP
           </Button>

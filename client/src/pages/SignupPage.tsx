@@ -1,11 +1,11 @@
 import React from 'react';
 import AuthLayout from '../components/auth/AuthLayout';
-import SignupForm from '../components/auth/SignupForm';
+import SignupFormContainer from '../containers/auth/SignupFormContainer';
 
 function SignupPage() {
   return (
     <AuthLayout>
-      <SignupForm />
+      <SignupFormContainer />
     </AuthLayout>
   );
 }
