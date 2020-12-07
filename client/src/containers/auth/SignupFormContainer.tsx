@@ -1,22 +1,22 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-import LoginForm from '../../components/auth/LoginForm';
+import SignupForm from '../../components/auth/SignupForm';
 import { RootState } from '../../modules';
 
-function LoginFormContainer() {
+function SignupFormContainer() {
   const token = useSelector((state: RootState) => state.user.token);
-  const error = useSelector((state: RootState) => state.user.error);
   const history = useHistory();
-
+  const error = useSelector((state: RootState) => state.user.error);
+  
   useEffect(() => {
     if (token) {
       localStorage.setItem('token', token);
-      history.replace('/');
+      history.replace('/')
     }
   }, [token, history]);
 
-  return <LoginForm error={error} />;
+  return <SignupForm error={error}/>;
 }
 
-export default LoginFormContainer;
+export default SignupFormContainer;

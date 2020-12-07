@@ -3,6 +3,7 @@ import {
   getUserInfoAPI,
   loginAPI,
   logoutAPI,
+  signupAPI,
 } from '../../lib/api/modsandbox/user';
 import {
   getUserInfo,
@@ -14,6 +15,9 @@ import {
   logout,
   logoutError,
   logoutSuccess,
+  signup,
+  signupError,
+  signupSuccess,
   userSelector,
 } from './slice';
 
@@ -46,10 +50,21 @@ function* getUserInfoSaga(action: ReturnType<typeof getUserInfo>) {
   }
 }
 
+function* signupSaga(action: ReturnType<typeof signup>) {
+  try {
+    const {username, password} = action.payload;
+    const token: string = yield call(signupAPI, username, password);
+    yield put(signupSuccess(token));
+  } catch (err) {
+    yield put(signupError(err));
+  }
+}
+
 export function* userSaga() {
   yield all([
     yield takeLatest(login, loginSaga),
     yield takeLatest(logout, logoutSaga),
     yield takeLatest(getUserInfo, getUserInfoSaga),
+    yield takeLatest(signup, signupSaga),
   ]);
 }

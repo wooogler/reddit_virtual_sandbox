@@ -25,17 +25,19 @@ function PostHeader({userInfo}: PostHeaderProps) {
       <Button color="blue" size="large">
         Import subreddit posts
       </Button>
+      <div className='right'>
       {
-        userInfo && <div className='user-info'>{userInfo.username}</div>
+        userInfo && <div>username: {userInfo.username}</div>
       }
-      <Button
-        color="red"
-        size="large"
-        onClick={handleClickLogout}
-        className="logout-button"
-      >
-        Log out
-      </Button>
+        <Button
+          color="red"
+          size="large"
+          onClick={handleClickLogout}
+          className="logout-button"
+        >
+          Log out
+        </Button>
+      </div>
     </PostHeaderDiv>
   );
 }
@@ -43,8 +45,14 @@ function PostHeader({userInfo}: PostHeaderProps) {
 const PostHeaderDiv = styled.div`
   display: flex;
   width: 100%;
-  .logout-button {
+  align-items: center;
+  .right {
     margin-left: auto;
+    display: flex;
+    align-items: center;
+    button {
+      margin-left: 2rem;
+    }
   }
 `;
 

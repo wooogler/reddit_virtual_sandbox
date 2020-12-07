@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { LoginForm } from '../../../modules/user/slice';
 
 export async function loginAPI(username: string, password: string) {
   const response = await axios.post<{ key: string }>(
@@ -28,4 +27,17 @@ export async function getUserInfoAPI(token: string) {
   })
 
   return response.data;
+}
+
+export async function signupAPI(username: string, password: string) {
+  const response = await axios.post<{ key: string }>(
+    'http://localhost:8000/rest-auth/registration/',
+    {
+      username,
+      password1: password,
+      password2: password,
+    },
+  )
+
+  return response.data.key;
 }

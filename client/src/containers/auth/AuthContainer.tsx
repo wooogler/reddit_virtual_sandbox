@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { RootState } from '../../modules';
-import { getUserInfo, login, userSelector } from '../../modules/user/slice';
+import { getUserInfo } from '../../modules/user/slice';
 
 function AuthContainer() {
   const history = useHistory();

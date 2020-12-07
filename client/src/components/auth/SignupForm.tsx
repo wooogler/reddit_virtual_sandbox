@@ -1,16 +1,25 @@
 import { useFormik } from 'formik';
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { signup } from '../../modules/user/slice';
 import Button from '../common/Button';
 
-function SignupForm() {
+interface SignupFormProps {
+  error: Error | null;
+}
+
+function SignupForm({error}: SignupFormProps) {
+  const dispatch = useDispatch()
   const formik = useFormik({
     initialValues: {
       username: '',
       password: '',
     },
-    onSubmit: (values) => {},
+    onSubmit: (values) => {
+      dispatch(signup(values));
+    },
   });
 
   return (
@@ -29,9 +38,10 @@ function SignupForm() {
         name="password"
         type="password"
         onChange={formik.handleChange}
-        value={formik.values.username}
+        value={formik.values.password}
         autoComplete="off"
       />
+      <div>{error && 'username already exists'}</div>
       <div className="button-group">
         <Button size="large" type="submit">
           SIGN UP

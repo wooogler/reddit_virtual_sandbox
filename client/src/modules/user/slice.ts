@@ -10,6 +10,11 @@ export type LoginForm = {
   password: string;
 };
 
+export type SignupForm = {
+  username: string;
+  password: string;
+}
+
 export type UserState = {
   loading: boolean;
   error: Error | null;
@@ -78,7 +83,23 @@ const userSlice = createSlice({
     getUserInfoError: (state, action: PayloadAction<Error>) => {
       state.loading = false;
       state.error = action.payload;
-    }
+    },
+    signup: {
+      reducer: (state) => {
+        state.loading = true;
+      },
+      prepare: (signupForm: SignupForm) => ({
+        payload: signupForm
+      })
+    },
+    signupSuccess: (state, action: PayloadAction<string>) => {
+      state.loading=false;
+      state.token = action.payload;
+    },
+    signupError: (state, action: PayloadAction<Error>) => {
+      state.error = action.payload;
+      state.loading = false;
+    },
   },
 });
 
@@ -101,7 +122,10 @@ export const {
   logoutError,
   getUserInfo,
   getUserInfoSuccess,
-  getUserInfoError
+  getUserInfoError,
+  signup,
+  signupError,
+  signupSuccess
 } = actions;
 
 export default reducer;
