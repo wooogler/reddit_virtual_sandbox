@@ -3,6 +3,7 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 from django.contrib.auth import get_user_model
 
+User = get_user_model()
 class Rule(models.Model):
     """
     Rule Model
@@ -30,8 +31,6 @@ class Post(models.Model):
 
     def __str__(self):
         return self._type + self.full_link
-
-User = get_user_model()
 
 class Profile(models.Model):
     """

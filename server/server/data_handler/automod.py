@@ -1,5 +1,6 @@
 import re
 import yaml
+from .models import Post, Profile, Rule
 
 class AutoModeratorSyntaxError(ValueError):
     def __init__(self, message, yaml):
