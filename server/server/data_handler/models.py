@@ -3,6 +3,14 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 from django.contrib.auth import get_user_model
 
+class Rule(models.Model):
+    """
+    Rule Model
+    """
+    user = models.ForeignKey(User, related_name='rules', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.id
 
 class Post(models.Model):
     """
@@ -15,6 +23,7 @@ class Post(models.Model):
     full_link = models.URLField()
     subreddit = models.CharField(max_length=300)
     title = models.CharField(max_length=300)  # Note that comment doesn't have title.
+    filtering_rules = models.ManyToManyField(Rule, blank=True)
 
     TYPE_CHOICES = [('submission', 'submission'), ('comment', 'comment')]
     _type = models.CharField(max_length=10, choices=TYPE_CHOICES)
@@ -40,14 +49,3 @@ def create_user_profile(sender, instance, created, **kwargs):
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
 
-class Rule(models.Model):
-    """
-    Rule Model
-    """
-    rule_id = models.IntegerField
-    line_id = models.IntegerField
-    user = models.ForeignKey(User, related_name='rules', on_delete=models.CASCADE)
-    post = models.ManyToManyField(Post, blank=True)
-
-    def __str__(self):
-        return str(self.rule_id)+'-'+str(self.line_id)

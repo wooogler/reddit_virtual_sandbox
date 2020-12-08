@@ -41,7 +41,7 @@ export const initialState: RuleState = {
   files: [
     {
       title: 'rule.yml',
-      code: 'title: hello\nbody: bi\n---\nbody: hello',
+      code: 'title: [hello]\n~body: [hi]\n---',
       tab: 0,
       mode: 'edit',
     },
