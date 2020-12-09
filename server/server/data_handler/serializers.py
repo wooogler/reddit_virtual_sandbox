@@ -8,7 +8,7 @@ class PostSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = Post
-        fields = ['_id', 'author', 'body', 'created_utc', 'full_link', 'subreddit', 'title', '_type']
+        fields = ['_id', 'author', 'body', 'created_utc', 'full_link', 'subreddit', 'title', '_type', 'filtering_rules']
 
 class ProfileSerializer(serializers.ModelSerializer):
     """

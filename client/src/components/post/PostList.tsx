@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { Submission, Comment } from '../../lib/api/modsandbox/post';
 import OverlayWithButton from '../common/OverlayWithButton';
 import { useDispatch } from 'react-redux';
 import { clearSelectedSpamPostId, getAllPostsMore } from '../../modules/post/slice';
@@ -9,13 +8,15 @@ import SplitPane from 'react-split-pane';
 import palette from '../../lib/styles/palette';
 import { useInfiniteScroll } from '../../lib/hooks';
 import PostItemContainer from '../../containers/post/PostItemContainer';
+import { Post } from '../../lib/api/modsandbox/post';
 
 interface PostListProps {
-  posts: (Submission | Comment)[];
+  posts: Post[];
   selectedLines: LineIds;
   selectedSpamPostId: string[];
-  postsMatchingRules: string[][];
+  postsMatchingRules: number[][];
   splitView: boolean;
+  loading: boolean;
 }
 
 function PostList({
@@ -24,6 +25,7 @@ function PostList({
   selectedSpamPostId,
   splitView,
   postsMatchingRules,
+  loading,
 }: PostListProps) {
   const dispatch = useDispatch();
   const [target, setTarget] = useState<any>(null);
@@ -52,7 +54,7 @@ function PostList({
       selectedLines.length === 0
         ? false
         : selectedLines.every((item) =>
-            matchingRules.includes(`${item.ruleId}-${item.lineId}`),
+            matchingRules.includes(item.ruleId),
           );
     return isFiltered;
   });
@@ -103,7 +105,7 @@ function PostList({
                     />
                   );
                 })}
-                {/* <div ref={setTarget} className='last-item'></div> */}
+                {!loading && <div ref={setTarget} className='last-item'></div>}
             </div>
           </SplitPane>
         ) : (
@@ -116,7 +118,7 @@ function PostList({
                 />
               );
             })}
-            {/* <div ref={setTarget} className='last-item'></div> */}
+            {!loading && <div ref={setTarget} className='last-item'></div>}
           </>
         )}
       </div>

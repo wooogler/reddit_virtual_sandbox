@@ -1,13 +1,9 @@
 import { all, call, put, select, takeLatest } from 'redux-saga/effects';
-import { getCommentsAPI } from '../../lib/api/pushshift/comment';
-import { getAllPostsAPI, Posts } from '../../lib/api/modsandbox/post';
+import { getAllPostsAPI, PaginatedResponse, Post } from '../../lib/api/modsandbox/post';
 import { SpamComment } from '../../lib/api/reddit/spamComment';
 import { getSpamPostsAPI } from '../../lib/api/reddit/spamPosts';
 import { SpamSubmission } from '../../lib/api/reddit/spamSubmission';
 import {
-  getComments,
-  getCommentsError,
-  getCommentsSuccess,
   getAllPosts,
   getAllPostsError,
   getAllPostsSuccess,
@@ -23,19 +19,20 @@ import {
 function* getAllPostsSaga(action: ReturnType<typeof getAllPosts>) {
   try {
     const page: number = yield select(postSelector.page);
-    const prevPosts: Posts = yield select(postSelector.posts);
+    const prevPosts: Post[] = yield select(postSelector.posts);
     const type: PostType = yield select(postSelector.type);
     const sort: SortType = yield select(postSelector.sort);
     const nextPage = page + 1;
 
-    const newPosts: Posts = yield call(getAllPostsAPI, type, sort, nextPage);
+    const response: PaginatedResponse = yield call(getAllPostsAPI, type, sort, nextPage);
     yield put(
       getAllPostsSuccess({
-        data: prevPosts.concat(newPosts),
+        data: prevPosts.concat(response.results),
         nextPage,
       }),
     );
   } catch (err) {
+    console.log(err);
     yield put(getAllPostsError(err));
   }
 }
@@ -51,20 +48,10 @@ function* getSpamPostsSaga(action: ReturnType<typeof getSpamPosts>) {
   }
 }
 
-function* getCommentsSaga(action: ReturnType<typeof getComments>) {
-  try {
-    const result = yield call(getCommentsAPI, action.payload);
-    yield put(getCommentsSuccess(result));
-  } catch (err) {
-    yield put(getCommentsError(err));
-  }
-}
-
 export function* postSaga() {
   yield all([
     yield takeLatest(getAllPosts, getAllPostsSaga),
     yield takeLatest(getAllPostsMore, getAllPostsSaga),
     yield takeLatest(getSpamPosts, getSpamPostsSaga),
-    yield takeLatest(getComments, getCommentsSaga),
   ]);
 }

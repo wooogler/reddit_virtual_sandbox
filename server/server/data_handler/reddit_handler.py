@@ -21,7 +21,17 @@ class RedditHandler():
             'submission': 'https://api.pushshift.io/reddit/search/submission',
             'comment': 'https://api.pushshift.io/reddit/search/comment'
         }
-        self.request_size = 500
+        self.request_size = 100
+
+    # def _size_limit_test(self): 
+    #     try:
+    #         response = requests.get(self.endpoint['submission'], params={'size': self.request_size, 'subreddit': 'AskReddit'})
+    #         assert response.status_code == 200
+    #         posts = json.loads(response.content)['data']
+    #         self.request_size = len(posts)
+    #         logger.info('size limit = %d' % self.request_size)
+    #     except Exception as e:
+    #         logger.error(e)
 
     def _get_reddit_posts(self, uri, params, max_retries=5):
         """Send HTTP request to 'uri'
@@ -81,6 +91,7 @@ class RedditHandler():
         Returns:
             bool: True if succeed False otherwise.
         """
+        # self._size_limit_test()
         stat = {'tot': 0, 'submission': 0, 'comment': 0}
         post_type = kwargs.get('post_type')
         max_size = kwargs['max_size']
@@ -94,6 +105,7 @@ class RedditHandler():
             'before': kwargs['end_ts'],
             'size': self.request_size
         }
+        profile = kwargs['profile']
 
         for post_type in post_types:
             logger.info(f'Crawl {post_type}')
@@ -109,17 +121,20 @@ class RedditHandler():
                 logger.info(f'Retrieved {len(posts)} {post_type}s.')
                 for post in posts:
                     obj, created = Post.objects.get_or_create(**post)
+                    if profile is not None:
+                        obj.profile_set.add(profile)
                     if created:
                         stat[post_type] += 1
                         stat['tot'] += 1
-                        if stat['tot'] >= max_size:
+                        if max_size is not None and stat['tot'] >= max_size:
                             logger.info(f'Number of newly inserted posts: {stat}')
                             return True
 
                 # For the next loop.
                 n = len(posts)
-                params['after'] = int(datetime.timestamp(posts[-1]['created_utc'])) + 1  # Might skip some posts.
-            logger.info(f'Last data + 1 sec is {datetime.fromtimestamp(params["after"], tz=timezone.utc)}')
+                if len(posts) != 0:
+                    params['after'] = int(datetime.timestamp(posts[-1]['created_utc']))  # Might skip some posts.
+            logger.info(f'Last data sec is {datetime.fromtimestamp(params["after"], tz=timezone.utc)}')
 
         logger.info(f'Number of newly inserted posts: {stat}')
         return True

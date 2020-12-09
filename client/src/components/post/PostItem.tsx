@@ -1,5 +1,5 @@
 import React from 'react';
-import { Submission, Comment, isSubmission } from '../../lib/api/modsandbox/post';
+import { Post } from '../../lib/api/modsandbox/post';
 import SubmissionItem from './SubmissionItem';
 import CommentItem from './CommentItem';
 import styled from 'styled-components';
@@ -9,7 +9,7 @@ import { togglePostSelect } from '../../modules/post/slice';
 import { LineIds } from '../../modules/rule/slice';
 
 interface PostItemProps {
-  post: Submission | Comment;
+  post: Post;
   selectedPostId: string[];
   selectedLines: LineIds;
 }
@@ -24,12 +24,12 @@ function PostItem({ post, selectedPostId, selectedLines }: PostItemProps) {
     selectedLines.length === 0
       ? false
       : selectedLines.every((item) =>
-          post.matching_rules?.includes(`${item.ruleId}-${item.lineId}`),
+          post.matching_rules.includes(item.ruleId),
         );
 
   return (
     <PostItemDiv selected={selectedPostId.includes(post._id)} onClick={handleClickPost}>
-      {isSubmission(post) ? (
+      {post._type === 'submission' ? (
         <SubmissionItem submission={post} action={isFiltered ? 'remove' : undefined} />
       ) : (
         <CommentItem comment={post} action={isFiltered ? 'remove' : undefined} />

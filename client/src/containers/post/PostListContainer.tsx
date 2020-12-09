@@ -38,11 +38,11 @@ function PostListContainer() {
         tooltipText='Posts imported <br/> from real subreddit'
       />
       {loading && <p style={{ textAlign: 'center' }}>글 로딩중..</p>}
-      {error && (
+      {/* {error && (
         <p style={{ textAlign: 'center' }}>
           에러 발생!
         </p>
-      )}
+      )} */}
       {data && (
         <PostList
           posts={data}
@@ -50,6 +50,7 @@ function PostListContainer() {
           selectedSpamPostId={selectedSpamPostId}
           splitView={splitPostList}
           postsMatchingRules={postsMatchingRules}
+          loading={loading}
         />
       )}
     </>

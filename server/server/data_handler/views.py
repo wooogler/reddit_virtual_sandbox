@@ -31,20 +31,22 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     pagination_class = PostPagination
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    # permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
         queryset = super().get_queryset()
         if self.request.user.is_authenticated:
             profile = Profile.objects.get(user=self.request.user.id)
             queryset = queryset.filter(_id__in=profile.used_posts.all())
-        post_type = self.request.query_params.get('type', None)
+        post_type = self.request.query_params.get('type', 'all')
         sort = self.request.query_params.get('sort', 'new')
+        print(post_type)
 
-        if not post_type:
+        if post_type == 'all':
             queryset = queryset.all()
         else:
             queryset = queryset.filter(_type=post_type)
+            
         
         if sort == 'new':
             queryset = queryset.order_by('-created_utc')
@@ -52,7 +54,6 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
             queryset = queryset.order_by('created_utc')
 
         return queryset
-
 
     @action(methods=['post'], detail=False, name='Bring Reddit Posts')
     def bring(self, request):
@@ -84,13 +85,16 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
             start_time = request.data['start_time']
             end_time = request.data['end_time']
             post_type = request.data.get('type', None)
-            max_size = request.data.get('max_size', 200)
+            max_size = request.data.get('max_size', None)
 
             start_ts = int(datetime.strptime(start_time, "%Y-%m-%d-%H:%M:%S").replace(tzinfo=timezone.utc).timestamp())
             end_ts = int(datetime.strptime(end_time, "%Y-%m-%d-%H:%M:%S").replace(tzinfo=timezone.utc).timestamp())
         except Exception as e:
             logger.error(e)
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        if request.user:
+            profile = Profile.objects.get(user=request.user.id)
 
         try:
             logger.info(f'request.data: {request.data}')
@@ -100,7 +104,8 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
                 start_ts=start_ts,
                 end_ts=end_ts,
                 post_type=post_type,
-                max_size=max_size
+                max_size=max_size,
+                profile=profile,
             ):
                 return Response(status=status.HTTP_201_CREATED)
 
@@ -160,6 +165,6 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
                 if(rule_target.check_item(post, '')):
                     post.filtering_rules.add(rule)
         
-        return Response()
+        return Response(status=status.HTTP_202_ACCEPTED)
             
             

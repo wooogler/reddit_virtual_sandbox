@@ -7,6 +7,7 @@ import {
   changePostType,
   changeSortType,
   getAllPosts,
+  PostType,
   toggleSplitPostList,
   toggleSplitSpamPostList,
 } from '../../modules/post/slice';
@@ -25,7 +26,7 @@ export interface ListHeaderProps {
 
 type OptionType = { value: string; label: string };
 type SortOptionType = { value: 'new' | 'old'; label: string };
-type ViewOptionType = { value: 'submission' | 'comment'; label: string };
+type ViewOptionType = { value: PostType; label: string };
 
 const sortOptions: OptionsType<SortOptionType> = [
   { value: 'new', label: 'new' },
@@ -34,7 +35,7 @@ const sortOptions: OptionsType<SortOptionType> = [
 ];
 
 const viewOptions: OptionsType<ViewOptionType> = [
-  // { value: 'all', label: 'all posts' },
+  { value: 'all', label: 'all posts' },
   { value: 'submission', label: 'submission' },
   { value: 'comment', label: 'comment' },
 ];

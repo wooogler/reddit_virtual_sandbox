@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import {Comment} from '../../lib/api/modsandbox/post';
+import { Post } from '../../lib/api/modsandbox/post';
 import { SpamComment } from '../../lib/api/reddit/spamComment';
 import palette, { actionColorMap } from '../../lib/styles/palette';
 import AuthorText from '../common/AuthorText';
@@ -11,7 +11,7 @@ import SubredditText from '../common/SubredditText';
 
 
 export interface CommentItemProps {
-  comment: Comment | SpamComment;
+  comment: Post | SpamComment;
   action?: 'remove' | 'report';
 }
 

@@ -1,15 +1,15 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Submission, Comment, Posts } from '../../lib/api/modsandbox/post';
 import { SpamSubmission } from '../../lib/api/reddit/spamSubmission';
 import { SpamComment } from '../../lib/api/reddit/spamComment';
 import { RootState } from '..';
+import { Post } from '../../lib/api/modsandbox/post';
 
-export type PostType = 'submission' | 'comment';
+export type PostType = 'submission' | 'comment' | 'all';
 export type SortType = 'new' | 'old';
 
 export type PostState = {
   posts: {
-    data: (Submission | Comment)[];
+    data: Post[];
     loading: boolean;
     error: Error | null;
     page: number;
@@ -68,7 +68,7 @@ const postSlice = createSlice({
     },
     getAllPostsSuccess: (
       state,
-      action: PayloadAction<{ data: Posts; nextPage: number }>,
+      action: PayloadAction<{ data: Post[]; nextPage: number }>,
     ) => {
       state.posts.data = action.payload.data;
       state.posts.loading = false;
@@ -79,23 +79,6 @@ const postSlice = createSlice({
       state.posts.loading = false;
     },
     getAllPostsMore: () => {},
-    getComments: {
-      reducer: (state) => {
-        state.comments.loading = true;
-        state.comments.data = null;
-      },
-      prepare: (submissionId: string) => ({
-        payload: submissionId,
-      }),
-    },
-    getCommentsSuccess: (state, action: PayloadAction<Comment[]>) => {
-      state.comments.data = action.payload;
-      state.comments.loading = false;
-    },
-    getCommentsError: (state, action: PayloadAction<Error>) => {
-      state.comments.loading = false;
-      state.comments.error = action.payload;
-    },
     changePostType: (state, action: PayloadAction<PostType>) => {
       state.posts.type = action.payload;
     },
@@ -153,12 +136,12 @@ const selectPage = createSelector<PostState, number, number>(
   (page) => page,
 );
 
-const selectPosts = createSelector<PostState, Posts, Posts>(
+const selectPosts = createSelector<PostState, Post[], Post[]>(
   (state) => state.posts.data,
   (data) => data,
 );
 
-const selectPostsMatchingRules = createSelector<PostState, Posts, string[][]>(
+const selectPostsMatchingRules = createSelector<PostState, Post[], number[][]>(
   (state) => state.posts.data,
   (data) => data.map((post) => post.matching_rules)
 )
@@ -196,9 +179,6 @@ export const {
   // selectSubmission,
   togglePostSelect,
   toggleSpamPostSelect,
-  getComments,
-  getCommentsSuccess,
-  getCommentsError,
   getSpamPosts,
   getSpamPostsSuccess,
   getSpamPostsError,

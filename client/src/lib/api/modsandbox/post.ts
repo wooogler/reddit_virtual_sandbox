@@ -6,43 +6,34 @@ export async function getAllPostsAPI(
   sortType: SortType,
   page: number,
 ) {
-  // const response = await axios.get<Posts>('http://localhost:8000/data', {
-  //   params: {
-  //     post_type: postType,
-  //     sort: sortType,
-  //     page,
-  //   },
-  // });
-
-  const response = await axios.get<Posts>('http://localhost:4000/posts');
+  const response = await axios.get<PaginatedResponse>('http://localhost:8000/post', {
+    params: {
+      type: postType,
+      sort: sortType,
+      page,
+    },
+  }).catch((error) => {
+    return error.message;
+  });
 
   return response.data;
 }
 
-export function isSubmission(post: Submission | Comment): post is Submission {
-  return (post as Submission).title !== undefined;
+export interface PaginatedResponse {
+  count: number;
+  previous: string | null;
+  next: string | null;
+  results: Post[];
 }
 
-export type Posts = (Submission | Comment)[];
-
-export interface Comment {
-  submission: string;
+export type Post = {
   _id: string;
-  author: string;
-  body: string;
-  created_utc: string;
-  full_link: string;
-  subreddit: string;
-  matching_rules: string[];
-}
-
-export interface Submission {
-  _id: string;
+  _type: 'comment' | 'submission';
   author: string;
   body: string;
   created_utc: string;
   full_link: string;
   subreddit: string;
   title: string;
-  matching_rules: string[];
+  matching_rules: number[];
 }
