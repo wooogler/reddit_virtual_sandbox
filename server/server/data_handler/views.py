@@ -1,4 +1,5 @@
 import logging
+import json
 from datetime import datetime, timezone
 
 from django.shortcuts import render
@@ -14,9 +15,10 @@ from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
-from .models import Post, Profile, User
+from .models import Post, Profile, User, Rule
 from .reddit_handler import RedditHandler
 from .rule_handler import RuleHandler
+from .automod import Ruleset, RuleTarget
 from .serializers import PostSerializer, ProfileSerializer
 
 
@@ -70,8 +72,6 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
 
         return Response()
         
-        
-
     @action(methods=['post'], detail=False, name='Crawl Reddit Posts')
     def crawl(self, request):
         """POST /post/crawl/
@@ -109,6 +109,7 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
 
         return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+
     # @action(methods=['post'], detail=False)
     # def apply_rules(self, request):
     #     """POST /post/apply_rules/, /post/apply_rules/?reset=false
@@ -134,17 +135,31 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
     #         logger.error(e)
     #     return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-    # @action(method=['post'], detail=False)
-    # def apply_rules(self, request):
-    #     """
-    #     POST /post/apply_rules/
-    #     """
-    #     try:
-    #         yaml = request.data['yaml']
-    #     except Exception as e:
-    #         logger.error(e)
-    #         return Response(status=status.HTTP_400_BAD_REQUEST)
+    @action(methods=['post'], detail=False)
+    def apply_rules(self, request):
+        """
+        POST /post/apply_rules/
+        """
+        try:
+            yaml = request.data['yaml']
+            rule_set = Ruleset(yaml)
+        except Exception as e:
+            logger.error(e)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        
+        profile = Profile.objects.get(user=request.user.id)
+        rules = rule_set.rules
 
-    #     try:
-    #         logger.info(f'request.data: {request.data}')
+        for index, rule in enumerate(rules):
+            rule_object = Rule(user=profile.user, rule_index=index, content=json.dumps(rule))
+            rule_object.save()
+
+        for post in profile.used_posts.all():
+            for rule in Rule.objects.all():
+                rule_target = RuleTarget("Link", json.loads(rule.content))
+                if(rule_target.check_item(post, '')):
+                    post.filtering_rules.add(rule)
+        
+        return Response()
+            
             

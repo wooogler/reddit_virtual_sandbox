@@ -9,9 +9,11 @@ class Rule(models.Model):
     Rule Model
     """
     user = models.ForeignKey(User, related_name='rules', on_delete=models.CASCADE)
+    rule_index = models.IntegerField(default=-1)
+    content = models.TextField(default='')
 
     def __str__(self):
-        return self.id
+        return self.content
 
 class Post(models.Model):
     """
@@ -37,12 +39,13 @@ class Profile(models.Model):
     Profile Model to extend User Model
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    username = models.CharField(max_length=300, default='default_username')
     used_posts = models.ManyToManyField(Post, blank=True)
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
-        Profile.objects.create(user=instance)
+        Profile.objects.create(user=instance, username=instance.username)
 
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):

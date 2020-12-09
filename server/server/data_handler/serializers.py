@@ -11,6 +11,9 @@ class PostSerializer(serializers.ModelSerializer):
         fields = ['_id', 'author', 'body', 'created_utc', 'full_link', 'subreddit', 'title', '_type']
 
 class ProfileSerializer(serializers.ModelSerializer):
+    """
+    Serializer for Profile Model
+    """
     user = serializers.StringRelatedField(read_only=True)
 
     class Meta:
