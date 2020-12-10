@@ -19,23 +19,24 @@ from .models import Post, Profile, User, Rule
 from .reddit_handler import RedditHandler
 from .rule_handler import RuleHandler
 from .automod import Ruleset, RuleTarget
-from .serializers import PostSerializer, ProfileSerializer
+from .serializers import PostSerializer, ProfileSerializer, RuleSerializer
+from .pagintations import PostPagination
 
 
 logger = logging.getLogger(__name__)
 
-class PostPagination(PageNumberPagination):
-    page_size=50
+class RuleHandlerViewSet(viewsets.ModelViewSet):
+    queryset = Rule.objects.all()
+    serializer_class = RuleSerializer
 
 class PostHandlerViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     pagination_class = PostPagination
-    # permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        print(self.request.user)
         if self.request.user.is_authenticated:
             profile = Profile.objects.get(user=self.request.user.id)
             queryset = queryset.filter(_id__in=profile.used_posts.all())
@@ -153,6 +154,7 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
         profile = Profile.objects.get(user=request.user.id)
+        profile.user.rules.all().delete()
         rules = rule_set.rules
 
         for index, rule in enumerate(rules):
@@ -163,7 +165,7 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
             for rule in Rule.objects.all():
                 rule_target = RuleTarget("Link", json.loads(rule.content))
                 if(rule_target.check_item(post, '')):
-                    post.filtering_rules.add(rule)
+                    post.matching_rules.add(rule)
         
         return Response(status=status.HTTP_202_ACCEPTED)
             

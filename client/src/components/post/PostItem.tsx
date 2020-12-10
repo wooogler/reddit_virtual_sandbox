@@ -12,9 +12,10 @@ interface PostItemProps {
   post: Post;
   selectedPostId: string[];
   selectedLines: LineIds;
+  isMatched: boolean;
 }
 
-function PostItem({ post, selectedPostId, selectedLines }: PostItemProps) {
+function PostItem({ post, selectedPostId, selectedLines, isMatched }: PostItemProps) {
   const dispatch = useDispatch();
   const handleClickPost = () => {
     dispatch(togglePostSelect(post._id));
@@ -30,9 +31,9 @@ function PostItem({ post, selectedPostId, selectedLines }: PostItemProps) {
   return (
     <PostItemDiv selected={selectedPostId.includes(post._id)} onClick={handleClickPost}>
       {post._type === 'submission' ? (
-        <SubmissionItem submission={post} action={isFiltered ? 'remove' : undefined} />
+        <SubmissionItem submission={post} action={isMatched ? 'remove' : undefined} />
       ) : (
-        <CommentItem comment={post} action={isFiltered ? 'remove' : undefined} />
+        <CommentItem comment={post} action={isMatched ? 'remove' : undefined} />
       )}
     </PostItemDiv>
   );

@@ -30,6 +30,7 @@ router = routers.DefaultRouter()
 # router.register(r'submissions', views.SubmissionViewSet)
 # router.register(r'comments', views.CommentViewSet)
 router.register(r'post', views.PostHandlerViewSet, basename='post')
+router.register(r'rule', views.RuleHandlerViewSet, basename='rule')
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.

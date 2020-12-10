@@ -4,9 +4,10 @@ import ListHeader from '../../components/post/ListHeader';
 import PostList from '../../components/post/PostList';
 import { RootState } from '../../modules';
 import { getAllPosts, postSelector } from '../../modules/post/slice';
+import { ruleSelector } from '../../modules/rule/slice';
 
 function PostListContainer() {
-  const { selectedLines } = useSelector((state: RootState) => state.rule);
+  const selectedLines = useSelector(ruleSelector.selectedLines);
   const {
     posts: { loading, error },
   } = useSelector((state: RootState) => state.post);

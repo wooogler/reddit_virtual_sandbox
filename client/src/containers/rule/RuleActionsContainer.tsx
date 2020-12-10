@@ -10,7 +10,7 @@ function RuleActionsContainer() {
 
   return (
     <>
-      <RuleActions message={String(error)} mode={ruleState.files[fileIndex].mode}/>
+      <RuleActions message={String(error)} mode={ruleState.files[fileIndex].mode} code={ruleState.files[fileIndex].code}/>
     </>
   )
 }

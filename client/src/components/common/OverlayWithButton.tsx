@@ -53,7 +53,7 @@ function OverlayWithButton({
 const TextDiv = styled.div`
   font-size: 2rem;
   margin-bottom: 1rem;
-  .button-group: {
+  .button-group {
     display: flex;
   }
 `;

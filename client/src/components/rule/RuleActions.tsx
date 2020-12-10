@@ -1,19 +1,22 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { parseRuleValue } from '../../modules/rule/slice';
+import { getAllPosts } from '../../modules/post/slice';
+import { parseRuleValue, submitCode } from '../../modules/rule/slice';
 import Button from '../common/Button';
 
 interface RuleActionsProps {
   message: string;
   mode: 'edit' | 'select';
+  code: string;
 }
 
-function RuleActions({ message, mode }: RuleActionsProps) {
+function RuleActions({ message, mode, code }: RuleActionsProps) {
   const dispatch = useDispatch();
 
   const handleClickRun = () => {
     dispatch(parseRuleValue());
+    dispatch(submitCode(code))
   };
 
   return (

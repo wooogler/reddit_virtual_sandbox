@@ -26,13 +26,15 @@ class Post(models.Model):
     full_link = models.URLField()
     subreddit = models.CharField(max_length=300)
     title = models.CharField(max_length=300)  # Note that comment doesn't have title.
-    filtering_rules = models.ManyToManyField(Rule, blank=True)
+    matching_rules = models.ManyToManyField(Rule, blank=True)
 
     TYPE_CHOICES = [('submission', 'submission'), ('comment', 'comment')]
     _type = models.CharField(max_length=10, choices=TYPE_CHOICES)
 
     def __str__(self):
         return self._type + self.full_link
+
+
 
 class Profile(models.Model):
     """

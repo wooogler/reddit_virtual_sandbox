@@ -20,6 +20,8 @@ export type Line = {
 export type LineIds = Omit<Line, 'content'>[]
 
 export type RuleState = {
+  loading: boolean;
+  error: Error | null;
   files: File[];
   selectedTab: number;
   parsed: {
@@ -38,10 +40,12 @@ export interface RuleQuery {
 }
 
 export const initialState: RuleState = {
+  loading: false,
+  error: null,
   files: [
     {
       title: 'rule.yml',
-      code: 'title: [hello]\n~body: [hi]\n---',
+      code: '',
       tab: 0,
       mode: 'edit',
     },
@@ -72,6 +76,21 @@ const ruleSlice = createSlice({
     },
     changeFile: (state, action: PayloadAction<number>) => {
       state.selectedTab = action.payload;
+    },
+    submitCode: {
+      reducer: (state) => {
+        state.loading = true
+      },
+      prepare: (code: string) => ({
+        payload: code,
+      })
+    },
+    submitCodeSuccess: (state) => {
+      state.loading = false;
+    },
+    submitCodeError: (state, action: PayloadAction<Error>) => {
+      state.error = action.payload;
+      state.loading = false;
     },
     parseRuleValue: (state) => {
       try {
@@ -129,6 +148,9 @@ export const {
   closeFile,
   updateFileCode,
   changeFile,
+  submitCode,
+  submitCodeError,
+  submitCodeSuccess,
   parseRuleValue,
   toggleLineSelect,
 } = actions;

@@ -4,9 +4,10 @@ import ListHeader from '../../components/post/ListHeader';
 import SpamPostList from '../../components/post/SpamPostList';
 import { RootState } from '../../modules';
 import { getSpamPosts } from '../../modules/post/slice';
+import { ruleSelector } from '../../modules/rule/slice';
 
 function SpamPostListContainer() {
-  const { selectedLines } = useSelector((state: RootState) => state.rule);
+  const selectedLines = useSelector(ruleSelector.selectedLines);
   const {
     selectedPostId,
     selectedSpamPostId,
