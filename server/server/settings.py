@@ -56,7 +56,11 @@ ACCOUNT_EMAIL_REQUIRED = False
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 100
+    'PAGE_SIZE': 10,
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ]
 }
 
 MIDDLEWARE = [
@@ -150,10 +154,3 @@ FORMAT = '%(asctime)s %(levelname)-6s [%(filename)s:%(funcName)s:L%(lineno)d] %(
 logging.basicConfig(format=FORMAT,
     datefmt='%Y-%m-%d:%H:%M:%S',
     level=logging.DEBUG)
-
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
-    ]
-}

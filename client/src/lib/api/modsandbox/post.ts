@@ -2,6 +2,7 @@ import axios from 'axios';
 import { PostType, SortType } from '../../../modules/post/slice';
 
 export async function getAllPostsAPI(
+  token: string,
   postType: PostType,
   sortType: SortType,
   page: number,
@@ -12,6 +13,7 @@ export async function getAllPostsAPI(
       sort: sortType,
       page,
     },
+    headers: { Authorization: `Token ${token}` },
   }).catch((error) => {
     return error.message;
   });

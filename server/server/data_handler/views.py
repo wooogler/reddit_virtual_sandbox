@@ -35,12 +35,12 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         queryset = super().get_queryset()
+        print(self.request.user)
         if self.request.user.is_authenticated:
             profile = Profile.objects.get(user=self.request.user.id)
             queryset = queryset.filter(_id__in=profile.used_posts.all())
         post_type = self.request.query_params.get('type', 'all')
         sort = self.request.query_params.get('sort', 'new')
-        print(post_type)
 
         if post_type == 'all':
             queryset = queryset.all()
