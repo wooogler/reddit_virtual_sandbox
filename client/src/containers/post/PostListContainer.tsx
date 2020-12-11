@@ -25,7 +25,7 @@ function PostListContainer() {
   const loadingRule = useSelector(ruleSelector.loading);
   const loadingPost = useSelector(postSelector.loadingPost)
   const postsMatchingRules = useSelector(postSelector.postsMatchingRules);
-
+  const loadingImport = useSelector(postSelector.loadingImport);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -45,7 +45,12 @@ function PostListContainer() {
           에러 발생!
         </p>
       )} */}
-      {data && (
+      {
+        loadingImport && (
+          <OverlayLoading text='Importing Posts' />
+        )
+      }
+      {data && data.length>8 && (
         <PostList
           posts={data}
           selectedSpamPostId={selectedSpamPostId}
@@ -53,6 +58,7 @@ function PostListContainer() {
           postsMatchingRules={postsMatchingRules}
           loadingPost={loadingPost}
           loadingRule={loadingRule}
+          loadingImport={loadingImport}
         />
       )}
     </>

@@ -88,8 +88,8 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
             post_type = request.data.get('type', None)
             max_size = request.data.get('max_size', None)
 
-            start_ts = int(datetime.strptime(start_time, "%Y-%m-%d-%H:%M:%S").replace(tzinfo=timezone.utc).timestamp())
-            end_ts = int(datetime.strptime(end_time, "%Y-%m-%d-%H:%M:%S").replace(tzinfo=timezone.utc).timestamp())
+            start_ts = int(datetime.strptime(start_time, "%Y-%m-%d %H:%M:%S").replace(tzinfo=timezone.utc).timestamp())
+            end_ts = int(datetime.strptime(end_time, "%Y-%m-%d %H:%M:%S").replace(tzinfo=timezone.utc).timestamp())
         except Exception as e:
             logger.error(e)
             return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -114,6 +114,18 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
             logger.error(e)
 
         return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    @action(methods=['post'], detail=False)
+    def delete_all(self, request):
+        if request.user:
+            profile = Profile.objects.get(user=request.user.id)
+            profile.used_posts.all().delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+        
+        
 
 
     # @action(methods=['post'], detail=False)

@@ -17,6 +17,7 @@ interface PostListProps {
   splitView: boolean;
   loadingPost: boolean;
   loadingRule: boolean;
+  loadingImport: boolean;
 }
 
 function PostList({
@@ -26,6 +27,7 @@ function PostList({
   postsMatchingRules,
   loadingPost,
   loadingRule,
+  loadingImport,
 }: PostListProps) {
   const dispatch = useDispatch();
   const [target, setTarget] = useState<any>(null);
@@ -105,7 +107,7 @@ function PostList({
                     />
                   );
                 })}
-                {!loadingPost && <div ref={setTarget} className='last-item'></div>}
+                {!loadingPost && !loadingImport && <div ref={setTarget} className='last-item'></div>}
             </div>
           </SplitPane>
         ) : (
@@ -118,7 +120,7 @@ function PostList({
                 />
               );
             })}
-            {!loadingPost && <div ref={setTarget} className='last-item'></div>}
+            {!loadingPost && !loadingImport && <div ref={setTarget} className='last-item'></div>}
           </>
         )}
       </div>

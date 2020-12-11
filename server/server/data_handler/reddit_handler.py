@@ -33,7 +33,7 @@ class RedditHandler():
     #     except Exception as e:
     #         logger.error(e)
 
-    def _get_reddit_posts(self, uri, params, max_retries=5):
+    def _get_reddit_posts(self, uri, params, max_retries=2):
         """Send HTTP request to 'uri'
         
         Returns:
@@ -95,7 +95,7 @@ class RedditHandler():
         stat = {'tot': 0, 'submission': 0, 'comment': 0}
         post_type = kwargs.get('post_type')
         max_size = kwargs['max_size']
-        if not post_type:
+        if post_type == 'all':
             post_types = ['submission', 'comment']
         else:
             post_types = [post_type]

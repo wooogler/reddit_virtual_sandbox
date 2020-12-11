@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { logout, UserInfo } from '../../modules/user/slice';
 import Button from '../common/Button';
+import DraggableModal from '../common/DraggableModal';
+import PostImportForm from './PostImportForm';
 
 interface PostHeaderProps {
   userInfo: UserInfo | null;
@@ -10,6 +12,7 @@ interface PostHeaderProps {
 
 function PostHeader({userInfo}: PostHeaderProps) {
   const dispatch = useDispatch();
+  const [isImportOpen, setIsImportOpen] = useState(false);
 
   const handleClickLogout = () => {
     const token = localStorage.getItem('token');
@@ -22,9 +25,16 @@ function PostHeader({userInfo}: PostHeaderProps) {
 
   return (
     <PostHeaderDiv>
-      <Button color="blue" size="large">
+      <Button color="blue" size="large" onClick={() => {setIsImportOpen(true)}}>
         Import subreddit posts
       </Button>
+      <DraggableModal
+        isOpen={isImportOpen}
+        position={{ x: 800, y: 150 }}
+        handleText={`Import subreddit posts`}
+      >
+        <PostImportForm onClickClose={() => {setIsImportOpen(false)}}/>
+      </DraggableModal>
       <div className='right'>
       {
         userInfo && <div>username: {userInfo.username}</div>

@@ -21,6 +21,30 @@ export async function getAllPostsAPI(
   return response.data;
 }
 
+export interface ImportQuery {
+  subreddit: string;
+  start_time: string;
+  end_time: string;
+  type: string;
+  max_size: number | null;
+}
+
+export async function importSubredditPostsAPI(token: string, values: ImportQuery) {
+  const response = await axios.post('http://localhost:8000/post/crawl/', values, {
+    headers: { Authorization: `Token ${token}` },
+  })
+
+  return response.statusText;
+}
+
+export async function deleteAllPostsAPI(token: string) {
+  const response = await axios.post('http://localhost:8000/post/delete_all/', null, {
+    headers: { Authorization: `Token ${token}` },
+  })
+
+  return response.statusText;
+}
+
 export interface PaginatedResponse {
   count: number;
   previous: string | null;

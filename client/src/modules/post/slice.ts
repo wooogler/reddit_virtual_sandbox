@@ -2,7 +2,7 @@ import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { SpamSubmission } from '../../lib/api/reddit/spamSubmission';
 import { SpamComment } from '../../lib/api/reddit/spamComment';
 import { RootState } from '..';
-import { Post } from '../../lib/api/modsandbox/post';
+import { ImportQuery, Post } from '../../lib/api/modsandbox/post';
 
 export type PostType = 'submission' | 'comment' | 'all';
 export type SortType = 'new' | 'old';
@@ -23,6 +23,14 @@ export type PostState = {
   };
   spamPosts: {
     data: (SpamSubmission | SpamComment)[] | null;
+    loading: boolean;
+    error: Error | null;
+  };
+  importPosts: {
+    loading: boolean;
+    error: Error | null;
+  };
+  deleteAllPosts: {
     loading: boolean;
     error: Error | null;
   };
@@ -48,6 +56,14 @@ export const initialState: PostState = {
   },
   spamPosts: {
     data: null,
+    loading: false,
+    error: null,
+  },
+  importPosts: {
+    loading: false,
+    error: null,
+  },
+  deleteAllPosts: {
     loading: false,
     error: null,
   },
@@ -128,6 +144,31 @@ const postSlice = createSlice({
     toggleSplitSpamPostList: (state) => {
       state.splitSpamPostList = !state.splitSpamPostList;
     },
+    importSubredditPosts: {
+      reducer: (state) => {
+        state.importPosts.loading = true;
+      },
+      prepare: (values: ImportQuery) => ({
+        payload: values
+      })
+    },
+    importSubredditPostsSuccess: (state) => {
+      state.importPosts.loading = false;
+    },
+    importSubredditPostsError: (state, action) => {
+      state.importPosts.loading = false;
+      state.importPosts.error = action.payload
+    },
+    deleteAllPosts: (state) => {
+      state.deleteAllPosts.loading = true;
+    },
+    deleteAllPostsSuccess: (state) => {
+      state.deleteAllPosts.loading = false;
+    },
+    deleteAllPostsError: (state, action) => {
+      state.deleteAllPosts.loading = false;
+      state.deleteAllPosts.error = action.payload;
+    }
   },
 });
 
@@ -166,6 +207,16 @@ const selectLoadingPost = createSelector<PostState, boolean, boolean>(
   (loading) => loading
 )
 
+const selectLoadingImport = createSelector<PostState, boolean, boolean>(
+  (state) => state.importPosts.loading,
+  (loading) => loading
+)
+
+const selectLoadingDeleteAll = createSelector<PostState, boolean, boolean>(
+  (state) => state.deleteAllPosts.loading,
+  (loading) => loading
+)
+
 export const postSelector = {
   page: (state: RootState) => selectPage(state.post),
   posts: (state: RootState) => selectPosts(state.post),
@@ -174,6 +225,8 @@ export const postSelector = {
   selectedPostId: (state: RootState) => selectSelectedPostId(state.post),
   postsMatchingRules: (state: RootState) => selectPostsMatchingRules(state.post),
   loadingPost: (state: RootState) => selectLoadingPost(state.post),
+  loadingImport: (state: RootState) => selectLoadingImport(state.post),
+  loadingDeleteAll: (state: RootState) => selectLoadingDeleteAll(state.post),
 };
 
 const { actions, reducer } = postSlice;
@@ -194,6 +247,12 @@ export const {
   clearSelectedSpamPostId,
   toggleSplitPostList,
   toggleSplitSpamPostList,
+  importSubredditPosts,
+  importSubredditPostsSuccess,
+  importSubredditPostsError,
+  deleteAllPosts,
+  deleteAllPostsError,
+  deleteAllPostsSuccess,
 } = actions;
 
 export default reducer;
