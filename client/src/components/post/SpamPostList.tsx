@@ -12,7 +12,6 @@ import palette from '../../lib/styles/palette';
 
 interface SpamPostListProps {
   spamPosts: (SpamSubmission | SpamComment)[] | null;
-  selectedLines: Omit<Line, 'content'>[];
   selectedSpamPostId: string[];
   selectedPostId: string[];
   splitView: boolean;
@@ -20,7 +19,6 @@ interface SpamPostListProps {
 
 function SpamPostList({
   spamPosts,
-  selectedLines,
   selectedSpamPostId,
   selectedPostId,
   splitView,
@@ -36,17 +34,6 @@ function SpamPostList({
     alert(JSON.stringify(selectedPostId));
     dispatch(clearSelectedPostId());
   };
-
-  const labeledSpamPosts = spamPosts?.map((post) => {
-    const isFiltered =
-      selectedLines.length === 0
-        ? false
-        : selectedLines.every((item) =>
-            post.matching_rules.includes(`${item.ruleId}-${item.lineId}`),
-          );
-    const selected = selectedSpamPostId.includes(post._id);
-    return { post, isFiltered, selected };
-  });
 
   return (
     <SpamPostListBlock>
@@ -71,52 +58,15 @@ function SpamPostList({
               <div className='pane-label'>
                 ▼ Affected by Automod
               </div>
-              {labeledSpamPosts
-                ?.filter((item) => item.isFiltered)
-                .map((item) => {
-                  const { post, isFiltered, selected } = item;
-                  return (
-                    <SpamPostItem
-                      spamPost={post}
-                      action={isFiltered ? 'remove' : undefined}
-                      key={post._id}
-                      selected={selected}
-                    />
-                  );
-                })}
             </div>
             <div className='split-pane'>
               <div className='pane-label'>
                 ▼ Not Affected by Automod
               </div>
-              {labeledSpamPosts
-                ?.filter((item) => !item.isFiltered)
-                .map((item) => {
-                  const { post, isFiltered, selected } = item;
-                  return (
-                    <SpamPostItem
-                      spamPost={post}
-                      action={isFiltered ? 'remove' : undefined}
-                      key={post._id}
-                      selected={selected}
-                    />
-                  );
-                })}
             </div>
           </SplitPane>
         ) : (
           <>
-            {labeledSpamPosts?.map((item) => {
-              const { post, isFiltered, selected } = item;
-              return (
-                <SpamPostItem
-                  spamPost={post}
-                  action={isFiltered ? 'remove' : undefined}
-                  key={post._id}
-                  selected={selected}
-                />
-              );
-            })}
           </>
         )}
       </div>

@@ -6,27 +6,18 @@ import styled from 'styled-components';
 import palette from '../../lib/styles/palette';
 import { useDispatch } from 'react-redux';
 import { togglePostSelect } from '../../modules/post/slice';
-import { LineIds } from '../../modules/rule/slice';
 
 interface PostItemProps {
   post: Post;
   selectedPostId: string[];
-  selectedLines: LineIds;
   isMatched: boolean;
 }
 
-function PostItem({ post, selectedPostId, selectedLines, isMatched }: PostItemProps) {
+function PostItem({ post, selectedPostId, isMatched }: PostItemProps) {
   const dispatch = useDispatch();
   const handleClickPost = () => {
     dispatch(togglePostSelect(post._id));
   };
-
-  const isFiltered =
-    selectedLines.length === 0
-      ? false
-      : selectedLines.every((item) =>
-          post.matching_rules.includes(item.ruleId),
-        );
 
   return (
     <PostItemDiv selected={selectedPostId.includes(post._id)} onClick={handleClickPost}>

@@ -161,6 +161,11 @@ const selectSelectedPostId = createSelector<PostState, string[], string[]>(
   (selectedPostId) => selectedPostId,
 )
 
+const selectLoadingPost = createSelector<PostState, boolean, boolean>(
+  (state) => state.posts.loading,
+  (loading) => loading
+)
+
 export const postSelector = {
   page: (state: RootState) => selectPage(state.post),
   posts: (state: RootState) => selectPosts(state.post),
@@ -168,6 +173,7 @@ export const postSelector = {
   sort: (state: RootState) => selectSort(state.post),
   selectedPostId: (state: RootState) => selectSelectedPostId(state.post),
   postsMatchingRules: (state: RootState) => selectPostsMatchingRules(state.post),
+  loadingPost: (state: RootState) => selectLoadingPost(state.post),
 };
 
 const { actions, reducer } = postSlice;

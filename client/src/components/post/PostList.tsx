@@ -3,29 +3,29 @@ import styled from 'styled-components';
 import OverlayWithButton from '../common/OverlayWithButton';
 import { useDispatch } from 'react-redux';
 import { clearSelectedSpamPostId, getAllPostsMore } from '../../modules/post/slice';
-import { LineIds } from '../../modules/rule/slice';
 import SplitPane from 'react-split-pane';
 import palette from '../../lib/styles/palette';
 import { useInfiniteScroll } from '../../lib/hooks';
 import PostItemContainer from '../../containers/post/PostItemContainer';
 import { Post } from '../../lib/api/modsandbox/post';
+import OverlayLoading from '../common/OverlayLoading';
 
 interface PostListProps {
   posts: Post[];
-  selectedLines: LineIds;
   selectedSpamPostId: string[];
   postsMatchingRules: number[][];
   splitView: boolean;
-  loading: boolean;
+  loadingPost: boolean;
+  loadingRule: boolean;
 }
 
 function PostList({
   posts,
-  selectedLines,
   selectedSpamPostId,
   splitView,
   postsMatchingRules,
-  loading,
+  loadingPost,
+  loadingRule,
 }: PostListProps) {
   const dispatch = useDispatch();
   const [target, setTarget] = useState<any>(null);
@@ -33,10 +33,12 @@ function PostList({
   useInfiniteScroll({
     target,
     onIntersect: ([{isIntersecting}]) => {
+      console.log('isIntersecting', isIntersecting)
       if (isIntersecting) {
         dispatch(getAllPostsMore())
       }
-    }
+    },
+    threshold: 0.7
   })
 
   const handleClickMove = () => {
@@ -49,16 +51,6 @@ function PostList({
     dispatch(clearSelectedSpamPostId());
   };
 
-  const labeledArray = postsMatchingRules.map((matchingRules) => {
-    const isFiltered =
-      selectedLines.length === 0
-        ? false
-        : selectedLines.every((item) =>
-            matchingRules.includes(item.ruleId),
-          );
-    return isFiltered;
-  });
-
   return (
     <PostListBlock>
       {selectedSpamPostId.length !== 0 && (
@@ -70,6 +62,16 @@ function PostList({
           onClickButton2={handleClickDelete}
         />
       )}
+      {
+        loadingPost && (
+          <OverlayLoading text='Loading Posts...' />
+        )
+      }
+      {
+        loadingRule && (
+          <OverlayLoading text='Applying Rules...' />
+        )
+      }
       <div className="list">
         {splitView ? (
           <SplitPane
@@ -84,7 +86,6 @@ function PostList({
               </div>
               {posts.map((post,index) => {
                   return (
-                    labeledArray[index] &&
                     <PostItemContainer
                       post={post}
                       key={post._id}
@@ -98,14 +99,13 @@ function PostList({
               </div>
               {posts.map((post, index) => {
                   return (
-                    !labeledArray[index] &&
                     <PostItemContainer
                       post={post}
                       key={post._id}
                     />
                   );
                 })}
-                {!loading && <div ref={setTarget} className='last-item'></div>}
+                {!loadingPost && <div ref={setTarget} className='last-item'></div>}
             </div>
           </SplitPane>
         ) : (
@@ -118,7 +118,7 @@ function PostList({
                 />
               );
             })}
-            {!loading && <div ref={setTarget} className='last-item'></div>}
+            {!loadingPost && <div ref={setTarget} className='last-item'></div>}
           </>
         )}
       </div>

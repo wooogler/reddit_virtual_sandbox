@@ -1,12 +1,11 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { getAllPosts } from '../../modules/post/slice';
-import { parseRuleValue, submitCode } from '../../modules/rule/slice';
+import { createEditable, submitCode, toggleEditorMode } from '../../modules/rule/slice';
 import Button from '../common/Button';
 
 interface RuleActionsProps {
-  message: string;
+  message: Error | null;
   mode: 'edit' | 'select';
   code: string;
 }
@@ -15,17 +14,24 @@ function RuleActions({ message, mode, code }: RuleActionsProps) {
   const dispatch = useDispatch();
 
   const handleClickRun = () => {
-    dispatch(parseRuleValue());
-    dispatch(submitCode(code))
+    dispatch(createEditable());
+    dispatch(toggleEditorMode());
+    if(mode === 'select') {
+      dispatch(submitCode(''))
+    }
   };
+
+  const handleClickExport = () => {
+    dispatch(createEditable())
+  }
 
   return (
     <RuleActionsBlock>
-      <span>{message}</span>
+      <span>{message && String(message)}</span>
       <Button onClick={handleClickRun} color="blue" size="large">
         {mode === "edit" ? 'Run' : 'Edit'}
       </Button>
-      <Button color="red" size="large">
+      <Button onClick={handleClickExport} color="red" size="large">
         Export YAML
       </Button>
     </RuleActionsBlock>

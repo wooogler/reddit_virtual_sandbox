@@ -7,7 +7,6 @@ import { getSpamPosts } from '../../modules/post/slice';
 import { ruleSelector } from '../../modules/rule/slice';
 
 function SpamPostListContainer() {
-  const selectedLines = useSelector(ruleSelector.selectedLines);
   const {
     selectedPostId,
     selectedSpamPostId,
@@ -34,7 +33,6 @@ function SpamPostListContainer() {
       {data && (
         <SpamPostList
           spamPosts={data}
-          selectedLines={selectedLines}
           selectedPostId={selectedPostId}
           selectedSpamPostId={selectedSpamPostId}
           splitView={splitSpamPostList}

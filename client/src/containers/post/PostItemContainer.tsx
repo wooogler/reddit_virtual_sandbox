@@ -11,13 +11,11 @@ interface PostItemContainerProps {
 
 function PostItemContainer({ post }: PostItemContainerProps) {
   const selectedPostId = useSelector(postSelector.selectedPostId);
-  const selectedLines = useSelector(ruleSelector.selectedLines);
   const isMatched = post.matching_rules.length !== 0;
   return (
     <PostItem
       isMatched={isMatched}
       post={post}
-      selectedLines={selectedLines}
       selectedPostId={selectedPostId}
     />
   );
