@@ -50,12 +50,13 @@ function PostImportForm({ onClickClose }: PostImportFormProps) {
       dispatch(
         importSubredditPosts({
           subreddit: values.subreddit,
-          start_time: values.datetime[0],
-          end_time: values.datetime[1],
+          start_time: moment.utc(values.datetime[0]).format('YYYY-MM-DD HH:mm:ss'),
+          end_time: moment.utc(values.datetime[1]).format('YYYY-MM-DD HH:mm:ss'),
           type: values.type,
           max_size: values.max_size,
         }),
       );
+      console.log(moment(values.datetime[0], 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss'));
       onClickClose();
     },
   });

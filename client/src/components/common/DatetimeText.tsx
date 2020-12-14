@@ -11,8 +11,8 @@ function DatetimeText({ datetime }: DatetimeTextProps) {
   return (
     <DatetimeDiv>
       {typeof datetime === 'number'
-        ? moment.unix(datetime).format('MMM Do YYYY, hh:mm:ss')
-        : moment(datetime).format('MMM Do YYYY, hh:mm:ss')}
+        ? moment.unix(datetime).local().format('MMM Do YYYY, hh:mm:ss')
+        : moment(datetime).local().format('MMM Do YYYY, hh:mm:ss')}
     </DatetimeDiv>
   );
 }
