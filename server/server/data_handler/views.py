@@ -40,14 +40,13 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
         if self.request.user.is_authenticated:
             profile = Profile.objects.get(user=self.request.user.id)
             queryset = queryset.filter(_id__in=profile.used_posts.all())
-        post_type = self.request.query_params.get('type', 'all')
+        post_type = self.request.query_params.get('post_type', 'all')
         sort = self.request.query_params.get('sort', 'new')
 
         if post_type == 'all':
             queryset = queryset.all()
         else:
             queryset = queryset.filter(_type=post_type)
-            
         
         if sort == 'new':
             queryset = queryset.order_by('-created_utc')

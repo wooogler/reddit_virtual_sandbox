@@ -9,7 +9,7 @@ export async function getAllPostsAPI(
 ) {
   const response = await axios.get<PaginatedResponse>('http://localhost:8000/post', {
     params: {
-      type: postType,
+      post_type: postType,
       sort: sortType,
       page,
     },

@@ -32,11 +32,6 @@ function PostListContainer() {
         splitView={splitPostList}
         tooltipText='Posts imported <br/> from real subreddit'
       />
-      {/* {error && (
-        <p style={{ textAlign: 'center' }}>
-          에러 발생!
-        </p>
-      )} */}
       {
         loadingImport && (
           <OverlayLoading text='Importing Posts' />
