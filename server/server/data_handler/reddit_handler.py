@@ -61,7 +61,7 @@ class RedditHandler():
     def project_submission(post):
         return {
             'author': post['author'],
-            'body': post['selftext'],
+            'body': post.get('selftext', ''),
             'created_utc': datetime.fromtimestamp(post['created_utc'], tz=timezone.utc),
             'full_link': post['full_link'],
             '_id': post['id'],
@@ -101,8 +101,8 @@ class RedditHandler():
             post_types = [post_type]
         params = {
             'subreddit': kwargs['subreddit'],
-            'after': kwargs['start_ts'],
-            'before': kwargs['end_ts'],
+            'after': kwargs['after'],
+            'before': kwargs['before'],
             'size': self.request_size
         }
         profile = kwargs['profile']
@@ -110,7 +110,7 @@ class RedditHandler():
         for post_type in post_types:
             logger.info(f'Crawl {post_type}')
             n = self.request_size
-            params['after'] = kwargs['start_ts']
+            params['after'] = kwargs['after']
 
             while (n == self.request_size):
                 logger.info(f'Querying starting from {datetime.fromtimestamp(params["after"], tz=timezone.utc)}')
@@ -134,7 +134,7 @@ class RedditHandler():
                 n = len(posts)
                 if len(posts) != 0:
                     params['after'] = int(datetime.timestamp(posts[-1]['created_utc']))  # Might skip some posts.
-            logger.info(f'Last data sec is {datetime.fromtimestamp(params["after"], tz=timezone.utc)}')
+            logger.info(f'Last data time is {datetime.fromtimestamp(params["after"], tz=timezone.utc)}')
 
         logger.info(f'Number of newly inserted posts: {stat}')
         return True

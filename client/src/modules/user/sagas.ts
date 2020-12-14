@@ -5,6 +5,7 @@ import {
   logoutAPI,
   signupAPI,
 } from '../../lib/api/modsandbox/user';
+import { getAllPosts } from '../post/slice';
 import {
   getUserInfo,
   getUserInfoError,
@@ -45,6 +46,7 @@ function* getUserInfoSaga(action: ReturnType<typeof getUserInfo>) {
   try {
     const { username } = yield call(getUserInfoAPI, action.payload);
     yield put(getUserInfoSuccess({ userInfo: {username}, token: action.payload }));
+    yield put(getAllPosts());
   } catch (err) {
     yield put(getUserInfoError(err));
   }

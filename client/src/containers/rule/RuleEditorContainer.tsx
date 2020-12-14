@@ -1,6 +1,5 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import styled from 'styled-components';
 import RuleEditor from '../../components/rule/RuleEditor'
 import RuleSelector from '../../components/rule/RuleSelector';
 import { RootState } from '../../modules'

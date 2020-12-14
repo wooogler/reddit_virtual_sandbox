@@ -3,11 +3,9 @@ import styled from 'styled-components';
 import { SpamComment } from '../../lib/api/reddit/spamComment';
 import { SpamSubmission } from '../../lib/api/reddit/spamSubmission';
 import OverlayWithButton from '../common/OverlayWithButton';
-import SpamPostItem from './SpamPostItem';
 import { useDispatch } from 'react-redux';
 import { clearSelectedPostId } from '../../modules/post/slice';
 import SplitPane from 'react-split-pane';
-import { Line } from '../../modules/rule/slice';
 import palette from '../../lib/styles/palette';
 
 interface SpamPostListProps {

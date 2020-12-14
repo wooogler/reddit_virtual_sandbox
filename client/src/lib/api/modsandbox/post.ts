@@ -2,7 +2,7 @@ import axios from 'axios';
 import { PostType, SortType } from '../../../modules/post/slice';
 
 export async function getAllPostsAPI(
-  token: string,
+  token: string | null,
   postType: PostType,
   sortType: SortType,
   page: number,
@@ -23,9 +23,9 @@ export async function getAllPostsAPI(
 
 export interface ImportQuery {
   subreddit: string;
-  start_time: string;
-  end_time: string;
-  type: string;
+  after: number;
+  before: number;
+  post_type: string;
   max_size: number | null;
 }
 

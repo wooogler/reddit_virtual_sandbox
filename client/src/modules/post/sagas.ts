@@ -29,7 +29,14 @@ function* getAllPostsSaga(action: ReturnType<typeof getAllPosts>) {
     const prevPosts: Post[] = yield select(postSelector.posts);
     const type: PostType = yield select(postSelector.type);
     const sort: SortType = yield select(postSelector.sort);
-    const token: string = yield select(userSelector.token);
+    let token: string | null = yield select(userSelector.token);
+
+    if (token==='') {
+      token = localStorage.getItem('token')
+    }
+
+    console.log('token: ',token);
+
     const nextPage = page + 1;
 
     const response: PaginatedResponse = yield call(getAllPostsAPI, token, type, sort, nextPage);

@@ -32,31 +32,23 @@ function PostImportForm({ onClickClose }: PostImportFormProps) {
   };
   const formik = useFormik({
     initialValues: {
-      datetime: [
-        moment()
-          .subtract(2, 'hours')
-          .startOf('hour')
-          .format('YYYY-MM-DD HH:mm:ss'),
-        moment()
-          .subtract(1, 'hours')
-          .startOf('hour')
-          .format('YYYY-MM-DD HH:mm:ss'),
-      ],
+      after: moment().subtract(2, 'hours').startOf('hour'),
+      before: moment().subtract(1, 'hours').startOf('hour'),
       subreddit: '',
-      type: 'all',
+      post_type: 'all',
       max_size: null,
     },
     onSubmit: (values) => {
       dispatch(
         importSubredditPosts({
           subreddit: values.subreddit,
-          start_time: moment.utc(values.datetime[0]).format('YYYY-MM-DD HH:mm:ss'),
-          end_time: moment.utc(values.datetime[1]).format('YYYY-MM-DD HH:mm:ss'),
-          type: values.type,
+          after: moment.utc(values.after).unix(),
+          before: moment.utc(values.before).unix(),
+          post_type: values.post_type,
           max_size: values.max_size,
         }),
       );
-      console.log(moment(values.datetime[0], 'YYYY-MM-DD HH:mm:ss').format('YYYY-MM-DD HH:mm:ss'));
+      console.log(values);
       onClickClose();
     },
   });
@@ -75,9 +67,9 @@ function PostImportForm({ onClickClose }: PostImportFormProps) {
         size="large"
         defaultValue="all"
         onChange={(value) => {
-          formik.setFieldValue('type', value);
+          formik.setFieldValue('post_type', value);
         }}
-        value={formik.values.type}
+        value={formik.values.post_type}
       >
         <Option value="all">All Posts</Option>
         <Option value="submission">Submission</Option>
@@ -88,14 +80,12 @@ function PostImportForm({ onClickClose }: PostImportFormProps) {
         name="range"
         className="range-picker"
         showTime
-        onChange={(values, formatString) =>
-          formik.setFieldValue('datetime', formatString)
-        }
+        onChange={(values) => {
+          formik.setFieldValue('after', values?.[0]);
+          formik.setFieldValue('before', values?.[1]);
+        }}
         size="large"
-        defaultValue={[
-          moment().subtract(2, 'hours').startOf('hour'),
-          moment().subtract(1, 'hours').startOf('hour'),
-        ]}
+        value={[formik.values.after, formik.values.before]}
       />
       <label htmlFor="max_size">Number of posts</label>
       <InputNumber

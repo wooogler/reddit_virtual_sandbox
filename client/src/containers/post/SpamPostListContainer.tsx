@@ -4,7 +4,6 @@ import ListHeader from '../../components/post/ListHeader';
 import SpamPostList from '../../components/post/SpamPostList';
 import { RootState } from '../../modules';
 import { getSpamPosts } from '../../modules/post/slice';
-import { ruleSelector } from '../../modules/rule/slice';
 
 function SpamPostListContainer() {
   const {

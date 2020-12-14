@@ -83,13 +83,11 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
 
         try:
             subreddit = request.data['subreddit']
-            start_time = request.data['start_time']
-            end_time = request.data['end_time']
-            post_type = request.data.get('type', None)
+            after = request.data['after']
+            before = request.data['before']
+            post_type = request.data.get('post_type', None)
             max_size = request.data.get('max_size', None)
 
-            start_ts = int(datetime.strptime(start_time, "%Y-%m-%d %H:%M:%S").replace(tzinfo=timezone.utc).timestamp())
-            end_ts = int(datetime.strptime(end_time, "%Y-%m-%d %H:%M:%S").replace(tzinfo=timezone.utc).timestamp())
         except Exception as e:
             logger.error(e)
             return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -102,8 +100,8 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
             reddit = RedditHandler()
             if reddit.run(
                 subreddit=subreddit,
-                start_ts=start_ts,
-                end_ts=end_ts,
+                after=after,
+                before=before,
                 post_type=post_type,
                 max_size=max_size,
                 profile=profile,

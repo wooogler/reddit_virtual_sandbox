@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 import PostItem from '../../components/post/PostItem';
 import { Post } from '../../lib/api/modsandbox/post';
 import { postSelector } from '../../modules/post/slice';
-import { ruleSelector } from '../../modules/rule/slice';
 
 interface PostItemContainerProps {
   post: Post;

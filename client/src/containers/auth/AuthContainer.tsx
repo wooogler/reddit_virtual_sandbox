@@ -10,7 +10,6 @@ function AuthContainer() {
   const token = useSelector((state: RootState) => state.user.token);
   
   useEffect(() => {
-    console.log(token);
     const localToken = localStorage.getItem('token');
     console.log(localToken);
     if(!localToken) {
