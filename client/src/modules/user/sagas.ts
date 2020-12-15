@@ -5,7 +5,7 @@ import {
   logoutAPI,
   signupAPI,
 } from '../../lib/api/modsandbox/user';
-import { getAllPosts } from '../post/slice';
+import { getPostsRefreshSaga } from '../post/sagas';
 import {
   getUserInfo,
   getUserInfoError,
@@ -45,8 +45,10 @@ function* logoutSaga() {
 function* getUserInfoSaga(action: ReturnType<typeof getUserInfo>) {
   try {
     const { username } = yield call(getUserInfoAPI, action.payload);
-    yield put(getUserInfoSuccess({ userInfo: {username}, token: action.payload }));
-    yield put(getAllPosts());
+    yield put(
+      getUserInfoSuccess({ userInfo: { username }, token: action.payload }),
+    );
+    yield getPostsRefreshSaga()
   } catch (err) {
     yield put(getUserInfoError(err));
   }
@@ -54,7 +56,7 @@ function* getUserInfoSaga(action: ReturnType<typeof getUserInfo>) {
 
 function* signupSaga(action: ReturnType<typeof signup>) {
   try {
-    const {username, password} = action.payload;
+    const { username, password } = action.payload;
     const token: string = yield call(signupAPI, username, password);
     yield put(signupSuccess(token));
   } catch (err) {

@@ -1,96 +1,165 @@
 import { all, call, put, select, takeLatest } from 'redux-saga/effects';
-import { deleteAllPostsAPI, getAllPostsAPI, importSubredditPostsAPI, PaginatedResponse, Post } from '../../lib/api/modsandbox/post';
+import {
+  deleteAllPostsAPI,
+  getPostsAPI,
+  importSubredditPostsAPI,
+  PaginatedResponse,
+  Post,
+} from '../../lib/api/modsandbox/post';
 import { SpamComment } from '../../lib/api/reddit/spamComment';
 import { getSpamPostsAPI } from '../../lib/api/reddit/spamPosts';
 import { SpamSubmission } from '../../lib/api/reddit/spamSubmission';
 import { userSelector } from '../user/slice';
-import {
-  getAllPosts,
-  getAllPostsError,
-  getAllPostsSuccess,
-  getSpamPosts,
-  getSpamPostsError,
-  getSpamPostsSuccess,
-  postSelector,
-  getAllPostsMore,
-  PostType,
-  SortType,
-  importSubredditPosts,
-  importSubredditPostsSuccess,
-  importSubredditPostsError,
-  deleteAllPostsSuccess,
-  deleteAllPostsError,
-  deleteAllPosts,
-} from './slice';
+import {postActions, postSelector, PostType, SortType} from './slice';
 
-function* getAllPostsSaga(action: ReturnType<typeof getAllPosts>) {
+function* getAllPostsSaga() {
   try {
-    const page: number = yield select(postSelector.page);
-    const prevPosts: Post[] = yield select(postSelector.posts);
+    const page: number = yield select(postSelector.pageAll);
+    const prevPosts: Post[] = yield select(postSelector.postsAll);
     const type: PostType = yield select(postSelector.type);
     const sort: SortType = yield select(postSelector.sort);
     let token: string | null = yield select(userSelector.token);
 
-    if (token==='') {
-      token = localStorage.getItem('token')
-    }
-
-    console.log('token: ',token);
-
     const nextPage = page + 1;
 
-    const response: PaginatedResponse = yield call(getAllPostsAPI, token, type, sort, nextPage);
+    const response: PaginatedResponse = yield call(
+      getPostsAPI,
+      token,
+      type,
+      sort,
+      'all',
+      nextPage,
+    );
     yield put(
-      getAllPostsSuccess({
+      postActions.getAllPostsSuccess({
         data: prevPosts.concat(response.results),
         nextPage,
       }),
     );
   } catch (err) {
     console.log(err);
-    yield put(getAllPostsError(err));
+    yield put(postActions.getAllPostsError(err));
   }
 }
 
-function* getSpamPostsSaga(action: ReturnType<typeof getSpamPosts>) {
+function* getFilteredPostsSaga() {
+  try {
+    const page: number = yield select(postSelector.pageFiltered);
+    const prevPosts: Post[] = yield select(postSelector.postsFiltered);
+    const type: PostType = yield select(postSelector.type);
+    const sort: SortType = yield select(postSelector.sort);
+    let token: string | null = yield select(userSelector.token);
+
+    const nextPage = page + 1;
+
+    const response: PaginatedResponse = yield call(
+      getPostsAPI,
+      token,
+      type,
+      sort,
+      'filtered',
+      nextPage,
+    );
+    yield put(
+      postActions.getFilteredPostsSuccess({
+        data: prevPosts.concat(response.results),
+        nextPage,
+      }),
+    );
+  } catch (err) {
+    console.log(err);
+    yield put(postActions.getFilteredPostsError(err));
+  }
+}
+
+function* getUnfilteredPostsSaga() {
+  try {
+    const page: number = yield select(postSelector.pageUnfiltered);
+    const prevPosts: Post[] = yield select(postSelector.postsUnfiltered);
+    const type: PostType = yield select(postSelector.type);
+    const sort: SortType = yield select(postSelector.sort);
+    let token: string | null = yield select(userSelector.token);
+
+    const nextPage = page + 1;
+
+    const response: PaginatedResponse = yield call(
+      getPostsAPI,
+      token,
+      type,
+      sort,
+      'unfiltered',
+      nextPage,
+    );
+    yield put(
+      postActions.getUnfilteredPostsSuccess({
+        data: prevPosts.concat(response.results),
+        nextPage,
+      }),
+    );
+  } catch (err) {
+    console.log(err);
+    yield put(postActions.getUnfilteredPostsError(err));
+  }
+}
+
+function* getSpamPostsSaga() {
   try {
     const result: (SpamSubmission | SpamComment)[] = yield call(
       getSpamPostsAPI,
     );
-    yield put(getSpamPostsSuccess(result));
+    yield put(postActions.getSpamPostsSuccess(result));
   } catch (err) {
-    yield put(getSpamPostsError(err));
+    yield put(postActions.getSpamPostsError(err));
   }
 }
 
-function* importSubredditPostsSaga(action: ReturnType<typeof importSubredditPosts>) {
+export function* getPostsRefreshSaga() {
+  const splitPostList: boolean = yield select(postSelector.splitPostList);
+
+  if (splitPostList) {
+    yield put(postActions.getFilteredPosts());
+    yield put(postActions.getUnfilteredPosts());
+  } else {
+    yield put(postActions.getAllPosts());
+  }
+}
+
+function* importSubredditPostsSaga(
+  action: ReturnType<typeof postActions.importSubredditPosts>,
+) {
   try {
     const token: string = yield select(userSelector.token);
+    
     yield call(importSubredditPostsAPI, token, action.payload);
-    yield put(importSubredditPostsSuccess());
-    yield put(getAllPosts());
-  } catch(err) {
-    yield put(importSubredditPostsError(err));
+    yield put(postActions.importSubredditPostsSuccess());
+    yield getPostsRefreshSaga();
+  } catch (err) {
+    yield put(postActions.importSubredditPostsError(err));
   }
 }
 
-function* deleteAllPostsSaga(action: ReturnType<typeof deleteAllPosts>) {
+function* deleteAllPostsSaga() {
   try {
     const token: string = yield select(userSelector.token);
     yield call(deleteAllPostsAPI, token);
-    yield put(deleteAllPostsSuccess());
-    yield put(getAllPosts());
-  } catch(err) {
-    yield put(deleteAllPostsError(err));
+    yield put(postActions.deleteAllPostsSuccess());
+    yield getPostsRefreshSaga();
+  } catch (err) {
+    yield put(postActions.deleteAllPostsError(err));
   }
 }
 
 export function* postSaga() {
   yield all([
-    yield takeLatest(getAllPosts, getAllPostsSaga),
-    yield takeLatest(getAllPostsMore, getAllPostsSaga),
-    yield takeLatest(getSpamPosts, getSpamPostsSaga),
-    yield takeLatest(importSubredditPosts, importSubredditPostsSaga),
-    yield takeLatest(deleteAllPosts, deleteAllPostsSaga),
+    yield takeLatest(postActions.getAllPosts, getAllPostsSaga),
+    yield takeLatest(postActions.getAllPostsMore, getAllPostsSaga),
+    yield takeLatest(postActions.getFilteredPosts, getFilteredPostsSaga),
+    yield takeLatest(postActions.getFilteredPostsMore, getFilteredPostsSaga),
+    yield takeLatest(postActions.getUnfilteredPosts, getUnfilteredPostsSaga),
+    yield takeLatest(postActions.getUnfilteredPostsMore, getUnfilteredPostsSaga),
+    yield takeLatest(postActions.getSpamPosts, getSpamPostsSaga),
+    yield takeLatest(postActions.importSubredditPosts, importSubredditPostsSaga),
+    yield takeLatest(postActions.deleteAllPosts, deleteAllPostsSaga),
+    yield takeLatest(postActions.getPostsRefresh, getPostsRefreshSaga)
   ]);
 }

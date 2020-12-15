@@ -5,7 +5,7 @@ import CommentItem from './CommentItem';
 import styled from 'styled-components';
 import palette from '../../lib/styles/palette';
 import { useDispatch } from 'react-redux';
-import { togglePostSelect } from '../../modules/post/slice';
+import { postActions } from '../../modules/post/slice';
 
 interface PostItemProps {
   post: Post;
@@ -16,7 +16,7 @@ interface PostItemProps {
 function PostItem({ post, selectedPostId, isMatched }: PostItemProps) {
   const dispatch = useDispatch();
   const handleClickPost = () => {
-    dispatch(togglePostSelect(post._id));
+    dispatch(postActions.togglePostSelect(post._id));
   };
 
   return (

@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { SpamComment } from '../../lib/api/reddit/spamComment';
 import { SpamSubmission } from '../../lib/api/reddit/spamSubmission';
 import palette from '../../lib/styles/palette';
-import { toggleSpamPostSelect } from '../../modules/post/slice';
+import { postActions } from '../../modules/post/slice';
 import CommentItem from './CommentItem';
 import SpamFrame from './SpamFrame';
 import SubmissionItem from './SubmissionItem';
@@ -18,7 +18,7 @@ export interface SpamPostItemProps {
 function SpamPostItem({ spamPost, action, selected }: SpamPostItemProps) {
   const dispatch = useDispatch();
   const handleClickSpamPost = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    dispatch(toggleSpamPostSelect(spamPost._id));
+    dispatch(postActions.toggleSpamPostSelect(spamPost._id));
   };
 
   return (

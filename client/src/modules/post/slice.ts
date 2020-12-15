@@ -6,20 +6,26 @@ import { ImportQuery, Post } from '../../lib/api/modsandbox/post';
 
 export type PostType = 'submission' | 'comment' | 'all';
 export type SortType = 'new' | 'old';
+export type Filtered = 'all' | 'filtered' | 'unfiltered'
 
 export type PostState = {
   posts: {
-    data: Post[];
+    all: {
+      data: Post[],
+      page: number;
+    };
+    filtered: {
+      data: Post[],
+      page: number;
+    };
+    unfiltered: {
+      data: Post[],
+      page: number;
+    };
     loading: boolean;
     error: Error | null;
-    page: number;
     type: PostType;
     sort: SortType;
-  };
-  comments: {
-    data: Comment[] | null;
-    loading: boolean;
-    error: Error | null;
   };
   spamPosts: {
     data: (SpamSubmission | SpamComment)[] | null;
@@ -42,17 +48,22 @@ export type PostState = {
 
 export const initialState: PostState = {
   posts: {
-    data: [],
+    all: {
+      data: [],
+      page: 0,
+    },
+    filtered: {
+      data: [],
+      page: 0,
+    },
+    unfiltered: {
+      data: [],
+      page: 0,
+    },
     loading: false,
     error: null,
-    page: 0,
-    type: 'submission',
+    type: 'all',
     sort: 'new',
-  },
-  comments: {
-    data: null,
-    loading: false,
-    error: null,
   },
   spamPosts: {
     data: null,
@@ -79,22 +90,59 @@ const postSlice = createSlice({
   reducers: {
     getAllPosts: (state) => {
       state.posts.loading = true;
-      state.posts.page = 0;
-      state.posts.data = [];
+      state.posts.all.page = 0;
+      state.posts.all.data = [];
     },
     getAllPostsSuccess: (
       state,
       action: PayloadAction<{ data: Post[]; nextPage: number }>,
     ) => {
-      state.posts.data = action.payload.data;
+      state.posts.all.data = action.payload.data;
       state.posts.loading = false;
-      state.posts.page = action.payload.nextPage;
+      state.posts.all.page = action.payload.nextPage;
     },
     getAllPostsError: (state, action: PayloadAction<Error>) => {
       state.posts.error = action.payload;
       state.posts.loading = false;
     },
     getAllPostsMore: () => {},
+    getFilteredPosts: (state) => {
+      state.posts.loading = true;
+      state.posts.filtered.page = 0;
+      state.posts.filtered.data = [];
+    },
+    getFilteredPostsSuccess: (
+      state,
+      action: PayloadAction<{ data: Post[]; nextPage: number }>,
+    ) => {
+      state.posts.filtered.data = action.payload.data;
+      state.posts.loading = false;
+      state.posts.filtered.page = action.payload.nextPage;
+    },
+    getFilteredPostsError: (state, action: PayloadAction<Error>) => {
+      state.posts.error = action.payload;
+      state.posts.loading = false;
+    },
+    getFilteredPostsMore: () => {},
+    getUnfilteredPosts: (state) => {
+      state.posts.loading = true;
+      state.posts.unfiltered.page = 0;
+      state.posts.unfiltered.data = [];
+    },
+    getUnfilteredPostsSuccess: (
+      state,
+      action: PayloadAction<{ data: Post[]; nextPage: number }>,
+    ) => {
+      state.posts.unfiltered.data = action.payload.data;
+      state.posts.loading = false;
+      state.posts.unfiltered.page = action.payload.nextPage;
+    },
+    getUnfilteredPostsError: (state, action: PayloadAction<Error>) => {
+      state.posts.error = action.payload;
+      state.posts.loading = false;
+    },
+    getUnfilteredPostsMore: () => {},
+    getPostsRefresh: ()=> {},
     changePostType: (state, action: PayloadAction<PostType>) => {
       state.posts.type = action.payload;
     },
@@ -149,15 +197,15 @@ const postSlice = createSlice({
         state.importPosts.loading = true;
       },
       prepare: (values: ImportQuery) => ({
-        payload: values
-      })
+        payload: values,
+      }),
     },
     importSubredditPostsSuccess: (state) => {
       state.importPosts.loading = false;
     },
     importSubredditPostsError: (state, action) => {
       state.importPosts.loading = false;
-      state.importPosts.error = action.payload
+      state.importPosts.error = action.payload;
     },
     deleteAllPosts: (state) => {
       state.deleteAllPosts.loading = true;
@@ -168,24 +216,44 @@ const postSlice = createSlice({
     deleteAllPostsError: (state, action) => {
       state.deleteAllPosts.loading = false;
       state.deleteAllPosts.error = action.payload;
-    }
+    },
   },
 });
 
-const selectPage = createSelector<PostState, number, number>(
-  (state) => state.posts.page,
+const selectPageAll = createSelector<PostState, number, number>(
+  (state) => state.posts.all.page,
   (page) => page,
 );
 
-const selectPosts = createSelector<PostState, Post[], Post[]>(
-  (state) => state.posts.data,
+const selectPostsAll = createSelector<PostState, Post[], Post[]>(
+  (state) => state.posts.all.data,
   (data) => data,
 );
 
-const selectPostsMatchingRules = createSelector<PostState, Post[], number[][]>(
-  (state) => state.posts.data,
-  (data) => data.map((post) => post.matching_rules)
-)
+const selectPageFiltered = createSelector<PostState, number, number>(
+  (state) => state.posts.filtered.page,
+  (page) => page,
+);
+
+const selectPostsUnfiltered = createSelector<PostState, Post[], Post[]>(
+  (state) => state.posts.unfiltered.data,
+  (data) => data,
+);
+const selectPageUnfiltered = createSelector<PostState, number, number>(
+  (state) => state.posts.unfiltered.page,
+  (page) => page,
+);
+
+const selectPostsFiltered = createSelector<PostState, Post[], Post[]>(
+  (state) => state.posts.filtered.data,
+  (data) => data,
+);
+
+
+const selectPostsMatchingRulesAll = createSelector<PostState, Post[], number[][]>(
+  (state) => state.posts.all.data,
+  (data) => data.map((post) => post.matching_rules),
+);
 
 const selectType = createSelector<PostState, PostType, PostType>(
   (state) => state.posts.type,
@@ -200,59 +268,47 @@ const selectSort = createSelector<PostState, SortType, SortType>(
 const selectSelectedPostId = createSelector<PostState, string[], string[]>(
   (state) => state.selectedPostId,
   (selectedPostId) => selectedPostId,
-)
+);
 
 const selectLoadingPost = createSelector<PostState, boolean, boolean>(
   (state) => state.posts.loading,
-  (loading) => loading
-)
+  (loading) => loading,
+);
 
 const selectLoadingImport = createSelector<PostState, boolean, boolean>(
   (state) => state.importPosts.loading,
-  (loading) => loading
-)
+  (loading) => loading,
+);
 
 const selectLoadingDeleteAll = createSelector<PostState, boolean, boolean>(
   (state) => state.deleteAllPosts.loading,
-  (loading) => loading
+  (loading) => loading,
+);
+
+const selectSplitPostList = createSelector<PostState, boolean, boolean>(
+  (state) => state.splitPostList,
+  (splitPostList) => splitPostList,
 )
 
 export const postSelector = {
-  page: (state: RootState) => selectPage(state.post),
-  posts: (state: RootState) => selectPosts(state.post),
+  pageAll: (state: RootState) => selectPageAll(state.post),
+  postsAll: (state: RootState) => selectPostsAll(state.post),
+  pageFiltered: (state: RootState) => selectPageFiltered(state.post),
+  postsFiltered: (state: RootState) => selectPostsFiltered(state.post),
+  pageUnfiltered: (state: RootState) => selectPageUnfiltered(state.post),
+  postsUnfiltered: (state: RootState) => selectPostsUnfiltered(state.post),
   type: (state: RootState) => selectType(state.post),
   sort: (state: RootState) => selectSort(state.post),
   selectedPostId: (state: RootState) => selectSelectedPostId(state.post),
-  postsMatchingRules: (state: RootState) => selectPostsMatchingRules(state.post),
+  postsMatchingRules: (state: RootState) =>
+    selectPostsMatchingRulesAll(state.post),
   loadingPost: (state: RootState) => selectLoadingPost(state.post),
   loadingImport: (state: RootState) => selectLoadingImport(state.post),
   loadingDeleteAll: (state: RootState) => selectLoadingDeleteAll(state.post),
+  splitPostList: (state: RootState) => selectSplitPostList(state.post),
 };
 
 const { actions, reducer } = postSlice;
-export const {
-  getAllPosts,
-  getAllPostsSuccess,
-  getAllPostsError,
-  getAllPostsMore,
-  // selectSubmission,
-  togglePostSelect,
-  toggleSpamPostSelect,
-  getSpamPosts,
-  getSpamPostsSuccess,
-  getSpamPostsError,
-  changePostType,
-  changeSortType,
-  clearSelectedPostId,
-  clearSelectedSpamPostId,
-  toggleSplitPostList,
-  toggleSplitSpamPostList,
-  importSubredditPosts,
-  importSubredditPostsSuccess,
-  importSubredditPostsError,
-  deleteAllPosts,
-  deleteAllPostsError,
-  deleteAllPostsSuccess,
-} = actions;
+export const postActions = actions;
 
 export default reducer;

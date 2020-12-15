@@ -12,20 +12,21 @@ interface RuleSelectorProps {
   loadingRule: boolean;
 }
 
-function RuleSelector({ editables, loadingRule }: RuleSelectorProps) {
-  const dispatch = useDispatch();
-  type Tree = {
+type Tree = {
+  title: string;
+  key: string;
+  children: {
     title: string;
     key: string;
     children: {
       title: string;
       key: string;
-      children: {
-        title: string;
-        key: string;
-      }[];
     }[];
   }[];
+}[];
+
+function RuleSelector({ editables, loadingRule }: RuleSelectorProps) {
+  const dispatch = useDispatch();
 
   const treeDataOriginal: Tree = editables.map((rule, ruleIndex) => {
     return {

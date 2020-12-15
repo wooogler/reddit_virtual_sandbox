@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import OverlayWithButton from '../common/OverlayWithButton';
 import { useDispatch } from 'react-redux';
-import { clearSelectedSpamPostId, getAllPostsMore } from '../../modules/post/slice';
+import {
+  postActions
+} from '../../modules/post/slice';
 import SplitPane from 'react-split-pane';
 import palette from '../../lib/styles/palette';
 import { useInfiniteScroll } from '../../lib/hooks';
@@ -11,9 +13,10 @@ import { Post } from '../../lib/api/modsandbox/post';
 import OverlayLoading from '../common/OverlayLoading';
 
 interface PostListProps {
-  posts: Post[];
+  postsAll: Post[];
+  postsFiltered: Post[];
+  postsUnfiltered: Post[];
   selectedSpamPostId: string[];
-  postsMatchingRules: number[][];
   splitView: boolean;
   loadingPost: boolean;
   loadingRule: boolean;
@@ -21,36 +24,44 @@ interface PostListProps {
 }
 
 function PostList({
-  posts,
+  postsAll,
+  postsFiltered,
+  postsUnfiltered,
   selectedSpamPostId,
   splitView,
-  postsMatchingRules,
   loadingPost,
   loadingRule,
   loadingImport,
 }: PostListProps) {
   const dispatch = useDispatch();
   const [target, setTarget] = useState<any>(null);
-  
+
   useInfiniteScroll({
     target,
-    onIntersect: ([{isIntersecting}]) => {
-      console.log('isIntersecting', isIntersecting)
+    onIntersect: ([{ isIntersecting }]) => {
       if (isIntersecting) {
-        dispatch(getAllPostsMore())
+        if(target.className === 'last-item-all') {
+          dispatch(postActions.getAllPostsMore());
+        }
+        if(target.className === 'last-item-filtered') {
+          dispatch(postActions.getFilteredPostsMore());
+        }
+        if(target.className === 'last-item-unfiltered') {
+          dispatch(postActions.getUnfilteredPostsMore());
+        }
       }
     },
-    threshold: 0.7
-  })
+    threshold: 0.7,
+  });
 
   const handleClickMove = () => {
     alert(JSON.stringify(selectedSpamPostId)); // move request
-    dispatch(clearSelectedSpamPostId());
+    dispatch(postActions.clearSelectedSpamPostId());
   };
 
   const handleClickDelete = () => {
     alert(JSON.stringify(selectedSpamPostId)); // delete request
-    dispatch(clearSelectedSpamPostId());
+    dispatch(postActions.clearSelectedSpamPostId());
   };
 
   return (
@@ -64,16 +75,8 @@ function PostList({
           onClickButton2={handleClickDelete}
         />
       )}
-      {
-        loadingPost && (
-          <OverlayLoading text='Loading Posts...' />
-        )
-      }
-      {
-        loadingRule && (
-          <OverlayLoading text='Applying Rules...' />
-        )
-      }
+      {loadingPost && <OverlayLoading text="Loading Posts..." />}
+      {loadingRule && <OverlayLoading text="Applying Rules..." />}
       <div className="list">
         {splitView ? (
           <SplitPane
@@ -83,44 +86,32 @@ function PostList({
             paneStyle={{ overflow: 'auto' }}
           >
             <div className="split-pane">
-              <div className='pane-label'>
-                ▼ Affected by Automod
-              </div>
-              {posts.map((post,index) => {
-                  return (
-                    <PostItemContainer
-                      post={post}
-                      key={post._id}
-                    />
-                  );
-                })}
+              <div className="pane-label">▼ Affected by Automod</div>
+              {postsFiltered.map((post, index) => {
+                return <PostItemContainer post={post} key={post._id} />;
+              })}
+              {postsFiltered.length > 8 && (
+                <div ref={setTarget} className="last-item-filtered"></div>
+              )}
             </div>
             <div className="split-pane">
-              <div className='pane-label'>
-                ▼ Not Affected by Automod
-              </div>
-              {posts.map((post, index) => {
-                  return (
-                    <PostItemContainer
-                      post={post}
-                      key={post._id}
-                    />
-                  );
-                })}
-                {!loadingPost && !loadingImport && <div ref={setTarget} className='last-item'></div>}
+              <div className="pane-label">▼ Not Affected by Automod</div>
+              {postsUnfiltered.map((post, index) => {
+                return <PostItemContainer post={post} key={post._id} />;
+              })}
+              {postsUnfiltered.length > 8 && (
+                <div ref={setTarget} className="last-item-unfiltered"></div>
+              )}
             </div>
           </SplitPane>
         ) : (
           <>
-            {posts.map((post) => {
-              return (
-                <PostItemContainer
-                  post={post}
-                  key={post._id}
-                />
-              );
+            {postsAll.map((post) => {
+              return <PostItemContainer post={post} key={post._id} />;
             })}
-            {!loadingPost && !loadingImport && <div ref={setTarget} className='last-item'></div>}
+            {postsAll.length > 8 && (
+              <div ref={setTarget} className="last-item-all"></div>
+            )}
           </>
         )}
       </div>
@@ -145,7 +136,7 @@ const PostListBlock = styled.div`
         padding-top: 0.3rem;
         border-bottom: 0.1rem solid ${palette.gray[2]};
         font-size: 0.9rem;
-        color: ${palette.gray[7]}
+        color: ${palette.gray[7]};
       }
     }
   }
@@ -156,7 +147,15 @@ const PostListBlock = styled.div`
     width: 100%;
     z-index: 100;
   }
-  .last-item {
+  .last-item-all {
+    width: 100%;
+    height: 100px;
+  }
+  .last-item-filtered {
+    width: 100%;
+    height: 100px;
+  }
+  .last-item-unfiltered {
     width: 100%;
     height: 100px;
   }

@@ -9,7 +9,9 @@ import { ruleSelector } from '../../modules/rule/slice';
 
 function PostListContainer() {
 
-  const data = useSelector((state: RootState) => state.post.posts.data);
+  const postsAll = useSelector(postSelector.postsAll);
+  const postsFiltered = useSelector(postSelector.postsFiltered);
+  const postsUnfiltered = useSelector(postSelector.postsUnfiltered);
 
   const selectedSpamPostId = useSelector(
     (state: RootState) => state.post.selectedSpamPostId,
@@ -21,7 +23,6 @@ function PostListContainer() {
 
   const loadingRule = useSelector(ruleSelector.loading);
   const loadingPost = useSelector(postSelector.loadingPost)
-  const postsMatchingRules = useSelector(postSelector.postsMatchingRules);
   const loadingImport = useSelector(postSelector.loadingImport);
 
   return (
@@ -37,12 +38,13 @@ function PostListContainer() {
           <OverlayLoading text='Importing Posts' />
         )
       }
-      {data && data.length>8 && (
+      {postsAll && postsAll.length>8 && (
         <PostList
-          posts={data}
+          postsAll={postsAll}
+          postsFiltered={postsFiltered}
+          postsUnfiltered={postsUnfiltered}
           selectedSpamPostId={selectedSpamPostId}
           splitView={splitPostList}
-          postsMatchingRules={postsMatchingRules}
           loadingPost={loadingPost}
           loadingRule={loadingRule}
           loadingImport={loadingImport}

@@ -4,7 +4,7 @@ import { SpamComment } from '../../lib/api/reddit/spamComment';
 import { SpamSubmission } from '../../lib/api/reddit/spamSubmission';
 import OverlayWithButton from '../common/OverlayWithButton';
 import { useDispatch } from 'react-redux';
-import { clearSelectedPostId } from '../../modules/post/slice';
+import { postActions } from '../../modules/post/slice';
 import SplitPane from 'react-split-pane';
 import palette from '../../lib/styles/palette';
 
@@ -25,12 +25,12 @@ function SpamPostList({
 
   const handleClickMove = () => {
     alert(JSON.stringify(selectedPostId));
-    dispatch(clearSelectedPostId());
+    dispatch(postActions.clearSelectedPostId());
   };
 
   const handleClickDelete = () => {
     alert(JSON.stringify(selectedPostId));
-    dispatch(clearSelectedPostId());
+    dispatch(postActions.clearSelectedPostId());
   };
 
   return (

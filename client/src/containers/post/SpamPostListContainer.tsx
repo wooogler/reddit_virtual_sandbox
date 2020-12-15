@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import ListHeader from '../../components/post/ListHeader';
 import SpamPostList from '../../components/post/SpamPostList';
 import { RootState } from '../../modules';
-import { getSpamPosts } from '../../modules/post/slice';
+import { postActions } from '../../modules/post/slice';
 
 function SpamPostListContainer() {
   const {
@@ -16,7 +16,7 @@ function SpamPostListContainer() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getSpamPosts());
+    dispatch(postActions.getSpamPosts());
   }, [dispatch]);
 
   return (

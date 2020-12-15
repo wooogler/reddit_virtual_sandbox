@@ -13,8 +13,7 @@ import Button from '../common/Button';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  deleteAllPosts,
-  importSubredditPosts,
+  postActions,
   postSelector,
 } from '../../modules/post/slice';
 export interface PostImportFormProps {
@@ -28,7 +27,7 @@ function PostImportForm({ onClickClose }: PostImportFormProps) {
   const { Option } = Select;
 
   const handleDeleteAll = () => {
-    dispatch(deleteAllPosts());
+    dispatch(postActions.deleteAllPosts());
   };
   const formik = useFormik({
     initialValues: {
@@ -40,7 +39,7 @@ function PostImportForm({ onClickClose }: PostImportFormProps) {
     },
     onSubmit: (values) => {
       dispatch(
-        importSubredditPosts({
+        postActions.importSubredditPosts({
           subreddit: values.subreddit,
           after: moment.utc(values.after).unix(),
           before: moment.utc(values.before).unix(),

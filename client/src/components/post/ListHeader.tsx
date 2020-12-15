@@ -4,12 +4,8 @@ import { OptionsType, ValueType } from 'react-select';
 import ReactTooltip from 'react-tooltip';
 import styled from 'styled-components';
 import {
-  changePostType,
-  changeSortType,
-  getAllPosts,
+  postActions,
   PostType,
-  toggleSplitPostList,
-  toggleSplitSpamPostList,
 } from '../../modules/post/slice';
 import { InfoIcon } from '../../static/svg';
 import Button from '../common/Button';
@@ -54,24 +50,26 @@ function ListHeader({ list, name, splitView, tooltipText }: ListHeaderProps) {
 
   const handleChangeView = (option: ValueType<OptionType>) => {
     if (list === 'unmoderated') {
-      dispatch(changePostType((option as ViewOptionType).value));
-      dispatch(getAllPosts())
+      dispatch(postActions.changePostType((option as ViewOptionType).value));
+      dispatch(postActions.getPostsRefresh())
     }
   };
 
   const handleChangeSort = (option: ValueType<OptionType>) => {
     if (list === 'unmoderated') {
-      dispatch(changeSortType((option as SortOptionType).value));
-      dispatch(getAllPosts())
+      dispatch(postActions.changeSortType((option as SortOptionType).value));
+      dispatch(postActions.getPostsRefresh());
     }
   };
 
   const handleChangeSplitView = () => {
     if (list === 'unmoderated') {
-      dispatch(toggleSplitPostList());
+      dispatch(postActions.toggleSplitPostList());
+      dispatch(postActions.getPostsRefresh())
     }
     if (list === 'moderated') {
-      dispatch(toggleSplitSpamPostList());
+      dispatch(postActions.toggleSplitSpamPostList());
+      dispatch(postActions.getPostsRefresh())
     }
   };
 
@@ -79,8 +77,13 @@ function ListHeader({ list, name, splitView, tooltipText }: ListHeaderProps) {
     <ListHeaderDiv>
       <div className="list-info">
         <div className="name">{name}</div>
-        <InfoIcon data-tip={tooltipText} data-for={list}/>
-        <ReactTooltip place="bottom" id={list} effect="solid" multiline={true}/>
+        <InfoIcon data-tip={tooltipText} data-for={list} />
+        <ReactTooltip
+          place="bottom"
+          id={list}
+          effect="solid"
+          multiline={true}
+        />
         <Button size="small" onClick={handleClickAddPost}>
           add post
         </Button>
@@ -106,9 +109,7 @@ function ListHeader({ list, name, splitView, tooltipText }: ListHeaderProps) {
           onChange={handleChangeSort}
         />
         <div className="checkbox">
-          <label htmlFor="split">
-            Split view
-          </label>
+          <label htmlFor="split">Split view</label>
           <input
             type="checkbox"
             name="split"

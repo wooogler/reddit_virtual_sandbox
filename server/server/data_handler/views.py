@@ -14,7 +14,6 @@ from rest_framework.pagination import PageNumberPagination
 from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
-
 from .models import Post, Profile, User, Rule
 from .reddit_handler import RedditHandler
 from .rule_handler import RuleHandler
@@ -42,6 +41,7 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(_id__in=profile.used_posts.all())
         post_type = self.request.query_params.get('post_type', 'all')
         sort = self.request.query_params.get('sort', 'new')
+        filtered = self.request.query_params.get('filtered', 'all')
 
         if post_type == 'all':
             queryset = queryset.all()
@@ -52,6 +52,13 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
             queryset = queryset.order_by('-created_utc')
         elif sort == 'old':
             queryset = queryset.order_by('created_utc')
+
+        if filtered == 'all':
+            queryset = queryset.all()
+        elif filtered == 'filtered':
+            queryset = queryset.filter(matching_rules__in=profile.user.rules.all())
+        elif filtered == 'unfiltered':
+            queryset = queryset.exclude(matching_rules__in=profile.user.rules.all())
 
         return queryset
 
@@ -171,7 +178,7 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
             rule_object.save()
 
         for post in profile.used_posts.all():
-            for rule in Rule.objects.all():
+            for rule in Rule.objects.filter(user=profile.user):
                 rule_target = RuleTarget("Link", json.loads(rule.content))
                 if(rule_target.check_item(post, '')):
                     post.matching_rules.add(rule)

@@ -1,6 +1,5 @@
 import re
 import yaml
-from .models import Post, Profile, Rule
 
 class AutoModeratorSyntaxError(ValueError):
     def __init__(self, message, yaml):
@@ -246,9 +245,9 @@ class Item(object):
         self.body = body
 
 
-sample = Item("hello", "see hi")
+# sample = Item("hello", "see hi")
 
-rule_set = Ruleset(yaml_text="---\ntitle: [hello]\nbody: [hi]\n---\nbody: [bye, see]\n")
+# rule_set = Ruleset(yaml_text="---\ntitle: [hello]\nbody: [hi]\n---\nbody: [bye, see]\n")
 
-print(rule_set.check_rule(sample))
+# print(rule_set.check_rule(sample))
 
