@@ -38,7 +38,7 @@ function PostListContainer() {
           <OverlayLoading text='Importing Posts' />
         )
       }
-      {postsAll && postsAll.length>8 && (
+      {postsAll && (
         <PostList
           postsAll={postsAll}
           postsFiltered={postsFiltered}
