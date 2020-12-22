@@ -55,11 +55,28 @@ def reddit_auth(request):
     profile = Profile.objects.get(user=state)
     profile.reddit_token = token
     profile.save()
-    # for sub in r.user.contributor_subreddits():
-    #     print(sub)
-    # for spam in r.subreddit("KIXModSandbox").mod.spam():
-    #     print(spam)
+    
     return redirect('http://localhost:3000/')
+
+@api_view(['GET'])
+def reddit_logged(request):
+    profile = Profile.objects.get(user=request.user.id)
+    if(profile.reddit_token != ''):
+        return Response(True)
+    else: 
+        return Response(False)
+
+@api_view(['GET'])
+def reddit_logout(request):
+    try: 
+        profile = Profile.objects.get(user=request.user.id)
+        profile.reddit_token=''
+        profile.save()
+    except Exception as e:
+        logger.error(e)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+    
+    return Response(status=status.HTTP_200_OK)
 
 class PostHandlerViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
@@ -193,10 +210,31 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
     
     @action(methods=["post"], detail=False, name="Crawl Spam Posts")
     def reddit_crawl(self, request):
-        """POST /post/crawl/
+        """POST /post/reddit_crawl/
         Crawl spam posts (submissions or comments) from reddit using praw
         and save to corresponding database.
         """
+        if request.user:
+            profile = Profile.objects.get(user=request.user.id)
+        
+        try: 
+            r = praw.Reddit(
+                client_id=os.environ.get('client_id'),
+                client_secret=os.environ.get('client_secret'),
+                refresh_token=profile.reddit_token,
+                user_agent=os.environ.get('user_agent'),
+            )
+            
+            for sub in r.user.contributor_subreddits():
+                print('sub', sub)
+            for spam in r.subreddit("KIXModSandbox").mod.spam():
+                print(spam.banned_by)
+        
+        except Exception as e:
+            logger.error(e)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(status=status.HTTP_201_CREATED)
 
         # @action(methods=['post'], detail=False)
     # def apply_rules(self, request):

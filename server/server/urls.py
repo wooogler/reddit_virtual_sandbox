@@ -37,6 +37,8 @@ urlpatterns = [
     path('', include(router.urls)),
     path('reddit_login/', views.reddit_login),
     path('reddit_auth/', views.reddit_auth),
+    path('reddit_logged/', views.reddit_logged),
+    path('reddit_logout/', views.reddit_logout),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('rest-auth/', include('rest_auth.urls')),
     path('rest-auth/registration/', include('rest_auth.registration.urls'))

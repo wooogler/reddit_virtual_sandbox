@@ -19,6 +19,7 @@ export type UserState = {
   loading: boolean;
   error: Error | null;
   token: string | null;
+  reddit_logged: boolean;
   me: UserInfo | null;
 };
 
@@ -26,6 +27,7 @@ const initialState: UserState = {
   loading: false,
   error: null,
   token: null,
+  reddit_logged: false,
   me: {
     username: '',
   },
@@ -75,8 +77,9 @@ const userSlice = createSlice({
         payload: token
       })
     },
-    getUserInfoSuccess: (state, action: PayloadAction<{userInfo: UserInfo, token: string}>) => {
+    getUserInfoSuccess: (state, action: PayloadAction<{userInfo: UserInfo, token: string, reddit_logged: boolean}>) => {
       state.me = action.payload.userInfo;
+      state.reddit_logged = action.payload.reddit_logged;
       state.token = action.payload.token;
       state.loading = false;
     },

@@ -11,7 +11,6 @@ function AuthContainer() {
   
   useEffect(() => {
     const localToken = localStorage.getItem('token');
-    console.log(localToken);
     if(!localToken) {
       history.push('/login');
     } else {
