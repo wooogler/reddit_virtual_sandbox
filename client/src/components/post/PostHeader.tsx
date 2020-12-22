@@ -5,6 +5,7 @@ import { logout, UserInfo } from '../../modules/user/slice';
 import {Button} from 'antd';
 import DraggableModal from '../common/DraggableModal';
 import PostImportForm from './PostImportForm';
+import axios from 'axios';
 
 interface PostHeaderProps {
   userInfo: UserInfo | null;
@@ -23,10 +24,21 @@ function PostHeader({userInfo}: PostHeaderProps) {
     }
   };
 
+  const handleClickRedditLogin = async () => {
+    const token = localStorage.getItem('token');
+    const response = await axios.get('http://localhost:8000/reddit_login/', {
+      headers: { Authorization: `Token ${token}` },
+    });
+    window.location.href=response.data;
+  }
+
   return (
     <PostHeaderDiv>
       <Button type='primary' size="large" onClick={() => {setIsImportOpen(true)}}>
         Import subreddit posts
+      </Button>
+      <Button type='primary' size='large' onClick={handleClickRedditLogin}>
+        Reddit Login
       </Button>
       <DraggableModal
         isOpen={isImportOpen}
@@ -57,6 +69,9 @@ const PostHeaderDiv = styled.div`
   display: flex;
   width: 100%;
   align-items: center;
+  button {
+    margin-right: 1rem;
+  }
   .right {
     margin-left: auto;
     display: flex;

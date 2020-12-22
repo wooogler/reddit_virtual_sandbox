@@ -24,18 +24,19 @@ Including another URLconf
 from django.urls import include, path
 from rest_framework import routers
 
-from .data_handler import views
+from .modsandbox import views
 
 router = routers.DefaultRouter()
 # router.register(r'submissions', views.SubmissionViewSet)
 # router.register(r'comments', views.CommentViewSet)
 router.register(r'post', views.PostHandlerViewSet, basename='post')
-router.register(r'rule', views.RuleHandlerViewSet, basename='rule')
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
     path('', include(router.urls)),
+    path('reddit_login/', views.reddit_login),
+    path('reddit_auth/', views.reddit_auth),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('rest-auth/', include('rest_auth.urls')),
     path('rest-auth/registration/', include('rest_auth.registration.urls'))

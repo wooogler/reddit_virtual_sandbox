@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'server.data_handler.apps.DataHandlerConfig',
+    'server.modsandbox.apps.ModSandboxConfig',
     'rest_framework.authtoken',
     'rest_auth',
     'allauth',
@@ -145,8 +145,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
-
-
 
 FORMAT = '%(asctime)s %(levelname)-6s [%(filename)s:%(funcName)s:L%(lineno)d] %(message)s'
 logging.basicConfig(format=FORMAT,

@@ -4,6 +4,7 @@ from django.db.models.signals import post_save
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
+
 class Rule(models.Model):
     """
     Rule Model
@@ -34,8 +35,6 @@ class Post(models.Model):
     def __str__(self):
         return self._type + self.full_link
 
-
-
 class Profile(models.Model):
     """
     Profile Model to extend User Model
@@ -43,6 +42,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     username = models.CharField(max_length=300, default='default_username')
     used_posts = models.ManyToManyField(Post, blank=True)
+    reddit_token = models.CharField(max_length=300, default='')
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):

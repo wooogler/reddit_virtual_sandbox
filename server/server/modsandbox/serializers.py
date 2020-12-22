@@ -1,13 +1,5 @@
 from rest_framework import serializers
-
-from .models import Post, Profile, Rule
-
-
-class RuleSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Rule
-        fields = ["user", "rule_index", "content"]
-
+from .models import Post, Profile
 
 class PostSerializer(serializers.ModelSerializer):
     """
