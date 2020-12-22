@@ -1,18 +1,16 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { OptionsType, ValueType } from 'react-select';
-import ReactTooltip from 'react-tooltip';
+import {Tooltip} from 'antd';
 import styled from 'styled-components';
-import {Select} from 'antd';
+import {Select, Checkbox} from 'antd';
+import {InfoCircleOutlined} from '@ant-design/icons';
 
 import {
   postActions,
   PostType,
   SortType,
 } from '../../modules/post/slice';
-import { InfoIcon } from '../../static/svg';
-import Button from '../common/Button';
-import CustomSelect from '../common/CustomSelect';
+import {Button} from 'antd';
 import DraggableModal from '../common/DraggableModal';
 import PostForm from './PostForm';
 
@@ -22,22 +20,6 @@ export interface ListHeaderProps {
   splitView: boolean;
   tooltipText?: string;
 }
-
-type OptionType = { value: string; label: string };
-type SortOptionType = { value: 'new' | 'old'; label: string };
-type ViewOptionType = { value: PostType; label: string };
-
-const sortOptions: OptionsType<SortOptionType> = [
-  { value: 'new', label: 'new' },
-  { value: 'old', label: 'old' },
-  // { value: 'smart', label: 'smart' },
-];
-
-const viewOptions: OptionsType<ViewOptionType> = [
-  { value: 'all', label: 'all posts' },
-  { value: 'submission', label: 'submission' },
-  { value: 'comment', label: 'comment' },
-];
 
 function ListHeader({ list, name, splitView, tooltipText }: ListHeaderProps) {
   const dispatch = useDispatch();
@@ -81,14 +63,10 @@ function ListHeader({ list, name, splitView, tooltipText }: ListHeaderProps) {
     <ListHeaderDiv>
       <div className="list-info">
         <div className="name">{name}</div>
-        <InfoIcon data-tip={tooltipText} data-for={list} />
-        <ReactTooltip
-          place="bottom"
-          id={list}
-          effect="solid"
-          multiline={true}
-        />
-        <Button size="small" onClick={handleClickAddPost}>
+        <Tooltip placement='right' title={tooltipText}>
+          <InfoCircleOutlined />
+        </Tooltip>
+        <Button type='primary' size="small" onClick={handleClickAddPost}>
           add post
         </Button>
         <DraggableModal
@@ -110,13 +88,7 @@ function ListHeader({ list, name, splitView, tooltipText }: ListHeaderProps) {
           <Option value='old'>Old</Option>
         </Select>
         <div className="checkbox">
-          <label htmlFor="split">Split view</label>
-          <input
-            type="checkbox"
-            name="split"
-            checked={splitView}
-            onChange={handleChangeSplitView}
-          />
+          <Checkbox onChange={handleChangeSplitView} checked={splitView}>Split View</Checkbox>
         </div>
       </div>
     </ListHeaderDiv>
@@ -153,20 +125,8 @@ const ListHeaderDiv = styled.div`
       width: 7rem;
       margin-left: 0.5rem;
     }
-    .react-select__indicator {
-      padding: 0.2rem;
-    }
     .checkbox {
-      display: flex;
       margin-left: auto;
-      align-items: center;
-      label {
-        font-size: 0.9rem;
-        text-align: right;
-      }
-      input {
-        margin-left: 0.3rem;
-      }
     }
   }
 `;

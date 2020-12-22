@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { signup } from '../../modules/user/slice';
-import Button from '../common/Button';
+import {Button, Input} from 'antd';
 
 interface SignupFormProps {
   error: Error | null;
@@ -26,7 +26,7 @@ function SignupForm({error}: SignupFormProps) {
     <SignupFormDiv onSubmit={formik.handleSubmit}>
       <div className="title">Sign up</div>
       <label htmlFor="username">USERNAME</label>
-      <input
+      <Input
         name="username"
         type="text"
         onChange={formik.handleChange}
@@ -34,7 +34,7 @@ function SignupForm({error}: SignupFormProps) {
         autoComplete="off"
       />
       <label htmlFor="password">PASSWORD</label>
-      <input
+      <Input
         name="password"
         type="password"
         onChange={formik.handleChange}
@@ -43,11 +43,11 @@ function SignupForm({error}: SignupFormProps) {
       />
       <div>{error && 'username already exists'}</div>
       <div className="button-group">
-        <Button size="large" type="submit">
+        <Button type='primary' size="large" htmlType="submit">
           SIGN UP
         </Button>
-        <Link to='/login' style={{textDecoration: 'none'}}>
-          <Button size="large" color="red">
+        <Link to='/login'>
+          <Button size="large">
             CANCEL
           </Button>
         </Link>
@@ -73,9 +73,6 @@ const SignupFormDiv = styled.form`
   }
   input {
     font-size: 1rem;
-    font-family: sans-serif;
-    border: 1px solid #ccc;
-    padding: 0.5rem;
     width: 20rem;
   }
   .button-group {

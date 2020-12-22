@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import Button from './Button';
+import {Button} from 'antd';
 import Overlay from './Overlay';
 
 export interface OverlayWithButtonProps {
@@ -37,11 +37,11 @@ function OverlayWithButton({
     <CustomOverlay>
       <TextDiv className="text">{text}</TextDiv>
       <div className='button-group'>
-        <Button color="blue" size="large" onClick={handleClickButton1}>
+        <Button type='primary' size="large" onClick={handleClickButton1}>
           {buttonText1}
         </Button>
         {buttonText2 && (
-          <Button color="red" size="large" onClick={handleClickButton2}>
+          <Button danger type='primary' size="large" onClick={handleClickButton2}>
             {buttonText2}
           </Button>
         )}
@@ -55,6 +55,7 @@ const TextDiv = styled.div`
   margin-bottom: 1rem;
   .button-group {
     display: flex;
+    margin-left: 1rem;
   }
 `;
 

@@ -1,9 +1,9 @@
+import { CloseOutlined } from '@ant-design/icons';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import palette from '../../lib/styles/palette';
 import { changeFile, closeFile } from '../../modules/rule/slice';
-import { CloseIcon } from '../../static/svg';
 
 export interface RuleTabItemProps extends React.HTMLProps<HTMLButtonElement> {
   active: boolean;
@@ -26,7 +26,7 @@ function RuleTabItem({ children, active = false, tab }: RuleTabItemProps) {
       {children}
       {active && (
         <CloseButton onClick={handleClose}>
-          <CloseIcon />
+          <CloseOutlined />
         </CloseButton>
       )}
     </TabBlock>

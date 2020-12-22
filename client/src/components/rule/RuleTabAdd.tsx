@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import palette from '../../lib/styles/palette';
-import { PlusIcon } from '../../static/svg';
 import {addFile, changeFile} from '../../modules/rule/slice'
 import { useDispatch } from 'react-redux';
+import { PlusOutlined } from '@ant-design/icons';
 
 export interface RuleTabAddProps {
   newTab: number
@@ -22,7 +22,7 @@ function RuleTabAdd({newTab}: RuleTabAddProps) {
 
   return (
     <TabAddBlock onClick={handleClick}>
-      <PlusIcon/>
+      <PlusOutlined />
     </TabAddBlock>
   )
 }

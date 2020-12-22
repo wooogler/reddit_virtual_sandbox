@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { logout, UserInfo } from '../../modules/user/slice';
-import Button from '../common/Button';
+import {Button} from 'antd';
 import DraggableModal from '../common/DraggableModal';
 import PostImportForm from './PostImportForm';
 
@@ -25,7 +25,7 @@ function PostHeader({userInfo}: PostHeaderProps) {
 
   return (
     <PostHeaderDiv>
-      <Button color="blue" size="large" onClick={() => {setIsImportOpen(true)}}>
+      <Button type='primary' size="large" onClick={() => {setIsImportOpen(true)}}>
         Import subreddit posts
       </Button>
       <DraggableModal
@@ -40,7 +40,8 @@ function PostHeader({userInfo}: PostHeaderProps) {
         userInfo && <div>username: {userInfo.username}</div>
       }
         <Button
-          color="red"
+          danger
+          type='primary'
           size="large"
           onClick={handleClickLogout}
           className="logout-button"

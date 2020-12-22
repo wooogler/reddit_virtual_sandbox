@@ -1,24 +1,16 @@
 import React from 'react';
 import { useFormik } from 'formik';
-import { OptionsType } from 'react-select';
 import styled from 'styled-components';
-import Button from '../common/Button';
-import Textarea from 'react-textarea-autosize';
-import CustomSelect from '../common/CustomSelect';
+import { Button, Input, Select } from 'antd';
 
 interface PostFormProps {
   onClickClose: () => void;
   list: string;
 }
 
-type OptionType = { value: string; label: string };
-
-const typeOptions: OptionsType<OptionType> = [
-  { value: 'submission', label: 'submission' },
-  { value: 'comment', label: 'comment' },
-];
-
 function PostForm({ onClickClose, list }: PostFormProps) {
+  const { Option } = Select;
+  const { TextArea } = Input;
 
   const formik = useFormik({
     initialValues: {
@@ -34,47 +26,50 @@ function PostForm({ onClickClose, list }: PostFormProps) {
   });
   return (
     <PostFormDiv onSubmit={formik.handleSubmit}>
-      <div className='title'>Add new posts to {list}</div> 
+      <div className="title">Add new posts to {list}</div>
       <label htmlFor="type">Type</label>
-      <CustomSelect
-        className='select-type'
-        options={typeOptions}
-        onChange={(option) => {
-          formik.setFieldValue('type', (option as OptionType).value);
+      <Select
+        className="select-type"
+        onChange={(value) => {
+          formik.setFieldValue('type', value);
         }}
-      />
-      {
-        formik.values.type === 'submission' && 
+        defaultValue="submission"
+        style={{ fontSize: '1rem' }}
+      >
+        <Option value="submission">submission</Option>
+        <Option value="comment">comment</Option>
+      </Select>
+      {formik.values.type === 'submission' && (
         <>
-        <label htmlFor="title">Title</label>
-        <input
-          name="title"
-          type="text"
-          onChange={formik.handleChange}
-          value={formik.values.title}
-        />
+          <label htmlFor="title">Title</label>
+          <Input
+            name="title"
+            type="text"
+            onChange={formik.handleChange}
+            value={formik.values.title}
+          />
         </>
-      }
-      
+      )}
+
       <label htmlFor="author">Author</label>
-      <input
+      <Input
         name="author"
         type="text"
         onChange={formik.handleChange}
         value={formik.values.author}
       />
       <label htmlFor="body">Body</label>
-      <Textarea
+      <TextArea
         name="body"
         onChange={formik.handleChange}
         value={formik.values.body}
-        minRows={15}
+        autoSize={{ minRows: 6, maxRows: 10 }}
       />
       <div className="buttons">
-        <Button color="red" onClick={onClickClose}>
-          Close
+        <Button onClick={onClickClose}>Close</Button>
+        <Button type="primary" htmlType="submit">
+          Save
         </Button>
-        <Button type="submit">Save</Button>
       </div>
     </PostFormDiv>
   );
@@ -92,20 +87,19 @@ const PostFormDiv = styled.form`
   .buttons {
     display: flex;
     margin-left: auto;
+    button {
+      margin-left: 1rem;
+    }
   }
   label {
     margin-left: 0.2rem;
-    margin-bottom: 0.5rem;
-    font-size: 1.2rem;
-    font-weight: bold;
+    margin-bottom: 0.2rem;
+    font-size: 1rem;
   }
   input,
   textarea {
     font-size: 1rem;
-    font-family: sans-serif;
     margin-bottom: 1rem;
-    border: 1px solid #ccc;
-    padding: 0.5rem;
   }
   .select-type {
     margin-bottom: 1rem;

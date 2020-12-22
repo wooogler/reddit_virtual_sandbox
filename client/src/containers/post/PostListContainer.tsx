@@ -31,7 +31,7 @@ function PostListContainer() {
         list="unmoderated"
         name="Posts"
         splitView={splitPostList}
-        tooltipText='Posts imported <br/> from real subreddit'
+        tooltipText='Posts imported from real subreddit'
       />
       {
         loadingImport && (

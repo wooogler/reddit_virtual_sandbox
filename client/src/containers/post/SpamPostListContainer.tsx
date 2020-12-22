@@ -25,7 +25,7 @@ function SpamPostListContainer() {
         list="moderated"
         name="Seed posts"
         splitView={splitSpamPostList}
-        tooltipText='Posts which needs moderation <br/> you can bring the posts from spam and reports'
+        tooltipText='Posts which needs moderation --- you can bring the posts from spam and reports'
       />
       {loading && <p style={{ textAlign: 'center' }}>글 로딩중..</p>}
       {error && <p style={{ textAlign: 'center' }}>에러 발생!</p>}
