@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import BodyTextContainer from '../../containers/common/BodyTextContainer';
 import { Post, Spam } from '../../lib/api/modsandbox/post';
-import { SpamSubmission } from '../../lib/api/reddit/spamSubmission';
 import palette, { actionColorMap } from '../../lib/styles/palette';
 import AuthorText from '../common/AuthorText';
 import DatetimeText from '../common/DatetimeText';

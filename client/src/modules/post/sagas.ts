@@ -9,9 +9,6 @@ import {
   Post,
   Spam,
 } from '../../lib/api/modsandbox/post';
-import { SpamComment } from '../../lib/api/reddit/spamComment';
-import { getSpamPostsAPI } from '../../lib/api/reddit/spamPosts';
-import { SpamSubmission } from '../../lib/api/reddit/spamSubmission';
 import { userSelector } from '../user/slice';
 import {postActions, postSelector, PostType, SortType, SpamType} from './slice';
 

@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { SpamComment } from '../../lib/api/reddit/spamComment';
-import { SpamSubmission } from '../../lib/api/reddit/spamSubmission';
 import OverlayWithButton from '../common/OverlayWithButton';
 import { useDispatch } from 'react-redux';
 import { postActions } from '../../modules/post/slice';
@@ -9,7 +7,7 @@ import SplitPane from 'react-split-pane';
 import palette from '../../lib/styles/palette';
 import { useInfiniteScroll } from '../../lib/hooks';
 import OverlayLoading from '../common/OverlayLoading';
-import { Post, Spam } from '../../lib/api/modsandbox/post';
+import { Spam } from '../../lib/api/modsandbox/post';
 import SpamItem from './SpamItem';
 
 interface SpamListProps {
@@ -33,7 +31,6 @@ function SpamList({
   splitView,
   loadingSpam,
   loadingRule,
-  loadingSpamImport,
 }: SpamListProps) {
   const dispatch = useDispatch();
   const [target, setTarget] = useState<any>(null);
@@ -92,7 +89,7 @@ function SpamList({
                 ▼ Affected by Automod
               </div>
               {
-                spamsFiltered.map((spam, index) => {
+                spamsFiltered.map((spam) => {
                   return <SpamItem spam={spam} selectedSpamId={selectedSpamId} key={spam._id} />
                 })
               }
@@ -107,7 +104,7 @@ function SpamList({
                 ▼ Not Affected by Automod
               </div>
               {
-                spamsUnfiltered.map((spam, index) => {
+                spamsUnfiltered.map((spam) => {
                   return <SpamItem spam={spam} selectedSpamId={selectedSpamId} key={spam._id} />
                 })
               }

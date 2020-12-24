@@ -1,9 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { Post, Spam } from '../../lib/api/modsandbox/post';
-import { SpamComment } from '../../lib/api/reddit/spamComment';
-import { SpamSubmission } from '../../lib/api/reddit/spamSubmission';
+import { Spam } from '../../lib/api/modsandbox/post';
 import palette from '../../lib/styles/palette';
 import { postActions } from '../../modules/post/slice';
 import CommentItem from './CommentItem';

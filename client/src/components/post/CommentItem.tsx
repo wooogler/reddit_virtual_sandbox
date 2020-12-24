@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Post, Spam } from '../../lib/api/modsandbox/post';
-import { SpamComment } from '../../lib/api/reddit/spamComment';
 import palette, { actionColorMap } from '../../lib/styles/palette';
 import AuthorText from '../common/AuthorText';
 import BodyText from '../common/BodyText';

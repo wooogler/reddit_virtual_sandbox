@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import PostHeaderContainer from '../../containers/post/PostHeaderContainer';
 import PostListContainer from '../../containers/post/PostListContainer';
-import SpamPostListContainer from '../../containers/post/SpamPostListContainer';
+import SpamPostListContainer from '../../containers/post/SpamListContainer';
 
 function PostLayout() {
   return (

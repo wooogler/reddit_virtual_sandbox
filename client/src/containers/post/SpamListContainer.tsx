@@ -1,14 +1,13 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import OverlayLoading from '../../components/common/OverlayLoading';
 import ListHeader from '../../components/post/ListHeader';
 import SpamList from '../../components/post/SpamList';
-import SpamPostList from '../../components/post/SpamList';
 import { RootState } from '../../modules';
-import { postActions, postSelector } from '../../modules/post/slice';
+import { postSelector } from '../../modules/post/slice';
 import { ruleSelector } from '../../modules/rule/slice';
 
-function SpamPostListContainer() {
+function SpamListContainer() {
 
   const spamsAll = useSelector(postSelector.spamsAll);
   const spamsFiltered = useSelector(postSelector.spamsFiltered);
@@ -59,4 +58,4 @@ function SpamPostListContainer() {
   );
 }
 
-export default SpamPostListContainer;
+export default SpamListContainer;

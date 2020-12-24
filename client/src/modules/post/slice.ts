@@ -1,6 +1,4 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { SpamSubmission } from '../../lib/api/reddit/spamSubmission';
-import { SpamComment } from '../../lib/api/reddit/spamComment';
 import { RootState } from '..';
 import { ImportQuery, Post, Spam } from '../../lib/api/modsandbox/post';
 
