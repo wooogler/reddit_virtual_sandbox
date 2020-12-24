@@ -5,9 +5,10 @@ import { RootState } from '../../modules'
 
 function PostHeaderContainer() {
   const me = useSelector((state: RootState) => state.user.me);
+  const redditLogged = useSelector((state: RootState) => state.user.reddit_logged);
 
   return (
-    <PostHeader userInfo={me}/>
+    <PostHeader userInfo={me} redditLogged={redditLogged}/>
   )
 }
 

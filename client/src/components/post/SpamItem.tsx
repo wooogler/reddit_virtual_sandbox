@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
+import { Post, Spam } from '../../lib/api/modsandbox/post';
 import { SpamComment } from '../../lib/api/reddit/spamComment';
 import { SpamSubmission } from '../../lib/api/reddit/spamSubmission';
 import palette from '../../lib/styles/palette';
@@ -9,31 +10,32 @@ import CommentItem from './CommentItem';
 import SpamFrame from './SpamFrame';
 import SubmissionItem from './SubmissionItem';
 
-export interface SpamPostItemProps {
-  spamPost: SpamSubmission | SpamComment;
-  action?: 'remove' | 'report';
-  selected: boolean;
+export interface SpamItemProps {
+  spam: Spam;
+  selectedSpamId: string[]
 }
 
-function SpamPostItem({ spamPost, action, selected }: SpamPostItemProps) {
+function SpamItem({ spam, selectedSpamId }: SpamItemProps) {
   const dispatch = useDispatch();
-  const handleClickSpamPost = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    dispatch(postActions.toggleSpamPostSelect(spamPost._id));
+
+  const isMatched = spam.matching_rules.length !== 0;
+  const handleClickSpam = () => {
+    dispatch(postActions.toggleSpamPostSelect(spam._id));
   };
 
   return (
-    <SpamPostItemDiv selected={selected} onClick={handleClickSpamPost}>
+    <SpamPostItemDiv selected={selectedSpamId.includes(spam._id)} onClick={handleClickSpam}>
     {
-      spamPost.type === 'spam_submission' ? (
-        <SpamFrame spamPost={spamPost}>
+      spam._type === 'spam_submission' ? (
+        <SpamFrame spam={spam}>
           <SubmissionItem
-            submission={spamPost}
-            action={action}
+            submission={spam}
+            action={isMatched ? 'remove' : undefined}
           />
         </SpamFrame>
       ) : (
-        <SpamFrame spamPost={spamPost}>
-          <CommentItem comment={spamPost} action={action}/>
+        <SpamFrame spam={spam}>
+          <CommentItem comment={spam} action={isMatched ? 'remove' : undefined}/>
         </SpamFrame>
       )
     }
@@ -51,4 +53,4 @@ const SpamPostItemDiv = styled.div<{ selected: boolean }>`
   cursor: default;
 `;
 
-export default SpamPostItem;
+export default SpamItem;

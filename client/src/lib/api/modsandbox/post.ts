@@ -1,18 +1,42 @@
 import axios from 'axios';
-import { Filtered, PostType, SortType } from '../../../modules/post/slice';
+import { Filtered, PostType, SortType, SpamType } from '../../../modules/post/slice';
 
 export async function getPostsAPI(
   token: string | null,
   postType: PostType,
-  sortType: SortType,
+  postSortType: SortType,
   filtered: Filtered,
   page: number,
 ) {
   const response = await axios
-    .get<PaginatedResponse>('http://localhost:8000/post', {
+    .get<PaginatedPostResponse>('http://localhost:8000/post/', {
       params: {
         post_type: postType,
-        sort: sortType,
+        sort: postSortType,
+        filtered, 
+        page,
+      },
+      headers: { Authorization: `Token ${token}` },
+    })
+    .catch((error) => {
+      return error.message;
+    });
+
+  return response.data;
+}
+
+export async function getSpamsAPI(
+  token: string | null,
+  spamType: SpamType,
+  spamSortType: SortType,
+  filtered: Filtered,
+  page: number,
+) {
+  const response = await axios
+    .get<PaginatedSpamResponse>('http://localhost:8000/spam/', {
+      params: {
+        post_type: spamType,
+        sort: spamSortType,
         filtered, 
         page,
       },
@@ -60,11 +84,18 @@ export async function deleteAllPostsAPI(token: string) {
   return response.statusText;
 }
 
-export interface PaginatedResponse {
+export interface PaginatedPostResponse {
   count: number;
   previous: string | null;
   next: string | null;
   results: Post[];
+}
+
+export interface PaginatedSpamResponse {
+  count: number;
+  previous: string | null;
+  next: string | null;
+  results: Spam[];
 }
 
 export type Post = {
@@ -77,4 +108,18 @@ export type Post = {
   subreddit: string;
   title: string;
   matching_rules: number[];
+};
+
+export type Spam = {
+  _id: string;
+  _type: 'spam_comment' | 'spam_submission';
+  author: string;
+  body: string;
+  created_utc: string;
+  full_link: string;
+  subreddit: string;
+  title: string;
+  matching_rules: number[];
+  banned_by: string;
+  banned_at_utc: string;
 };

@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
-import { logout, UserInfo } from '../../modules/user/slice';
-import Button from '../common/Button';
+import { getUserInfo, logout, UserInfo } from '../../modules/user/slice';
+import { Button } from 'antd';
 import DraggableModal from '../common/DraggableModal';
 import PostImportForm from './PostImportForm';
+import axios from 'axios';
 
 interface PostHeaderProps {
   userInfo: UserInfo | null;
+  redditLogged: boolean;
 }
 
-function PostHeader({userInfo}: PostHeaderProps) {
+function PostHeader({ userInfo, redditLogged }: PostHeaderProps) {
   const dispatch = useDispatch();
   const [isImportOpen, setIsImportOpen] = useState(false);
 
@@ -23,24 +25,73 @@ function PostHeader({userInfo}: PostHeaderProps) {
     }
   };
 
+  const handleClickRedditLogin = async () => {
+    const token = localStorage.getItem('token');
+    const response = await axios.get('http://localhost:8000/reddit_login/', {
+      headers: { Authorization: `Token ${token}` },
+    });
+    window.location.href = response.data;
+  };
+
+  const handleClickRedditLogout = async () => {
+    const token = localStorage.getItem('token');
+    await axios.get('http://localhost:8000/reddit_logout/', {
+      headers: { Authorization: `Token ${token}` },
+    });
+    if (token) {
+      dispatch(getUserInfo(token));
+    }
+  };
+
+  const handleClickImportSeed = async () => {
+    const token = localStorage.getItem('token');
+    await axios.post('http://localhost:8000/spam/crawl/', null, {
+      headers: { Authorization: `Token ${token}` },
+    });
+  };
+
   return (
     <PostHeaderDiv>
-      <Button color="blue" size="large" onClick={() => {setIsImportOpen(true)}}>
+      <Button
+        type="primary"
+        size="large"
+        onClick={() => {
+          setIsImportOpen(true);
+        }}
+      >
         Import subreddit posts
       </Button>
+      {redditLogged ? (
+        <>
+          <Button type="primary" size="large" onClick={handleClickImportSeed}>
+            Import seed posts
+          </Button>
+          <Button danger size="large" onClick={handleClickRedditLogout}>
+            Reddit Logout
+          </Button>
+        </>
+      ) : (
+        <Button type="primary" size="large" onClick={handleClickRedditLogin}>
+          Reddit Login
+        </Button>
+      )}
+
       <DraggableModal
         isOpen={isImportOpen}
         position={{ x: 800, y: 150 }}
         handleText={`Import subreddit posts`}
       >
-        <PostImportForm onClickClose={() => {setIsImportOpen(false)}}/>
+        <PostImportForm
+          onClickClose={() => {
+            setIsImportOpen(false);
+          }}
+        />
       </DraggableModal>
-      <div className='right'>
-      {
-        userInfo && <div>username: {userInfo.username}</div>
-      }
+      <div className="right">
+        {/* {userInfo && <div>username: {userInfo.username}</div>} */}
         <Button
-          color="red"
+          danger
+          type="primary"
           size="large"
           onClick={handleClickLogout}
           className="logout-button"
@@ -56,6 +107,9 @@ const PostHeaderDiv = styled.div`
   display: flex;
   width: 100%;
   align-items: center;
+  button {
+    margin-right: 1rem;
+  }
   .right {
     margin-left: auto;
     display: flex;

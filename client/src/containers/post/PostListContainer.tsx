@@ -14,11 +14,11 @@ function PostListContainer() {
   const postsUnfiltered = useSelector(postSelector.postsUnfiltered);
 
   const selectedSpamPostId = useSelector(
-    (state: RootState) => state.post.selectedSpamPostId,
+    postSelector.selectedSpamId
   );
 
   const splitPostList = useSelector(
-    (state: RootState) => state.post.splitPostList,
+    (state: RootState) => state.post.posts.split,
   );
 
   const loadingRule = useSelector(ruleSelector.loading);
@@ -31,14 +31,14 @@ function PostListContainer() {
         list="unmoderated"
         name="Posts"
         splitView={splitPostList}
-        tooltipText='Posts imported <br/> from real subreddit'
+        tooltipText='Posts imported from real subreddit'
       />
       {
         loadingImport && (
           <OverlayLoading text='Importing Posts' />
         )
       }
-      {postsAll && postsAll.length>8 && (
+      {postsAll && (
         <PostList
           postsAll={postsAll}
           postsFiltered={postsFiltered}

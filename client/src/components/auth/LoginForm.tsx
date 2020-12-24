@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { login } from '../../modules/user/slice';
-import Button from '../common/Button';
+import {Button, Input} from 'antd';
 
 interface LoginFormProps {
   error: Error | null;
@@ -27,7 +27,7 @@ function LoginForm({error}: LoginFormProps) {
     <LoginFormDiv onSubmit={formik.handleSubmit}>
       <div className="title">Login</div>
       <label htmlFor="username">USERNAME</label>
-      <input
+      <Input
         name="username"
         type="text"
         onChange={formik.handleChange}
@@ -35,7 +35,7 @@ function LoginForm({error}: LoginFormProps) {
         autoComplete="off"
       />
       <label htmlFor="password">PASSWORD</label>
-      <input
+      <Input
         name="password"
         type="password"
         onChange={formik.handleChange}
@@ -44,11 +44,11 @@ function LoginForm({error}: LoginFormProps) {
       />
       <div>{error && 'Please check your username and password'}</div>
       <div className="button-group">
-        <Button size="large" type="submit">
+        <Button size="large" type="primary" htmlType='submit'>
           LOG IN
         </Button>
         <Link to="/signup">
-          <Button size="large" color="red">
+          <Button size="large">
             SIGN UP
           </Button>
         </Link>
@@ -74,9 +74,6 @@ const LoginFormDiv = styled.form`
   }
   input {
     font-size: 1rem;
-    font-family: sans-serif;
-    border: 1px solid #ccc;
-    padding: 0.5rem;
     width: 20rem;
   }
   .button-group {

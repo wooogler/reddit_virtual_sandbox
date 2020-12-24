@@ -1,14 +1,7 @@
-import argparse
-from datetime import datetime, timedelta, timezone
-import itertools
+from datetime import datetime, timezone
 import json
 import logging
-import math
-import sys
 import time
-
-import numpy as np
-import praw
 import requests
 
 from .models import Post

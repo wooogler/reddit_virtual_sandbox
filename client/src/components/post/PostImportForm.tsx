@@ -4,12 +4,10 @@ import {
   Input,
   Select,
   InputNumber,
-  Button as AntdButton,
+  Button
 } from 'antd';
-import 'antd/dist/antd.css';
 import { useFormik } from 'formik';
 import moment from 'moment';
-import Button from '../common/Button';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -97,14 +95,14 @@ function PostImportForm({ onClickClose }: PostImportFormProps) {
         }}
       />
       <label>Delete All Posts</label>
-      <AntdButton danger loading={loadingDeleteAll} onClick={handleDeleteAll}>
+      <Button danger loading={loadingDeleteAll} onClick={handleDeleteAll}>
         Delete all posts
-      </AntdButton>
+      </Button>
       <div className="buttons">
-        <Button color="red" onClick={onClickClose}>
+        <Button onClick={onClickClose}>
           Close
         </Button>
-        <Button type="submit">Save</Button>
+        <Button type='primary' htmlType="submit">Save</Button>
       </div>
     </PostImportFormDiv>
   );
@@ -122,14 +120,16 @@ const PostImportFormDiv = styled.form`
   label {
     margin-left: 0.2rem;
     margin-top: 1rem;
-    margin-bottom: 0.5rem;
-    font-size: 1.2rem;
-    font-weight: bold;
+    margin-bottom: 0.2rem;
+    font-size: 1rem;
   }
   .buttons {
     display: flex;
     margin-left: auto;
     margin-top: 1rem;
+    button {
+      margin-left: 1rem;
+    }
   }
 `;
 

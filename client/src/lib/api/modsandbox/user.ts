@@ -21,12 +21,16 @@ export async function logoutAPI(token: string) {
 }
 
 export async function getUserInfoAPI(token: string) {
-  console.log(token);
-  const response = await axios.get<string>('http://localhost:8000/rest-auth/user/', {
+
+  const response = await axios.get<any>('http://localhost:8000/rest-auth/user/', {
     headers: { Authorization: `Token ${token}` }
   })
 
-  return response.data;
+  const logResponse = await axios.get<string>('http://localhost:8000/reddit_logged', {
+    headers: { Authorization: `Token ${token}` }
+  })
+
+  return {...response.data, reddit_logged: logResponse.data} 
 }
 
 export async function signupAPI(username: string, password: string) {

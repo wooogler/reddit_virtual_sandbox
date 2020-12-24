@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Spam } from '../../lib/api/modsandbox/post';
 import { SpamComment } from '../../lib/api/reddit/spamComment';
 import { SpamSubmission } from '../../lib/api/reddit/spamSubmission';
 import palette from '../../lib/styles/palette';
@@ -7,17 +8,17 @@ import AuthorText from '../common/AuthorText';
 import DatetimeText from '../common/DatetimeText';
 
 interface SpamFrameProps {
-  spamPost: SpamComment | SpamSubmission;
+  spam: Spam;
   children: React.ReactChild;
 }
 
-function SpamFrame({ spamPost, children }: SpamFrameProps) {
+function SpamFrame({ spam, children }: SpamFrameProps) {
   return (
     <SpamFrameDiv>
       <div className='spam-info'>
         <div className='spammed'>Spammed</div>
-        <AuthorText text={spamPost.banned_by}/>
-        <DatetimeText datetime={spamPost.banned_at_utc}/>
+        <AuthorText text={spam.banned_by}/>
+        <DatetimeText datetime={spam.banned_at_utc}/>
       </div>
       {children}
     </SpamFrameDiv>

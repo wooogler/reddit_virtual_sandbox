@@ -73,7 +73,7 @@ function RuleSelector({ editables, loadingRule }: RuleSelectorProps) {
       tree1.children.forEach((tree2) => {
         code = code + `${tree2.title}: [`;
         tree2.children.forEach((tree3, index, arr) => {
-          code = code + `"${tree3.title}"`;
+          code = code + `'${tree3.title}'`;
           if (index !== arr.length - 1) {
             code = code + `, `;
           }

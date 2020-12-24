@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { OptionsType, ValueType } from 'react-select';
-import ReactTooltip from 'react-tooltip';
+import {Tooltip} from 'antd';
 import styled from 'styled-components';
+import {Select, Checkbox} from 'antd';
+import {InfoCircleOutlined} from '@ant-design/icons';
+
 import {
   postActions,
   PostType,
+  SortType,
+  SpamType,
 } from '../../modules/post/slice';
-import { InfoIcon } from '../../static/svg';
-import Button from '../common/Button';
-import CustomSelect from '../common/CustomSelect';
+import {Button} from 'antd';
 import DraggableModal from '../common/DraggableModal';
 import PostForm from './PostForm';
 
@@ -20,24 +22,9 @@ export interface ListHeaderProps {
   tooltipText?: string;
 }
 
-type OptionType = { value: string; label: string };
-type SortOptionType = { value: 'new' | 'old'; label: string };
-type ViewOptionType = { value: PostType; label: string };
-
-const sortOptions: OptionsType<SortOptionType> = [
-  { value: 'new', label: 'new' },
-  { value: 'old', label: 'old' },
-  // { value: 'smart', label: 'smart' },
-];
-
-const viewOptions: OptionsType<ViewOptionType> = [
-  { value: 'all', label: 'all posts' },
-  { value: 'submission', label: 'submission' },
-  { value: 'comment', label: 'comment' },
-];
-
 function ListHeader({ list, name, splitView, tooltipText }: ListHeaderProps) {
   const dispatch = useDispatch();
+  const {Option} = Select;
   const [isAddOpen, setIsAddOpen] = useState(false);
 
   const handleClickAddPost = () => {
@@ -48,17 +35,25 @@ function ListHeader({ list, name, splitView, tooltipText }: ListHeaderProps) {
     setIsAddOpen(false);
   };
 
-  const handleChangeView = (option: ValueType<OptionType>) => {
+  const handleChangeView = (type: PostType | SpamType) => {
     if (list === 'unmoderated') {
-      dispatch(postActions.changePostType((option as ViewOptionType).value));
+      dispatch(postActions.changePostType(type as PostType));
+      dispatch(postActions.getPostsRefresh())
+    }
+    if (list === 'moderated') {
+      dispatch(postActions.changeSpamType(type as SpamType));
       dispatch(postActions.getPostsRefresh())
     }
   };
 
-  const handleChangeSort = (option: ValueType<OptionType>) => {
+  const handleChangeSort = (sort: SortType) => {
     if (list === 'unmoderated') {
-      dispatch(postActions.changeSortType((option as SortOptionType).value));
+      dispatch(postActions.changeSortType(sort));
       dispatch(postActions.getPostsRefresh());
+    }
+    if (list === 'moderated') {
+      dispatch(postActions.changeSpamSortType(sort));
+      dispatch(postActions.getSpamsRefresh());
     }
   };
 
@@ -69,7 +64,7 @@ function ListHeader({ list, name, splitView, tooltipText }: ListHeaderProps) {
     }
     if (list === 'moderated') {
       dispatch(postActions.toggleSplitSpamPostList());
-      dispatch(postActions.getPostsRefresh())
+      dispatch(postActions.getSpamsRefresh())
     }
   };
 
@@ -77,14 +72,10 @@ function ListHeader({ list, name, splitView, tooltipText }: ListHeaderProps) {
     <ListHeaderDiv>
       <div className="list-info">
         <div className="name">{name}</div>
-        <InfoIcon data-tip={tooltipText} data-for={list} />
-        <ReactTooltip
-          place="bottom"
-          id={list}
-          effect="solid"
-          multiline={true}
-        />
-        <Button size="small" onClick={handleClickAddPost}>
+        <Tooltip placement='right' title={tooltipText}>
+          <InfoCircleOutlined />
+        </Tooltip>
+        <Button type='primary' size="small" onClick={handleClickAddPost}>
           add post
         </Button>
         <DraggableModal
@@ -96,26 +87,17 @@ function ListHeader({ list, name, splitView, tooltipText }: ListHeaderProps) {
         </DraggableModal>
       </div>
       <div className="select-group">
-        <CustomSelect
-          className="select-view"
-          defaultValue={viewOptions[0]}
-          options={viewOptions}
-          onChange={handleChangeView}
-        />
-        <CustomSelect
-          className="select-sort"
-          options={sortOptions}
-          placeholder="sort"
-          onChange={handleChangeSort}
-        />
+        <Select defaultValue='all' onChange={handleChangeView} size='small' className='select-view'>
+          <Option value='all'>All Posts</Option>
+          <Option value='submission'>Submission</Option>
+          <Option value='comment'>Comment</Option>
+        </Select>
+        <Select onChange={handleChangeSort} placeholder='sort' size='small' className='select-sort'>
+          <Option value='new'>New</Option>
+          <Option value='old'>Old</Option>
+        </Select>
         <div className="checkbox">
-          <label htmlFor="split">Split view</label>
-          <input
-            type="checkbox"
-            name="split"
-            checked={splitView}
-            onChange={handleChangeSplitView}
-          />
+          <Checkbox onChange={handleChangeSplitView} checked={splitView}>Split View</Checkbox>
         </div>
       </div>
     </ListHeaderDiv>
@@ -124,7 +106,7 @@ function ListHeader({ list, name, splitView, tooltipText }: ListHeaderProps) {
 
 const ListHeaderDiv = styled.div`
   padding: 0.2rem;
-  height: 4.5rem;
+  height: 4rem;
   .list-info {
     display: flex;
     width: 100%;
@@ -145,26 +127,15 @@ const ListHeaderDiv = styled.div`
     display: flex;
     align-items: center;
     .select-sort {
-      width: 6rem;
-      margin-left: 1rem;
+      width: 4rem;
+      margin-left: 0.5rem;
     }
     .select-view {
-      width: 8rem;
-    }
-    .react-select__indicator {
-      padding: 0.2rem;
+      width: 7rem;
+      margin-left: 0.5rem;
     }
     .checkbox {
-      display: flex;
       margin-left: auto;
-      align-items: center;
-      label {
-        font-size: 0.9rem;
-        text-align: right;
-      }
-      input {
-        margin-left: 0.3rem;
-      }
     }
   }
 `;

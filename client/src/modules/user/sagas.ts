@@ -44,9 +44,9 @@ function* logoutSaga() {
 
 function* getUserInfoSaga(action: ReturnType<typeof getUserInfo>) {
   try {
-    const { username } = yield call(getUserInfoAPI, action.payload);
+    const { username, reddit_logged } = yield call(getUserInfoAPI, action.payload);
     yield put(
-      getUserInfoSuccess({ userInfo: { username }, token: action.payload }),
+      getUserInfoSuccess({ userInfo: { username }, reddit_logged, token: action.payload }),
     );
     yield getPostsRefreshSaga()
   } catch (err) {
