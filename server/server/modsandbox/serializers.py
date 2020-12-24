@@ -23,6 +23,8 @@ class PostSerializer(serializers.ModelSerializer):
             "title",
             "_type",
             "matching_rules",
+            "banned_at_utc",
+            "banned_by",
         ]
 
 

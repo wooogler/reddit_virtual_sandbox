@@ -12,6 +12,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from django.shortcuts import redirect
 from .models import Post, Profile, Rule
 from .reddit_handler import RedditHandler
+from .praw_handler import PrawHandler
 from .automod import Ruleset, RuleTarget
 from .serializers import PostSerializer
 from .pagintations import PostPagination
@@ -19,67 +20,106 @@ from .pagintations import PostPagination
 
 logger = logging.getLogger(__name__)
 
-@api_view(['GET'])
+
+@api_view(["GET"])
 def reddit_login(request):
     """
     response the reddit login page
     """
     reddit = praw.Reddit(
-        client_id=os.environ.get('client_id'),
-        client_secret=os.environ.get('client_secret'),
-        redirect_uri=os.environ.get('redirect_uri'),
-        user_agent=os.environ.get('user_agent'),
+        client_id=os.environ.get("client_id"),
+        client_secret=os.environ.get("client_secret"),
+        redirect_uri=os.environ.get("redirect_uri"),
+        user_agent=os.environ.get("user_agent"),
     )
-    return Response(reddit.auth.url(["identity", "read", "mysubreddits"], request.user.id, "permanent"))
+    return Response(
+        reddit.auth.url(
+            ["identity", "read", "mysubreddits"], request.user.id, "permanent"
+        )
+    )
 
-@api_view(['GET'])
+
+@api_view(["GET"])
 def reddit_auth(request):
     """
     response token for reddit auth
     """
     try:
-        code = request.query_params.get('code')
-        state = request.query_params.get('state')
+        code = request.query_params.get("code")
+        state = request.query_params.get("state")
         print(code)
         r = praw.Reddit(
-            client_id=os.environ.get('client_id'),
-            client_secret=os.environ.get('client_secret'),
-            redirect_uri=os.environ.get('redirect_uri'),
-            user_agent=os.environ.get('user_agent'),
+            client_id=os.environ.get("client_id"),
+            client_secret=os.environ.get("client_secret"),
+            redirect_uri=os.environ.get("redirect_uri"),
+            user_agent=os.environ.get("user_agent"),
         )
         token = r.auth.authorize(code)
     except Exception as e:
         logger.error(e)
         return Response(status=status.HTTP_400_BAD_REQUEST)
-    
+
     profile = Profile.objects.get(user=state)
     profile.reddit_token = token
     profile.save()
-    
-    return redirect('http://localhost:3000/')
 
-@api_view(['GET'])
+    return redirect("http://localhost:3000/")
+
+
+@api_view(["GET"])
 def reddit_logged(request):
     profile = Profile.objects.get(user=request.user.id)
-    if(profile.reddit_token != ''):
+    if profile.reddit_token != "":
         return Response(True)
-    else: 
+    else:
         return Response(False)
 
-@api_view(['GET'])
+
+@api_view(["GET"])
 def reddit_logout(request):
-    try: 
+    try:
         profile = Profile.objects.get(user=request.user.id)
-        profile.reddit_token=''
+        profile.reddit_token = ""
         profile.save()
     except Exception as e:
         logger.error(e)
         return Response(status=status.HTTP_400_BAD_REQUEST)
-    
+
     return Response(status=status.HTTP_200_OK)
 
+@api_view(['POST'])
+def apply_rules(request):
+    """
+    POST /apply_rules/
+    """
+    try:
+        yaml = request.data["yaml"]
+        rule_set = Ruleset(yaml)
+    except Exception as e:
+        logger.error(e)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    profile = Profile.objects.get(user=request.user.id)
+    profile.user.rules.all().delete()
+    rules = rule_set.rules
+
+    for index, rule in enumerate(rules):
+        rule_object = Rule(
+            user=profile.user, rule_index=index, content=json.dumps(rule)
+        )
+        rule_object.save()
+
+    for post in profile.used_posts.all():
+        for rule in Rule.objects.filter(user=profile.user):
+            rule_target = RuleTarget("Link", json.loads(rule.content))
+            if rule_target.check_item(post, ""):
+                post.matching_rules.add(rule)
+
+    return Response(status=status.HTTP_202_ACCEPTED)
+
+
 class PostHandlerViewSet(viewsets.ModelViewSet):
-    queryset = Post.objects.all()
+    queryset = Post.objects.filter(_type__in=["submission", "comment"])
     serializer_class = PostSerializer
     pagination_class = PostPagination
     permission_classes = [IsAuthenticatedOrReadOnly]
@@ -173,7 +213,7 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
     def delete_all(self, request):
         if request.user:
             profile = Profile.objects.get(user=request.user.id)
-            profile.used_posts.all().delete()
+            profile.used_posts.filter(_type__in=['submission', 'comment']).delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
 
         return Response(status=status.HTTP_401_UNAUTHORIZED)
@@ -207,56 +247,65 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
                     post.matching_rules.add(rule)
 
         return Response(status=status.HTTP_202_ACCEPTED)
-    
-    @action(methods=["post"], detail=False, name="Crawl Spam Posts")
-    def reddit_crawl(self, request):
-        """POST /post/reddit_crawl/
+
+
+class SpamHandlerViewSet(viewsets.ModelViewSet):
+    queryset = Post.objects.filter(_type__in=["spam_submission", "spam_comment"])
+    serializer_class = PostSerializer
+    pagination_class = PostPagination
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if self.request.user.is_authenticated:
+            profile = Profile.objects.get(user=self.request.user.id)
+            queryset = queryset.filter(_id__in=profile.used_posts.all())
+        post_type = self.request.query_params.get("post_type", "all")
+        sort = self.request.query_params.get("sort", "new")
+        filtered = self.request.query_params.get("filtered", "all")
+
+        if post_type == "all":
+            queryset = queryset.all()
+        else:
+            queryset = queryset.filter(_type=post_type)
+
+        if sort == "new":
+            queryset = queryset.order_by("-created_utc")
+        elif sort == "old":
+            queryset = queryset.order_by("created_utc")
+
+        if filtered == "all":
+            queryset = queryset.all()
+        elif filtered == "filtered":
+            queryset = queryset.filter(matching_rules__in=profile.user.rules.all())
+        elif filtered == "unfiltered":
+            queryset = queryset.exclude(matching_rules__in=profile.user.rules.all())
+
+        return queryset
+
+    @action(methods=["post"], detail=False, name="Crawl Spams from PRAW")
+    def crawl(self, request):
+        """POST /spam/crawl/
         Crawl spam posts (submissions or comments) from reddit using praw
         and save to corresponding database.
         """
         if request.user:
             profile = Profile.objects.get(user=request.user.id)
-        
-        try: 
-            r = praw.Reddit(
-                client_id=os.environ.get('client_id'),
-                client_secret=os.environ.get('client_secret'),
-                refresh_token=profile.reddit_token,
-                user_agent=os.environ.get('user_agent'),
-            )
-            
-            for sub in r.user.contributor_subreddits():
-                print('sub', sub)
-            for spam in r.subreddit("KIXModSandbox").mod.spam():
-                print(spam.banned_by)
-        
+
+        try:
+            praw_hanlder = PrawHandler(profile.reddit_token)
+            if praw_hanlder.run(profile=profile):
+                return Response(status=status.HTTP_201_CREATED)
+
         except Exception as e:
             logger.error(e)
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        return Response(status=status.HTTP_201_CREATED)
+    @action(methods=["post"], detail=False)
+    def delete_all(self, request):
+        if request.user:
+            profile = Profile.objects.get(user=request.user.id)
+            profile.used_posts.filter(_type__in=['spam_submission', 'spam_comment']).delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
 
-        # @action(methods=['post'], detail=False)
-    # def apply_rules(self, request):
-    #     """POST /post/apply_rules/, /post/apply_rules/?reset=false
-    #     Default (reset=true):
-    #         1. Reset rule_id, line_id columns in database.
-    #         2. Apply moderation rules (given as json format in request.body) to posts saved in database & save the results in rule_id, line_id columns in database.
-
-    #     reset=false:
-    #         Skip 1. and perform 2. straight away.
-    #     """
-    #     is_reset = request.query_params.get('reset', 'true')
-    #     is_reset = True if is_reset == 'true' else False
-    #     rules = request.data
-
-    #     try:
-    #         logger.info(f'Request: is_reset({is_reset}), apply rules ({rules})')
-    #         rule_handler = RuleHandler()
-    #         if is_reset:
-    #             rule_handler.reset_rules()
-    #         if rule_handler.apply_rules(rules):
-    #             return Response(status=status.HTTP_201_CREATED)
-    #     except Exception as e:
-    #         logger.error(e)
-    #     return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return Response(status=status.HTTP_401_UNAUTHORIZED)

@@ -14,11 +14,11 @@ function PostListContainer() {
   const postsUnfiltered = useSelector(postSelector.postsUnfiltered);
 
   const selectedSpamPostId = useSelector(
-    (state: RootState) => state.post.selectedSpamPostId,
+    postSelector.selectedSpamId
   );
 
   const splitPostList = useSelector(
-    (state: RootState) => state.post.splitPostList,
+    (state: RootState) => state.post.posts.split,
   );
 
   const loadingRule = useSelector(ruleSelector.loading);

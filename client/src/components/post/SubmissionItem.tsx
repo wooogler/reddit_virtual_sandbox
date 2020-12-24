@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import BodyTextContainer from '../../containers/common/BodyTextContainer';
-import { Post } from '../../lib/api/modsandbox/post';
+import { Post, Spam } from '../../lib/api/modsandbox/post';
 import { SpamSubmission } from '../../lib/api/reddit/spamSubmission';
 import palette, { actionColorMap } from '../../lib/styles/palette';
 import AuthorText from '../common/AuthorText';
@@ -15,7 +15,7 @@ type Bolds = {
 }
 
 export interface SubmissionItemProps {
-  submission: Post | SpamSubmission;
+  submission: Post | Spam;
   action?: 'remove' | 'report';
 }
 

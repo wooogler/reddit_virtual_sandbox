@@ -38,16 +38,16 @@ function PostHeader({ userInfo, redditLogged }: PostHeaderProps) {
     await axios.get('http://localhost:8000/reddit_logout/', {
       headers: { Authorization: `Token ${token}` },
     });
-    if(token) {
+    if (token) {
       dispatch(getUserInfo(token));
     }
-  }
+  };
 
   const handleClickImportSeed = async () => {
     const token = localStorage.getItem('token');
-    await axios.post('http://localhost:8000/post/reddit_crawl/', null, {
+    await axios.post('http://localhost:8000/spam/crawl/', null, {
       headers: { Authorization: `Token ${token}` },
-    })
+    });
   };
 
   return (
@@ -63,12 +63,12 @@ function PostHeader({ userInfo, redditLogged }: PostHeaderProps) {
       </Button>
       {redditLogged ? (
         <>
-        <Button type="primary" size="large" onClick={handleClickImportSeed}>
-          Import seed posts
-        </Button>
-        <Button danger size='large' onClick={handleClickRedditLogout}>
-          Reddit Logout
-        </Button>
+          <Button type="primary" size="large" onClick={handleClickImportSeed}>
+            Import seed posts
+          </Button>
+          <Button danger size="large" onClick={handleClickRedditLogout}>
+            Reddit Logout
+          </Button>
         </>
       ) : (
         <Button type="primary" size="large" onClick={handleClickRedditLogin}>

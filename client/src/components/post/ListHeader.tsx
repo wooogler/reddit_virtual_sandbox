@@ -9,6 +9,7 @@ import {
   postActions,
   PostType,
   SortType,
+  SpamType,
 } from '../../modules/post/slice';
 import {Button} from 'antd';
 import DraggableModal from '../common/DraggableModal';
@@ -34,9 +35,13 @@ function ListHeader({ list, name, splitView, tooltipText }: ListHeaderProps) {
     setIsAddOpen(false);
   };
 
-  const handleChangeView = (type: PostType) => {
+  const handleChangeView = (type: PostType | SpamType) => {
     if (list === 'unmoderated') {
-      dispatch(postActions.changePostType(type));
+      dispatch(postActions.changePostType(type as PostType));
+      dispatch(postActions.getPostsRefresh())
+    }
+    if (list === 'moderated') {
+      dispatch(postActions.changeSpamType(type as SpamType));
       dispatch(postActions.getPostsRefresh())
     }
   };
@@ -45,6 +50,10 @@ function ListHeader({ list, name, splitView, tooltipText }: ListHeaderProps) {
     if (list === 'unmoderated') {
       dispatch(postActions.changeSortType(sort));
       dispatch(postActions.getPostsRefresh());
+    }
+    if (list === 'moderated') {
+      dispatch(postActions.changeSpamSortType(sort));
+      dispatch(postActions.getSpamsRefresh());
     }
   };
 
@@ -55,7 +64,7 @@ function ListHeader({ list, name, splitView, tooltipText }: ListHeaderProps) {
     }
     if (list === 'moderated') {
       dispatch(postActions.toggleSplitSpamPostList());
-      dispatch(postActions.getPostsRefresh())
+      dispatch(postActions.getSpamsRefresh())
     }
   };
 

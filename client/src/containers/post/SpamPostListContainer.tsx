@@ -1,40 +1,58 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import OverlayLoading from '../../components/common/OverlayLoading';
 import ListHeader from '../../components/post/ListHeader';
-import SpamPostList from '../../components/post/SpamPostList';
+import SpamList from '../../components/post/SpamList';
+import SpamPostList from '../../components/post/SpamList';
 import { RootState } from '../../modules';
-import { postActions } from '../../modules/post/slice';
+import { postActions, postSelector } from '../../modules/post/slice';
+import { ruleSelector } from '../../modules/rule/slice';
 
 function SpamPostListContainer() {
-  const {
-    selectedPostId,
-    selectedSpamPostId,
-    splitSpamPostList,
-    spamPosts: { data, loading, error },
-  } = useSelector((state: RootState) => state.post);
 
-  const dispatch = useDispatch();
+  const spamsAll = useSelector(postSelector.spamsAll);
+  const spamsFiltered = useSelector(postSelector.spamsFiltered);
+  const spamsUnfiltered = useSelector(postSelector.spamsUnfiltered);
 
-  useEffect(() => {
-    dispatch(postActions.getSpamPosts());
-  }, [dispatch]);
+  const selectedPostId = useSelector(
+    postSelector.selectedPostId
+  );
+  const selectedSpamId = useSelector(
+    postSelector.selectedSpamId
+  )
+
+  const splitSpamList = useSelector(
+    (state: RootState) => state.post.spams.split,
+  );
+
+  const loadingRule = useSelector(ruleSelector.loading);
+  const loadingSpam = useSelector(postSelector.loadingSpam)
+  const loadingSpamImport = useSelector(postSelector.loadingSpamImport);
 
   return (
     <>
       <ListHeader
         list="moderated"
         name="Seed posts"
-        splitView={splitSpamPostList}
+        splitView={splitSpamList}
         tooltipText='Posts which needs moderation --- you can bring the posts from spam and reports'
       />
-      {loading && <p style={{ textAlign: 'center' }}>글 로딩중..</p>}
-      {error && <p style={{ textAlign: 'center' }}>에러 발생!</p>}
-      {data && (
-        <SpamPostList
-          spamPosts={data}
+      {
+        loadingSpamImport && (
+          <OverlayLoading text='Importing Posts' />
+        )
+      }
+      {spamsAll && (
+        <SpamList
+          spamsAll={spamsAll}
+          spamsFiltered={spamsFiltered}
+          spamsUnfiltered={spamsUnfiltered}
           selectedPostId={selectedPostId}
-          selectedSpamPostId={selectedSpamPostId}
-          splitView={splitSpamPostList}
+          selectedSpamId={selectedSpamId}
+          splitView={splitSpamList}
+          loadingSpam={loadingSpam}
+          loadingRule={loadingRule}
+          loadingSpamImport={loadingSpamImport}
         />
       )}
     </>
