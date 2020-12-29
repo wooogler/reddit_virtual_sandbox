@@ -42,7 +42,7 @@ function ListHeader({ list, name, splitView, tooltipText }: ListHeaderProps) {
     }
     if (list === 'moderated') {
       dispatch(postActions.changeSpamType(type as SpamType));
-      dispatch(postActions.getPostsRefresh())
+      dispatch(postActions.getSpamsRefresh())
     }
   };
 

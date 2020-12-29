@@ -18,7 +18,7 @@ export type SignupForm = {
 export type UserState = {
   loading: boolean;
   error: Error | null;
-  token: string | null;
+  token: string;
   reddit_logged: boolean;
   me: UserInfo | null;
 };
@@ -26,7 +26,7 @@ export type UserState = {
 const initialState: UserState = {
   loading: false,
   error: null,
-  token: null,
+  token: '',
   reddit_logged: false,
   me: {
     username: '',
@@ -62,7 +62,7 @@ const userSlice = createSlice({
       }),
     },
     logoutSuccess: (state) => {
-      state.token = null;
+      state.token = '';
       state.loading = false;
     },
     logoutError: (state, action: PayloadAction<Error>) => {
@@ -106,7 +106,7 @@ const userSlice = createSlice({
   },
 });
 
-const selectToken = createSelector<UserState, string | null, string | null>(
+const selectToken = createSelector<UserState, string, string>(
   (state) => state.token,
   (token) => token,
 );

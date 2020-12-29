@@ -36,11 +36,6 @@ function SpamListContainer() {
         splitView={splitSpamList}
         tooltipText='Posts which needs moderation --- you can bring the posts from spam and reports'
       />
-      {
-        loadingSpamImport && (
-          <OverlayLoading text='Importing Posts' />
-        )
-      }
       {spamsAll && (
         <SpamList
           spamsAll={spamsAll}

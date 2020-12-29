@@ -1,6 +1,6 @@
 import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '..';
-import { ImportQuery, Post, Spam } from '../../lib/api/modsandbox/post';
+import { ImportPostQuery, ImportSpamQuery, Post, Spam } from '../../lib/api/modsandbox/post';
 
 export type PostType = 'submission' | 'comment' | 'all';
 export type SpamType = 'spam_submission' | 'spam_comment' | 'all';
@@ -283,7 +283,7 @@ const postSlice = createSlice({
       reducer: (state) => {
         state.posts.import.loading = true;
       },
-      prepare: (values: ImportQuery) => ({
+      prepare: (values: ImportPostQuery) => ({
         payload: values,
       }),
     },
@@ -294,6 +294,21 @@ const postSlice = createSlice({
       state.posts.import.loading = false;
       state.posts.import.error = action.payload;
     },
+    importSpamPosts: {
+      reducer: (state) => {
+        state.spams.import.loading = true;
+      },
+      prepare: (values: ImportSpamQuery) => ({
+        payload: values,
+      }),
+    },
+    importSpamPostsSuccess: (state) => {
+      state.spams.import.loading = false;
+    },
+    importSpamPostsError: (state, action) => {
+      state.spams.import.loading = false;
+      state.spams.import.error = action.payload;
+    },
     deleteAllPosts: (state) => {
       state.posts.deleteAll.loading = true;
     },
@@ -303,6 +318,16 @@ const postSlice = createSlice({
     deleteAllPostsError: (state, action) => {
       state.posts.deleteAll.loading = false;
       state.posts.deleteAll.error = action.payload;
+    },
+    deleteAllSpams: (state) => {
+      state.spams.deleteAll.loading = true;
+    },
+    deleteAllSpamsSuccess: (state) => {
+      state.spams.deleteAll.loading = false;
+    },
+    deleteAllSpamsError: (state, action) => {
+      state.spams.deleteAll.loading = false;
+      state.spams.deleteAll.error = action.payload;
     },
   },
 });
@@ -411,8 +436,8 @@ const selectLoadingPost = createSelector<PostState, boolean, boolean>(
 );
 
 const selectLoadingImport = createSelector<PostState, boolean, boolean>(
-  (state) => state.posts.import.loading,
-  (loading) => loading,
+  (state) => state.posts.import.loading, 
+  (loading) => loading
 );
 
 const selectLoadingDeleteAll = createSelector<PostState, boolean, boolean>(

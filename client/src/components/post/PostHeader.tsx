@@ -6,6 +6,7 @@ import { Button } from 'antd';
 import DraggableModal from '../common/DraggableModal';
 import PostImportForm from './PostImportForm';
 import axios from 'axios';
+import SpamImportForm from './SpamImportForm';
 
 interface PostHeaderProps {
   userInfo: UserInfo | null;
@@ -14,7 +15,8 @@ interface PostHeaderProps {
 
 function PostHeader({ userInfo, redditLogged }: PostHeaderProps) {
   const dispatch = useDispatch();
-  const [isImportOpen, setIsImportOpen] = useState(false);
+  const [isPostImportOpen, setIsPostImportOpen] = useState(false);
+  const [isSpamImportOpen, setIsSpamImportOpen] = useState(false);
 
   const handleClickLogout = () => {
     const token = localStorage.getItem('token');
@@ -56,14 +58,18 @@ function PostHeader({ userInfo, redditLogged }: PostHeaderProps) {
         type="primary"
         size="large"
         onClick={() => {
-          setIsImportOpen(true);
+          setIsPostImportOpen(true);
         }}
       >
         Import subreddit posts
       </Button>
       {redditLogged ? (
         <>
-          <Button type="primary" size="large" onClick={handleClickImportSeed}>
+          <Button
+            type="primary"
+            size="large"
+            onClick={() => setIsSpamImportOpen(true)}
+          >
             Import seed posts
           </Button>
           <Button danger size="large" onClick={handleClickRedditLogout}>
@@ -77,16 +83,29 @@ function PostHeader({ userInfo, redditLogged }: PostHeaderProps) {
       )}
 
       <DraggableModal
-        isOpen={isImportOpen}
+        isOpen={isPostImportOpen}
         position={{ x: 800, y: 150 }}
         handleText={`Import subreddit posts`}
       >
         <PostImportForm
           onClickClose={() => {
-            setIsImportOpen(false);
+            setIsPostImportOpen(false);
           }}
         />
       </DraggableModal>
+
+      <DraggableModal
+        isOpen={isSpamImportOpen}
+        position={{ x: 800, y: 150 }}
+        handleText={`Import seed posts`}
+      >
+        <SpamImportForm
+          onClickClose={()=> {
+            setIsSpamImportOpen(false);
+          }}
+        />
+      </DraggableModal>
+
       <div className="right">
         {/* {userInfo && <div>username: {userInfo.username}</div>} */}
         <Button

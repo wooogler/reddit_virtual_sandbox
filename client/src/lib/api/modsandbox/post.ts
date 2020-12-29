@@ -49,7 +49,7 @@ export async function getSpamsAPI(
   return response.data;
 }
 
-export interface ImportQuery {
+export interface ImportPostQuery {
   subreddit: string;
   after: number;
   before: number;
@@ -57,12 +57,32 @@ export interface ImportQuery {
   max_size: number | null;
 }
 
+export interface ImportSpamQuery {
+  subreddit_name: string;
+  mod_type: string;
+}
+
 export async function importSubredditPostsAPI(
   token: string,
-  values: ImportQuery,
+  values: ImportPostQuery,
 ) {
   const response = await axios.post(
     'http://localhost:8000/post/crawl/',
+    values,
+    {
+      headers: { Authorization: `Token ${token}` },
+    },
+  );
+
+  return response.statusText;
+}
+
+export async function importSpamPostsAPI(
+  token: string,
+  values: ImportSpamQuery,
+) {
+  const response = await axios.post(
+    'http://localhost:8000/spam/crawl/',
     values,
     {
       headers: { Authorization: `Token ${token}` },
@@ -82,6 +102,26 @@ export async function deleteAllPostsAPI(token: string) {
   );
 
   return response.statusText;
+}
+
+export async function deleteAllSpamsAPI(token: string) {
+  const response = await axios.post(
+    'http://localhost:8000/spam/delete_all/',
+    null,
+    {
+      headers: { Authorization: `Token ${token}` },
+    },
+  );
+
+  return response.statusText;
+}
+
+export async function getModSubreddits(token: string) {
+  const response = await axios.get<string[]>('http://localhost:8000/mod_subreddits',{
+    headers: { Authorization: `Token ${token}` },
+  })
+
+  return response.data;
 }
 
 export interface PaginatedPostResponse {

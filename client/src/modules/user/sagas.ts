@@ -5,7 +5,7 @@ import {
   logoutAPI,
   signupAPI,
 } from '../../lib/api/modsandbox/user';
-import { getPostsRefreshSaga } from '../post/sagas';
+import { getPostsRefreshSaga, getSpamsRefreshSaga } from '../post/sagas';
 import {
   getUserInfo,
   getUserInfoError,
@@ -49,6 +49,7 @@ function* getUserInfoSaga(action: ReturnType<typeof getUserInfo>) {
       getUserInfoSuccess({ userInfo: { username }, reddit_logged, token: action.payload }),
     );
     yield getPostsRefreshSaga()
+    yield getSpamsRefreshSaga()
   } catch (err) {
     yield put(getUserInfoError(err));
   }

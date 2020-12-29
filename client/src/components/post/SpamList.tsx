@@ -134,7 +134,7 @@ const SpamPostListBlock = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
-  height: 100%;
+  height: calc(100% - 4.5rem);
   .list {
     height: 100%;
     overflow-y: auto;

@@ -43,9 +43,8 @@ function PostImportForm({ onClickClose }: PostImportFormProps) {
           before: moment.utc(values.before).unix(),
           post_type: values.post_type,
           max_size: values.max_size,
-        }),
+        })
       );
-      console.log(values);
       onClickClose();
     },
   });
@@ -102,7 +101,7 @@ function PostImportForm({ onClickClose }: PostImportFormProps) {
         <Button onClick={onClickClose}>
           Close
         </Button>
-        <Button type='primary' htmlType="submit">Save</Button>
+        <Button type='primary' htmlType="submit">Import</Button>
       </div>
     </PostImportFormDiv>
   );

@@ -87,7 +87,8 @@ def reddit_logout(request):
 
     return Response(status=status.HTTP_200_OK)
 
-@api_view(['POST'])
+
+@api_view(["POST"])
 def apply_rules(request):
     """
     POST /apply_rules/
@@ -116,6 +117,13 @@ def apply_rules(request):
                 post.matching_rules.add(rule)
 
     return Response(status=status.HTTP_202_ACCEPTED)
+
+
+@api_view(["GET"])
+def mod_subreddits(request):
+    profile = Profile.objects.get(user=request.user.id)
+    praw_handler = PrawHandler(profile.reddit_token)
+    return Response(praw_handler.get_mod_subreddits())
 
 
 class PostHandlerViewSet(viewsets.ModelViewSet):
@@ -213,7 +221,7 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
     def delete_all(self, request):
         if request.user:
             profile = Profile.objects.get(user=request.user.id)
-            profile.used_posts.filter(_type__in=['submission', 'comment']).delete()
+            profile.used_posts.filter(_type__in=["submission", "comment"]).delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
 
         return Response(status=status.HTTP_401_UNAUTHORIZED)
@@ -294,7 +302,11 @@ class SpamHandlerViewSet(viewsets.ModelViewSet):
 
         try:
             praw_hanlder = PrawHandler(profile.reddit_token)
-            if praw_hanlder.run(profile=profile):
+            subreddit_name = request.data["subreddit_name"]
+            mod_type = request.data["mod_type"]
+            if praw_hanlder.run(
+                profile=profile, subreddit_name=subreddit_name, mod_type=mod_type
+            ):
                 return Response(status=status.HTTP_201_CREATED)
 
         except Exception as e:
@@ -305,7 +317,9 @@ class SpamHandlerViewSet(viewsets.ModelViewSet):
     def delete_all(self, request):
         if request.user:
             profile = Profile.objects.get(user=request.user.id)
-            profile.used_posts.filter(_type__in=['spam_submission', 'spam_comment']).delete()
+            profile.used_posts.filter(
+                _type__in=["spam_submission", "spam_comment"]
+            ).delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
 
         return Response(status=status.HTTP_401_UNAUTHORIZED)

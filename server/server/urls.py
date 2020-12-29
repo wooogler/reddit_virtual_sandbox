@@ -41,6 +41,7 @@ urlpatterns = [
     path('reddit_logged/', views.reddit_logged),
     path('reddit_logout/', views.reddit_logout),
     path('apply_rules/', views.apply_rules),
+    path('mod_subreddits', views.mod_subreddits),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('rest-auth/', include('rest_auth.urls')),
     path('rest-auth/registration/', include('rest_auth.registration.urls'))

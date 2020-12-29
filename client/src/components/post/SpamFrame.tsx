@@ -1,8 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Spam } from '../../lib/api/modsandbox/post';
-import { SpamComment } from '../../lib/api/reddit/spamComment';
-import { SpamSubmission } from '../../lib/api/reddit/spamSubmission';
 import palette from '../../lib/styles/palette';
 import AuthorText from '../common/AuthorText';
 import DatetimeText from '../common/DatetimeText';
