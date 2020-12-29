@@ -1,5 +1,6 @@
 import praw
 import os
+import json
 from datetime import datetime, timezone
 import logging
 
@@ -35,6 +36,10 @@ class PrawHandler:
                 "banned_at_utc": datetime.fromtimestamp(
                     spam.banned_at_utc, tz=timezone.utc
                 ),
+                "user_reports": spam.user_reports,
+                "mod_reports": spam.mod_reports,
+                "ups": spam.ups,
+                "downs": spam.downs,
             }
 
         return {
@@ -50,7 +55,51 @@ class PrawHandler:
             "banned_at_utc": datetime.fromtimestamp(
                 spam.banned_at_utc, tz=timezone.utc
             ),
+            "user_reports": spam.user_reports,
+            "mod_reports": spam.mod_reports,
+            "ups": spam.ups,
+            "downs": spam.downs,
         }
+
+    @staticmethod
+    def project_reports(reports):
+        if isinstance(reports, praw.models.Submission):
+            return {
+                "author": reports.author.name,
+                "body": reports.selftext,
+                "created_utc": datetime.fromtimestamp(
+                    reports.created_utc, tz=timezone.utc
+                ),
+                "full_link": "https://www.reddit.com" + reports.permalink,
+                "_id": reports.id,
+                "subreddit": reports.subreddit.display_name,
+                "title": reports.title,
+                "_type": "reports_submission",
+                "user_reports": reports.user_reports,
+                "mod_reports": reports.mod_reports,
+                "ups": reports.ups,
+                "downs": reports.downs,
+            }
+
+        return {
+            "author": reports.author.name,
+            "body": reports.body,
+            "created_utc": datetime.fromtimestamp(reports.created_utc, tz=timezone.utc),
+            "full_link": "https://www.reddit.com" + reports.permalink,
+            "_id": reports.id,
+            "subreddit": reports.subreddit.display_name,
+            "title": "",
+            "_type": "reports_comment",
+            "user_reports": reports.user_reports,
+            "mod_reports": reports.mod_reports,
+            "ups": reports.ups,
+            "downs": reports.downs,
+        }
+    
+    def project_modqueue(self, modqueue):
+        if modqueue.banned_by:
+            return self.project_spam(modqueue)
+        return self.project_reports(modqueue)
 
     def _get_spam_posts(self, subreddit_name):
         spams = self.reddit.subreddit(subreddit_name).mod.spam(limit=None)
@@ -58,14 +107,14 @@ class PrawHandler:
         return spams
 
     def _get_reports_posts(self, subreddit_name):
-        spams = self.reddit.subreddit(subreddit_name).mod.reports(limit=None)
-        spams = list(map(self.project_spam, spams))
-        return spams
+        reports = self.reddit.subreddit(subreddit_name).mod.reports(limit=None)
+        reports = list(map(self.project_reports, reports))
+        return reports
 
     def _get_modqueue_posts(self, subreddit_name):
-        spams = self.reddit.subreddit(subreddit_name).mod.modqueue(limit=None)
-        spams = list(map(self.project_spam, spams))
-        return spams
+        modqueue = self.reddit.subreddit(subreddit_name).mod.modqueue(limit=None)
+        modqueue = list(map(self.project_modqueue, modqueue))
+        return modqueue
 
     def run(self, **kwargs):
         stat = {"tot": 0, "submission": 0, "comment": 0}

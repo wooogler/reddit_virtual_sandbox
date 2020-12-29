@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Filtered, PostType, SortType, SpamType } from '../../../modules/post/slice';
+import { Filtered, PostType, SortType} from '../../../modules/post/slice';
 
 export async function getPostsAPI(
   token: string | null,
@@ -27,7 +27,7 @@ export async function getPostsAPI(
 
 export async function getSpamsAPI(
   token: string | null,
-  spamType: SpamType,
+  spamType: PostType,
   spamSortType: SortType,
   filtered: Filtered,
   page: number,
@@ -148,11 +148,13 @@ export type Post = {
   subreddit: string;
   title: string;
   matching_rules: number[];
+  ups: number;
+  downs: number;
 };
 
 export type Spam = {
   _id: string;
-  _type: 'spam_comment' | 'spam_submission';
+  _type: 'spam_comment' | 'spam_submission' | 'reports_comment' | 'reports_submission';
   author: string;
   body: string;
   created_utc: string;
@@ -160,6 +162,8 @@ export type Spam = {
   subreddit: string;
   title: string;
   matching_rules: number[];
-  banned_by: string;
-  banned_at_utc: string;
+  banned_by: string | null;
+  banned_at_utc: string | null;
+  mod_reports: [string, string][];
+  user_reports: [string, number][];
 };

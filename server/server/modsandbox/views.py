@@ -258,7 +258,7 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
 
 
 class SpamHandlerViewSet(viewsets.ModelViewSet):
-    queryset = Post.objects.filter(_type__in=["spam_submission", "spam_comment"])
+    queryset = Post.objects.filter(_type__in=["spam_submission", "spam_comment", "reports_submission", "reports_comment"])
     serializer_class = PostSerializer
     pagination_class = PostPagination
     permission_classes = [IsAuthenticatedOrReadOnly]
@@ -274,8 +274,10 @@ class SpamHandlerViewSet(viewsets.ModelViewSet):
 
         if post_type == "all":
             queryset = queryset.all()
-        else:
-            queryset = queryset.filter(_type=post_type)
+        elif post_type == 'submission': 
+            queryset = queryset.filter(_type__in=["spam_submission", "reports_submission"])
+        elif post_type == 'comment':
+            queryset = queryset.filter(_type__in=["spam_comment", "reports_comment"])
 
         if sort == "new":
             queryset = queryset.order_by("-created_utc")
@@ -318,7 +320,12 @@ class SpamHandlerViewSet(viewsets.ModelViewSet):
         if request.user:
             profile = Profile.objects.get(user=request.user.id)
             profile.used_posts.filter(
-                _type__in=["spam_submission", "spam_comment"]
+                _type__in=[
+                    "spam_submission",
+                    "spam_comment",
+                    "reports_submission",
+                    "reports_comment",
+                ]
             ).delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
 

@@ -82,7 +82,7 @@ function SpamList({
             split="horizontal"
             defaultSize="50%"
             style={{ position: 'relative' }}
-            paneStyle={{ overflow: 'auto', width: '100%' }}
+            paneStyle={{ overflow: 'auto' }}
           >
             <div className='split-pane'>
               <div className='pane-label'>

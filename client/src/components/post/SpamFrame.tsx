@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { Spam } from '../../lib/api/modsandbox/post';
 import palette from '../../lib/styles/palette';
 import AuthorText from '../common/AuthorText';
@@ -10,23 +10,56 @@ interface SpamFrameProps {
   children: React.ReactChild;
 }
 
+type SpamType =
+  | 'spam_comment'
+  | 'spam_submission'
+  | 'reports_comment'
+  | 'reports_submission';
+
 function SpamFrame({ spam, children }: SpamFrameProps) {
   return (
-    <SpamFrameDiv>
-      <div className='spam-info'>
-        <div className='spammed'>Spammed</div>
-        <AuthorText text={spam.banned_by}/>
-        <DatetimeText datetime={spam.banned_at_utc}/>
-      </div>
+    <SpamFrameDiv _type={spam._type}>
+      {spam.banned_by && spam.banned_at_utc && (
+        <div className="spam-info">
+          <div className="spammed">Spammed</div>
+          <AuthorText text={spam.banned_by} />
+          <DatetimeText datetime={spam.banned_at_utc} />
+        </div>
+      )}
+      {spam.user_reports.length !== 0 && (
+        <>
+          <div className="report-title">User reports</div>
+          <div className="report-contents">
+            {spam.user_reports.map((user_report) => (
+              <div className="report">
+                {user_report[1]}: {user_report[0]}
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+      {spam.mod_reports.length !== 0 && (
+        <>
+          <div className="report-title">Moderator reports</div>
+          <div className="report-contents">
+            {spam.mod_reports.map((mod_report) => (
+              <div className="report">
+                u/{mod_report[1]}: {mod_report[0]}
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+
       {children}
     </SpamFrameDiv>
   );
 }
 
-const SpamFrameDiv = styled.div`
+const SpamFrameDiv = styled.div<{ _type: SpamType }>`
   width: 100%;
   .spam-info {
-    display:flex;
+    display: flex;
     margin: 0.3rem 0;
     .spammed {
       color: ${palette.gray[7]};
@@ -38,7 +71,17 @@ const SpamFrameDiv = styled.div`
       margin-left: 0.3rem;
     }
   }
-  background-color: ${palette.orange[3]};
+  .report-title {
+    font-weight: bold;
+    margin-left: 0.3rem;
+  }
+  .report-contents {
+    margin: 0.2rem;
+    padding: 0.2rem;
+    border-radius: 0.2rem;
+    background-color: ${palette.gray[1]};
+  }
+  background: ${props => props._type.startsWith('reports_') ? palette.orange[1] : palette.orange[3]};
   padding: 0.4rem;
 `;
 

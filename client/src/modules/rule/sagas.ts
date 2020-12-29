@@ -1,6 +1,6 @@
 import { all, call, put, select, takeLatest } from 'redux-saga/effects';
 import { submitCodeAPI } from '../../lib/api/modsandbox/rule';
-import { getPostsRefreshSaga } from '../post/sagas';
+import { getPostsRefreshSaga, getSpamsRefreshSaga } from '../post/sagas';
 import { userSelector } from '../user/slice';
 import { submitCode, submitCodeError, submitCodeSuccess } from './slice';
 
@@ -11,6 +11,7 @@ function* submitCodeSaga(action: ReturnType<typeof submitCode>) {
     yield call(submitCodeAPI, token, code);
     yield put(submitCodeSuccess());
     yield getPostsRefreshSaga();
+    yield getSpamsRefreshSaga();
   } catch (err) {
     yield put(submitCodeError(err));
   }

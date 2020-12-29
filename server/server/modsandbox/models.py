@@ -32,16 +32,25 @@ class Post(models.Model):
     subreddit = models.CharField(max_length=300)
     title = models.CharField(max_length=300)  # Note that comment doesn't have title.
     matching_rules = models.ManyToManyField(Rule, blank=True)
+    # for vote
+    ups = models.IntegerField(default=0)
+    downs = models.IntegerField(default=0)
+    # for spam_
     banned_by = models.CharField(max_length=300, null=True)
     banned_at_utc = models.DateTimeField(null=True)
+    # for reports_
+    user_reports = models.JSONField(null=True) # [['spam',2],['trolling',1]]
+    mod_reports = models.JSONField(null=True) # [['spam','mod_1'],['spam','mod_2'],['Can someone take a look at this?','mod_3']]
 
     TYPE_CHOICES = [
         ("submission", "submission"),
         ("comment", "comment"),
         ("spam_submission", "spam_submission"),
         ("spam_comment", "spam_comment"),
+        ("reports_submission", "reports_submission"),
+        ("reports_comment", "reports_comment"),
     ]
-    _type = models.CharField(max_length=15, choices=TYPE_CHOICES)
+    _type = models.CharField(max_length=18, choices=TYPE_CHOICES)
 
     def __str__(self):
         return self._type + self.full_link

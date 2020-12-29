@@ -1,3 +1,4 @@
+import json
 from rest_framework import serializers
 from .models import Post, Profile
 
@@ -6,6 +7,7 @@ class PostSerializer(serializers.ModelSerializer):
     Serializer for Post Model
     """
     matching_rules=serializers.SerializerMethodField()
+    
 
     def get_matching_rules(self, obj):
         rules = obj.matching_rules.filter(user=self.context['request'].user)
@@ -25,6 +27,10 @@ class PostSerializer(serializers.ModelSerializer):
             "matching_rules",
             "banned_at_utc",
             "banned_by",
+            "mod_reports",
+            "user_reports",
+            "ups",
+            "downs",
         ]
 
 

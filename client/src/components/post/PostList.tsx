@@ -2,9 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import OverlayWithButton from '../common/OverlayWithButton';
 import { useDispatch } from 'react-redux';
-import {
-  postActions
-} from '../../modules/post/slice';
+import { postActions } from '../../modules/post/slice';
 import SplitPane from 'react-split-pane';
 import palette from '../../lib/styles/palette';
 import { useInfiniteScroll } from '../../lib/hooks';
@@ -40,13 +38,13 @@ function PostList({
     target,
     onIntersect: ([{ isIntersecting }]) => {
       if (isIntersecting) {
-        if(target.className === 'last-item-all') {
+        if (target.className === 'last-item-all') {
           dispatch(postActions.getAllPostsMore());
         }
-        if(target.className === 'last-item-filtered') {
+        if (target.className === 'last-item-filtered') {
           dispatch(postActions.getFilteredPostsMore());
         }
-        if(target.className === 'last-item-unfiltered') {
+        if (target.className === 'last-item-unfiltered') {
           dispatch(postActions.getUnfilteredPostsMore());
         }
       }

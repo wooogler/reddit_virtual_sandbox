@@ -3,7 +3,6 @@ import { RootState } from '..';
 import { ImportPostQuery, ImportSpamQuery, Post, Spam } from '../../lib/api/modsandbox/post';
 
 export type PostType = 'submission' | 'comment' | 'all';
-export type SpamType = 'spam_submission' | 'spam_comment' | 'all';
 export type SortType = 'new' | 'old';
 export type Filtered = 'all' | 'filtered' | 'unfiltered';
 
@@ -59,7 +58,7 @@ export type PostState = {
     };
     loading: boolean;
     error: Error | null;
-    type: SpamType;
+    type: PostType;
     sort: SortType;
     selected: string[];
     split: boolean;
@@ -245,7 +244,7 @@ const postSlice = createSlice({
     },
     getUnfilteredSpamsMore: () => {},
     getSpamsRefresh: () => {},
-    changeSpamType: (state, action: PayloadAction<SpamType>) => {
+    changeSpamType: (state, action: PayloadAction<PostType>) => {
       state.spams.type = action.payload;
     },
     changeSpamSortType: (state, action: PayloadAction<SortType>) => {

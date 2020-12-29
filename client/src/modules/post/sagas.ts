@@ -12,7 +12,7 @@ import {
   Spam,
 } from '../../lib/api/modsandbox/post';
 import { userSelector } from '../user/slice';
-import {postActions, postSelector, PostType, SortType, SpamType} from './slice';
+import { postActions, postSelector, PostType, SortType } from './slice';
 
 function* getAllPostsSaga() {
   try {
@@ -131,7 +131,7 @@ function* importSubredditPostsSaga(
 ) {
   try {
     const token: string = yield select(userSelector.token);
-    
+
     yield call(importSubredditPostsAPI, token, action.payload);
     yield put(postActions.importSubredditPostsSuccess());
     yield getPostsRefreshSaga();
@@ -145,7 +145,7 @@ function* importSpamPostsSaga(
 ) {
   try {
     const token: string = yield select(userSelector.token);
-    
+
     yield call(importSpamPostsAPI, token, action.payload);
     yield put(postActions.importSpamPostsSuccess());
     yield getSpamsRefreshSaga();
@@ -180,7 +180,7 @@ function* getAllSpamsSaga() {
   try {
     const page: number = yield select(postSelector.spamPageAll);
     const prevSpams: Spam[] = yield select(postSelector.spamsAll);
-    const type: SpamType = yield select(postSelector.spamType);
+    const type: PostType = yield select(postSelector.spamType);
     const sort: SortType = yield select(postSelector.spamSort);
     let token: string | null = yield select(userSelector.token);
 
@@ -208,10 +208,10 @@ function* getAllSpamsSaga() {
 
 function* getFilteredSpamsSaga() {
   try {
-    const page: number = yield select(postSelector.pageFiltered);
-    const prevSpams: Spam[] = yield select(postSelector.postsFiltered);
-    const type: SpamType = yield select(postSelector.postType);
-    const sort: SortType = yield select(postSelector.postSort);
+    const page: number = yield select(postSelector.spamPageFiltered);
+    const prevSpams: Spam[] = yield select(postSelector.spamsFiltered);
+    const type: PostType = yield select(postSelector.spamType);
+    const sort: SortType = yield select(postSelector.spamSort);
     let token: string | null = yield select(userSelector.token);
 
     const nextPage = page + 1;
@@ -238,10 +238,10 @@ function* getFilteredSpamsSaga() {
 
 function* getUnfilteredSpamsSaga() {
   try {
-    const page: number = yield select(postSelector.pageUnfiltered);
-    const prevSpams: Spam[] = yield select(postSelector.postsUnfiltered);
-    const type: SpamType = yield select(postSelector.postType);
-    const sort: SortType = yield select(postSelector.postSort);
+    const page: number = yield select(postSelector.spamPageUnfiltered);
+    const prevSpams: Spam[] = yield select(postSelector.spamsUnfiltered);
+    const type: PostType = yield select(postSelector.spamType);
+    const sort: SortType = yield select(postSelector.spamSort);
     let token: string | null = yield select(userSelector.token);
 
     const nextPage = page + 1;
@@ -273,7 +273,10 @@ export function* postSaga() {
     yield takeLatest(postActions.getFilteredPosts, getFilteredPostsSaga),
     yield takeLatest(postActions.getFilteredPostsMore, getFilteredPostsSaga),
     yield takeLatest(postActions.getUnfilteredPosts, getUnfilteredPostsSaga),
-    yield takeLatest(postActions.getUnfilteredPostsMore, getUnfilteredPostsSaga),
+    yield takeLatest(
+      postActions.getUnfilteredPostsMore,
+      getUnfilteredPostsSaga,
+    ),
     yield takeLatest(postActions.getPostsRefresh, getPostsRefreshSaga),
     yield takeLatest(postActions.getSpamsRefresh, getSpamsRefreshSaga),
     yield takeLatest(postActions.getAllSpams, getAllSpamsSaga),
@@ -281,11 +284,17 @@ export function* postSaga() {
     yield takeLatest(postActions.getFilteredSpams, getFilteredSpamsSaga),
     yield takeLatest(postActions.getFilteredSpamsMore, getFilteredSpamsSaga),
     yield takeLatest(postActions.getUnfilteredSpams, getUnfilteredSpamsSaga),
-    yield takeLatest(postActions.getUnfilteredSpamsMore, getUnfilteredSpamsSaga),
+    yield takeLatest(
+      postActions.getUnfilteredSpamsMore,
+      getUnfilteredSpamsSaga,
+    ),
     yield takeLatest(postActions.getSpamsRefresh, getSpamsRefreshSaga),
-    yield takeLatest(postActions.importSubredditPosts, importSubredditPostsSaga),
+    yield takeLatest(
+      postActions.importSubredditPosts,
+      importSubredditPostsSaga,
+    ),
     yield takeLatest(postActions.importSpamPosts, importSpamPostsSaga),
     yield takeLatest(postActions.deleteAllPosts, deleteAllPostsSaga),
-    yield takeLatest(postActions.deleteAllSpams, deleteAllSpamsSaga)
+    yield takeLatest(postActions.deleteAllSpams, deleteAllSpamsSaga),
   ]);
 }
