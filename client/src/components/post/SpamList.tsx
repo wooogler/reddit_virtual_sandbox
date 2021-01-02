@@ -9,6 +9,7 @@ import { useInfiniteScroll } from '../../lib/hooks';
 import OverlayLoading from '../common/OverlayLoading';
 import { Spam } from '../../lib/api/modsandbox/post';
 import SpamItem from './SpamItem';
+import SpamItemContainer from '../../containers/post/SpamItemContainer';
 
 interface SpamListProps {
   spamsAll: Spam[];
@@ -90,7 +91,7 @@ function SpamList({
               </div>
               {
                 spamsFiltered.map((spam) => {
-                  return <SpamItem spam={spam} selectedSpamId={selectedSpamId} key={spam._id} />
+                  return <SpamItemContainer spam={spam} key={spam._id} />
                 })
               }
               {
@@ -105,7 +106,7 @@ function SpamList({
               </div>
               {
                 spamsUnfiltered.map((spam) => {
-                  return <SpamItem spam={spam} selectedSpamId={selectedSpamId} key={spam._id} />
+                  return <SpamItemContainer spam={spam} key={spam._id} />
                 })
               }
               {
@@ -118,7 +119,7 @@ function SpamList({
         ) : (
           <>
             {spamsAll.map((spam) => {
-              return <SpamItem spam={spam} selectedSpamId={selectedSpamId} key={spam._id} />;
+              return <SpamItemContainer spam={spam} key={spam._id} />;
             })}
             {spamsAll.length > 8 && (
               <div ref={setTarget} className="last-item-all"></div>

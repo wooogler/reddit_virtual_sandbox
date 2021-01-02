@@ -1,4 +1,4 @@
-import { Post } from '../api/modsandbox/post';
+import { Post, Spam } from '../api/modsandbox/post';
 import _ from 'lodash';
 import YAML from 'yaml';
 
@@ -112,7 +112,7 @@ const parseMatchFieldsKey = (key: string) => {
   };
 };
 
-const getMatchIndexes = (post: Post, ruleIndex: number, matches: Match[]) => {
+const getMatchIndexes = (post: Post | Spam, ruleIndex: number, matches: Match[]) => {
   const partialPost = {title: post.title, body: post.body}
   const postArray = Object.entries(partialPost).map(([key, value]) => ({
     key,
@@ -147,7 +147,7 @@ const getMatchIndexes = (post: Post, ruleIndex: number, matches: Match[]) => {
   });
 };
 
-export const getMatch = (code: string, post: Post) => {
+export const getMatch = (code: string, post: Post | Spam) => {
   const sections = code.split(/---/m).map((section) => _.trim(section, '\r\n'));
   const rules = sections.map((section) => YAML.parse(section)).filter((n) => n);
   return rules.reduce<MatchIndex[]>((acc, rule, ruleIndex) => {

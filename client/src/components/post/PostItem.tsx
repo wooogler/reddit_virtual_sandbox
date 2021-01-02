@@ -12,7 +12,7 @@ interface PostItemProps {
   post: Post;
   selectedPostId: string[];
   isMatched: boolean;
-  match: MatchIndex[]
+  match: MatchIndex[];
 }
 
 function PostItem({ post, selectedPostId, isMatched, match }: PostItemProps) {
@@ -22,21 +22,31 @@ function PostItem({ post, selectedPostId, isMatched, match }: PostItemProps) {
   };
 
   return (
-    <PostItemDiv selected={selectedPostId.includes(post._id)} onClick={handleClickPost}>
+    <PostItemDiv
+      selected={selectedPostId.includes(post._id)}
+      onClick={handleClickPost}
+    >
       {post._type === 'submission' ? (
-        <SubmissionItem match={match} submission={post} action={isMatched ? 'remove' : undefined} />
+        <SubmissionItem
+          match={match}
+          submission={post}
+          action={isMatched ? 'remove' : undefined}
+        />
       ) : (
-        <CommentItem match={match} comment={post} action={isMatched ? 'remove' : undefined} />
+        <CommentItem
+          match={match}
+          comment={post}
+          action={isMatched ? 'remove' : undefined}
+        />
       )}
     </PostItemDiv>
   );
 }
 
 const PostItemDiv = styled.div<{ selected: boolean }>`
-  > div  {
+  > div {
     box-shadow: 0 0 0 3px
-    ${(props) => (props.selected ? `${palette.red[7]}` : 'none')}
-    inset;
+      ${(props) => (props.selected ? `${palette.red[7]}` : 'none')} inset;
   }
   background-color: ${palette.gray[3]};
   cursor: default;
