@@ -1,6 +1,5 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import OverlayLoading from '../../components/common/OverlayLoading';
 import ListHeader from '../../components/post/ListHeader';
 import SpamList from '../../components/post/SpamList';
 import { RootState } from '../../modules';

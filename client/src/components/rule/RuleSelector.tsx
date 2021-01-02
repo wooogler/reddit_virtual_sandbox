@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Rule, submitCode } from '../../modules/rule/slice';
+import { Rule, ruleSelector, submitCode } from '../../modules/rule/slice';
 import { Tree } from 'antd';
 import { cloneDeep } from 'lodash';
 import 'antd/dist/antd.css';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import OverlayLoading from '../common/OverlayLoading';
 
 interface RuleSelectorProps {
@@ -92,6 +92,8 @@ function RuleSelector({ editables, loadingRule }: RuleSelectorProps) {
     dispatch(submitCode(code));
   };
 
+  const clickedRuleIndex = useSelector(ruleSelector.clickedRuleIndex)
+
   return (
     <RuleSelectorDiv>
       {loadingRule && <OverlayLoading text='Apply Rules...' />}
@@ -100,7 +102,7 @@ function RuleSelector({ editables, loadingRule }: RuleSelectorProps) {
         onCheck={onCheck}
         treeData={treeDataOriginal}
         defaultExpandAll={true}
-        selectable={false}
+        selectedKeys={[clickedRuleIndex]}
       />
     </RuleSelectorDiv>
   );

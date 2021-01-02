@@ -23,7 +23,7 @@ function SpamItem({ spam, selectedSpamId }: SpamItemProps) {
 
   return (
     <SpamPostItemDiv selected={selectedSpamId.includes(spam._id)} onClick={handleClickSpam}>
-    {
+    {/* {
       spam._type === 'spam_submission' || 'reports_submission' ? (
         <SpamFrame spam={spam}>
           <SubmissionItem
@@ -36,7 +36,7 @@ function SpamItem({ spam, selectedSpamId }: SpamItemProps) {
           <CommentItem comment={spam} action={isMatched ? 'remove' : undefined}/>
         </SpamFrame>
       )
-    }
+    } */}
     </SpamPostItemDiv>
   ) 
 }

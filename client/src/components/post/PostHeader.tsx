@@ -45,13 +45,6 @@ function PostHeader({ userInfo, redditLogged }: PostHeaderProps) {
     }
   };
 
-  const handleClickImportSeed = async () => {
-    const token = localStorage.getItem('token');
-    await axios.post('http://localhost:8000/spam/crawl/', null, {
-      headers: { Authorization: `Token ${token}` },
-    });
-  };
-
   return (
     <PostHeaderDiv>
       <Button

@@ -1,9 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import BodyTextContainer from '../../containers/common/BodyTextContainer';
 import { Post, Spam } from '../../lib/api/modsandbox/post';
 import palette, { actionColorMap } from '../../lib/styles/palette';
+import { MatchIndex } from '../../lib/utils/match';
 import AuthorText from '../common/AuthorText';
+import BodyText from '../common/BodyText';
 import DatetimeText from '../common/DatetimeText';
 import LinkText from '../common/LinkText';
 import SubredditText from '../common/SubredditText';
@@ -16,9 +17,10 @@ type Bolds = {
 export interface SubmissionItemProps {
   submission: Post | Spam;
   action?: 'remove' | 'report';
+  match: MatchIndex[]
 }
 
-function SubmissionItem({submission, action}: SubmissionItemProps) {
+function SubmissionItem({submission, action, match}: SubmissionItemProps) {
 
   return (
     <SubmissionItemDiv action={action}>
@@ -35,7 +37,7 @@ function SubmissionItem({submission, action}: SubmissionItemProps) {
         <SubredditText text={submission.subreddit} />
         <LinkText text='open submission link' url={submission.full_link}/>
       </div>
-      <BodyTextContainer text={submission.body} ellipsis={true}/>
+      <BodyText text={submission.body} matchBody={match.find(matchItem => matchItem.target === 'body')?.indexes}/>
       <div className="author-info">
         <AuthorText text={submission.author} />
         <DatetimeText datetime={submission.created_utc} />

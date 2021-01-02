@@ -6,14 +6,16 @@ import styled from 'styled-components';
 import palette from '../../lib/styles/palette';
 import { useDispatch } from 'react-redux';
 import { postActions } from '../../modules/post/slice';
+import { MatchIndex } from '../../lib/utils/match';
 
 interface PostItemProps {
   post: Post;
   selectedPostId: string[];
   isMatched: boolean;
+  match: MatchIndex[]
 }
 
-function PostItem({ post, selectedPostId, isMatched }: PostItemProps) {
+function PostItem({ post, selectedPostId, isMatched, match }: PostItemProps) {
   const dispatch = useDispatch();
   const handleClickPost = () => {
     dispatch(postActions.togglePostSelect(post._id));
@@ -22,9 +24,9 @@ function PostItem({ post, selectedPostId, isMatched }: PostItemProps) {
   return (
     <PostItemDiv selected={selectedPostId.includes(post._id)} onClick={handleClickPost}>
       {post._type === 'submission' ? (
-        <SubmissionItem submission={post} action={isMatched ? 'remove' : undefined} />
+        <SubmissionItem match={match} submission={post} action={isMatched ? 'remove' : undefined} />
       ) : (
-        <CommentItem comment={post} action={isMatched ? 'remove' : undefined} />
+        <CommentItem match={match} comment={post} action={isMatched ? 'remove' : undefined} />
       )}
     </PostItemDiv>
   );
