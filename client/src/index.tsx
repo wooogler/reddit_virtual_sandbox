@@ -9,13 +9,22 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import createSagaMiddleware from 'redux-saga';
 import rootReducer, { rootSaga } from './modules';
 import 'antd/dist/antd.css';
+import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 
 const sagaMiddleware = createSagaMiddleware();
 
-const store = createStore(
-  rootReducer,
-  composeWithDevTools(applyMiddleware(sagaMiddleware)),
-);
+// const store = createStore(
+//   rootReducer,
+//   composeWithDevTools(applyMiddleware(sagaMiddleware)),
+// );
+
+const store = configureStore({
+  reducer: rootReducer,
+  middleware: [
+    ...getDefaultMiddleware(),
+    sagaMiddleware,
+  ]
+})
 
 sagaMiddleware.run(rootSaga);
 

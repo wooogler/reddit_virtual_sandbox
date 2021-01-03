@@ -6,11 +6,15 @@ export type Match = {
   matchPattern: RegExp[];
   name: string;
   fields: string[];
-  modifiers: string[];
+  modifiers: string[] | null;
   match_success: boolean;
 };
 
-export type Index = { startIndex: number; endIndex: number; matchIndex: string };
+export type Index = {
+  startIndex: number;
+  endIndex: number;
+  matchIndex: string;
+};
 
 export type MatchIndex = {
   target: string;
@@ -32,12 +36,21 @@ const matchModifiers = [
   'regex',
 ];
 
+const matchFieldDefaults: { [key: string]: string } = {
+  id: 'full-exact',
+  url: 'includes',
+  media_author: 'full-exact',
+  media_author_url: 'includes',
+  flair_text: 'full-exact',
+  flair_css_class: 'full-exact',
+};
+
 const getMatchPatterns = (values: object) => {
   /*
   title (includes-word, case-sensitive): "patch"
   ~body+title (full-text): ["we", "expected"]
   */
-
+  console.log(values)
   let matches: Match[] = [];
   for (const [key, value] of Object.entries(values)) {
     const parsedKey = parseMatchFieldsKey(key);
@@ -48,35 +61,55 @@ const getMatchPatterns = (values: object) => {
     if (typeof matchValues === 'string') {
       matchValues = [matchValues];
     }
-    if (parsedKey.modifiers) {
-      if (!parsedKey.modifiers.includes('regex')) {
+    if (!parsedKey.modifiers) {
+      // modifier가 없을 때
+      const patterns = matchValues.map((value) => {
+        return matchRegexes['includes-word'](value);
+      });
+      const matchPattern = patterns.map((pattern) => {
+        return new RegExp(pattern, 'gsui');
+      });
+      matches.push({ ...parsedKey, matchPattern });
+    }
+    else {
+      if (!('regex' in parsedKey.modifiers)) {
         matchValues = matchValues.map((val) => _.escapeRegExp(val));
       }
-      const match_mod = parsedKey.modifiers.find((mod) => {
-        return Object.keys(matchRegexes).includes(mod);
+      let match_mod: string = 'includes-word';
+      for (const mod of parsedKey.modifiers) {
+        let found = false;
+        if (mod in matchRegexes) {
+          match_mod = mod;
+          found = true;
+          break;
+        }
+        if (!found) {
+          if (parsedKey.fields.length === 1) {
+            const field = parsedKey.fields[0];
+            //domain이 추가될 경우 추가
+            match_mod = matchFieldDefaults[field]
+              ? matchFieldDefaults[field]
+              : 'includes-word';
+          }
+        }
+      }
+
+      const patterns = matchValues.map((value) => {
+        return matchRegexes[match_mod](value);
       });
+
       let flags = 'gsu';
       if (!parsedKey.modifiers.includes('case-sensitive')) {
         flags = flags + 'i';
       }
-      if (match_mod) {
-        const patterns = matchValues.map((value) => {
-          return matchRegexes[match_mod](value);
-        });
-        const matchPattern = patterns.map((pattern) => {
-          return new RegExp(pattern, flags);
-        });
-        matches.push({ ...parsedKey, matchPattern });
-      } else {
-        throw new Error('Generated an invalid regex for ' + key);
-      }
-    } else {
-      const matchPattern = matchValues.map((value) => {
-        return new RegExp(matchRegexes['includes-word'](value), 'gsui');
+
+      const matchPattern = patterns.map((pattern) => {
+        return new RegExp(pattern, flags);
       });
       matches.push({ ...parsedKey, matchPattern });
     }
   }
+  console.log('matches', matches)
   return matches;
 };
 
@@ -107,13 +140,17 @@ const parseMatchFieldsKey = (key: string) => {
   return {
     name,
     fields,
-    modifiers,
+    modifiers: modifiers ? modifiers : null,
     match_success: !name.startsWith('~'),
   };
 };
 
-const getMatchIndexes = (post: Post | Spam, ruleIndex: number, matches: Match[]) => {
-  const partialPost = {title: post.title, body: post.body}
+const getMatchIndexes = (
+  post: Post | Spam,
+  ruleIndex: number,
+  matches: Match[],
+) => {
+  const partialPost = { title: post.title, body: post.body };
   const postArray = Object.entries(partialPost).map(([key, value]) => ({
     key,
     value,
@@ -127,9 +164,10 @@ const getMatchIndexes = (post: Post | Spam, ruleIndex: number, matches: Match[])
             let indexes: Index[] = [];
             for (const match of matches) {
               if (match.index !== undefined) {
+                const indexNoIndent = match.index + match[0].search(/\S/)
                 const matchItem = {
-                  startIndex: match.index,
-                  endIndex: match.index + match[0].length,
+                  startIndex: indexNoIndent,
+                  endIndex: indexNoIndent + match[1].length,
                   matchIndex: `${ruleIndex}-${matchIndex}-${patternIndex}`,
                 };
                 indexes.push(matchItem);
@@ -153,6 +191,6 @@ export const getMatch = (code: string, post: Post | Spam) => {
   return rules.reduce<MatchIndex[]>((acc, rule, ruleIndex) => {
     const matches = getMatchPatterns(rule);
     const matchIndex = getMatchIndexes(post, ruleIndex, matches);
-    return [...acc, ...matchIndex]
+    return [...acc, ...matchIndex];
   }, []);
 };

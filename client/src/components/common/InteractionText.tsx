@@ -2,7 +2,7 @@ import React, { ReactElement } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { Index } from '../../lib/utils/match';
-import { clickMatched } from '../../modules/rule/slice';
+import { clickMatchedThunk } from '../../modules/rule/slice';
 
 interface Props {
   text: string;
@@ -28,7 +28,8 @@ function InteractionText({ text, match }: Props): ReactElement {
   );
 
   const handleClickHighlight = (value: string, e:React.MouseEvent) => {
-    dispatch(clickMatched(value))
+    dispatch(clickMatchedThunk(value))
+    console.log(match)
     e.stopPropagation();
   };
 

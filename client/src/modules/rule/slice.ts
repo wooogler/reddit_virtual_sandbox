@@ -1,6 +1,13 @@
-import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import {
+  Action,
+  createSelector,
+  createSlice,
+  PayloadAction,
+  ThunkAction,
+} from '@reduxjs/toolkit';
 import YAML from 'yaml';
 import { RootState } from '..';
+import { makeTree, treeToCode } from '../../lib/utils/tree';
 
 export type File = {
   tab: number;
@@ -35,7 +42,7 @@ export const initialState: RuleState = {
   files: [
     {
       title: 'rule.yml',
-      code: 'body: [we, expected]',
+      code: 'title: patch\nbody: next',
       tab: 0,
     },
   ],
@@ -43,6 +50,21 @@ export const initialState: RuleState = {
   editables: [],
   submittedCode: '',
   clickedRuleIndex: '',
+};
+
+const delay = (value: string, time: number) =>
+  new Promise<string>((resolve, reject) => {
+    resolve(value);
+    setTimeout(() => {
+      resolve('');
+    }, time);
+  });
+
+export const clickMatchedThunk = (
+  matchId: string,
+): ThunkAction<void, RuleState, unknown, Action<string>> => (dispatch) => {
+  dispatch(clickMatched(matchId));
+  setTimeout(() => dispatch(clearMatched()), 3000);
 };
 
 const ruleSlice = createSlice({
@@ -91,6 +113,9 @@ const ruleSlice = createSlice({
     clickMatched: (state, action: PayloadAction<string>) => {
       state.clickedRuleIndex = action.payload;
     },
+    clearMatched: (state) => {
+      state.clickedRuleIndex = '';
+    },
     createEditable: (state) => {
       try {
         const code = state.files[state.selectedTab].code;
@@ -112,9 +137,8 @@ const ruleSlice = createSlice({
           if (item) {
             for (const [key, words] of Object.entries(item)) {
               if (typeof words === 'string') {
-                rule.lines.push({ key, words: [words]})
-              }
-              else if (words){ 
+                rule.lines.push({ key, words: [words] });
+              } else if (words) {
                 rule.lines.push({ key, words });
               }
             }
@@ -135,15 +159,15 @@ const selectLoading = createSelector<RuleState, boolean, boolean>(
   (loading) => loading,
 );
 
-const selectSubmittedCode = createSelector<RuleState, string, string> (
+const selectSubmittedCode = createSelector<RuleState, string, string>(
   (state) => state.submittedCode,
   (submittedCode) => submittedCode,
-)
+);
 
-const selectClickedRuleIndex = createSelector<RuleState, string, string> (
+const selectClickedRuleIndex = createSelector<RuleState, string, string>(
   (state) => state.clickedRuleIndex,
   (index) => index,
-)
+);
 
 export const ruleSelector = {
   loading: (state: RootState) => selectLoading(state.rule),
@@ -163,7 +187,8 @@ export const {
   submitCodeSuccess,
   toggleEditorMode,
   createEditable,
-  clickMatched
+  clearMatched,
+  clickMatched,
 } = actions;
 
 export default reducer;

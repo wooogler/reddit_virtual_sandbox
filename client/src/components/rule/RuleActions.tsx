@@ -14,15 +14,16 @@ function RuleActions({ message, mode, code }: RuleActionsProps) {
   const dispatch = useDispatch();
 
   const handleClickRun = () => {
-    dispatch(createEditable());
-    dispatch(toggleEditorMode());
     if(mode === 'select') {
       dispatch(submitCode(''))
+    } else {
+      dispatch(createEditable());
     }
+    dispatch(toggleEditorMode());
   };
 
   const handleClickExport = () => {
-    dispatch(createEditable())
+
   }
 
   return (

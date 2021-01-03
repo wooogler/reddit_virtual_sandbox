@@ -24,7 +24,7 @@ function SubmissionItem({submission, action, match}: SubmissionItemProps) {
 
   return (
     <SubmissionItemDiv action={action}>
-      <TitleText text={submission.title} ellipsis={false} />
+      <TitleText text={submission.title} ellipsis={false} matchTitle={match.find(matchItem => matchItem.target === 'title')?.indexes}/>
       <div className="submission-info">
         {/* {submission.link_flair_text && (
           <FlairText
