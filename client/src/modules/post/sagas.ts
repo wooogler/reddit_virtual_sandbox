@@ -21,6 +21,7 @@ function* getAllPostsSaga() {
     const type: PostType = yield select(postSelector.postType);
     const sort: SortType = yield select(postSelector.postSort);
     let token: string | null = yield select(userSelector.token);
+    const userImported: boolean = yield select(postSelector.postUserImported)
 
     const nextPage = page + 1;
 
@@ -31,6 +32,7 @@ function* getAllPostsSaga() {
       sort,
       'all',
       nextPage,
+      userImported,
     );
     yield put(
       postActions.getAllPostsSuccess({
@@ -51,6 +53,7 @@ function* getFilteredPostsSaga() {
     const type: PostType = yield select(postSelector.postType);
     const sort: SortType = yield select(postSelector.postSort);
     let token: string | null = yield select(userSelector.token);
+    const userImported: boolean = yield select(postSelector.postUserImported)
 
     const nextPage = page + 1;
 
@@ -61,6 +64,7 @@ function* getFilteredPostsSaga() {
       sort,
       'filtered',
       nextPage,
+      userImported
     );
     yield put(
       postActions.getFilteredPostsSuccess({
@@ -81,6 +85,7 @@ function* getUnfilteredPostsSaga() {
     const type: PostType = yield select(postSelector.postType);
     const sort: SortType = yield select(postSelector.postSort);
     let token: string | null = yield select(userSelector.token);
+    const userImported: boolean = yield select(postSelector.postUserImported)
 
     const nextPage = page + 1;
 
@@ -91,6 +96,7 @@ function* getUnfilteredPostsSaga() {
       sort,
       'unfiltered',
       nextPage,
+      userImported
     );
     yield put(
       postActions.getUnfilteredPostsSuccess({
@@ -183,6 +189,7 @@ function* getAllSpamsSaga() {
     const type: PostType = yield select(postSelector.spamType);
     const sort: SortType = yield select(postSelector.spamSort);
     let token: string | null = yield select(userSelector.token);
+    const userImported: boolean = yield select(postSelector.spamUserImported);
 
     const nextPage = page + 1;
 
@@ -193,6 +200,7 @@ function* getAllSpamsSaga() {
       sort,
       'all',
       nextPage,
+      userImported
     );
     yield put(
       postActions.getAllSpamsSuccess({
@@ -213,6 +221,7 @@ function* getFilteredSpamsSaga() {
     const type: PostType = yield select(postSelector.spamType);
     const sort: SortType = yield select(postSelector.spamSort);
     let token: string | null = yield select(userSelector.token);
+    const userImported: boolean = yield select(postSelector.spamUserImported);
 
     const nextPage = page + 1;
 
@@ -223,6 +232,7 @@ function* getFilteredSpamsSaga() {
       sort,
       'filtered',
       nextPage,
+      userImported
     );
     yield put(
       postActions.getFilteredSpamsSuccess({
@@ -243,6 +253,7 @@ function* getUnfilteredSpamsSaga() {
     const type: PostType = yield select(postSelector.spamType);
     const sort: SortType = yield select(postSelector.spamSort);
     let token: string | null = yield select(userSelector.token);
+    const userImported: boolean = yield select(postSelector.spamUserImported);
 
     const nextPage = page + 1;
 
@@ -253,6 +264,7 @@ function* getUnfilteredSpamsSaga() {
       sort,
       'unfiltered',
       nextPage,
+      userImported
     );
     yield put(
       postActions.getUnfilteredSpamsSuccess({

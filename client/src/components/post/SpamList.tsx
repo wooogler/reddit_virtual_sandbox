@@ -8,8 +8,9 @@ import palette from '../../lib/styles/palette';
 import { useInfiniteScroll } from '../../lib/hooks';
 import OverlayLoading from '../common/OverlayLoading';
 import { Spam } from '../../lib/api/modsandbox/post';
-import SpamItem from './SpamItem';
 import SpamItemContainer from '../../containers/post/SpamItemContainer';
+import { AppDispatch } from '../..';
+import { deletePosts, getPostsRefresh, getSpamsRefresh, movePosts } from '../../modules/post/actions';
 
 interface SpamListProps {
   spamsAll: Spam[];
@@ -33,7 +34,7 @@ function SpamList({
   loadingSpam,
   loadingRule,
 }: SpamListProps) {
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const [target, setTarget] = useState<any>(null);
   
   useInfiniteScroll({
@@ -55,23 +56,28 @@ function SpamList({
   });
 
   const handleClickMove = () => {
-    alert(JSON.stringify(selectedPostId));
-    dispatch(postActions.clearSelectedSpamPostId());
+    dispatch(movePosts(selectedPostId)).then(() => {
+      dispatch(getPostsRefresh());
+      dispatch(getSpamsRefresh());
+    });
+    dispatch(postActions.clearSelectedPostId());
   };
 
   const handleClickDelete = () => {
-    alert(JSON.stringify(selectedPostId));
-    dispatch(postActions.clearSelectedSpamPostId());
+    dispatch(deletePosts(selectedPostId)).then(() => {
+      dispatch(getPostsRefresh())
+    });
+    dispatch(postActions.clearSelectedPostId());
   };
 
   return (
     <SpamPostListBlock>
       {selectedPostId.length !== 0 && (
         <OverlayWithButton
-          text="Move to Moderated"
-          buttonText1="Move"
+          text={selectedPostId.length ===1 ? `1 post selected` : `${selectedPostId.length} posts selected`}
+          buttonText1="Move to Seed posts"
           onClickButton1={handleClickMove}
-          buttonText2='Delete'
+          buttonText2='Delete from Posts'
           onClickButton2={handleClickDelete}
         />
       )}

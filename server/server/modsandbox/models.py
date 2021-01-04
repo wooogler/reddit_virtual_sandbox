@@ -25,11 +25,11 @@ class Post(models.Model):
     """
 
     _id = models.CharField(max_length=300, primary_key=True)
-    author = models.CharField(max_length=300)
-    body = models.TextField()
-    created_utc = models.DateTimeField()
-    full_link = models.URLField()
-    subreddit = models.CharField(max_length=300)
+    author = models.CharField(max_length=300, default='FakeUser')
+    body = models.TextField(default='')
+    created_utc = models.DateTimeField(auto_now_add=True)
+    full_link = models.URLField(default='https://www.reddit.com/1')
+    subreddit = models.CharField(max_length=300, default='FakeSubreddit')
     title = models.CharField(max_length=300)  # Note that comment doesn't have title.
     matching_rules = models.ManyToManyField(Rule, blank=True)
     # for vote

@@ -20,7 +20,7 @@ export interface PostImportFormProps {
 
 function PostImportForm({ onClickClose }: PostImportFormProps) {
   const dispatch = useDispatch();
-  const loadingDeleteAll = useSelector(postSelector.loadingDeleteAll);
+  const loadingDelete = useSelector(postSelector.loadingDelete);
   const { RangePicker } = DatePicker;
   const { Option } = Select;
 
@@ -94,7 +94,7 @@ function PostImportForm({ onClickClose }: PostImportFormProps) {
         }}
       />
       <label>Delete All Posts</label>
-      <Button danger loading={loadingDeleteAll} onClick={handleDeleteAll}>
+      <Button danger loading={loadingDelete} onClick={handleDeleteAll}>
         Delete all posts
       </Button>
       <div className="buttons">

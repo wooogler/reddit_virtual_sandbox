@@ -19,7 +19,7 @@ function DraggableModal({
 }: DraggableModalProps) {
 
   return (
-    <Modal isOpen={isOpen} style={modalStyle}>
+    <Modal isOpen={isOpen} style={modalStyle} ariaHideApp={false}>
       <Draggable handle=".handle" defaultPosition={position}>
         <Content>
           <div className="handle">{handleText}</div>

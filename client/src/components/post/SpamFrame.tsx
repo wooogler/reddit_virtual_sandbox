@@ -1,5 +1,5 @@
 import React from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { Spam } from '../../lib/api/modsandbox/post';
 import palette from '../../lib/styles/palette';
 import AuthorText from '../common/AuthorText';
@@ -26,24 +26,24 @@ function SpamFrame({ spam, children }: SpamFrameProps) {
           <DatetimeText datetime={spam.banned_at_utc} />
         </div>
       )}
-      {spam.user_reports.length !== 0 && (
+      {spam.user_reports && spam.user_reports.length !== 0 && (
         <>
           <div className="report-title">User reports</div>
           <div className="report-contents">
-            {spam.user_reports.map((user_report) => (
-              <div className="report">
+            {spam.user_reports.map((user_report, index) => (
+              <div className="report" key={index}>
                 {user_report[1]}: {user_report[0]}
               </div>
             ))}
           </div>
         </>
       )}
-      {spam.mod_reports.length !== 0 && (
+      {spam.mod_reports && spam.mod_reports.length !== 0 && (
         <>
           <div className="report-title">Moderator reports</div>
           <div className="report-contents">
-            {spam.mod_reports.map((mod_report) => (
-              <div className="report">
+            {spam.mod_reports.map((mod_report, index) => (
+              <div className="report" key={index}>
                 u/{mod_report[1]}: {mod_report[0]}
               </div>
             ))}

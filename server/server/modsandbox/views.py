@@ -1,7 +1,9 @@
 import logging
 import json
-import praw
+from datetime import datetime
 import os
+import praw
+
 
 # Create your views here.
 
@@ -137,6 +139,8 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
         if self.request.user.is_authenticated:
             profile = Profile.objects.get(user=self.request.user.id)
             queryset = queryset.filter(_id__in=profile.used_posts.all())
+        else:
+            queryset = queryset.filter(profile__isnull=True)
         post_type = self.request.query_params.get("post_type", "all")
         sort = self.request.query_params.get("sort", "new")
         filtered = self.request.query_params.get("filtered", "all")
@@ -218,47 +222,63 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @action(methods=["post"], detail=False)
-    def delete_all(self, request):
+    def deletes(self, request):
+        try:
+            ids = request.data["ids"]
+        except Exception as e:
+            logger.error(e)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        queryset = super().get_queryset()
         if request.user:
-            profile = Profile.objects.get(user=request.user.id)
-            profile.used_posts.filter(_type__in=["submission", "comment"]).delete()
+            queryset.filter(profile__pk=request.user.id).filter(_id__in=ids).delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
 
         return Response(status=status.HTTP_401_UNAUTHORIZED)
 
     @action(methods=["post"], detail=False)
-    def apply_rules(self, request):
-        """
-        POST /post/apply_rules/
-        """
+    def delete_all(self, request):
+        queryset = super().get_queryset()
+        if request.user:
+            queryset.filter(profile__pk=request.user.id).delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+    @action(methods=["post"], detail=False)
+    def moves(self, request):
         try:
-            yaml = request.data["yaml"]
-            rule_set = Ruleset(yaml)
+            ids = request.data["ids"]
         except Exception as e:
             logger.error(e)
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        profile = Profile.objects.get(user=request.user.id)
-        profile.user.rules.all().delete()
-        rules = rule_set.rules
+        queryset = super().get_queryset()
+        if request.user:
+            profile = Profile.objects.get(user=request.user.id)
+            posts = queryset.filter(profile__pk=request.user.id).filter(_id__in=ids)
+            for post in posts:
+                post.banned_by = profile.username
+                post.banned_at_utc = datetime.now()
+                if post._type == "submission":
+                    post._type = "spam_submission"
+                elif post._type == "comment":
+                    post._type = "spam_comment"
+                post.save()
+            return Response(status=status.HTTP_204_NO_CONTENT)
 
-        for index, rule in enumerate(rules):
-            rule_object = Rule(
-                user=profile.user, rule_index=index, content=json.dumps(rule)
-            )
-            rule_object.save()
-
-        for post in profile.used_posts.all():
-            for rule in Rule.objects.filter(user=profile.user):
-                rule_target = RuleTarget("Link", json.loads(rule.content))
-                if rule_target.check_item(post, ""):
-                    post.matching_rules.add(rule)
-
-        return Response(status=status.HTTP_202_ACCEPTED)
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 
 class SpamHandlerViewSet(viewsets.ModelViewSet):
-    queryset = Post.objects.filter(_type__in=["spam_submission", "spam_comment", "reports_submission", "reports_comment"])
+    queryset = Post.objects.filter(
+        _type__in=[
+            "spam_submission",
+            "spam_comment",
+            "reports_submission",
+            "reports_comment",
+        ]
+    )
     serializer_class = PostSerializer
     pagination_class = PostPagination
     permission_classes = [IsAuthenticatedOrReadOnly]
@@ -268,15 +288,19 @@ class SpamHandlerViewSet(viewsets.ModelViewSet):
         if self.request.user.is_authenticated:
             profile = Profile.objects.get(user=self.request.user.id)
             queryset = queryset.filter(_id__in=profile.used_posts.all())
+        else:
+            queryset = queryset.filter(profile__isnull=True)
         post_type = self.request.query_params.get("post_type", "all")
         sort = self.request.query_params.get("sort", "new")
         filtered = self.request.query_params.get("filtered", "all")
 
         if post_type == "all":
             queryset = queryset.all()
-        elif post_type == 'submission': 
-            queryset = queryset.filter(_type__in=["spam_submission", "reports_submission"])
-        elif post_type == 'comment':
+        elif post_type == "submission":
+            queryset = queryset.filter(
+                _type__in=["spam_submission", "reports_submission"]
+            )
+        elif post_type == "comment":
             queryset = queryset.filter(_type__in=["spam_comment", "reports_comment"])
 
         if sort == "new":
@@ -316,17 +340,49 @@ class SpamHandlerViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
     @action(methods=["post"], detail=False)
+    def deletes(self, request):
+        try:
+            ids = request.data["ids"]
+        except Exception as e:
+            logger.error(e)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        queryset = super().get_queryset()
+        if request.user:
+            queryset.filter(profile__pk=request.user.id).filter(_id__in=ids).delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+    @action(methods=["post"], detail=False)
     def delete_all(self, request):
+        queryset = super().get_queryset()
+        if request.user:
+            queryset.filter(profile__pk=request.user.id).delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+    @action(methods=["post"], detail=False)
+    def moves(self, request):
+        try:
+            ids = request.data["ids"]
+        except Exception as e:
+            logger.error(e)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        queryset = super().get_queryset()
         if request.user:
             profile = Profile.objects.get(user=request.user.id)
-            profile.used_posts.filter(
-                _type__in=[
-                    "spam_submission",
-                    "spam_comment",
-                    "reports_submission",
-                    "reports_comment",
-                ]
-            ).delete()
+            posts = queryset.filter(profile__pk=request.user.id).filter(_id__in=ids)
+            for post in posts:
+                post.banned_by = None
+                post.banned_at_utc = None
+                if post._type == ("spam_submission" or "reports_submission"):
+                    post._type = "submission"
+                elif post._type == ("spam_comment" or "reports_comment"):
+                    post._type = "comment"
+                post.save()
             return Response(status=status.HTTP_204_NO_CONTENT)
 
         return Response(status=status.HTTP_401_UNAUTHORIZED)

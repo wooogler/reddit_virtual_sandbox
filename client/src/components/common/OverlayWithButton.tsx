@@ -34,33 +34,40 @@ function OverlayWithButton({
   };
 
   return (
-    <CustomOverlay>
-      <TextDiv className="text">{text}</TextDiv>
-      <div className='button-group'>
-        <Button type='primary' size="large" onClick={handleClickButton1}>
-          {buttonText1}
-        </Button>
-        {buttonText2 && (
-          <Button danger type='primary' size="large" onClick={handleClickButton2}>
-            {buttonText2}
+    <Overlay>
+      <OverlayDiv>
+        <div className="text">{text}</div>
+        <div className='button-group'>
+          <Button type='primary' size="large" onClick={handleClickButton1}>
+            {buttonText1}
           </Button>
-        )}
-      </div>
-    </CustomOverlay>
+          {buttonText2 && (
+            <Button danger type='primary' size="large" onClick={handleClickButton2}>
+              {buttonText2}
+            </Button>
+          )}
+        </div>
+      </OverlayDiv>
+    </Overlay>
   );
 }
 
-const TextDiv = styled.div`
-  font-size: 2rem;
-  margin-bottom: 1rem;
+const OverlayDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .text{
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
   .button-group {
     display: flex;
+    flex-direction: column;
     margin-left: 1rem;
+    button {
+      margin-bottom: 0.5rem;
+    }
   }
-`;
-
-const CustomOverlay = styled(Overlay)`
-  
 `
 
 export default OverlayWithButton;

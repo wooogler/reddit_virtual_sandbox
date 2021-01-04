@@ -2,6 +2,8 @@ import React from 'react';
 import { useFormik } from 'formik';
 import styled from 'styled-components';
 import { Button, Input, Select } from 'antd';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../modules';
 
 interface PostFormProps {
   onClickClose: () => void;
@@ -11,13 +13,15 @@ interface PostFormProps {
 function PostForm({ onClickClose, list }: PostFormProps) {
   const { Option } = Select;
   const { TextArea } = Input;
+  const username = useSelector((state: RootState) => state.user.me?.username)
 
   const formik = useFormik({
     initialValues: {
+      id: Math.random().toString(36).substr(2, 7),
       type: 'submission',
       title: '',
       body: '',
-      author: 'fake_user',
+      author: username,
     },
     onSubmit: (values) => {
       alert(JSON.stringify(values, null, 2));
@@ -39,6 +43,13 @@ function PostForm({ onClickClose, list }: PostFormProps) {
         <Option value="submission">submission</Option>
         <Option value="comment">comment</Option>
       </Select>
+      <label htmlFor="author">Post ID</label>
+      <Input
+        name="author"
+        type="text"
+        onChange={formik.handleChange}
+        value={formik.values.id}
+      />
       {formik.values.type === 'submission' && (
         <>
           <label htmlFor="title">Title</label>

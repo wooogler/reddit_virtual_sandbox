@@ -13,15 +13,17 @@ import {
 import {Button} from 'antd';
 import DraggableModal from '../common/DraggableModal';
 import PostForm from './PostForm';
+import { getPostsRefresh, getSpamsRefresh } from '../../modules/post/actions';
 
 export interface ListHeaderProps {
   list: string;
   name: string;
   splitView: boolean;
+  userImported: boolean;
   tooltipText?: string;
 }
 
-function ListHeader({ list, name, splitView, tooltipText }: ListHeaderProps) {
+function ListHeader({ list, name, splitView, tooltipText, userImported }: ListHeaderProps) {
   const dispatch = useDispatch();
   const {Option} = Select;
   const [isAddOpen, setIsAddOpen] = useState(false);
@@ -37,33 +39,44 @@ function ListHeader({ list, name, splitView, tooltipText }: ListHeaderProps) {
   const handleChangeView = (type: PostType) => {
     if (list === 'unmoderated') {
       dispatch(postActions.changePostType(type));
-      dispatch(postActions.getPostsRefresh())
+      dispatch(getPostsRefresh())
     }
     if (list === 'moderated') {
       dispatch(postActions.changeSpamType(type));
-      dispatch(postActions.getSpamsRefresh())
+      dispatch(getSpamsRefresh())
     }
   };
 
   const handleChangeSort = (sort: SortType) => {
     if (list === 'unmoderated') {
       dispatch(postActions.changeSortType(sort));
-      dispatch(postActions.getPostsRefresh());
+      dispatch(getPostsRefresh());
     }
     if (list === 'moderated') {
       dispatch(postActions.changeSpamSortType(sort));
-      dispatch(postActions.getSpamsRefresh());
+      dispatch(getSpamsRefresh());
     }
   };
 
   const handleChangeSplitView = () => {
     if (list === 'unmoderated') {
       dispatch(postActions.toggleSplitPostList());
-      dispatch(postActions.getPostsRefresh())
+      dispatch(getPostsRefresh())
     }
     if (list === 'moderated') {
       dispatch(postActions.toggleSplitSpamPostList());
-      dispatch(postActions.getSpamsRefresh())
+      dispatch(getSpamsRefresh())
+    }
+  };
+
+  const handleChangeUserImported = () => {
+    if (list === 'unmoderated') {
+      dispatch(postActions.togglePostUserImported());
+      dispatch(getPostsRefresh())
+    }
+    if (list === 'moderated') {
+      dispatch(postActions.toggleSpamUserImported());
+      dispatch(getSpamsRefresh())
     }
   };
 
@@ -95,6 +108,9 @@ function ListHeader({ list, name, splitView, tooltipText }: ListHeaderProps) {
           <Option value='new'>New</Option>
           <Option value='old'>Old</Option>
         </Select>
+        <div className="checkbox">
+          <Checkbox onChange={handleChangeUserImported} checked={userImported}>User Imported</Checkbox>
+        </div>
         <div className="checkbox">
           <Checkbox onChange={handleChangeSplitView} checked={splitView}>Split View</Checkbox>
         </div>

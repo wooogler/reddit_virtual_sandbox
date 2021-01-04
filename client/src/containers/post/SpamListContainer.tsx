@@ -2,7 +2,6 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import ListHeader from '../../components/post/ListHeader';
 import SpamList from '../../components/post/SpamList';
-import { RootState } from '../../modules';
 import { postSelector } from '../../modules/post/slice';
 import { ruleSelector } from '../../modules/rule/slice';
 
@@ -20,8 +19,10 @@ function SpamListContainer() {
   )
 
   const splitSpamList = useSelector(
-    (state: RootState) => state.post.spams.split,
+    postSelector.splitSpamList
   );
+
+  const spamUserImported = useSelector(postSelector.spamUserImported);
 
   const loadingRule = useSelector(ruleSelector.loading);
   const loadingSpam = useSelector(postSelector.loadingSpam)
@@ -34,6 +35,7 @@ function SpamListContainer() {
         name="Seed posts"
         splitView={splitSpamList}
         tooltipText='Posts which needs moderation --- you can bring the posts from spam and reports'
+        userImported={spamUserImported}
       />
       {spamsAll && (
         <SpamList

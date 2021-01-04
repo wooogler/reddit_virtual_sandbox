@@ -7,7 +7,6 @@ import {
 } from '@reduxjs/toolkit';
 import YAML from 'yaml';
 import { RootState } from '..';
-import { makeTree, treeToCode } from '../../lib/utils/tree';
 
 export type File = {
   tab: number;
@@ -51,14 +50,6 @@ export const initialState: RuleState = {
   submittedCode: '',
   clickedRuleIndex: '',
 };
-
-const delay = (value: string, time: number) =>
-  new Promise<string>((resolve, reject) => {
-    resolve(value);
-    setTimeout(() => {
-      resolve('');
-    }, time);
-  });
 
 export const clickMatchedThunk = (
   matchId: string,

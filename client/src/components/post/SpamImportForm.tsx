@@ -14,7 +14,7 @@ interface SpamImportFormProps {
 function SpamImportForm({ onClickClose }: SpamImportFormProps) {
   const dispatch = useDispatch();
   const token = useSelector(userSelector.token);
-  const loadingDeleteAll = useSelector(postSelector.loadingSpamDeleteAll);
+  const loadingDelete = useSelector(postSelector.loadingSpamDelete);
   const handleDeleteAll = () => {
     dispatch(postActions.deleteAllSpams())
   }
@@ -69,7 +69,7 @@ function SpamImportForm({ onClickClose }: SpamImportFormProps) {
         <Option value="spam">Spam</Option>
       </Select>
       <label>Delete All Seed Posts</label>
-      <Button danger loading={loadingDeleteAll} onClick={handleDeleteAll}>
+      <Button danger loading={loadingDelete} onClick={handleDeleteAll}>
         Delete all posts
       </Button>
       <div className="buttons">

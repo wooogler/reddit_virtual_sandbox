@@ -28,7 +28,7 @@ function SpamItem({ spam, selectedSpamId, isMatched, match }: SpamItemProps) {
       selected={selectedSpamId.includes(spam._id)}
       onClick={handleClickSpam}
     >
-      {spam._type === 'spam_submission' || 'reports_submission' ? (
+      {spam._type === ('spam_submission' || 'reports_submission') ? (
         <SpamFrame spam={spam}>
           <SubmissionItem
             match={match}

@@ -9,6 +9,13 @@ import { useInfiniteScroll } from '../../lib/hooks';
 import PostItemContainer from '../../containers/post/PostItemContainer';
 import { Post } from '../../lib/api/modsandbox/post';
 import OverlayLoading from '../common/OverlayLoading';
+import {
+  deleteSpams,
+  getPostsRefresh,
+  getSpamsRefresh,
+  moveSpams,
+} from '../../modules/post/actions';
+import { AppDispatch } from '../..';
 
 interface PostListProps {
   postsAll: Post[];
@@ -31,7 +38,7 @@ function PostList({
   loadingRule,
   loadingImport,
 }: PostListProps) {
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const [target, setTarget] = useState<any>(null);
 
   useInfiniteScroll({
@@ -53,12 +60,17 @@ function PostList({
   });
 
   const handleClickMove = () => {
-    alert(JSON.stringify(selectedSpamPostId)); // move request
+    dispatch(moveSpams(selectedSpamPostId)).then(() => {
+      dispatch(getSpamsRefresh());
+      dispatch(getPostsRefresh());
+    });
     dispatch(postActions.clearSelectedSpamPostId());
   };
 
   const handleClickDelete = () => {
-    alert(JSON.stringify(selectedSpamPostId)); // delete request
+    dispatch(deleteSpams(selectedSpamPostId)).then(() => {
+      dispatch(getSpamsRefresh());
+    });
     dispatch(postActions.clearSelectedSpamPostId());
   };
 
@@ -66,10 +78,14 @@ function PostList({
     <PostListBlock>
       {selectedSpamPostId.length !== 0 && (
         <OverlayWithButton
-          text="Move to Unmoderated"
-          buttonText1="Move"
+          text={
+            selectedSpamPostId.length === 1
+              ? `1 post selected`
+              : `${selectedSpamPostId.length} posts selected`
+          }
+          buttonText1="Move to Posts"
           onClickButton1={handleClickMove}
-          buttonText2="Delete"
+          buttonText2="Delete from Seed posts"
           onClickButton2={handleClickDelete}
         />
       )}
