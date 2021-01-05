@@ -12,7 +12,7 @@ import {
   Spam,
 } from '../../lib/api/modsandbox/post';
 import { enableMapSet } from 'immer';
-import { deletePosts, deleteSpams } from './actions';
+import { addPost, addSpam, deletePosts, deleteSpams } from './actions';
 
 enableMapSet();
 
@@ -38,6 +38,10 @@ export type PostState = {
       loading: boolean;
       error: Error | null;
     };
+    add: {
+      loading: boolean;
+      error: SerializedError | null;
+    }
     delete: {
       loading: boolean;
       error: SerializedError | null;
@@ -46,7 +50,7 @@ export type PostState = {
     error: Error | null;
     type: PostType;
     sort: SortType;
-    selected: Set<string>;
+    selected: string[];
     userImported: boolean;
     split: boolean;
   };
@@ -71,11 +75,15 @@ export type PostState = {
       loading: boolean;
       error: SerializedError | null;
     };
+    add: {
+      loading: boolean;
+      error: SerializedError | null;
+    }
     loading: boolean;
     error: Error | null;
     type: PostType;
     sort: SortType;
-    selected: Set<string>;
+    selected: string[];
     split: boolean;
     userImported: boolean;
   };
@@ -103,13 +111,17 @@ export const initialState: PostState = {
       loading: false,
       error: null,
     },
+    add: {
+      loading: false,
+      error: null,
+    },
     loading: false,
     error: null,
     type: 'all',
     sort: 'new',
     split: false,
     userImported: true,
-    selected: new Set<string>(),
+    selected: [],
   },
   spams: {
     all: {
@@ -132,12 +144,16 @@ export const initialState: PostState = {
       loading: false,
       error: null,
     },
+    add: {
+      loading: false,
+      error: null,
+    },
     loading: false,
     error: null,
     type: 'all',
     sort: 'new',
     split: false,
-    selected: new Set<string>(),
+    selected: [],
     userImported: true,
   },
 };
@@ -269,24 +285,26 @@ const postSlice = createSlice({
       state.spams.sort = action.payload;
     },
     togglePostSelect: (state, action: PayloadAction<string>) => {
-      if (state.posts.selected.has(action.payload)) {
-        state.posts.selected.delete(action.payload);
+      const idx = state.posts.selected.indexOf(action.payload);
+      if (idx > -1) {
+        state.posts.selected.splice(idx, 1);
       } else {
-        state.posts.selected.add(action.payload);
+        state.posts.selected.push(action.payload);
       }
     },
     toggleSpamPostSelect: (state, action: PayloadAction<string>) => {
-      if (state.spams.selected.has(action.payload)) {
-        state.spams.selected.delete(action.payload);
+      const idx = state.spams.selected.indexOf(action.payload);
+      if (idx > -1) {
+        state.spams.selected.splice(idx, 1);
       } else {
-        state.spams.selected.add(action.payload);
+        state.spams.selected.push(action.payload);
       }
     },
     clearSelectedPostId: (state) => {
-      state.posts.selected = new Set<string>();
+      state.posts.selected = [];
     },
     clearSelectedSpamPostId: (state) => {
-      state.spams.selected = new Set<string>();
+      state.spams.selected = [];
     },
     toggleSplitPostList: (state) => {
       state.posts.split = !state.posts.split;
@@ -360,6 +378,7 @@ const postSlice = createSlice({
         state.posts.delete.loading = false;
       })
       .addCase(deletePosts.rejected, (state, action) => {
+        state.posts.delete.loading = false;
         state.posts.delete.error = action.error;
       })
       .addCase(deleteSpams.pending, (state) => {
@@ -369,8 +388,29 @@ const postSlice = createSlice({
         state.spams.delete.loading = false;
       })
       .addCase(deleteSpams.rejected, (state, action) => {
+        state.spams.delete.loading = false;
         state.spams.delete.error = action.error;
-      });
+      })
+      .addCase(addPost.pending, (state) => {
+        state.posts.add.loading = true;
+      })
+      .addCase(addPost.fulfilled, (state) => {
+        state.posts.add.loading = false;
+      })
+      .addCase(addPost.rejected, (state, action) => {
+        state.posts.add.loading = false;
+        state.posts.add.error = action.error;
+      })
+      .addCase(addSpam.pending, (state) => {
+        state.spams.add.loading = true;
+      })
+      .addCase(addSpam.fulfilled, (state) => {
+        state.spams.add.loading = false;
+      })
+      .addCase(addSpam.rejected, (state, action) => {
+        state.spams.add.loading = false;
+        state.spams.add.error = action.error;
+      })
   },
 });
 
@@ -454,13 +494,13 @@ const selectSpamSort = createSelector<PostState, SortType, SortType>(
   (sort) => sort,
 );
 
-const selectSelectedPostId = createSelector<PostState, Set<string>, string[]>(
+const selectSelectedPostId = createSelector<PostState, string[], string[]>(
   (state) => state.posts.selected,
-  (selected) => Array.from(selected),
+  (selected) => selected,
 );
-const selectSelectedSpamId = createSelector<PostState, Set<string>, string[]>(
+const selectSelectedSpamId = createSelector<PostState, string[], string[]>(
   (state) => state.spams.selected,
-  (selected) => Array.from(selected),
+  (selected) => selected,
 );
 
 const selectLoadingPost = createSelector<PostState, boolean, boolean>(

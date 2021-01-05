@@ -1,6 +1,6 @@
 import { Action, createAsyncThunk, ThunkAction } from "@reduxjs/toolkit";
 import { RootState } from "..";
-import { deletePostsAPI, deleteSpamsAPI, movePostsAPI, moveSpamsAPI } from "../../lib/api/modsandbox/post";
+import { addPostAPI, addSpamAPI, deletePostsAPI, deleteSpamsAPI, movePostsAPI, moveSpamsAPI, NewPost, NewSpam, Post, Spam } from "../../lib/api/modsandbox/post";
 import { postActions } from "./slice";
 
 export const getPostsRefresh = (): ThunkAction<void, RootState, unknown, Action<string>> => (dispatch, getState) => {
@@ -61,3 +61,15 @@ export const moveSpams = createAsyncThunk<
   await moveSpamsAPI(token, ids);
 });
 
+export const addPost = createAsyncThunk<Post, NewPost, {state: RootState}>('post/addPost', async (newPost, thunkAPI) => {
+  const token = thunkAPI.getState().user.token;
+  const data = await addPostAPI(token, newPost);
+  return data;
+})
+
+export const addSpam = createAsyncThunk<Spam, NewSpam, {state: RootState}>('post/addSpam', async (newSpam, thunkAPI) => {
+  const token = thunkAPI.getState().user.token;
+  const username = thunkAPI.getState().user.me?.username;
+  const data = await addSpamAPI(token, newSpam, username);
+  return data;
+}) 

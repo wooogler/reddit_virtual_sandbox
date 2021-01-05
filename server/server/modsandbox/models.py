@@ -27,7 +27,7 @@ class Post(models.Model):
     _id = models.CharField(max_length=300, primary_key=True)
     author = models.CharField(max_length=300, default='FakeUser')
     body = models.TextField(default='')
-    created_utc = models.DateTimeField(auto_now_add=True)
+    created_utc = models.DateTimeField()
     full_link = models.URLField(default='https://www.reddit.com/1')
     subreddit = models.CharField(max_length=300, default='FakeSubreddit')
     title = models.CharField(max_length=300)  # Note that comment doesn't have title.

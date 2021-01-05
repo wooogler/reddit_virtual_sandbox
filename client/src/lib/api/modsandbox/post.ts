@@ -1,4 +1,5 @@
 import axios from 'axios';
+import moment from 'moment';
 import { Filtered, PostType, SortType } from '../../../modules/post/slice';
 
 export async function getPostsAPI(
@@ -208,6 +209,31 @@ export async function getModSubreddits(token: string) {
   return response.data;
 }
 
+export async function addPostAPI(token: string, newPost: NewPost) {
+  const response = await axios.post<Post>(
+    'http://localhost:8000/post/',
+    {...newPost, created_utc: moment(new Date()).utc().format('YYYY-MM-DD HH:mm:ss')},
+    {
+      headers: {Authorization: `Token ${token}`}
+    }
+  )
+
+  return response.data;
+}
+
+export async function addSpamAPI(token: string, newSpam: NewSpam, username: string | undefined) {
+  const now = moment(new Date()).utc().format('YYYY-MM-DD HH:mm:ss')
+  const response = await axios.post<Spam>(
+    'http://localhost:8000/spam/',
+    {...newSpam, created_utc: now, banned_at_utc: now, banned_by: username ? username : 'fake_user'},
+    {
+      headers: {Authorization: `Token ${token}`}
+    }
+  )
+
+  return response.data;
+}
+
 export interface PaginatedPostResponse {
   count: number;
   previous: string | null;
@@ -235,6 +261,22 @@ export type Post = {
   ups: number;
   downs: number;
 };
+
+export type NewPost = {
+  _id: string;
+  _type: 'comment' | 'submission';
+  author: string | undefined;
+  body: string;
+  title: string;
+}
+
+export type NewSpam = {
+  _id: string;
+  _type: 'spam_comment' | 'spam_submission';
+  author: string | undefined;
+  body: string;
+  title: string;
+}
 
 export type Spam = {
   _id: string;

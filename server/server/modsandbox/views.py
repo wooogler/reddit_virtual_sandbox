@@ -316,6 +316,8 @@ class SpamHandlerViewSet(viewsets.ModelViewSet):
             queryset = queryset.exclude(matching_rules__in=profile.user.rules.all())
 
         return queryset
+    
+    
 
     @action(methods=["post"], detail=False, name="Crawl Spams from PRAW")
     def crawl(self, request):

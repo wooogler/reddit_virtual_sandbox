@@ -2,40 +2,67 @@ import React from 'react';
 import { useFormik } from 'formik';
 import styled from 'styled-components';
 import { Button, Input, Select } from 'antd';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../modules';
+import { AppDispatch } from '../..';
+import {
+  addPost,
+  addSpam,
+  getPostsRefresh,
+  getSpamsRefresh,
+} from '../../modules/post/actions';
+import { NewPost } from '../../lib/api/modsandbox/post';
 
 interface PostFormProps {
   onClickClose: () => void;
-  list: string;
+  list: 'unmoderated' | 'moderated';
 }
 
 function PostForm({ onClickClose, list }: PostFormProps) {
+  const dispatch: AppDispatch = useDispatch();
   const { Option } = Select;
   const { TextArea } = Input;
-  const username = useSelector((state: RootState) => state.user.me?.username)
+  const username = useSelector((state: RootState) => state.user.me?.username);
 
-  const formik = useFormik({
+  const formik = useFormik<NewPost>({
     initialValues: {
-      id: Math.random().toString(36).substr(2, 7),
-      type: 'submission',
+      _id: Math.random().toString(36).substr(2, 7),
+      _type: 'submission',
       title: '',
       body: '',
       author: username,
     },
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+    onSubmit: async (values) => {
+      if (list === 'unmoderated') {
+        await dispatch(addPost(values));
+        await dispatch(getPostsRefresh());
+      } else if (list === 'moderated') {
+        await dispatch(
+          addSpam({
+            ...values,
+            _type:
+              values._type === 'submission'
+                ? 'spam_submission'
+                : 'spam_comment',
+          }),
+        );
+        await dispatch(getSpamsRefresh());
+      }
       onClickClose();
     },
   });
   return (
     <PostFormDiv onSubmit={formik.handleSubmit}>
-      <div className="title">Add new posts to {list}</div>
+      <div className="title">
+        {list === 'unmoderated'
+          ? 'Add a new post to Posts'
+          : 'Add a new spam to Seed posts'}
+      </div>
       <label htmlFor="type">Type</label>
       <Select
         className="select-type"
         onChange={(value) => {
-          formik.setFieldValue('type', value);
+          formik.setFieldValue('_type', value);
         }}
         defaultValue="submission"
         style={{ fontSize: '1rem' }}
@@ -48,9 +75,9 @@ function PostForm({ onClickClose, list }: PostFormProps) {
         name="author"
         type="text"
         onChange={formik.handleChange}
-        value={formik.values.id}
+        value={formik.values._id}
       />
-      {formik.values.type === 'submission' && (
+      {formik.values._type === 'submission' && (
         <>
           <label htmlFor="title">Title</label>
           <Input

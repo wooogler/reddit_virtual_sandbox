@@ -41,7 +41,7 @@ export const initialState: RuleState = {
   files: [
     {
       title: 'rule.yml',
-      code: 'title: patch\nbody: next',
+      code: '',
       tab: 0,
     },
   ],

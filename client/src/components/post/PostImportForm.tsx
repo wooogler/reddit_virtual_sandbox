@@ -24,9 +24,6 @@ function PostImportForm({ onClickClose }: PostImportFormProps) {
   const { RangePicker } = DatePicker;
   const { Option } = Select;
 
-  const handleDeleteAll = () => {
-    dispatch(postActions.deleteAllPosts());
-  };
   const formik = useFormik({
     initialValues: {
       after: moment().subtract(2, 'hours').startOf('hour'),
@@ -93,10 +90,6 @@ function PostImportForm({ onClickClose }: PostImportFormProps) {
           formik.setFieldValue('max_size', value);
         }}
       />
-      <label>Delete All Posts</label>
-      <Button danger loading={loadingDelete} onClick={handleDeleteAll}>
-        Delete all posts
-      </Button>
       <div className="buttons">
         <Button onClick={onClickClose}>
           Close

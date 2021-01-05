@@ -68,10 +68,6 @@ function SpamImportForm({ onClickClose }: SpamImportFormProps) {
         <Option value="reports">Reports</Option>
         <Option value="spam">Spam</Option>
       </Select>
-      <label>Delete All Seed Posts</label>
-      <Button danger loading={loadingDelete} onClick={handleDeleteAll}>
-        Delete all posts
-      </Button>
       <div className="buttons">
         <Button onClick={onClickClose}>Close</Button>
         <Button type="primary" htmlType="submit">
