@@ -24,27 +24,26 @@ function RuleActions({ message, mode, code, title }: RuleActionsProps) {
     dispatch(toggleEditorMode());
   };
 
-  const makeYamlFile = useCallback(() => {
+  
+
+  useEffect(() => {
     const data = new Blob([code], {type: 'text/plain'})
     if(downloadLink !== '') window.URL.revokeObjectURL(downloadLink);
     setDownloadLink(window.URL.createObjectURL(data))
-  }, [code, downloadLink])
-
-  useEffect(() => {
-    makeYamlFile()
-  }, [makeYamlFile])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [code])
 
   return (
     <RuleActionsBlock>
-      <span>{message && String(message)}</span>
-      <Button onClick={handleClickRun} type='primary' size="large">
-        {mode === "edit" ? 'Run' : 'Edit'}
-      </Button>
       <a download={title} href={downloadLink}>
         <Button size="large">
           Export YAML
         </Button>
       </a>
+      <span>{message && String(message)}</span>
+      <Button onClick={handleClickRun} type='primary' size="large">
+        {mode === "edit" ? 'Run' : 'Edit'}
+      </Button>
     </RuleActionsBlock>
   );
 }
