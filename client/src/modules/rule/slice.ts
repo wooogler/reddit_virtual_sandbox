@@ -74,6 +74,9 @@ const ruleSlice = createSlice({
     updateFileCode: (state, action: PayloadAction<string>) => {
       state.files[state.selectedTab].code = action.payload;
     },
+    updateFilename: (state, action: PayloadAction<string>) => {
+      state.files[state.selectedTab].title = action.payload;
+    },
     changeFile: (state, action: PayloadAction<number>) => {
       state.selectedTab = action.payload;
     },
@@ -160,10 +163,16 @@ const selectClickedRuleIndex = createSelector<RuleState, string, string>(
   (index) => index,
 );
 
+const selectNumberOfTabs = createSelector<RuleState, File[], number>(
+  (state) => state.files,
+  (files) => files.length
+)
+
 export const ruleSelector = {
   loading: (state: RootState) => selectLoading(state.rule),
   submittedCode: (state: RootState) => selectSubmittedCode(state.rule),
   clickedRuleIndex: (state: RootState) => selectClickedRuleIndex(state.rule),
+  numberOfTabs: (state: RootState) => selectNumberOfTabs(state.rule),
 };
 
 const { actions, reducer } = ruleSlice;
@@ -172,6 +181,7 @@ export const {
   addFile,
   closeFile,
   updateFileCode,
+  updateFilename,
   changeFile,
   submitCode,
   submitCodeError,

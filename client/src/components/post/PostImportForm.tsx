@@ -9,10 +9,9 @@ import {
 import { useFormik } from 'formik';
 import moment from 'moment';
 import styled from 'styled-components';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import {
   postActions,
-  postSelector,
 } from '../../modules/post/slice';
 export interface PostImportFormProps {
   onClickClose: () => void;
@@ -20,7 +19,6 @@ export interface PostImportFormProps {
 
 function PostImportForm({ onClickClose }: PostImportFormProps) {
   const dispatch = useDispatch();
-  const loadingDelete = useSelector(postSelector.loadingDelete);
   const { RangePicker } = DatePicker;
   const { Option } = Select;
 

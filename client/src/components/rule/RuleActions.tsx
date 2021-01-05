@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { createEditable, submitCode, toggleEditorMode } from '../../modules/rule/slice';
@@ -8,10 +8,12 @@ interface RuleActionsProps {
   message: Error | null;
   mode: 'edit' | 'select';
   code: string;
+  title: string;
 }
 
-function RuleActions({ message, mode, code }: RuleActionsProps) {
+function RuleActions({ message, mode, code, title }: RuleActionsProps) {
   const dispatch = useDispatch();
+  const [downloadLink, setDownloadLink] = useState('')
 
   const handleClickRun = () => {
     if(mode === 'select') {
@@ -22,9 +24,15 @@ function RuleActions({ message, mode, code }: RuleActionsProps) {
     dispatch(toggleEditorMode());
   };
 
-  const handleClickExport = () => {
+  const makeYamlFile = useCallback(() => {
+    const data = new Blob([code], {type: 'text/plain'})
+    if(downloadLink !== '') window.URL.revokeObjectURL(downloadLink);
+    setDownloadLink(window.URL.createObjectURL(data))
+  }, [code, downloadLink])
 
-  }
+  useEffect(() => {
+    makeYamlFile()
+  }, [makeYamlFile])
 
   return (
     <RuleActionsBlock>
@@ -32,9 +40,11 @@ function RuleActions({ message, mode, code }: RuleActionsProps) {
       <Button onClick={handleClickRun} type='primary' size="large">
         {mode === "edit" ? 'Run' : 'Edit'}
       </Button>
-      <Button onClick={handleClickExport} size="large">
-        Export YAML
-      </Button>
+      <a download={title} href={downloadLink}>
+        <Button size="large">
+          Export YAML
+        </Button>
+      </a>
     </RuleActionsBlock>
   );
 }

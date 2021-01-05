@@ -4,7 +4,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { useModSubApi } from '../../lib/hooks';
-import { postActions, postSelector } from '../../modules/post/slice';
+import { postActions } from '../../modules/post/slice';
 import { userSelector } from '../../modules/user/slice';
 
 interface SpamImportFormProps {
@@ -14,10 +14,6 @@ interface SpamImportFormProps {
 function SpamImportForm({ onClickClose }: SpamImportFormProps) {
   const dispatch = useDispatch();
   const token = useSelector(userSelector.token);
-  const loadingDelete = useSelector(postSelector.loadingSpamDelete);
-  const handleDeleteAll = () => {
-    dispatch(postActions.deleteAllSpams())
-  }
   
   const { Option } = Select;
 
