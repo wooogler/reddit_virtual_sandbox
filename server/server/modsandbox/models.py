@@ -41,6 +41,8 @@ class Post(models.Model):
     # for reports_
     user_reports = models.JSONField(null=True) # [['spam',2],['trolling',1]]
     mod_reports = models.JSONField(null=True) # [['spam','mod_1'],['spam','mod_2'],['Can someone take a look at this?','mod_3']]
+    # for post DB 
+    is_private = models.BooleanField(default=True)
 
     TYPE_CHOICES = [
         ("submission", "submission"),

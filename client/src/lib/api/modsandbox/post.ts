@@ -10,22 +10,6 @@ export async function getPostsAPI(
   page: number,
   userImported: boolean,
 ) {
-  if (userImported) {
-    const response = await axios
-      .get<PaginatedPostResponse>('http://localhost:8000/post/', {
-        params: {
-          post_type: postType,
-          sort: postSortType,
-          filtered,
-          page,
-        },
-        headers: { Authorization: `Token ${token}` },
-      })
-      .catch((error) => {
-        return error.message;
-      });
-    return response.data;
-  }
   const response = await axios
     .get<PaginatedPostResponse>('http://localhost:8000/post/', {
       params: {
@@ -33,7 +17,9 @@ export async function getPostsAPI(
         sort: postSortType,
         filtered,
         page,
+        is_private: userImported,
       },
+      headers: { Authorization: `Token ${token}` },
     })
     .catch((error) => {
       return error.message;

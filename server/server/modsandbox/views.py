@@ -139,9 +139,14 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
         if self.request.user.is_authenticated:
             profile = Profile.objects.get(user=self.request.user.id)
             queryset = queryset.filter(_id__in=profile.used_posts.all())
-        post_type = self.request.query_params.get("post_type", "all")
-        sort = self.request.query_params.get("sort", "new")
-        filtered = self.request.query_params.get("filtered", "all")
+        try:
+            post_type = self.request.query_params.get("post_type", "all")
+            sort = self.request.query_params.get("sort", "new")
+            filtered = self.request.query_params.get("filtered", "all")
+            is_private = self.request.query_params.get('is_private', 'true')
+        except Exception as e:
+            logger.error(e)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
         if post_type == "all":
             queryset = queryset.all()
@@ -159,6 +164,11 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(matching_rules__in=profile.user.rules.all())
         elif filtered == "unfiltered":
             queryset = queryset.exclude(matching_rules__in=profile.user.rules.all())
+
+        if is_private == 'true':
+            queryset = queryset.filter(is_private=True)
+        elif is_private == 'false':
+            queryset = queryset.filter(is_private=False)
 
         return queryset
 
