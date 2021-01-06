@@ -19,7 +19,7 @@ export interface CommentItemProps {
 function CommentItem({ comment, action, match }: CommentItemProps) {
   return (
     <CommentItemDiv action={action}>
-      <BodyText text={comment.body}/>
+      <BodyText text={comment.body} matchBody={match.find(matchItem => matchItem.target === 'body')?.indexes}/>
       <div className="comment-info">
         {/* <IdText text={comment.id} /> */}
         <SubredditText text={comment.subreddit} />

@@ -139,8 +139,6 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
         if self.request.user.is_authenticated:
             profile = Profile.objects.get(user=self.request.user.id)
             queryset = queryset.filter(_id__in=profile.used_posts.all())
-        else:
-            queryset = queryset.filter(profile__isnull=True)
         post_type = self.request.query_params.get("post_type", "all")
         sort = self.request.query_params.get("sort", "new")
         filtered = self.request.query_params.get("filtered", "all")
