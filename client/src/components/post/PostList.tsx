@@ -6,7 +6,6 @@ import { postActions } from '../../modules/post/slice';
 import SplitPane from 'react-split-pane';
 import palette from '../../lib/styles/palette';
 import { useInfiniteScroll } from '../../lib/hooks';
-import PostItemContainer from '../../containers/post/PostItemContainer';
 import { Post } from '../../lib/api/modsandbox/post';
 import OverlayLoading from '../common/OverlayLoading';
 import {
@@ -16,16 +15,20 @@ import {
   moveSpams,
 } from '../../modules/post/actions';
 import { AppDispatch } from '../..';
+import PostItem from './PostItem';
+import { getMatch } from '../../lib/utils/match';
 
 interface PostListProps {
   postsAll: Post[];
   postsFiltered: Post[];
   postsUnfiltered: Post[];
   selectedSpamPostId: string[];
+  selectedPostId: string[];
   splitView: boolean;
   loadingPost: boolean;
   loadingRule: boolean;
   loadingImport: boolean;
+  code: string;
 }
 
 function PostList({
@@ -33,10 +36,12 @@ function PostList({
   postsFiltered,
   postsUnfiltered,
   selectedSpamPostId,
+  selectedPostId,
   splitView,
   loadingPost,
   loadingRule,
   loadingImport,
+  code,
 }: PostListProps) {
   const dispatch: AppDispatch = useDispatch();
   const [target, setTarget] = useState<any>(null);
@@ -102,7 +107,15 @@ function PostList({
             <div className="split-pane">
               <div className="pane-label">▼ Affected by Automod</div>
               {postsFiltered.map((post, index) => {
-                return <PostItemContainer post={post} key={post._id} />;
+                return (
+                  <PostItem
+                    post={post}
+                    selected={selectedPostId.includes(post._id)}
+                    isMatched={post.matching_rules.length !== 0}
+                    match={getMatch(code, post)}
+                    key={post._id}
+                  />
+                );
               })}
               {postsFiltered.length > 8 && (
                 <div ref={setTarget} className="last-item-filtered"></div>
@@ -111,7 +124,15 @@ function PostList({
             <div className="split-pane">
               <div className="pane-label">▼ Not Affected by Automod</div>
               {postsUnfiltered.map((post, index) => {
-                return <PostItemContainer post={post} key={post._id} />;
+                return (
+                  <PostItem
+                    post={post}
+                    selected={selectedPostId.includes(post._id)}
+                    isMatched={post.matching_rules.length !== 0}
+                    match={getMatch(code, post)}
+                    key={post._id}
+                  />
+                );
               })}
               {postsUnfiltered.length > 8 && (
                 <div ref={setTarget} className="last-item-unfiltered"></div>
@@ -121,7 +142,15 @@ function PostList({
         ) : (
           <>
             {postsAll.map((post) => {
-              return <PostItemContainer post={post} key={post._id} />;
+              return (
+              <PostItem
+                  post={post}
+                  selected={selectedPostId.includes(post._id)}
+                  isMatched={post.matching_rules.length !== 0}
+                  match={getMatch(code, post)}
+                  key={post._id}
+                />
+              );
             })}
             {postsAll.length > 8 && (
               <div ref={setTarget} className="last-item-all"></div>

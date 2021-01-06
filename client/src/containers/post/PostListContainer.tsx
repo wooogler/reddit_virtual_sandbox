@@ -16,6 +16,10 @@ function PostListContainer() {
     postSelector.selectedSpamId
   );
 
+  const selectedPostId = useSelector(
+    postSelector.selectedPostId
+  )
+
   const splitPostList = useSelector(
     postSelector.splitPostList
   );
@@ -25,6 +29,7 @@ function PostListContainer() {
   const loadingRule = useSelector(ruleSelector.loading);
   const loadingPost = useSelector(postSelector.loadingPost)
   const loadingImport = useSelector(postSelector.loadingImport);
+  const code = useSelector(ruleSelector.submittedCode)
 
   return (
     <>
@@ -46,10 +51,12 @@ function PostListContainer() {
           postsFiltered={postsFiltered}
           postsUnfiltered={postsUnfiltered}
           selectedSpamPostId={selectedSpamPostId}
+          selectedPostId={selectedPostId}
           splitView={splitPostList}
           loadingPost={loadingPost}
           loadingRule={loadingRule}
           loadingImport={loadingImport}
+          code={code}
         />
       )}
     </>

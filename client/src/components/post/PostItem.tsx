@@ -10,12 +10,12 @@ import { MatchIndex } from '../../lib/utils/match';
 
 interface PostItemProps {
   post: Post;
-  selectedPostId: string[];
+  selected: boolean;
   isMatched: boolean;
   match: MatchIndex[];
 }
 
-function PostItem({ post, selectedPostId, isMatched, match }: PostItemProps) {
+function PostItem({ post, selected, isMatched, match }: PostItemProps) {
   const dispatch = useDispatch();
   const handleClickPost = () => {
     dispatch(postActions.togglePostSelect(post._id));
@@ -23,7 +23,7 @@ function PostItem({ post, selectedPostId, isMatched, match }: PostItemProps) {
 
   return (
     <PostItemDiv
-      selected={selectedPostId.includes(post._id)}
+      selected={selected}
       onClick={handleClickPost}
     >
       {post._type === 'submission' ? (
