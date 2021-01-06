@@ -72,7 +72,7 @@ const getMatchPatterns = (values: object) => {
       matches.push({ ...parsedKey, matchPattern });
     }
     else {
-      if (!('regex' in parsedKey.modifiers)) {
+      if (('regex' in parsedKey.modifiers)) {
         matchValues = matchValues.map((val) => _.escapeRegExp(val));
       }
       let match_mod: string = 'includes-word';

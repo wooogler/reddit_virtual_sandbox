@@ -55,7 +55,7 @@ export const clickMatchedThunk = (
   matchId: string,
 ): ThunkAction<void, RuleState, unknown, Action<string>> => (dispatch) => {
   dispatch(clickMatched(matchId));
-  setTimeout(() => dispatch(clearMatched()), 3000);
+  setTimeout(() => dispatch(clearMatched()), 2000);
 };
 
 const ruleSlice = createSlice({
