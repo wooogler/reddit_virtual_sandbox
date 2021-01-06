@@ -50,7 +50,6 @@ export const keysToTree = (treeData: Tree, keys: string[]) => {
       });
     });
   });
-  console.log(treeData, keys);
   return treeData;
 };
 
@@ -69,6 +68,5 @@ export const treeToCode = (treeData: Tree) => {
       code = code + ']\n';
     });
   });
-  console.log(code);
   return code;
 };

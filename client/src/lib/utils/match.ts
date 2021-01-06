@@ -50,7 +50,6 @@ const getMatchPatterns = (values: object) => {
   title (includes-word, case-sensitive): "patch"
   ~body+title (full-text): ["we", "expected"]
   */
-  console.log(values)
   let matches: Match[] = [];
   for (const [key, value] of Object.entries(values)) {
     const parsedKey = parseMatchFieldsKey(key);
@@ -64,15 +63,18 @@ const getMatchPatterns = (values: object) => {
     if (!parsedKey.modifiers) {
       // modifier가 없을 때
       const patterns = matchValues.map((value) => {
+        const field = parsedKey.fields[0];
+        if (field === 'domain') {
+          return matchRegexes['includes-word'](`(?:.*?\\.)?${value}`);
+        }
         return matchRegexes['includes-word'](value);
       });
       const matchPattern = patterns.map((pattern) => {
         return new RegExp(pattern, 'gsui');
       });
       matches.push({ ...parsedKey, matchPattern });
-    }
-    else {
-      if (('regex' in parsedKey.modifiers)) {
+    } else {
+      if ('regex' in parsedKey.modifiers) {
         matchValues = matchValues.map((val) => _.escapeRegExp(val));
       }
       let match_mod: string = 'includes-word';
@@ -86,7 +88,6 @@ const getMatchPatterns = (values: object) => {
         if (!found) {
           if (parsedKey.fields.length === 1) {
             const field = parsedKey.fields[0];
-            //domain이 추가될 경우 추가
             match_mod = matchFieldDefaults[field]
               ? matchFieldDefaults[field]
               : 'includes-word';
@@ -95,6 +96,10 @@ const getMatchPatterns = (values: object) => {
       }
 
       const patterns = matchValues.map((value) => {
+        const field = parsedKey.fields[0];
+        if (field === 'domain') {
+          return matchRegexes[match_mod](`(?:.*?\\.)?${value}`);
+        }
         return matchRegexes[match_mod](value);
       });
 
@@ -109,7 +114,6 @@ const getMatchPatterns = (values: object) => {
       matches.push({ ...parsedKey, matchPattern });
     }
   }
-  console.log('matches', matches)
   return matches;
 };
 
@@ -119,7 +123,7 @@ const parseMatchFieldsKey = (key: string) => {
     throw new Error('Invalid search check: ' + key);
   }
   const name = matches[1];
-  const allValidFields = ['title', 'body']; // search 가능한 key
+  const allValidFields = ['title', 'body', 'url', 'domain']; // search 가능한 key
   const fields = _.trimStart(name, '~').split('#')[0].split('+');
   fields.forEach((field) => {
     if (!allValidFields.includes(field)) {
@@ -150,7 +154,12 @@ const getMatchIndexes = (
   ruleIndex: number,
   matches: Match[],
 ) => {
-  const partialPost = { title: post.title, body: post.body };
+  const partialPost = {
+    title: post.title,
+    body: post.body,
+    url: post.url,
+    domain: post.domain,
+  };
   const postArray = Object.entries(partialPost).map(([key, value]) => ({
     key,
     value,
@@ -164,7 +173,7 @@ const getMatchIndexes = (
             let indexes: Index[] = [];
             for (const match of matches) {
               if (match.index !== undefined) {
-                const indexNoIndent = match.index + match[0].search(/\S/)
+                const indexNoIndent = match.index + match[0].search(/\S/);
                 const matchItem = {
                   startIndex: indexNoIndent,
                   endIndex: indexNoIndent + match[1].length,

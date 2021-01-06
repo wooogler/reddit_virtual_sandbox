@@ -246,6 +246,8 @@ export type Post = {
   matching_rules: number[];
   ups: number;
   downs: number;
+  domain: string;
+  url: string;
 };
 
 export type NewPost = {
@@ -254,6 +256,7 @@ export type NewPost = {
   author: string | undefined;
   body: string;
   title: string;
+  url: string;
 }
 
 export type NewSpam = {
@@ -262,6 +265,7 @@ export type NewSpam = {
   author: string | undefined;
   body: string;
   title: string;
+  url: string;
 }
 
 export type Spam = {
@@ -282,4 +286,6 @@ export type Spam = {
   banned_at_utc: string | null;
   mod_reports: [string, string][];
   user_reports: [string, number][];
+  domain: string;
+  url: string;
 };

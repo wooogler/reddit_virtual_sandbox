@@ -60,7 +60,9 @@ class RedditHandler():
             '_id': post['id'],
             'subreddit': post['subreddit'],
             'title': post['title'],
-            '_type': 'submission'
+            '_type': 'submission',
+            'domain': post['domain'],
+            'url': post['url'],
         }
     
     @staticmethod
@@ -74,7 +76,7 @@ class RedditHandler():
             'subreddit': post['subreddit'],
             # 'link_id': post['link_id'][3:]  # link_id always starts with 't3_'--> id of a submission that this comment is linked to.
             'title': '',
-            '_type': 'comment'
+            '_type': 'comment',
         }
 
     def run(self, **kwargs):

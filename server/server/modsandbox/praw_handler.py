@@ -40,6 +40,8 @@ class PrawHandler:
                 "mod_reports": spam.mod_reports,
                 "ups": spam.ups,
                 "downs": spam.downs,
+                "domain": spam.domain,
+                "url": spam.url,
             }
 
         return {
@@ -79,6 +81,8 @@ class PrawHandler:
                 "mod_reports": reports.mod_reports,
                 "ups": reports.ups,
                 "downs": reports.downs,
+                "domain": reports.domain,
+                "url": reports.url,
             }
 
         return {

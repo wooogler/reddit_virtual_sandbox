@@ -23,7 +23,6 @@ function PostHeader({ userInfo, redditLogged }: PostHeaderProps) {
     if (token) {
       dispatch(logout(token));
       localStorage.removeItem('token');
-      console.log('removed', localStorage.getItem('token'));
     }
   };
 

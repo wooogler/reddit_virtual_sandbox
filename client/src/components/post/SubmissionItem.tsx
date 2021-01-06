@@ -6,9 +6,11 @@ import { MatchIndex } from '../../lib/utils/match';
 import AuthorText from '../common/AuthorText';
 import BodyText from '../common/BodyText';
 import DatetimeText from '../common/DatetimeText';
+import DomainText from '../common/DomainText';
 import LinkText from '../common/LinkText';
 import SubredditText from '../common/SubredditText';
 import TitleText from '../common/TitleText';
+import UrlText from '../common/UrlText';
 
 type Bolds = {
   body: string[]
@@ -36,8 +38,15 @@ function SubmissionItem({submission, action, match}: SubmissionItemProps) {
         {/* <IdText text={submission.id} /> */}
         <SubredditText text={submission.subreddit} />
         <LinkText text='open submission link' url={submission.full_link}/>
+        <DomainText text={submission.domain} matchDomain={match.find(matchItem => matchItem.target === 'domain')?.indexes} />
       </div>
-      <BodyText text={submission.body} matchBody={match.find(matchItem => matchItem.target === 'body')?.indexes}/>
+      
+      {submission.domain && submission.domain.startsWith('self.') ? 
+        <BodyText text={submission.body} matchBody={match.find(matchItem => matchItem.target === 'body')?.indexes}/>
+        :
+        <UrlText text={submission.url} matchUrl={match.find(matchItem => matchItem.target === 'url')?.indexes} />
+      }
+      
       <div className="author-info">
         <AuthorText text={submission.author} />
         <DatetimeText datetime={submission.created_utc} />
@@ -66,6 +75,9 @@ const SubmissionItemDiv = styled.div<{ action?: 'remove' | 'report' }>`
     display: flex;
     margin: 0.5rem 0;
     div + div {
+      margin-left: 0.5rem;
+    }
+    a + div{
       margin-left: 0.5rem;
     }
     a + a {

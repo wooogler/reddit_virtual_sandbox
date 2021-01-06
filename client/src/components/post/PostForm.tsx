@@ -31,6 +31,7 @@ function PostForm({ onClickClose, list }: PostFormProps) {
       title: '',
       body: '',
       author: username,
+      url: 'self.FakeSubreddit',
     },
     onSubmit: async (values) => {
       if (list === 'unmoderated') {
@@ -102,6 +103,13 @@ function PostForm({ onClickClose, list }: PostFormProps) {
         onChange={formik.handleChange}
         value={formik.values.body}
         autoSize={{ minRows: 6, maxRows: 10 }}
+      />
+      <label htmlFor="url">link URL</label>
+      <Input
+        name="url"
+        type="text"
+        onChange={formik.handleChange}
+        value={formik.values.url}
       />
       <div className="buttons">
         <Button onClick={onClickClose}>Close</Button>

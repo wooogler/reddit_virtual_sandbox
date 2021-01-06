@@ -2,6 +2,7 @@ import json
 from rest_framework import serializers
 from .models import Post, Profile
 
+
 class ProfileSerializer(serializers.ModelSerializer):
     """
     Serializer for Profile Model
@@ -13,18 +14,20 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = Profile
         fields = "__all__"
 
+
 class PostSerializer(serializers.ModelSerializer):
     """
     Serializer for Post Model
     """
-    matching_rules=serializers.SerializerMethodField()
+
+    matching_rules = serializers.SerializerMethodField()
 
     def get_matching_rules(self, obj):
-        rules = obj.matching_rules.filter(user=self.context['request'].user)
+        rules = obj.matching_rules.filter(user=self.context["request"].user)
         return [rule.pk for rule in rules]
 
     def create(self, validated_data):
-        profile = Profile.objects.get(user=self.context['request'].user)
+        profile = Profile.objects.get(user=self.context["request"].user)
         profile.used_posts.create(**validated_data)
         return Post(**validated_data)
 
@@ -46,7 +49,6 @@ class PostSerializer(serializers.ModelSerializer):
             "user_reports",
             "ups",
             "downs",
+            "domain",
+            "url",
         ]
-
-
-

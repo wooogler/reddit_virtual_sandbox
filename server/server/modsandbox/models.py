@@ -26,11 +26,13 @@ class Post(models.Model):
 
     _id = models.CharField(max_length=300, primary_key=True)
     author = models.CharField(max_length=300, default='FakeUser')
+    title = models.CharField(max_length=300)  # Note that comment doesn't have title.
     body = models.TextField(default='')
     created_utc = models.DateTimeField()
     full_link = models.URLField(default='https://www.reddit.com/1')
     subreddit = models.CharField(max_length=300, default='FakeSubreddit')
-    title = models.CharField(max_length=300)  # Note that comment doesn't have title.
+    domain = models.CharField(max_length=300, default='')
+    url = models.CharField(max_length=500, null=True)
     matching_rules = models.ManyToManyField(Rule, blank=True)
     # for vote
     ups = models.IntegerField(default=0)

@@ -29,7 +29,6 @@ function InteractionText({ text, match }: Props): ReactElement {
 
   const handleClickHighlight = (value: string, e:React.MouseEvent) => {
     dispatch(clickMatchedThunk(value))
-    console.log(match)
     e.stopPropagation();
   };
 
