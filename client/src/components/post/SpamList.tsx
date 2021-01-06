@@ -8,9 +8,10 @@ import palette from '../../lib/styles/palette';
 import { useInfiniteScroll } from '../../lib/hooks';
 import OverlayLoading from '../common/OverlayLoading';
 import { Spam } from '../../lib/api/modsandbox/post';
-import SpamItemContainer from '../../containers/post/SpamItemContainer';
 import { AppDispatch } from '../..';
 import { deletePosts, getPostsRefresh, getSpamsRefresh, movePosts } from '../../modules/post/actions';
+import { getMatch } from '../../lib/utils/match';
+import SpamItem from './SpamItem';
 
 interface SpamListProps {
   spamsAll: Spam[];
@@ -22,6 +23,7 @@ interface SpamListProps {
   loadingSpam: boolean;
   loadingRule: boolean;
   loadingSpamImport: boolean;
+  code: string;
 }
 
 function SpamList({
@@ -33,6 +35,7 @@ function SpamList({
   splitView,
   loadingSpam,
   loadingRule,
+  code,
 }: SpamListProps) {
   const dispatch: AppDispatch = useDispatch();
   const [target, setTarget] = useState<any>(null);
@@ -97,7 +100,13 @@ function SpamList({
               </div>
               {
                 spamsFiltered.map((spam) => {
-                  return <SpamItemContainer spam={spam} key={spam._id} />
+                  return (<SpamItem
+                    spam={spam}
+                    selected={selectedSpamId.includes(spam._id)}
+                    isMatched={spam.matching_rules.length !== 0}
+                    match={getMatch(code, spam)}
+                    key={spam._id}
+                  />)
                 })
               }
               {
@@ -112,7 +121,13 @@ function SpamList({
               </div>
               {
                 spamsUnfiltered.map((spam) => {
-                  return <SpamItemContainer spam={spam} key={spam._id} />
+                  return (<SpamItem
+                    spam={spam}
+                    selected={selectedSpamId.includes(spam._id)}
+                    isMatched={spam.matching_rules.length !== 0}
+                    match={getMatch(code, spam)}
+                    key={spam._id}
+                  />)
                 })
               }
               {
@@ -125,7 +140,13 @@ function SpamList({
         ) : (
           <>
             {spamsAll.map((spam) => {
-              return <SpamItemContainer spam={spam} key={spam._id} />;
+              return (<SpamItem
+                spam={spam}
+                selected={selectedSpamId.includes(spam._id)}
+                isMatched={spam.matching_rules.length !== 0}
+                match={getMatch(code, spam)}
+                key={spam._id}
+              />)
             })}
             {spamsAll.length > 8 && (
               <div ref={setTarget} className="last-item-all"></div>

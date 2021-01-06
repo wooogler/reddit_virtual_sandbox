@@ -27,6 +27,7 @@ function SpamListContainer() {
   const loadingRule = useSelector(ruleSelector.loading);
   const loadingSpam = useSelector(postSelector.loadingSpam)
   const loadingSpamImport = useSelector(postSelector.loadingSpamImport);
+  const code = useSelector(ruleSelector.submittedCode);
 
   return (
     <>
@@ -48,6 +49,7 @@ function SpamListContainer() {
           loadingSpam={loadingSpam}
           loadingRule={loadingRule}
           loadingSpamImport={loadingSpamImport}
+          code={code}
         />
       )}
     </>

@@ -11,12 +11,12 @@ import SubmissionItem from './SubmissionItem';
 
 export interface SpamItemProps {
   spam: Spam;
-  selectedSpamId: string[];
+  selected: boolean;
   isMatched: boolean;
   match: MatchIndex[];
 }
 
-function SpamItem({ spam, selectedSpamId, isMatched, match }: SpamItemProps) {
+function SpamItem({ spam, selected, isMatched, match }: SpamItemProps) {
   const dispatch = useDispatch();
 
   const handleClickSpam = () => {
@@ -25,7 +25,7 @@ function SpamItem({ spam, selectedSpamId, isMatched, match }: SpamItemProps) {
 
   return (
     <SpamPostItemDiv
-      selected={selectedSpamId.includes(spam._id)}
+      selected={selected}
       onClick={handleClickSpam}
     >
       {spam._type === ('spam_submission' || 'reports_submission') ? (
