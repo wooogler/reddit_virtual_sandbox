@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import OverlayLoading from '../../components/common/OverlayLoading';
 import ListHeader from '../../components/post/ListHeader';
 import PostList from '../../components/post/PostList';
+import { RootState } from '../../modules';
 import { postSelector } from '../../modules/post/slice';
 import { ruleSelector } from '../../modules/rule/slice';
 
@@ -25,11 +26,15 @@ function PostListContainer() {
   );
 
   const postUserImported = useSelector(postSelector.postUserImported);
+  const postSpan = useSelector((state: RootState) => state.post.posts.span);
+
 
   const loadingRule = useSelector(ruleSelector.loading);
   const loadingPost = useSelector(postSelector.loadingPost)
   const loadingImport = useSelector(postSelector.loadingImport);
   const code = useSelector(ruleSelector.submittedCode)
+
+  const listHeaderHeight = useSelector((state: RootState) => state.common.postListHeaderHeight)
 
   return (
     <>
@@ -39,6 +44,7 @@ function PostListContainer() {
         splitView={splitPostList}
         tooltipText='Posts imported from real subreddit'
         userImported={postUserImported}
+        span={postSpan}
       />
       {
         loadingImport && (
@@ -57,6 +63,7 @@ function PostListContainer() {
           loadingRule={loadingRule}
           loadingImport={loadingImport}
           code={code}
+          listHeaderHeight={listHeaderHeight}
         />
       )}
     </>

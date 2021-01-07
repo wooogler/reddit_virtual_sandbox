@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Post, Spam } from '../../lib/api/modsandbox/post';
-import palette, { actionColorMap } from '../../lib/styles/palette';
+import { actionColorMap } from '../../lib/styles/palette';
 import { MatchIndex } from '../../lib/utils/match';
 import AuthorText from '../common/AuthorText';
 import BodyText from '../common/BodyText';
@@ -19,7 +19,7 @@ type Bolds = {
 export interface SubmissionItemProps {
   submission: Post | Spam;
   action?: 'remove' | 'report';
-  match: MatchIndex[]
+  match: MatchIndex[];
 }
 
 function SubmissionItem({submission, action, match}: SubmissionItemProps) {
@@ -42,7 +42,7 @@ function SubmissionItem({submission, action, match}: SubmissionItemProps) {
       </div>
       
       {submission.domain && submission.domain.startsWith('self.') ? 
-        <BodyText text={submission.body} matchBody={match.find(matchItem => matchItem.target === 'body')?.indexes}/>
+        <BodyText text={submission.body} matchBody={match.find(matchItem => matchItem.target === 'body')?.indexes} type={submission._type}/>
         :
         <UrlText text={submission.url} matchUrl={match.find(matchItem => matchItem.target === 'url')?.indexes} />
       }
@@ -68,24 +68,19 @@ const SubmissionItemDiv = styled.div<{ action?: 'remove' | 'report' }>`
   display: flex;
   flex-direction: column;
   padding: 0.5rem;
-  border: 1px solid ${palette.gray[2]};
   background-color: ${(props) =>
     props.action ? actionColorMap[props.action].background : 'white'};
   .submission-info {
     display: flex;
+    flex-wrap: wrap;
     margin: 0.5rem 0;
-    div + div {
-      margin-left: 0.5rem;
-    }
-    a + div{
-      margin-left: 0.5rem;
-    }
-    a + a {
-      margin-left: 0.5rem;
+    div, a {
+      margin-right: 0.3rem;
     }
   }
   .author-info {
     display: flex;
+    flex-wrap: wrap;
     margin-top: 0.5rem;
     div + div {
       margin-left: 0.5rem;

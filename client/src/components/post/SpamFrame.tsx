@@ -20,15 +20,20 @@ function SpamFrame({ spam, children }: SpamFrameProps) {
   return (
     <SpamFrameDiv _type={spam._type}>
       {spam.banned_by && spam.banned_at_utc && (
-        <div className="spam-info">
-          <div className="spammed">Spammed</div>
-          <AuthorText text={spam.banned_by} />
-          <DatetimeText datetime={spam.banned_at_utc} />
-        </div>
+        <>
+          <div className="spam-info">
+            <div className="spammed">Spammed</div>
+            <AuthorText text={spam.banned_by} />
+            <DatetimeText datetime={spam.banned_at_utc} />
+          </div>
+          {spam.mod_reason_title !== null && (
+            <div>removal reason: {spam.mod_reason_title}</div>
+          )}
+        </>
       )}
       {spam.user_reports && spam.user_reports.length !== 0 && (
         <>
-          <div className="report-title">User reports</div>
+          <div className="report-title">Reported by Users</div>
           <div className="report-contents">
             {spam.user_reports.map((user_report, index) => (
               <div className="report" key={index}>
@@ -40,7 +45,7 @@ function SpamFrame({ spam, children }: SpamFrameProps) {
       )}
       {spam.mod_reports && spam.mod_reports.length !== 0 && (
         <>
-          <div className="report-title">Moderator reports</div>
+          <div className="report-title">Reported by Moderators</div>
           <div className="report-contents">
             {spam.mod_reports.map((mod_report, index) => (
               <div className="report" key={index}>
@@ -72,17 +77,18 @@ const SpamFrameDiv = styled.div<{ _type: SpamType }>`
     }
   }
   .report-title {
-    font-weight: bold;
     margin-left: 0.3rem;
+    font-size: 0.9rem;
   }
   .report-contents {
     margin: 0.2rem;
     padding: 0.2rem;
     border-radius: 0.2rem;
-    background-color: ${palette.gray[1]};
+    font-size: 0.9rem;
   }
-  background: ${props => props._type.startsWith('reports_') ? palette.orange[1] : palette.orange[3]};
-  padding: 0.4rem;
+  background: ${(props) =>
+    props._type.startsWith('reports_') ? palette.orange[1] : palette.orange[3]};
+  padding: 0.4rem 0.2rem 0.4rem 0.4rem;
 `;
 
 export default SpamFrame;

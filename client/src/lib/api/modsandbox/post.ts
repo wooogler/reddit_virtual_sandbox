@@ -114,11 +114,11 @@ export async function importSpamPostsAPI(
 export async function deletePostsAPI(token: string, ids: string[]) {
   const response = await axios.post(
     'http://localhost:8000/post/deletes/',
-    {ids},
+    { ids },
     {
       headers: { Authorization: `Token ${token}` },
     },
-  )
+  );
 
   return response.status;
 }
@@ -126,11 +126,11 @@ export async function deletePostsAPI(token: string, ids: string[]) {
 export async function deleteSpamsAPI(token: string, ids: string[]) {
   const response = await axios.post(
     'http://localhost:8000/spam/deletes/',
-    {ids},
+    { ids },
     {
       headers: { Authorization: `Token ${token}` },
     },
-  )
+  );
 
   return response.status;
 }
@@ -162,11 +162,11 @@ export async function deleteAllSpamsAPI(token: string) {
 export async function movePostsAPI(token: string, ids: string[]) {
   const response = await axios.post(
     'http://localhost:8000/post/moves/',
-    {ids},
+    { ids },
     {
       headers: { Authorization: `Token ${token}` },
     },
-  )
+  );
 
   return response.status;
 }
@@ -174,15 +174,14 @@ export async function movePostsAPI(token: string, ids: string[]) {
 export async function moveSpamsAPI(token: string, ids: string[]) {
   const response = await axios.post(
     'http://localhost:8000/spam/moves/',
-    {ids},
+    { ids },
     {
       headers: { Authorization: `Token ${token}` },
     },
-  )
+  );
 
   return response.status;
 }
-
 
 export async function getModSubreddits(token: string) {
   const response = await axios.get<string[]>(
@@ -198,24 +197,36 @@ export async function getModSubreddits(token: string) {
 export async function addPostAPI(token: string, newPost: NewPost) {
   const response = await axios.post<Post>(
     'http://localhost:8000/post/',
-    {...newPost, created_utc: moment(new Date()).utc().format('YYYY-MM-DD HH:mm:ss')},
     {
-      headers: {Authorization: `Token ${token}`}
-    }
-  )
+      ...newPost,
+      created_utc: moment(new Date()).utc().format('YYYY-MM-DD HH:mm:ss'),
+    },
+    {
+      headers: { Authorization: `Token ${token}` },
+    },
+  );
 
   return response.data;
 }
 
-export async function addSpamAPI(token: string, newSpam: NewSpam, username: string | undefined) {
-  const now = moment(new Date()).utc().format('YYYY-MM-DD HH:mm:ss')
+export async function addSpamAPI(
+  token: string,
+  newSpam: NewSpam,
+  username: string | undefined,
+) {
+  const now = moment(new Date()).utc().format('YYYY-MM-DD HH:mm:ss');
   const response = await axios.post<Spam>(
     'http://localhost:8000/spam/',
-    {...newSpam, created_utc: now, banned_at_utc: now, banned_by: username ? username : 'fake_user'},
     {
-      headers: {Authorization: `Token ${token}`}
-    }
-  )
+      ...newSpam,
+      created_utc: now,
+      banned_at_utc: now,
+      banned_by: username ? username : 'fake_user',
+    },
+    {
+      headers: { Authorization: `Token ${token}` },
+    },
+  );
 
   return response.data;
 }
@@ -257,7 +268,7 @@ export type NewPost = {
   body: string;
   title: string;
   url: string;
-}
+};
 
 export type NewSpam = {
   _id: string;
@@ -266,15 +277,11 @@ export type NewSpam = {
   body: string;
   title: string;
   url: string;
-}
+};
 
 export type Spam = {
   _id: string;
-  _type:
-    | 'spam_comment'
-    | 'spam_submission'
-    | 'reports_comment'
-    | 'reports_submission';
+  _type: SpamType
   author: string;
   body: string;
   created_utc: string;
@@ -284,8 +291,15 @@ export type Spam = {
   matching_rules: number[];
   banned_by: string | null;
   banned_at_utc: string | null;
+  mod_reason_title: string | null;
   mod_reports: [string, string][];
   user_reports: [string, number][];
   domain: string;
   url: string;
 };
+
+export type SpamType =
+  | 'spam_comment'
+  | 'spam_submission'
+  | 'reports_comment'
+  | 'reports_submission';

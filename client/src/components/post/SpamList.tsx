@@ -24,6 +24,7 @@ interface SpamListProps {
   loadingRule: boolean;
   loadingSpamImport: boolean;
   code: string;
+  listHeaderHeight: number;
 }
 
 function SpamList({
@@ -36,6 +37,7 @@ function SpamList({
   loadingSpam,
   loadingRule,
   code,
+  listHeaderHeight,
 }: SpamListProps) {
   const dispatch: AppDispatch = useDispatch();
   const [target, setTarget] = useState<any>(null);
@@ -74,7 +76,7 @@ function SpamList({
   };
 
   return (
-    <SpamPostListBlock>
+    <SpamPostListBlock listHeaderHeight={listHeaderHeight}>
       {selectedPostId.length !== 0 && (
         <OverlayWithButton
           text={selectedPostId.length ===1 ? `1 post selected` : `${selectedPostId.length} posts selected`}
@@ -158,11 +160,11 @@ function SpamList({
   );
 }
 
-const SpamPostListBlock = styled.div`
+const SpamPostListBlock = styled.div<{listHeaderHeight: number}>`
   display: flex;
   flex-direction: column;
   position: relative;
-  height: calc(100% - 4.5rem);
+  height: calc(100% - ${(props) => props.listHeaderHeight}px);
   .list {
     height: 100%;
     overflow-y: auto;

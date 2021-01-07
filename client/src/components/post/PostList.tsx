@@ -29,6 +29,7 @@ interface PostListProps {
   loadingRule: boolean;
   loadingImport: boolean;
   code: string;
+  listHeaderHeight: number;
 }
 
 function PostList({
@@ -42,6 +43,7 @@ function PostList({
   loadingRule,
   loadingImport,
   code,
+  listHeaderHeight,
 }: PostListProps) {
   const dispatch: AppDispatch = useDispatch();
   const [target, setTarget] = useState<any>(null);
@@ -80,7 +82,7 @@ function PostList({
   };
 
   return (
-    <PostListBlock>
+    <PostListBlock listHeaderHeight={listHeaderHeight}>
       {selectedSpamPostId.length !== 0 && (
         <OverlayWithButton
           text={
@@ -162,11 +164,10 @@ function PostList({
   );
 }
 
-const PostListBlock = styled.div`
+const PostListBlock = styled.div<{listHeaderHeight: number}>`
   display: flex;
   flex-direction: column;
-  position: relative;
-  height: calc(100% - 4.5rem);
+  height: calc(100% - ${(props) => props.listHeaderHeight}px);
   .list {
     height: 100%;
     overflow-y: auto;

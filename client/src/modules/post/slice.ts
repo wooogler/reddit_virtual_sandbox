@@ -11,14 +11,15 @@ import {
   Post,
   Spam,
 } from '../../lib/api/modsandbox/post';
-import { enableMapSet } from 'immer';
 import { addPost, addSpam, deletePosts, deleteSpams } from './actions';
 
-enableMapSet();
-
 export type PostType = 'submission' | 'comment' | 'all';
-export type SortType = 'new' | 'old'
-export type SpamSortType = 'created-new' | 'created-old' | 'banned-new' | 'banned-old';;
+export type SortType = 'new' | 'old';
+export type SpamSortType =
+  | 'created-new'
+  | 'created-old'
+  | 'banned-new'
+  | 'banned-old';
 export type Filtered = 'all' | 'filtered' | 'unfiltered';
 
 export type PostState = {
@@ -45,7 +46,7 @@ export type PostState = {
     add: {
       loading: boolean;
       error: SerializedError | null;
-    }
+    };
     delete: {
       loading: boolean;
       error: SerializedError | null;
@@ -57,6 +58,7 @@ export type PostState = {
     selected: string[];
     userImported: boolean;
     split: boolean;
+    span: boolean;
   };
   spams: {
     all: {
@@ -85,7 +87,7 @@ export type PostState = {
     add: {
       loading: boolean;
       error: SerializedError | null;
-    }
+    };
     loading: boolean;
     error: Error | null;
     type: PostType;
@@ -93,6 +95,7 @@ export type PostState = {
     selected: string[];
     split: boolean;
     userImported: boolean;
+    span: boolean;
   };
 };
 
@@ -132,6 +135,7 @@ export const initialState: PostState = {
     split: false,
     userImported: true,
     selected: [],
+    span: false,
   },
   spams: {
     all: {
@@ -168,6 +172,7 @@ export const initialState: PostState = {
     split: false,
     selected: [],
     userImported: true,
+    span: false,
   },
 };
 
@@ -182,7 +187,7 @@ const postSlice = createSlice({
     },
     getAllPostsSuccess: (
       state,
-      action: PayloadAction<{ data: Post[]; nextPage: number, count: number }>,
+      action: PayloadAction<{ data: Post[]; nextPage: number; count: number }>,
     ) => {
       state.posts.all.data = action.payload.data;
       state.posts.loading = false;
@@ -201,7 +206,7 @@ const postSlice = createSlice({
     },
     getFilteredPostsSuccess: (
       state,
-      action: PayloadAction<{ data: Post[]; nextPage: number, count: number }>,
+      action: PayloadAction<{ data: Post[]; nextPage: number; count: number }>,
     ) => {
       state.posts.filtered.data = action.payload.data;
       state.posts.loading = false;
@@ -220,7 +225,7 @@ const postSlice = createSlice({
     },
     getUnfilteredPostsSuccess: (
       state,
-      action: PayloadAction<{ data: Post[]; nextPage: number, count: number }>,
+      action: PayloadAction<{ data: Post[]; nextPage: number; count: number }>,
     ) => {
       state.posts.unfiltered.data = action.payload.data;
       state.posts.loading = false;
@@ -246,7 +251,7 @@ const postSlice = createSlice({
     },
     getAllSpamsSuccess: (
       state,
-      action: PayloadAction<{ data: Spam[]; nextPage: number, count: number, }>,
+      action: PayloadAction<{ data: Spam[]; nextPage: number; count: number }>,
     ) => {
       state.spams.all.data = action.payload.data;
       state.spams.loading = false;
@@ -265,7 +270,7 @@ const postSlice = createSlice({
     },
     getFilteredSpamsSuccess: (
       state,
-      action: PayloadAction<{ data: Spam[]; nextPage: number, count: number, }>,
+      action: PayloadAction<{ data: Spam[]; nextPage: number; count: number }>,
     ) => {
       state.spams.filtered.data = action.payload.data;
       state.spams.loading = false;
@@ -284,7 +289,7 @@ const postSlice = createSlice({
     },
     getUnfilteredSpamsSuccess: (
       state,
-      action: PayloadAction<{ data: Spam[]; nextPage: number, count: number }>,
+      action: PayloadAction<{ data: Spam[]; nextPage: number; count: number }>,
     ) => {
       state.spams.unfiltered.data = action.payload.data;
       state.spams.loading = false;
@@ -336,6 +341,12 @@ const postSlice = createSlice({
     },
     toggleSpamUserImported: (state) => {
       state.spams.userImported = !state.spams.userImported;
+    },
+    togglePostSpan: (state) => {
+      state.posts.span = !state.posts.span;
+    },
+    toggleSpamSpan: (state) => {
+      state.spams.span = !state.spams.span;
     },
     importSubredditPosts: {
       reducer: (state) => {
@@ -429,7 +440,7 @@ const postSlice = createSlice({
       .addCase(addSpam.rejected, (state, action) => {
         state.spams.add.loading = false;
         state.spams.add.error = action.error;
-      })
+      });
   },
 });
 
@@ -576,21 +587,21 @@ const selectPostCount = createSelector(
   (state: PostState) => state.posts.all.count,
   (state: PostState) => state.posts.filtered.count,
   (state: PostState) => state.posts.unfiltered.count,
-  (all, filtered, unfiltered) => ({all, filtered, unfiltered})
-)
+  (all, filtered, unfiltered) => ({ all, filtered, unfiltered }),
+);
 
 const selectSpamCount = createSelector(
   (state: PostState) => state.spams.all.count,
   (state: PostState) => state.spams.filtered.count,
   (state: PostState) => state.spams.unfiltered.count,
-  (all, filtered, unfiltered) => ({all, filtered, unfiltered})
-)
+  (all, filtered, unfiltered) => ({ all, filtered, unfiltered }),
+);
 
 const selectCount = createSelector(
   selectPostCount,
   selectSpamCount,
-  (posts, spams) => ({posts, spams})
-)
+  (posts, spams) => ({ posts, spams }),
+);
 
 export const postSelector = {
   pageAll: (state: RootState) => selectPageAll(state.post),
@@ -622,7 +633,7 @@ export const postSelector = {
   splitSpamList: (state: RootState) => selectSplitSpamList(state.post),
   postUserImported: (state: RootState) => selectPostUserImported(state.post),
   spamUserImported: (state: RootState) => selectSpamUserImported(state.post),
-  count: (state:RootState) => selectCount(state.post),
+  count: (state: RootState) => selectCount(state.post),
 };
 
 const { actions, reducer } = postSlice;

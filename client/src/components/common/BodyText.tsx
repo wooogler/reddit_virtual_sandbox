@@ -1,17 +1,30 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import palette from '../../lib/styles/palette';
 import Truncate from 'react-truncate';
 import { Index } from '../../lib/utils/match';
 import InteractionText from './InteractionText';
-
+import { PostType } from '../../modules/post/slice';
+import { SpamType } from '../../lib/api/modsandbox/post';
+import { RootState } from '../../modules';
+import { useSelector } from 'react-redux';
 
 export interface BodyTextProps {
   text: string;
   matchBody?: Index[];
+  type: PostType | SpamType;
 }
 
-function BodyText({ text, matchBody }: BodyTextProps) {
+function BodyText({ text, matchBody, type }: BodyTextProps) {
+  const span = useSelector((state: RootState) => {
+    if (type === 'submission' || 'comment') {
+      return state.post.posts.span;
+    }
+    return state.post.spams.span;
+  });
+  useEffect(() => {
+    setEllipsis(!span);
+  }, [span]);
   const [ellipsis, setEllipsis] = useState(true);
 
   if (text === 'null') return null;
@@ -24,7 +37,11 @@ function BodyText({ text, matchBody }: BodyTextProps) {
   return (
     <TextBlock>
       <Truncate lines={ellipsis ? 1 : false}>
-        {matchBody ? <InteractionText text={text} match={matchBody}/> : <>{text}</>}
+        {matchBody ? (
+          <InteractionText text={text} match={matchBody} />
+        ) : (
+          <>{text}</>
+        )}
       </Truncate>
       {text !== '' && (
         <div className="span-div">
