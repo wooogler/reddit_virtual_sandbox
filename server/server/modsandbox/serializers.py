@@ -45,6 +45,7 @@ class PostSerializer(serializers.ModelSerializer):
             "matching_rules",
             "banned_at_utc",
             "banned_by",
+            "mod_reason_title",
             "mod_reports",
             "user_reports",
             "ups",

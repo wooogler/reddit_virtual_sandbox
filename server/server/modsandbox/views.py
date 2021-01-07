@@ -299,7 +299,7 @@ class SpamHandlerViewSet(viewsets.ModelViewSet):
         else:
             queryset = queryset.filter(profile__isnull=True)
         post_type = self.request.query_params.get("post_type", "all")
-        sort = self.request.query_params.get("sort", "new")
+        sort = self.request.query_params.get("sort", "created-new")
         filtered = self.request.query_params.get("filtered", "all")
 
         if post_type == "all":
@@ -311,10 +311,14 @@ class SpamHandlerViewSet(viewsets.ModelViewSet):
         elif post_type == "comment":
             queryset = queryset.filter(_type__in=["spam_comment", "reports_comment"])
 
-        if sort == "new":
+        if sort == "created-new":
             queryset = queryset.order_by("-created_utc")
-        elif sort == "old":
+        elif sort == "created-old":
             queryset = queryset.order_by("created_utc")
+        if sort == "banned-new":
+            queryset = queryset.order_by("-banned_at_utc")
+        elif sort == "banned-old":
+            queryset = queryset.order_by("banned_at_utc")
 
         if filtered == "all":
             queryset = queryset.all()

@@ -36,6 +36,7 @@ class PrawHandler:
                 "banned_at_utc": datetime.fromtimestamp(
                     spam.banned_at_utc, tz=timezone.utc
                 ),
+                "mod_reason_title": spam.mod_reason_title,
                 "user_reports": spam.user_reports,
                 "mod_reports": spam.mod_reports,
                 "ups": spam.ups,
@@ -57,6 +58,7 @@ class PrawHandler:
             "banned_at_utc": datetime.fromtimestamp(
                 spam.banned_at_utc, tz=timezone.utc
             ),
+            "mod_reason_title": spam.mod_reason_title,
             "user_reports": spam.user_reports,
             "mod_reports": spam.mod_reports,
             "ups": spam.ups,

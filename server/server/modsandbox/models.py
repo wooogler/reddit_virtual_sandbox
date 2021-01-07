@@ -45,6 +45,7 @@ class Post(models.Model):
     mod_reports = models.JSONField(null=True) # [['spam','mod_1'],['spam','mod_2'],['Can someone take a look at this?','mod_3']]
     # for post DB 
     is_private = models.BooleanField(default=True)
+    mod_reason_title = models.CharField(default='', max_length=300)
 
     TYPE_CHOICES = [
         ("submission", "submission"),

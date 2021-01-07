@@ -10,6 +10,7 @@ import {
   postSelector,
   PostType,
   SortType,
+  SpamSortType,
 } from '../../modules/post/slice';
 import { Button } from 'antd';
 import DraggableModal from '../common/DraggableModal';
@@ -36,7 +37,7 @@ function ListHeader({
   const loadingDelete = useSelector(postSelector.loadingDelete);
   const loadingSpamDelete = useSelector(postSelector.loadingSpamDelete);
   const count = useSelector(postSelector.count);
-  const { Option } = Select;
+  const { Option, OptGroup } = Select;
   const [isAddOpen, setIsAddOpen] = useState(false);
 
   const handleClickAddPost = () => {
@@ -66,13 +67,13 @@ function ListHeader({
     }
   };
 
-  const handleChangeSort = (sort: SortType) => {
+  const handleChangeSort = (sort: SortType | SpamSortType) => {
     if (list === 'unmoderated') {
-      dispatch(postActions.changeSortType(sort));
+      dispatch(postActions.changeSortType(sort as SortType));
       dispatch(getPostsRefresh());
     }
     if (list === 'moderated') {
-      dispatch(postActions.changeSpamSortType(sort));
+      dispatch(postActions.changeSpamSortType(sort as SpamSortType));
       dispatch(getSpamsRefresh());
     }
   };
@@ -152,15 +153,34 @@ function ListHeader({
           <Option value="submission">Submission</Option>
           <Option value="comment">Comment</Option>
         </Select>
-        <Select
-          onChange={handleChangeSort}
-          placeholder="sort"
-          size="small"
-          className="select-sort"
-        >
-          <Option value="new">New</Option>
-          <Option value="old">Old</Option>
-        </Select>
+        {
+          list === 'unmoderated' ? 
+          <Select
+            onChange={handleChangeSort}
+            placeholder="sort"
+            size="small"
+            className="select-sort"
+          >
+            <Option value="new">New</Option>
+            <Option value="old">Old</Option>
+          </Select> :
+          <Select
+            onChange={handleChangeSort}
+            placeholder="sort"
+            size="small"
+            className="select-sort"
+          >
+            <OptGroup label='created by'>
+              <Option value="created-new">New</Option>
+              <Option value="created-old">Old</Option>
+            </OptGroup>
+            <OptGroup label='banned by'>
+              <Option value="banned-new">New</Option>
+              <Option value="banned-old">Old</Option>
+            </OptGroup>
+          </Select>
+        }
+        
         <div className="checkbox-group">
           <Checkbox onChange={handleChangeUserImported} checked={userImported}>
             User Imported
@@ -205,7 +225,7 @@ const ListHeaderDiv = styled.div`
     display: flex;
     align-items: center;
     .select-sort {
-      width: 4rem;
+      width: 5rem;
       margin-left: 0.5rem;
     }
     .select-view {

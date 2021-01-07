@@ -17,7 +17,8 @@ import { addPost, addSpam, deletePosts, deleteSpams } from './actions';
 enableMapSet();
 
 export type PostType = 'submission' | 'comment' | 'all';
-export type SortType = 'new' | 'old';
+export type SortType = 'new' | 'old'
+export type SpamSortType = 'created-new' | 'created-old' | 'banned-new' | 'banned-old';;
 export type Filtered = 'all' | 'filtered' | 'unfiltered';
 
 export type PostState = {
@@ -88,7 +89,7 @@ export type PostState = {
     loading: boolean;
     error: Error | null;
     type: PostType;
-    sort: SortType;
+    sort: SpamSortType;
     selected: string[];
     split: boolean;
     userImported: boolean;
@@ -163,7 +164,7 @@ export const initialState: PostState = {
     loading: false,
     error: null,
     type: 'all',
-    sort: 'new',
+    sort: 'created-new',
     split: false,
     selected: [],
     userImported: true,
@@ -299,7 +300,7 @@ const postSlice = createSlice({
     changeSpamType: (state, action: PayloadAction<PostType>) => {
       state.spams.type = action.payload;
     },
-    changeSpamSortType: (state, action: PayloadAction<SortType>) => {
+    changeSpamSortType: (state, action: PayloadAction<SpamSortType>) => {
       state.spams.sort = action.payload;
     },
     togglePostSelect: (state, action: PayloadAction<string>) => {
@@ -507,7 +508,7 @@ const selectSpamType = createSelector<PostState, PostType, PostType>(
   (type) => type,
 );
 
-const selectSpamSort = createSelector<PostState, SortType, SortType>(
+const selectSpamSort = createSelector<PostState, SpamSortType, SpamSortType>(
   (state) => state.spams.sort,
   (sort) => sort,
 );
