@@ -22,7 +22,6 @@ function SubredditText({ text }: SubredditTextProps) {
 }
 
 const SubredditDiv = styled.div`
-  font-weight: 800;
   color: ${palette.gray[7]};
   font-size: 0.9rem;
   display: inline-flex;

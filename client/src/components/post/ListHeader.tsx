@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Tooltip } from 'antd';
+import { Tooltip, Popconfirm } from 'antd';
 import styled from 'styled-components';
 import { Select, Checkbox } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
@@ -15,6 +15,7 @@ import { Button } from 'antd';
 import DraggableModal from '../common/DraggableModal';
 import PostForm from './PostForm';
 import { getPostsRefresh, getSpamsRefresh } from '../../modules/post/actions';
+import palette from '../../lib/styles/palette';
 
 export interface ListHeaderProps {
   list: 'unmoderated' | 'moderated';
@@ -34,6 +35,7 @@ function ListHeader({
   const dispatch = useDispatch();
   const loadingDelete = useSelector(postSelector.loadingDelete);
   const loadingSpamDelete = useSelector(postSelector.loadingSpamDelete);
+  const count = useSelector(postSelector.count);
   const { Option } = Select;
   const [isAddOpen, setIsAddOpen] = useState(false);
 
@@ -104,17 +106,30 @@ function ListHeader({
         <Tooltip placement="right" title={tooltipText}>
           <InfoCircleOutlined />
         </Tooltip>
+        <div className="stat">
+          {list === 'unmoderated' ? (
+            <div>
+              filtered: {count.posts.filtered} / all: {count.posts.all} ({(count.posts.filtered/count.posts.all*100).toFixed(1)}%)
+            </div>
+          ) : (
+            <div>
+              filtered: {count.spams.filtered} / all: {count.spams.all} ({(count.spams.filtered/count.spams.all*100).toFixed(1)}%)
+            </div>
+          )}
+        </div>
+
         <div className="button-group">
-          <Button
-            danger
-            size="small"
-            onClick={handleClickDeleteAll}
-            loading={list === 'moderated' ? loadingDelete : loadingSpamDelete}
-          >
-            Delete All
-          </Button>
+          <Popconfirm placement='bottom' title="Are you sure?" onConfirm={handleClickDeleteAll}>
+            <Button
+              danger
+              size="small"
+              loading={list === 'moderated' ? loadingDelete : loadingSpamDelete}
+            >
+              Delete All
+            </Button>
+          </Popconfirm>
           <Button type="primary" size="small" onClick={handleClickAddPost}>
-            Add {list==='unmoderated' ? 'post' : 'spam'}
+            Add {list === 'unmoderated' ? 'post' : 'spam'}
           </Button>
         </div>
 
@@ -178,6 +193,11 @@ const ListHeaderDiv = styled.div`
     }
     svg {
       margin-left: 0.2rem;
+    }
+    .stat{
+      margin-left: 0.5rem;
+      font-size: 0.9rem;
+      color: ${palette.gray[8]}
     }
   }
   .select-group {

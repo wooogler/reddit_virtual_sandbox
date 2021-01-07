@@ -1,12 +1,15 @@
 import {
   Action,
+  createAsyncThunk,
   createSelector,
   createSlice,
   PayloadAction,
+  SerializedError,
   ThunkAction,
 } from '@reduxjs/toolkit';
 import YAML from 'yaml';
 import { RootState } from '..';
+import { submitCodeAPI } from '../../lib/api/modsandbox/rule';
 
 export type File = {
   tab: number;
@@ -25,7 +28,7 @@ export interface Line {
 
 export type RuleState = {
   loading: boolean;
-  error: Error | null;
+  error: SerializedError | null;
   files: File[];
   mode: 'edit' | 'select';
   selectedTab: number;
@@ -58,6 +61,14 @@ export const clickMatchedThunk = (
   setTimeout(() => dispatch(clearMatched()), 2000);
 };
 
+export const submitCode = createAsyncThunk<void, string,{state: RootState}>(
+  'rule/submitCode',
+  async(code, {getState}) => {
+    const token = getState().user.token;
+    await submitCodeAPI(token, code);
+  }
+)
+
 const ruleSlice = createSlice({
   name: 'rule',
   initialState,
@@ -79,22 +90,6 @@ const ruleSlice = createSlice({
     },
     changeFile: (state, action: PayloadAction<number>) => {
       state.selectedTab = action.payload;
-    },
-    submitCode: {
-      reducer: (state, action: PayloadAction<string>) => {
-        state.loading = true;
-        state.submittedCode = action.payload;
-      },
-      prepare: (code: string) => ({
-        payload: code,
-      }),
-    },
-    submitCodeSuccess: (state) => {
-      state.loading = false;
-    },
-    submitCodeError: (state, action: PayloadAction<Error>) => {
-      state.error = action.payload;
-      state.loading = false;
     },
     toggleEditorMode: (state) => {
       const mode = state.mode;
@@ -146,6 +141,18 @@ const ruleSlice = createSlice({
       }
     },
   },
+  extraReducers: (builder) => {
+    builder.addCase(submitCode.pending, (state) => {
+      state.loading = true;
+    }).addCase(submitCode.fulfilled, (state, action) => {
+      state.loading = false;
+      state.submittedCode = action.meta.arg
+    }).addCase(submitCode.rejected, (state, action) => {
+      state.error = action.error;
+      state.loading = false;
+    })
+  }
+    
 });
 
 const selectLoading = createSelector<RuleState, boolean, boolean>(
@@ -183,9 +190,6 @@ export const {
   updateFileCode,
   updateFilename,
   changeFile,
-  submitCode,
-  submitCodeError,
-  submitCodeSuccess,
   toggleEditorMode,
   createEditable,
   clearMatched,

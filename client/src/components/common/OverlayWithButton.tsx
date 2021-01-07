@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import {Button} from 'antd';
+import {Button, Popconfirm} from 'antd';
 import Overlay from './Overlay';
 
 export interface OverlayWithButtonProps {
@@ -11,7 +11,7 @@ export interface OverlayWithButtonProps {
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => void;
   onClickButton2?: (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    event: React.MouseEvent<HTMLElement, MouseEvent>,
   ) => void;
 }
 
@@ -28,9 +28,9 @@ function OverlayWithButton({
     onClickButton1(e);
   };
   const handleClickButton2 = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    e: React.MouseEvent<HTMLElement, MouseEvent> | undefined,
   ) => {
-    onClickButton2 && onClickButton2(e);
+    e && onClickButton2 && onClickButton2(e);
   };
 
   return (
@@ -42,9 +42,12 @@ function OverlayWithButton({
             {buttonText1}
           </Button>
           {buttonText2 && (
-            <Button danger type='primary' size="large" onClick={handleClickButton2}>
-              {buttonText2}
-            </Button>
+            <Popconfirm placement='bottom' title='Are you sure?' onConfirm={handleClickButton2}>
+              <Button danger type='primary' size="large">
+                {buttonText2}
+              </Button>
+            </Popconfirm>
+            
           )}
         </div>
       </OverlayDiv>

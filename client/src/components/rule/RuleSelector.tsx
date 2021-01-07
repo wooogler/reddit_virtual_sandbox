@@ -7,6 +7,8 @@ import 'antd/dist/antd.css';
 import { useDispatch, useSelector } from 'react-redux';
 import OverlayLoading from '../common/OverlayLoading';
 import { keysToTree, makeTree, treeToCode } from '../../lib/utils/tree';
+import { AppDispatch } from '../..';
+import { getPostsRefresh, getSpamsRefresh } from '../../modules/post/actions';
 
 interface RuleSelectorProps {
   editables: Rule[];
@@ -27,7 +29,7 @@ type Tree = {
 }[];
 
 function RuleSelector({ editables, loadingRule }: RuleSelectorProps) {
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
 
   const treeDataOriginal = makeTree(editables)
 
@@ -36,7 +38,10 @@ function RuleSelector({ editables, loadingRule }: RuleSelectorProps) {
     const code = treeToCode(
       keysToTree(treeData, [...checkedKeys, ...info.halfCheckedKeys]),
     );
-    dispatch(submitCode(code));
+    dispatch(submitCode(code)).then(() => {
+      dispatch(getPostsRefresh());
+      dispatch(getSpamsRefresh());
+    })
   };
 
   const clickedRuleIndex = useSelector(ruleSelector.clickedRuleIndex)

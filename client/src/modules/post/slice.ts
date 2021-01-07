@@ -25,14 +25,17 @@ export type PostState = {
     all: {
       data: Post[];
       page: number;
+      count: number;
     };
     filtered: {
       data: Post[];
       page: number;
+      count: number;
     };
     unfiltered: {
       data: Post[];
       page: number;
+      count: number;
     };
     import: {
       loading: boolean;
@@ -58,14 +61,17 @@ export type PostState = {
     all: {
       data: Spam[];
       page: number;
+      count: number;
     };
     filtered: {
       data: Spam[];
       page: number;
+      count: number;
     };
     unfiltered: {
       data: Spam[];
       page: number;
+      count: number;
     };
     import: {
       loading: boolean;
@@ -94,14 +100,17 @@ export const initialState: PostState = {
     all: {
       data: [],
       page: 0,
+      count: 0,
     },
     filtered: {
       data: [],
       page: 0,
+      count: 0,
     },
     unfiltered: {
       data: [],
       page: 0,
+      count: 0,
     },
     import: {
       loading: false,
@@ -127,14 +136,17 @@ export const initialState: PostState = {
     all: {
       data: [],
       page: 0,
+      count: 0,
     },
     filtered: {
       data: [],
       page: 0,
+      count: 0,
     },
     unfiltered: {
       data: [],
       page: 0,
+      count: 0,
     },
     import: {
       loading: false,
@@ -169,11 +181,12 @@ const postSlice = createSlice({
     },
     getAllPostsSuccess: (
       state,
-      action: PayloadAction<{ data: Post[]; nextPage: number }>,
+      action: PayloadAction<{ data: Post[]; nextPage: number, count: number }>,
     ) => {
       state.posts.all.data = action.payload.data;
       state.posts.loading = false;
       state.posts.all.page = action.payload.nextPage;
+      state.posts.all.count = action.payload.count;
     },
     getAllPostsError: (state, action: PayloadAction<Error>) => {
       state.posts.error = action.payload;
@@ -187,11 +200,12 @@ const postSlice = createSlice({
     },
     getFilteredPostsSuccess: (
       state,
-      action: PayloadAction<{ data: Post[]; nextPage: number }>,
+      action: PayloadAction<{ data: Post[]; nextPage: number, count: number }>,
     ) => {
       state.posts.filtered.data = action.payload.data;
       state.posts.loading = false;
       state.posts.filtered.page = action.payload.nextPage;
+      state.posts.filtered.count = action.payload.count;
     },
     getFilteredPostsError: (state, action: PayloadAction<Error>) => {
       state.posts.error = action.payload;
@@ -205,11 +219,12 @@ const postSlice = createSlice({
     },
     getUnfilteredPostsSuccess: (
       state,
-      action: PayloadAction<{ data: Post[]; nextPage: number }>,
+      action: PayloadAction<{ data: Post[]; nextPage: number, count: number }>,
     ) => {
       state.posts.unfiltered.data = action.payload.data;
       state.posts.loading = false;
       state.posts.unfiltered.page = action.payload.nextPage;
+      state.posts.unfiltered.count = action.payload.count;
     },
     getUnfilteredPostsError: (state, action: PayloadAction<Error>) => {
       state.posts.error = action.payload;
@@ -230,11 +245,12 @@ const postSlice = createSlice({
     },
     getAllSpamsSuccess: (
       state,
-      action: PayloadAction<{ data: Spam[]; nextPage: number }>,
+      action: PayloadAction<{ data: Spam[]; nextPage: number, count: number, }>,
     ) => {
       state.spams.all.data = action.payload.data;
       state.spams.loading = false;
       state.spams.all.page = action.payload.nextPage;
+      state.spams.all.count = action.payload.count;
     },
     getAllSpamsError: (state, action: PayloadAction<Error>) => {
       state.spams.error = action.payload;
@@ -248,11 +264,12 @@ const postSlice = createSlice({
     },
     getFilteredSpamsSuccess: (
       state,
-      action: PayloadAction<{ data: Spam[]; nextPage: number }>,
+      action: PayloadAction<{ data: Spam[]; nextPage: number, count: number, }>,
     ) => {
       state.spams.filtered.data = action.payload.data;
       state.spams.loading = false;
       state.spams.filtered.page = action.payload.nextPage;
+      state.spams.filtered.count = action.payload.count;
     },
     getFilteredSpamsError: (state, action: PayloadAction<Error>) => {
       state.spams.error = action.payload;
@@ -266,11 +283,12 @@ const postSlice = createSlice({
     },
     getUnfilteredSpamsSuccess: (
       state,
-      action: PayloadAction<{ data: Spam[]; nextPage: number }>,
+      action: PayloadAction<{ data: Spam[]; nextPage: number, count: number }>,
     ) => {
       state.spams.unfiltered.data = action.payload.data;
       state.spams.loading = false;
       state.spams.unfiltered.page = action.payload.nextPage;
+      state.spams.unfiltered.count = action.payload.count;
     },
     getUnfilteredSpamsError: (state, action: PayloadAction<Error>) => {
       state.spams.error = action.payload;
@@ -553,6 +571,26 @@ const selectSpamUserImported = createSelector<PostState, boolean, boolean>(
   (split) => split,
 );
 
+const selectPostCount = createSelector(
+  (state: PostState) => state.posts.all.count,
+  (state: PostState) => state.posts.filtered.count,
+  (state: PostState) => state.posts.unfiltered.count,
+  (all, filtered, unfiltered) => ({all, filtered, unfiltered})
+)
+
+const selectSpamCount = createSelector(
+  (state: PostState) => state.spams.all.count,
+  (state: PostState) => state.spams.filtered.count,
+  (state: PostState) => state.spams.unfiltered.count,
+  (all, filtered, unfiltered) => ({all, filtered, unfiltered})
+)
+
+const selectCount = createSelector(
+  selectPostCount,
+  selectSpamCount,
+  (posts, spams) => ({posts, spams})
+)
+
 export const postSelector = {
   pageAll: (state: RootState) => selectPageAll(state.post),
   postsAll: (state: RootState) => selectPostsAll(state.post),
@@ -583,6 +621,7 @@ export const postSelector = {
   splitSpamList: (state: RootState) => selectSplitSpamList(state.post),
   postUserImported: (state: RootState) => selectPostUserImported(state.post),
   spamUserImported: (state: RootState) => selectSpamUserImported(state.post),
+  count: (state:RootState) => selectCount(state.post),
 };
 
 const { actions, reducer } = postSlice;

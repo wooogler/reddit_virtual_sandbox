@@ -38,6 +38,7 @@ function* getAllPostsSaga() {
       postActions.getAllPostsSuccess({
         data: prevPosts.concat(response.results),
         nextPage,
+        count: response.count,
       }),
     );
   } catch (err) {
@@ -70,6 +71,7 @@ function* getFilteredPostsSaga() {
       postActions.getFilteredPostsSuccess({
         data: prevPosts.concat(response.results),
         nextPage,
+        count: response.count
       }),
     );
   } catch (err) {
@@ -102,6 +104,7 @@ function* getUnfilteredPostsSaga() {
       postActions.getUnfilteredPostsSuccess({
         data: prevPosts.concat(response.results),
         nextPage,
+        count: response.count,
       }),
     );
   } catch (err) {
@@ -206,6 +209,7 @@ function* getAllSpamsSaga() {
       postActions.getAllSpamsSuccess({
         data: prevSpams.concat(response.results),
         nextPage,
+        count: response.count,
       }),
     );
   } catch (err) {
@@ -238,6 +242,7 @@ function* getFilteredSpamsSaga() {
       postActions.getFilteredSpamsSuccess({
         data: prevSpams.concat(response.results),
         nextPage,
+        count: response.count,
       }),
     );
   } catch (err) {
@@ -264,12 +269,13 @@ function* getUnfilteredSpamsSaga() {
       sort,
       'unfiltered',
       nextPage,
-      userImported
+      userImported,
     );
     yield put(
       postActions.getUnfilteredSpamsSuccess({
         data: prevSpams.concat(response.results),
         nextPage,
+        count: response.count,
       }),
     );
   } catch (err) {

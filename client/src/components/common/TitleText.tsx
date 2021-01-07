@@ -20,6 +20,7 @@ function TitleText({ text, ellipsis, matchTitle }: TitleTextProps) {
 
 const TitleBlock = styled.div<{ellipsis: boolean}>`
   font-size: 1rem;
+  font-weight: 600;
   color: ${palette.gray[8]};
   display: block;
   width: auto;

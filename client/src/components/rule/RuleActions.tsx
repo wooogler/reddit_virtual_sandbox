@@ -3,21 +3,27 @@ import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import { createEditable, submitCode, toggleEditorMode } from '../../modules/rule/slice';
 import {Button} from 'antd';
+import { AppDispatch } from '../..';
+import { getPostsRefresh, getSpamsRefresh } from '../../modules/post/actions';
+import { SerializedError } from '@reduxjs/toolkit';
 
 interface RuleActionsProps {
-  message: Error | null;
+  message: SerializedError | null;
   mode: 'edit' | 'select';
   code: string;
   title: string;
 }
 
 function RuleActions({ message, mode, code, title }: RuleActionsProps) {
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const [downloadLink, setDownloadLink] = useState('')
 
   const handleClickRun = () => {
     if(mode === 'select') {
-      dispatch(submitCode(''))
+      dispatch(submitCode('')).then(() => {
+        dispatch(getPostsRefresh());
+        dispatch(getSpamsRefresh());
+      })
     } else {
       dispatch(createEditable());
     }
