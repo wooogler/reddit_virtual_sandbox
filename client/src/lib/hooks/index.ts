@@ -1,5 +1,5 @@
+import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { getModSubreddits } from '../api/modsandbox/post';
 
 type Input = {
   root?: Element | null;
@@ -37,10 +37,11 @@ export const useInfiniteScroll: UseInfiniteScroll = ({
   }, [target, root, rootMargin, onIntersect, threshold]);
 };
 
-export const useModSubApi: (
+export function useGetApi<T>(
   token: string,
-) => [string[], Error | null, boolean] = (token) => {
-  const [data, setData] = useState<string[]>([]);
+  api: string,
+): [T | null, Error | null, boolean] {
+  const [data, setData] = useState<T | null>(null);
   const [error, setError] = useState<Error | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -50,17 +51,52 @@ export const useModSubApi: (
       setLoading(true);
 
       try {
-        const modSubreddits = await getModSubreddits(token);
-        setData(modSubreddits);
+        const response = await axios.get<T>(api, {
+          headers: { Authorization: `Token ${token}` },
+        });
+        setData(response.data);
       } catch (error) {
         setError(error);
       }
 
       setLoading(false);
     };
-
     process();
-  }, [token]);
+  }, [token, api]);
 
   return [data, error, loading];
-};
+}
+
+export function useGetApiWithParam<T>(
+  token: string,
+  api: string,
+  param: string,
+): [T | null, Error | null, boolean] {
+  const [data, setData] = useState<T | null>(null);
+  const [error, setError] = useState<Error | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (param !== '') {
+      const process = async () => {
+        setError(null);
+        setLoading(true);
+
+        try {
+          const response = await axios.get<T>(api, {
+            headers: { Authorization: `Token ${token}` },
+            params: { param },
+          });
+          setData(response.data);
+        } catch (error) {
+          setError(error);
+        }
+
+        setLoading(false);
+      };
+      process();
+    }
+  }, [token, api, param]);
+
+  return [data, error, loading];
+}

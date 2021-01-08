@@ -28,23 +28,19 @@ function SpamItem({ spam, selected, isMatched, match }: SpamItemProps) {
     <SpamPostItemDiv
       _type={spam._type}
     >
-      {spam._type === 'spam_submission' || 'reports_submission' ? (
-        <SpamFrame spam={spam}>
-          <SubmissionItem
-            match={match}
-            submission={spam}
-            action={isMatched ? 'remove' : undefined}
-          />
-        </SpamFrame>
-      ) : (
-        <SpamFrame spam={spam}>
-          <CommentItem
-            match={match}
-            comment={spam}
-            action={isMatched ? 'remove' : undefined}
-          />
-        </SpamFrame>
-      )}
+      <SpamFrame spam={spam}>
+        {spam._type === ('spam_submission' || 'reports_submission') ? 
+        <SubmissionItem
+          match={match}
+          submission={spam}
+          action={isMatched ? 'remove' : undefined}
+        /> :
+        <CommentItem
+          match={match}
+          comment={spam}
+          action={isMatched ? 'remove' : undefined}
+        />}
+      </SpamFrame>
       <div className="checkbox-frame">
         <Checkbox onClick={handleClickSpam}/>
       </div>

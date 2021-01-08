@@ -77,8 +77,12 @@ export interface ImportPostQuery {
 }
 
 export interface ImportSpamQuery {
-  subreddit_name: string;
+  subreddit_name: string | undefined;
   mod_type: string;
+  removal_reason: string;
+  community_rule: string;
+  moderator_name: string;
+  reported_by: string;
 }
 
 export async function importSubredditPostsAPI(
@@ -181,17 +185,6 @@ export async function moveSpamsAPI(token: string, ids: string[]) {
   );
 
   return response.status;
-}
-
-export async function getModSubreddits(token: string) {
-  const response = await axios.get<string[]>(
-    'http://localhost:8000/mod_subreddits',
-    {
-      headers: { Authorization: `Token ${token}` },
-    },
-  );
-
-  return response.data;
 }
 
 export async function addPostAPI(token: string, newPost: NewPost) {

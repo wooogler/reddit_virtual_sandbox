@@ -127,10 +127,26 @@ class PrawHandler:
         profile = kwargs["profile"]
         subreddit_name = kwargs['subreddit_name']
         mod_type = kwargs['mod_type']
+        removal_reason = kwargs['removal_reason']
+        community_rule = kwargs['community_rule']
+        moderator_name = kwargs['moderator_name']
+        reported_by = kwargs['reported_by']
         if mod_type == 'spam':
             spams = self._get_spam_posts(subreddit_name)
+            print('removal_reason: ', removal_reason)
+            if removal_reason != 'all':
+                spams = list(filter(lambda spam: spam["mod_reason_title"] == removal_reason, spams))
+            if moderator_name != 'all':
+                spams = list(filter(lambda spam: spam["banned_by"] == moderator_name, spams))
         elif mod_type =='reports':
             spams = self._get_reports_posts(subreddit_name)
+            if reported_by == 'mod':
+                if moderator_name != 'all':
+                    spams = list(filter(lambda spam: moderator_name in list(map(lambda report: report[1], spam["mod_reports"])), spams))
+            elif reported_by=='user':
+                if community_rule != 'all':
+                    spams = list(filter(lambda spam: community_rule in list(map(lambda report: report[0], spam["user_reports"])), spams))
+            
         elif mod_type =='modqueue':
             spams = self._get_modqueue_posts(subreddit_name)
         for spam in spams:
@@ -154,4 +170,31 @@ class PrawHandler:
     def get_mod_subreddits(self):
         return list(
             map(self.project_mod_subreddit, self.reddit.user.contributor_subreddits())
+        )
+
+    @staticmethod
+    def project_removal_reasons(reason):
+        return reason.title
+
+    def get_removal_reasons(self, subreddit_name):
+        return list(
+            map(self.project_removal_reasons, self.reddit.subreddit(subreddit_name).mod.removal_reasons)
+        )
+
+    @staticmethod
+    def project_community_rules(reason):
+        return reason.short_name
+
+    def get_community_rules(self, subreddit_name):
+        return list(
+            map(self.project_community_rules, self.reddit.subreddit(subreddit_name).rules)
+        )
+
+    @staticmethod
+    def project_moderators(mod):
+        return mod.name
+    
+    def get_moderators(self, subreddit_name):
+        return list(
+            map(self.project_moderators, self.reddit.subreddit(subreddit_name).moderator())
         )

@@ -184,7 +184,7 @@ function ListHeader({
             <Button
               danger
               size="small"
-              loading={list === 'moderated' ? loadingDelete : loadingSpamDelete}
+              loading={list === 'unmoderated' ? loadingDelete : loadingSpamDelete}
             >
               Delete All
             </Button>

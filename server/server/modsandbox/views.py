@@ -36,7 +36,7 @@ def reddit_login(request):
     )
     return Response(
         reddit.auth.url(
-            ["identity", "read", "mysubreddits"], request.user.id, "permanent"
+            ["identity", "read", "mysubreddits", "modcontributors"], request.user.id, "permanent"
         )
     )
 
@@ -127,6 +127,38 @@ def mod_subreddits(request):
     praw_handler = PrawHandler(profile.reddit_token)
     return Response(praw_handler.get_mod_subreddits())
 
+@api_view(["GET"])
+def removal_reasons(request):
+    try:
+        subreddit_name = request.query_params.get("param")
+    except Exception as e:
+        logger.error(e)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+    profile = Profile.objects.get(user=request.user.id)
+    praw_handler = PrawHandler(profile.reddit_token)
+    return Response(praw_handler.get_removal_reasons(subreddit_name))
+
+@api_view(["GET"])
+def community_rules(request):
+    try:
+        subreddit_name = request.query_params.get("param")
+    except Exception as e:
+        logger.error(e)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+    profile = Profile.objects.get(user=request.user.id)
+    praw_handler = PrawHandler(profile.reddit_token)
+    return Response(praw_handler.get_community_rules(subreddit_name))
+
+@api_view(["GET"])
+def get_moderators(request):
+    try:
+        subreddit_name = request.query_params.get("param")
+    except Exception as e:
+        logger.error(e)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+    profile = Profile.objects.get(user=request.user.id)
+    praw_handler = PrawHandler(profile.reddit_token)
+    return Response(praw_handler.get_moderators(subreddit_name))
 
 class PostHandlerViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.filter(_type__in=["submission", "comment"])
@@ -344,8 +376,14 @@ class SpamHandlerViewSet(viewsets.ModelViewSet):
             praw_hanlder = PrawHandler(profile.reddit_token)
             subreddit_name = request.data["subreddit_name"]
             mod_type = request.data["mod_type"]
+            removal_reason = request.data["removal_reason"]
+            community_rule = request.data["community_rule"]
+            moderator_name = request.data['moderator_name']
+            reported_by = request.data['reported_by']
             if praw_hanlder.run(
-                profile=profile, subreddit_name=subreddit_name, mod_type=mod_type
+                profile=profile, subreddit_name=subreddit_name, mod_type=mod_type, 
+                removal_reason=removal_reason, community_rule=community_rule, moderator_name=moderator_name,
+                reported_by=reported_by
             ):
                 return Response(status=status.HTTP_201_CREATED)
 
