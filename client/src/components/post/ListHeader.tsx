@@ -69,7 +69,6 @@ function ListHeader({
           clearTimeout(resizetimer);
           resizetimer = setTimeout(() => {
             dispatch(commonActions.changePostListHeaderHeight(height));
-            console.log(height);
           }, 250);
         }
       }
@@ -79,7 +78,6 @@ function ListHeader({
           clearTimeout(resizetimer);
           resizetimer = setTimeout(() => {
             dispatch(commonActions.changeSpamListHeaderHeight(height));
-            console.log(height);
           }, 250);
         }
       }

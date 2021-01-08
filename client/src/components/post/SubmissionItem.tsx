@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Post, Spam } from '../../lib/api/modsandbox/post';
 import { actionColorMap } from '../../lib/styles/palette';
-import { MatchIndex } from '../../lib/utils/match';
+import { Index, MatchIndex } from '../../lib/utils/match';
 import AuthorText from '../common/AuthorText';
 import BodyText from '../common/BodyText';
 import DatetimeText from '../common/DatetimeText';
@@ -24,9 +24,35 @@ export interface SubmissionItemProps {
 
 function SubmissionItem({submission, action, match}: SubmissionItemProps) {
 
+  const matchTitle = match.filter(matchItem => matchItem.target==='body').reduce<Index[]>((acc, item) => {
+    if(item.indexes) {
+      return acc.concat(item.indexes);
+    }
+    return acc;
+  }, [])
+
+  const matchDomain = match.filter(matchItem => matchItem.target==='domain').reduce<Index[]>((acc, item) => {
+    if(item.indexes) {
+      return acc.concat(item.indexes);
+    }
+    return acc;
+  }, [])
+  const matchUrl = match.filter(matchItem => matchItem.target==='url').reduce<Index[]>((acc, item) => {
+    if(item.indexes) {
+      return acc.concat(item.indexes);
+    }
+    return acc;
+  }, [])
+  const matchBody = match.filter(matchItem => matchItem.target==='body').reduce<Index[]>((acc, item) => {
+    if(item.indexes) {
+      return acc.concat(item.indexes);
+    }
+    return acc;
+  }, [])
+
   return (
     <SubmissionItemDiv action={action}>
-      <TitleText text={submission.title} ellipsis={false} matchTitle={match.find(matchItem => matchItem.target === 'title')?.indexes}/>
+      <TitleText text={submission.title} ellipsis={false} matchTitle={matchTitle}/>
       <div className="submission-info">
         {/* {submission.link_flair_text && (
           <FlairText
@@ -38,13 +64,13 @@ function SubmissionItem({submission, action, match}: SubmissionItemProps) {
         {/* <IdText text={submission.id} /> */}
         <SubredditText text={submission.subreddit} />
         <LinkText text='open submission link' url={submission.full_link}/>
-        <DomainText text={submission.domain} matchDomain={match.find(matchItem => matchItem.target === 'domain')?.indexes} />
+        <DomainText text={submission.domain} matchDomain={matchDomain} />
       </div>
       
       {submission.domain && submission.domain.startsWith('self.') ? 
-        <BodyText text={submission.body} matchBody={match.find(matchItem => matchItem.target === 'body')?.indexes} type={submission._type}/>
+        <BodyText text={submission.body} matchBody={matchBody} type={submission._type}/>
         :
-        <UrlText text={submission.url} matchUrl={match.find(matchItem => matchItem.target === 'url')?.indexes} />
+        <UrlText text={submission.url} matchUrl={matchUrl} />
       }
       
       <div className="author-info">
