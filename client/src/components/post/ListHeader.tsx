@@ -61,7 +61,7 @@ function ListHeader({
   }, [dispatch, list])
 
   useLayoutEffect(() => {
-    let resizetimer = 0;
+    let resizetimer: NodeJS.Timeout
     const updateHeight = () => {
       if(list === 'unmoderated') {
         const height = headerRef.current?.offsetHeight;
