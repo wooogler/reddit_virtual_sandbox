@@ -1,36 +1,39 @@
+import { LinkOutlined } from '@ant-design/icons';
 import React from 'react';
 import styled, { css } from 'styled-components';
 import palette from '../../lib/styles/palette';
 import { Index } from '../../lib/utils/match';
 import InteractionText from './InteractionText';
+import LinkText from './LinkText';
 
 export interface TitleTextProps {
   text: string;
-  ellipsis: boolean;
   matchTitle?: Index[];
   url: string;
 }
 
-function TitleText({ text, ellipsis, matchTitle, url }: TitleTextProps) {
+function TitleText({ text, matchTitle, url }: TitleTextProps) {
   return (
-    <a href={url} onClick={(e) => {e.stopPropagation()}} target="_blank" rel="noopener noreferrer">
-    <TitleBlock ellipsis={ellipsis} className='text-base font-medium  text-gray-900 font-display hover:underline leading-5'>
-      {matchTitle ? <InteractionText text={text} match={matchTitle}/> : <>{text}</>}
-    </TitleBlock>
-    </a>
+    <div className='flex items-center'>
+      <div className="text-base font-medium  text-gray-900 font-display">
+        {matchTitle ? (
+          <InteractionText text={text} match={matchTitle} />
+        ) : (
+          <>{text}</>
+        )}
+      </div>
+      <a
+        href={url}
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
+        target="_blank"
+        rel="noopener noreferrer"
+        className='ml-2 flex text-xs'
+      ><LinkOutlined/></a>
+    </div>
+    
   );
 }
-
-const TitleBlock = styled.div<{ellipsis: boolean}>`
-  display: block;
-  width: auto;
-  ${(props) =>
-    props.ellipsis &&
-    css`
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      overflow: hidden;
-    `}
-`;
 
 export default TitleText;

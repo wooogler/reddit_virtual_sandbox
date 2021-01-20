@@ -33,7 +33,6 @@ function SpamItem({ spam, selected, isMatched, match }: SpamItemProps) {
         <SubmissionItem
           match={match}
           submission={spam}
-          action={isMatched ? 'remove' : undefined}
         /> :
         <CommentItem
           match={match}

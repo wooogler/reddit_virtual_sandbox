@@ -18,16 +18,18 @@ export interface CommentItemProps {
 
 function CommentItem({ comment, action, match }: CommentItemProps) {
   return (
-    <CommentItemDiv action={action}>
-      <BodyText text={comment.body} matchBody={match.find(matchItem => matchItem.target === 'body')?.indexes} type={comment._type}/>
-      <div className="comment-info">
+    <div className='min-w-0'>
+      <BodyText url={comment.full_link} text={comment.body} matchBody={match.find(matchItem => matchItem.target === 'body')?.indexes} type={comment._type}/>
+      <div className='flex'>
         {/* <IdText text={comment.id} /> */}
         <SubredditText text={comment.subreddit} />
-        <LinkText text="open comment link" url={comment.full_link} />
-      </div>
-      <div className="author-info">
+        <div className='mx-1 text-gray-300'>•</div>
         <AuthorText text={comment.author} />
         <DatetimeText datetime={comment.created_utc} />
+        <LinkText text="open" url={comment.full_link} />
+      </div>
+      <div className="author-info">
+        
         {/* {comment.author_flair_text && (
           <FlairText
             text={comment.author_flair_text}
@@ -36,7 +38,7 @@ function CommentItem({ comment, action, match }: CommentItemProps) {
           />
         )} */}
       </div>
-    </CommentItemDiv>
+    </div>
   );
 }
 

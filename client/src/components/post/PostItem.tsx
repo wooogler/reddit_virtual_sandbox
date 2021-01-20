@@ -23,38 +23,25 @@ function PostItem({ post, selected, isMatched, match }: PostItemProps) {
   };
 
   return (
-    <PostItemDiv selected={selected} className='flex'>
-      <div className="flex items-center">
+    <div
+      className={
+        'flex border border-gray-200 p-1 ' + (isMatched ? 'bg-red-200' : '')
+      }
+    >
+      <div className="flex mr-1">
         <Checkbox onClick={handleClickPost} />
       </div>
       {post._type === 'submission' ? (
-        <div className="item-frame">
-          <SubmissionItem
-            match={match}
-            submission={post}
-            action={isMatched ? 'remove' : undefined}
-          />
-        </div>
+        <SubmissionItem match={match} submission={post} />
       ) : (
-        <div className="item-frame">
-          <CommentItem
-            match={match}
-            comment={post}
-            action={isMatched ? 'remove' : undefined}
-          />
-        </div>
+        <CommentItem
+          match={match}
+          comment={post}
+          action={isMatched ? 'remove' : undefined}
+        />
       )}
-      
-    </PostItemDiv>
+    </div>
   );
 }
-
-const PostItemDiv = styled.div<{ selected: boolean }>`
-  border-bottom: 3px solid ${palette.gray[2]};
-  .item-frame {
-    width: 100%;
-  }
-  background-color: ${palette.gray[3]};
-`;
 
 export default PostItem;

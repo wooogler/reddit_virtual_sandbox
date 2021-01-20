@@ -8,15 +8,20 @@ import { PostType } from '../../modules/post/slice';
 import { SpamType } from '../../lib/api/modsandbox/post';
 import { RootState } from '../../modules';
 import { useSelector } from 'react-redux';
-import { ArrowsAltOutlined, ShrinkOutlined } from '@ant-design/icons';
+import {
+  ArrowsAltOutlined,
+  LinkOutlined,
+  ShrinkOutlined,
+} from '@ant-design/icons';
 
 export interface BodyTextProps {
   text: string;
   matchBody?: Index[];
   type: PostType | SpamType;
+  url: string;
 }
 
-function BodyText({ text, matchBody, type }: BodyTextProps) {
+function BodyText({ text, matchBody, type, url }: BodyTextProps) {
   const span = useSelector((state: RootState) => {
     if (type === 'submission' || 'comment') {
       return state.post.posts.span;
@@ -30,24 +35,44 @@ function BodyText({ text, matchBody, type }: BodyTextProps) {
 
   if (text === 'null') return null;
 
-  const handleClickSpan = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const handleClickSpan = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
     setEllipsis((state) => !state);
     e.stopPropagation();
   };
 
   return (
     <>
-    <div className={'text-sm font-body '+(ellipsis && 'truncate')}>
+      <div className={'text-sm font-body ' + (ellipsis && 'truncate')}>
         {matchBody ? (
           <InteractionText text={text} match={matchBody} />
         ) : (
           <>{text}</>
         )}
-    </div>
-
-    {text !== '' && (
-      <button className='hover:bg-gray-200 p-1 flex' onClick={handleClickSpan}>{ellipsis ? <ArrowsAltOutlined />:<ShrinkOutlined />}</button>
-    )}
+      </div>
+      <div className="flex items-center">
+        {text.length > 50 && (
+          <button
+            className="hover:bg-gray-200 p-1 flex"
+            onClick={handleClickSpan}
+          >
+            {ellipsis ? <ArrowsAltOutlined /> : <ShrinkOutlined />}
+          </button>
+        )}
+        <a
+          href={url}
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex p-1 items-center"
+        >
+          <LinkOutlined />
+          <div className='ml-1'>link</div>
+        </a>
+      </div>
     </>
   );
 }

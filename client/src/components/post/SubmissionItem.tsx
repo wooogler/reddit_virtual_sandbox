@@ -14,11 +14,10 @@ import UrlText from '../common/UrlText';
 
 export interface SubmissionItemProps {
   submission: Post | Spam;
-  action?: 'remove' | 'report';
   match: MatchIndex[];
 }
 
-function SubmissionItem({submission, action, match}: SubmissionItemProps) {
+function SubmissionItem({submission, match}: SubmissionItemProps) {
 
   const matchTitle = match.filter(matchItem => matchItem.target==='title').reduce<Index[]>((acc, item) => {
     if(item.indexes) {
@@ -47,8 +46,8 @@ function SubmissionItem({submission, action, match}: SubmissionItemProps) {
   }, [])
 
   return (
-    <SubmissionItemDiv action={action} className='p-2'>
-      <TitleText text={submission.title} ellipsis={false} matchTitle={matchTitle} url={submission.full_link}/>
+    <div className='min-w-0'>
+      <TitleText text={submission.title} matchTitle={matchTitle} url={submission.full_link}/>
       <div className="flex">
         {/* {submission.link_flair_text && (
           <FlairText
@@ -67,7 +66,7 @@ function SubmissionItem({submission, action, match}: SubmissionItemProps) {
       </div>
       <div className='pt-2'>
       {submission.domain && submission.domain.startsWith('self.') ? 
-        <BodyText text={submission.body} matchBody={matchBody} type={submission._type}/>
+        <BodyText text={submission.body} matchBody={matchBody} type={submission._type} url={submission.full_link}/>
         :
         <UrlText text={submission.url} matchUrl={matchUrl} />
       }
@@ -85,13 +84,8 @@ function SubmissionItem({submission, action, match}: SubmissionItemProps) {
         )}
         <IdText text={submission.author_fullname} /> */}
       </div>
-    </SubmissionItemDiv>
+    </div>
   );
 }
-
-const SubmissionItemDiv = styled.div<{ action?: 'remove' | 'report' }>`
-  background-color: ${(props) =>
-    props.action ? actionColorMap[props.action].background : 'white'};
-`;
 
 export default SubmissionItem;
