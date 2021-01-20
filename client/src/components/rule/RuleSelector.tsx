@@ -15,19 +15,6 @@ interface RuleSelectorProps {
   loadingRule: boolean;
 }
 
-type Tree = {
-  title: string;
-  key: string;
-  children: {
-    title: string;
-    key: string;
-    children: {
-      title: string;
-      key: string;
-    }[];
-  }[];
-}[];
-
 function RuleSelector({ editables, loadingRule }: RuleSelectorProps) {
   const dispatch: AppDispatch = useDispatch();
 

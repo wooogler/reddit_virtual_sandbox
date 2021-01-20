@@ -8,20 +8,20 @@ export interface TitleTextProps {
   text: string;
   ellipsis: boolean;
   matchTitle?: Index[];
+  url: string;
 }
 
-function TitleText({ text, ellipsis, matchTitle }: TitleTextProps) {
+function TitleText({ text, ellipsis, matchTitle, url }: TitleTextProps) {
   return (
-    <TitleBlock ellipsis={ellipsis}>
+    <a href={url} onClick={(e) => {e.stopPropagation()}} target="_blank" rel="noopener noreferrer">
+    <TitleBlock ellipsis={ellipsis} className='text-base font-medium  text-gray-900 font-display hover:underline leading-5'>
       {matchTitle ? <InteractionText text={text} match={matchTitle}/> : <>{text}</>}
     </TitleBlock>
+    </a>
   );
 }
 
 const TitleBlock = styled.div<{ellipsis: boolean}>`
-  font-size: 1rem;
-  font-weight: 600;
-  color: ${palette.gray[8]};
   display: block;
   width: auto;
   ${(props) =>

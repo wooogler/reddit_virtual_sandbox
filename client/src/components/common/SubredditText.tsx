@@ -16,14 +16,12 @@ function SubredditText({ text }: SubredditTextProps) {
       target="_blank"
       rel="noopener noreferrer"
     >
-      <SubredditDiv>r/{text}</SubredditDiv>
+      <SubredditDiv className='font-display font-bold text-sm hover:underline text-gray-900'>r/{text}</SubredditDiv>
     </a>
   );
 }
 
 const SubredditDiv = styled.div`
-  color: ${palette.gray[7]};
-  font-size: 0.9rem;
   display: inline-flex;
 `;
 

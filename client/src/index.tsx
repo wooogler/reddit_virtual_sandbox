@@ -7,6 +7,7 @@ import * as serviceWorker from './serviceWorker';
 import createSagaMiddleware from 'redux-saga';
 import rootReducer, { rootSaga } from './modules';
 import 'antd/dist/antd.css';
+import './index.css'
 import { configureStore } from '@reduxjs/toolkit';
 
 const sagaMiddleware = createSagaMiddleware();

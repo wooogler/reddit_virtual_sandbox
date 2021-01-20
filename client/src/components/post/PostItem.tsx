@@ -23,7 +23,10 @@ function PostItem({ post, selected, isMatched, match }: PostItemProps) {
   };
 
   return (
-    <PostItemDiv selected={selected}>
+    <PostItemDiv selected={selected} className='flex'>
+      <div className="flex items-center">
+        <Checkbox onClick={handleClickPost} />
+      </div>
       {post._type === 'submission' ? (
         <div className="item-frame">
           <SubmissionItem
@@ -41,25 +44,15 @@ function PostItem({ post, selected, isMatched, match }: PostItemProps) {
           />
         </div>
       )}
-      <div className="checkbox-frame">
-        <Checkbox onClick={handleClickPost} />
-      </div>
+      
     </PostItemDiv>
   );
 }
 
 const PostItemDiv = styled.div<{ selected: boolean }>`
-  display: flex;
-  align-items: stretch;
   border-bottom: 3px solid ${palette.gray[2]};
   .item-frame {
     width: 100%;
-  }
-  .checkbox-frame {
-    display: flex;
-    align-items: center;
-    padding-right: 0.2rem;
-    background-color: white;
   }
   background-color: ${palette.gray[3]};
 `;

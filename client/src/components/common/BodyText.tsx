@@ -8,6 +8,7 @@ import { PostType } from '../../modules/post/slice';
 import { SpamType } from '../../lib/api/modsandbox/post';
 import { RootState } from '../../modules';
 import { useSelector } from 'react-redux';
+import { ArrowsAltOutlined, ShrinkOutlined } from '@ant-design/icons';
 
 export interface BodyTextProps {
   text: string;
@@ -29,38 +30,27 @@ function BodyText({ text, matchBody, type }: BodyTextProps) {
 
   if (text === 'null') return null;
 
-  const handleClickSpan = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  const handleClickSpan = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     setEllipsis((state) => !state);
     e.stopPropagation();
   };
 
   return (
-    <TextBlock>
-      <Truncate lines={ellipsis ? 1 : false}>
+    <>
+    <div className={'text-sm font-body '+(ellipsis && 'truncate')}>
         {matchBody ? (
           <InteractionText text={text} match={matchBody} />
         ) : (
           <>{text}</>
         )}
-      </Truncate>
-      {text !== '' && (
-        <div className="span-div">
-          <ToggleSpanButton onClick={handleClickSpan}>
-            {ellipsis ? '▽ span' : '△ close'}
-          </ToggleSpanButton>
-        </div>
-      )}
-    </TextBlock>
+    </div>
+
+    {text !== '' && (
+      <button className='hover:bg-gray-200 p-1 flex' onClick={handleClickSpan}>{ellipsis ? <ArrowsAltOutlined />:<ShrinkOutlined />}</button>
+    )}
+    </>
   );
 }
-
-const TextBlock = styled.div`
-  font-size: 0.9rem;
-  color: ${palette.gray[7]};
-  .span-div {
-    display: flex;
-  }
-`;
 
 const ToggleSpanButton = styled.span`
   font-size: 0.8rem;

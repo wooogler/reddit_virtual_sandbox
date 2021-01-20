@@ -12,10 +12,6 @@ import SubredditText from '../common/SubredditText';
 import TitleText from '../common/TitleText';
 import UrlText from '../common/UrlText';
 
-type Bolds = {
-  body: string[]
-}
-
 export interface SubmissionItemProps {
   submission: Post | Spam;
   action?: 'remove' | 'report';
@@ -24,7 +20,7 @@ export interface SubmissionItemProps {
 
 function SubmissionItem({submission, action, match}: SubmissionItemProps) {
 
-  const matchTitle = match.filter(matchItem => matchItem.target==='body').reduce<Index[]>((acc, item) => {
+  const matchTitle = match.filter(matchItem => matchItem.target==='title').reduce<Index[]>((acc, item) => {
     if(item.indexes) {
       return acc.concat(item.indexes);
     }
@@ -51,9 +47,9 @@ function SubmissionItem({submission, action, match}: SubmissionItemProps) {
   }, [])
 
   return (
-    <SubmissionItemDiv action={action}>
-      <TitleText text={submission.title} ellipsis={false} matchTitle={matchTitle}/>
-      <div className="submission-info">
+    <SubmissionItemDiv action={action} className='p-2'>
+      <TitleText text={submission.title} ellipsis={false} matchTitle={matchTitle} url={submission.full_link}/>
+      <div className="flex">
         {/* {submission.link_flair_text && (
           <FlairText
             text={submission.link_flair_text}
@@ -63,19 +59,23 @@ function SubmissionItem({submission, action, match}: SubmissionItemProps) {
         )} */}
         {/* <IdText text={submission.id} /> */}
         <SubredditText text={submission.subreddit} />
-        <LinkText text='open submission link' url={submission.full_link}/>
-        <DomainText text={submission.domain} matchDomain={matchDomain} />
+        <div className='mx-1 text-gray-300'>•</div>
+        <AuthorText text={submission.author} />
+        <DatetimeText datetime={submission.created_utc} />
+        {/* <DomainText text={submission.domain} matchDomain={matchDomain} /> */}
+
       </div>
-      
+      <div className='pt-2'>
       {submission.domain && submission.domain.startsWith('self.') ? 
         <BodyText text={submission.body} matchBody={matchBody} type={submission._type}/>
         :
         <UrlText text={submission.url} matchUrl={matchUrl} />
       }
+      </div>
       
       <div className="author-info">
-        <AuthorText text={submission.author} />
-        <DatetimeText datetime={submission.created_utc} />
+        
+        
         {/* {submission.author_flair_text && (
           <FlairText
             text={submission.author_flair_text}
@@ -90,28 +90,8 @@ function SubmissionItem({submission, action, match}: SubmissionItemProps) {
 }
 
 const SubmissionItemDiv = styled.div<{ action?: 'remove' | 'report' }>`
-  width: auto;
-  display: flex;
-  flex-direction: column;
-  padding: 0.5rem;
   background-color: ${(props) =>
     props.action ? actionColorMap[props.action].background : 'white'};
-  .submission-info {
-    display: flex;
-    flex-wrap: wrap;
-    margin: 0.5rem 0;
-    div, a {
-      margin-right: 0.3rem;
-    }
-  }
-  .author-info {
-    display: flex;
-    flex-wrap: wrap;
-    margin-top: 0.5rem;
-    div + div {
-      margin-left: 0.5rem;
-    }
-  }
 `;
 
 export default SubmissionItem;

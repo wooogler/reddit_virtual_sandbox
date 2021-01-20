@@ -8,8 +8,8 @@ interface AuthorTextProps {
 
 function AuthorText({ text }: AuthorTextProps) {
   return (
-    <div>
-      <AuthorSpan>by </AuthorSpan>
+    <div className='flex text-sm text-gray-500 font-display'>
+      <div className='mr-1'>Posted by</div>
       <a
         href={`https://www.reddit.com/user/${text}`}
         onClick={(e) => {
@@ -18,22 +18,10 @@ function AuthorText({ text }: AuthorTextProps) {
         target="_blank"
         rel="noopener noreferrer"
       >
-        <AuthorDiv>{text}</AuthorDiv>
+        <div className='hover:underline'>u/{text}</div>
       </a>
     </div>
   );
 }
-
-const AuthorSpan = styled.span`
-  color: ${palette.gray[7]};
-  font-size: 0.9rem;
-`;
-
-const AuthorDiv = styled.div`
-  font-weight: 800;
-  color: ${palette.gray[8]};
-  font-size: 0.9rem;
-  display: inline-flex;
-`;
 
 export default AuthorText;
