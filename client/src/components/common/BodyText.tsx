@@ -1,7 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import palette from '../../lib/styles/palette';
-import Truncate from 'react-truncate';
 import { Index } from '../../lib/utils/match';
 import InteractionText from './InteractionText';
 import { PostType } from '../../modules/post/slice';
@@ -9,10 +6,9 @@ import { SpamType } from '../../lib/api/modsandbox/post';
 import { RootState } from '../../modules';
 import { useSelector } from 'react-redux';
 import {
-  ArrowsAltOutlined,
   LinkOutlined,
-  ShrinkOutlined,
 } from '@ant-design/icons';
+import { CollapseIcon, ExpandIcon } from '../../static/svg';
 
 export interface BodyTextProps {
   text: string;
@@ -54,10 +50,10 @@ function BodyText({ text, matchBody, type, url }: BodyTextProps) {
       <div className="flex items-center">
         {text.length > 50 && (
           <button
-            className="hover:bg-gray-200 p-1 flex"
+            className="hover:bg-gray-200 p-1 flex w-7"
             onClick={handleClickSpan}
           >
-            {ellipsis ? <ArrowsAltOutlined /> : <ShrinkOutlined />}
+            {ellipsis ? <ExpandIcon/> : <CollapseIcon />}
           </button>
         )}
         <a
@@ -67,7 +63,7 @@ function BodyText({ text, matchBody, type, url }: BodyTextProps) {
           }}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex p-1 items-center"
+          className="flex p-1 items-center text-sm"
         >
           <LinkOutlined />
           <div className='ml-1'>link</div>
@@ -77,10 +73,5 @@ function BodyText({ text, matchBody, type, url }: BodyTextProps) {
   );
 }
 
-const ToggleSpanButton = styled.span`
-  font-size: 0.8rem;
-  color: ${palette.gray[6]};
-  cursor: pointer;
-`;
 
 export default BodyText;

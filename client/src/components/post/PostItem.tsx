@@ -2,8 +2,6 @@ import React from 'react';
 import { Post } from '../../lib/api/modsandbox/post';
 import SubmissionItem from './SubmissionItem';
 import CommentItem from './CommentItem';
-import styled from 'styled-components';
-import palette from '../../lib/styles/palette';
 import { useDispatch } from 'react-redux';
 import { postActions } from '../../modules/post/slice';
 import { MatchIndex } from '../../lib/utils/match';
@@ -16,7 +14,7 @@ interface PostItemProps {
   match: MatchIndex[];
 }
 
-function PostItem({ post, selected, isMatched, match }: PostItemProps) {
+function PostItem({ post, isMatched, match }: PostItemProps) {
   const dispatch = useDispatch();
   const handleClickPost = () => {
     dispatch(postActions.togglePostSelect(post._id));

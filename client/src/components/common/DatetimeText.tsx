@@ -3,8 +3,6 @@ import moment from 'moment';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import palette from '../../lib/styles/palette';
-import styled from 'styled-components';
 import { Tooltip } from 'antd';
 
 export interface DatetimeTextProps {

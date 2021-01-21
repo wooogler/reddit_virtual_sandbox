@@ -1,13 +1,9 @@
 import React from 'react';
-import styled from 'styled-components';
 import { Post, Spam } from '../../lib/api/modsandbox/post';
-import { actionColorMap } from '../../lib/styles/palette';
 import { Index, MatchIndex } from '../../lib/utils/match';
 import AuthorText from '../common/AuthorText';
 import BodyText from '../common/BodyText';
 import DatetimeText from '../common/DatetimeText';
-import DomainText from '../common/DomainText';
-import LinkText from '../common/LinkText';
 import SubredditText from '../common/SubredditText';
 import TitleText from '../common/TitleText';
 import UrlText from '../common/UrlText';
@@ -26,12 +22,6 @@ function SubmissionItem({submission, match}: SubmissionItemProps) {
     return acc;
   }, [])
 
-  const matchDomain = match.filter(matchItem => matchItem.target==='domain').reduce<Index[]>((acc, item) => {
-    if(item.indexes) {
-      return acc.concat(item.indexes);
-    }
-    return acc;
-  }, [])
   const matchUrl = match.filter(matchItem => matchItem.target==='url').reduce<Index[]>((acc, item) => {
     if(item.indexes) {
       return acc.concat(item.indexes);
@@ -68,21 +58,8 @@ function SubmissionItem({submission, match}: SubmissionItemProps) {
       {submission.domain && submission.domain.startsWith('self.') ? 
         <BodyText text={submission.body} matchBody={matchBody} type={submission._type} url={submission.full_link}/>
         :
-        <UrlText text={submission.url} matchUrl={matchUrl} />
+        <UrlText text={submission.url} link={submission.full_link} matchUrl={matchUrl} />
       }
-      </div>
-      
-      <div className="author-info">
-        
-        
-        {/* {submission.author_flair_text && (
-          <FlairText
-            text={submission.author_flair_text}
-            color={submission.author_flair_text_color}
-            background={submission.author_flair_background_color}
-          />
-        )}
-        <IdText text={submission.author_fullname} /> */}
       </div>
     </div>
   );

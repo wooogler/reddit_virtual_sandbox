@@ -1,36 +1,54 @@
-import React, { ReactElement } from 'react'
+import { LinkOutlined } from '@ant-design/icons';
+import React, { ReactElement } from 'react';
 import styled from 'styled-components';
 import palette from '../../lib/styles/palette';
 import { Index } from '../../lib/utils/match';
+import { ExternalIcon } from '../../static/svg';
 import InteractionText from './InteractionText';
 
 interface Props {
-  text: string,
-  matchUrl?: Index[],
+  text: string;
+  matchUrl?: Index[];
+  link: string;
 }
 
-function UrlText({text, matchUrl}: Props): ReactElement {
+function UrlText({ text, matchUrl, link }: Props): ReactElement {
   return (
-    
-      <UrlDiv>
+    <>
+      <div className="text-sm font-body text-blue-600">
         {matchUrl ? (
           <InteractionText text={text} match={matchUrl} />
         ) : (
           <>{text}</>
         )}
-        <a href={text} onClick={(e) => {e.stopPropagation()}} target="_blank" rel="noopener noreferrer">⎋ open</a>
-      </UrlDiv>
-  )
+      </div>
+      <div className='flex items-center'>
+        <a
+          href={text}
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover:bg-gray-200 p-1 flex"
+        >
+          <ExternalIcon className='w-5'/>
+        </a>
+        <a
+          href={link}
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex p-1 items-center text-sm"
+        >
+          <LinkOutlined />
+          <div className='ml-1'>link</div>
+        </a>
+      </div>
+    </>
+  );
 }
 
-const UrlDiv = styled.div`
-  font-size: 0.9rem;
-  a {
-    color: ${palette.blue[8]};
-    text-decoration: underline;
-    cursor: pointer;
-    margin-left: 0.5rem;
-  }
-`
-
-export default UrlText
+export default UrlText;

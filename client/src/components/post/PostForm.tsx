@@ -31,7 +31,7 @@ function PostForm({ onClickClose, list }: PostFormProps) {
       title: '',
       body: '',
       author: username,
-      url: 'self.FakeSubreddit',
+      domain: 'self.FakeSubreddit',
     },
     onSubmit: async (values) => {
       if (list === 'unmoderated') {
@@ -109,7 +109,7 @@ function PostForm({ onClickClose, list }: PostFormProps) {
         name="url"
         type="text"
         onChange={formik.handleChange}
-        value={formik.values.url}
+        value={formik.values.domain}
       />
       <div className="buttons">
         <Button onClick={onClickClose}>Close</Button>
