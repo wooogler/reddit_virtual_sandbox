@@ -30,12 +30,11 @@ function PostItem({ post, isMatched, match }: PostItemProps) {
         <Checkbox onClick={handleClickPost} />
       </div>
       {post._type === 'submission' ? (
-        <SubmissionItem match={match} submission={post} />
+        <SubmissionItem match={isMatched ? match : []} submission={post} />
       ) : (
         <CommentItem
-          match={match}
+          match={isMatched ? match : []}
           comment={post}
-          action={isMatched ? 'remove' : undefined}
         />
       )}
     </div>

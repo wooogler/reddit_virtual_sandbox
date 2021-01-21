@@ -163,7 +163,6 @@ function SpamList({
 const SpamPostListBlock = styled.div<{listHeaderHeight: number}>`
   display: flex;
   flex-direction: column;
-  position: relative;
   height: calc(100% - ${(props) => props.listHeaderHeight}px);
   .list {
     height: 100%;

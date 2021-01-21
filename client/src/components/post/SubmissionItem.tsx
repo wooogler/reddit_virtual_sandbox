@@ -7,13 +7,15 @@ import DatetimeText from '../common/DatetimeText';
 import SubredditText from '../common/SubredditText';
 import TitleText from '../common/TitleText';
 import UrlText from '../common/UrlText';
+import SpamFrame from './SpamFrame';
 
 export interface SubmissionItemProps {
   submission: Post | Spam;
   match: MatchIndex[];
+  spam?: boolean;
 }
 
-function SubmissionItem({submission, match}: SubmissionItemProps) {
+function SubmissionItem({submission, match, spam}: SubmissionItemProps) {
 
   const matchTitle = match.filter(matchItem => matchItem.target==='title').reduce<Index[]>((acc, item) => {
     if(item.indexes) {
@@ -38,7 +40,7 @@ function SubmissionItem({submission, match}: SubmissionItemProps) {
   return (
     <div className='min-w-0'>
       <TitleText text={submission.title} matchTitle={matchTitle} url={submission.full_link}/>
-      <div className="flex">
+      <div className="flex flex-wrap">
         {/* {submission.link_flair_text && (
           <FlairText
             text={submission.link_flair_text}
@@ -52,7 +54,6 @@ function SubmissionItem({submission, match}: SubmissionItemProps) {
         <AuthorText text={submission.author} />
         <DatetimeText datetime={submission.created_utc} />
         {/* <DomainText text={submission.domain} matchDomain={matchDomain} /> */}
-
       </div>
       <div className='pt-2'>
       {submission.domain && submission.domain.startsWith('self.') ? 
@@ -61,6 +62,7 @@ function SubmissionItem({submission, match}: SubmissionItemProps) {
         <UrlText text={submission.url} link={submission.full_link} matchUrl={matchUrl} />
       }
       </div>
+      {spam && <SpamFrame spam={submission as Spam}/>}
     </div>
   );
 }

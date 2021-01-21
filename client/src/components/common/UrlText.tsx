@@ -1,7 +1,5 @@
 import { LinkOutlined } from '@ant-design/icons';
 import React, { ReactElement } from 'react';
-import styled from 'styled-components';
-import palette from '../../lib/styles/palette';
 import { Index } from '../../lib/utils/match';
 import { ExternalIcon } from '../../static/svg';
 import InteractionText from './InteractionText';
@@ -22,7 +20,7 @@ function UrlText({ text, matchUrl, link }: Props): ReactElement {
           <>{text}</>
         )}
       </div>
-      <div className='flex items-center'>
+      <div className='flex items-center opacity-60'>
         <a
           href={text}
           onClick={(e) => {

@@ -19,7 +19,7 @@ export interface BodyTextProps {
 
 function BodyText({ text, matchBody, type, url }: BodyTextProps) {
   const span = useSelector((state: RootState) => {
-    if (type === 'submission' || 'comment') {
+    if (type === 'submission' || type === 'comment') {
       return state.post.posts.span;
     }
     return state.post.spams.span;
@@ -47,13 +47,13 @@ function BodyText({ text, matchBody, type, url }: BodyTextProps) {
           <>{text}</>
         )}
       </div>
-      <div className="flex items-center">
+      <div className="flex items-center opacity-60">
         {text.length > 50 && (
           <button
             className="hover:bg-gray-200 p-1 flex w-7"
             onClick={handleClickSpan}
           >
-            {ellipsis ? <ExpandIcon/> : <CollapseIcon />}
+            {ellipsis ? <ExpandIcon /> : <CollapseIcon />}
           </button>
         )}
         <a
