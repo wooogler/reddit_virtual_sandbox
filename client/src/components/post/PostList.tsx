@@ -19,6 +19,7 @@ import PostItem from './PostItem';
 import { getMatch } from '../../lib/utils/match';
 import ListHeader from './ListHeader';
 import BarRate from '../vis/BarRate';
+import { Empty } from 'antd';
 
 interface PostListProps {
   postsAll: Post[];
@@ -49,7 +50,7 @@ function PostList({
   code,
   splitPostList,
   postUserImported,
-  postSpan
+  postSpan,
 }: PostListProps) {
   const dispatch: AppDispatch = useDispatch();
   const [target, setTarget] = useState<any>(null);
@@ -89,7 +90,7 @@ function PostList({
   };
 
   return (
-    <div className='relative flex flex-col h-full'>
+    <div className="relative flex flex-col h-full">
       {selectedSpamPostId.length !== 0 && (
         <OverlayWithButton
           text={
@@ -109,12 +110,12 @@ function PostList({
         list="unmoderated"
         name="Posts"
         splitView={splitPostList}
-        tooltipText='Posts imported from real subreddit'
+        tooltipText="Posts imported from real subreddit"
         userImported={postUserImported}
         span={postSpan}
       />
-      <BarRate total={count.posts.all} part={count.posts.filtered}/>
-      <SplitPaneDiv className='flex-1 overflow-y-auto'>
+      <BarRate total={count.posts.all} part={count.posts.filtered} />
+      <SplitPaneDiv className="flex-1 overflow-y-auto">
         {splitView ? (
           <SplitPane
             split="horizontal"
@@ -124,23 +125,31 @@ function PostList({
           >
             <div className="w-full">
               <div className="flex justify-center">▼ Affected by Automod</div>
-              {postsFiltered.map((post) => {
-                return (
-                  <PostItem
-                    post={post}
-                    selected={selectedPostId.includes(post._id)}
-                    isMatched={post.matching_rules.length !== 0}
-                    match={getMatch(code, post)}
-                    key={post._id}
-                  />
-                );
-              })}
+              {postsFiltered.length !== 0 ? (
+                postsFiltered.map((post) => {
+                  return (
+                    <PostItem
+                      post={post}
+                      selected={selectedPostId.includes(post._id)}
+                      isMatched={post.matching_rules.length !== 0}
+                      match={getMatch(code, post)}
+                      key={post._id}
+                    />
+                  );
+                })
+              ) : (
+                <div className="flex justify-center items-center h-full">
+                  <Empty description="No filtered post" />
+                </div>
+              )}
               {postsFiltered.length > 8 && (
                 <div ref={setTarget} className="last-item-filtered"></div>
               )}
             </div>
             <div className="w-full">
-              <div className="flex justify-center">▼ Not Affected by Automod</div>
+              <div className="flex justify-center">
+                ▼ Not Affected by Automod
+              </div>
               {postsUnfiltered.map((post, index) => {
                 return (
                   <PostItem
@@ -158,18 +167,24 @@ function PostList({
             </div>
           </SplitPane>
         ) : (
-          <div>
-            {postsAll.map((post) => {
-              return (
-              <PostItem
-                  post={post}
-                  selected={selectedPostId.includes(post._id)}
-                  isMatched={post.matching_rules.length !== 0}
-                  match={getMatch(code, post)}
-                  key={post._id}
-                />
-              );
-            })}
+          <div className="h-full">
+            {postsAll.length !== 0 ? (
+              postsAll.map((post) => {
+                return (
+                  <PostItem
+                    post={post}
+                    selected={selectedPostId.includes(post._id)}
+                    isMatched={post.matching_rules.length !== 0}
+                    match={getMatch(code, post)}
+                    key={post._id}
+                  />
+                );
+              })
+            ) : (
+              <div className="flex justify-center items-center h-full">
+                <Empty description="Import subreddit posts" />
+              </div>
+            )}
             {postsAll.length > 8 && (
               <div ref={setTarget} className="last-item-all"></div>
             )}
@@ -180,7 +195,7 @@ function PostList({
   );
 }
 
-const SplitPaneDiv= styled.div`
+const SplitPaneDiv = styled.div`
   .Resizer.horizontal {
     height: 0.3rem;
     background-color: ${palette.blue[2]};

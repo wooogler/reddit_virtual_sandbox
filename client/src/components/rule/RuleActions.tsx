@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import styled from 'styled-components';
 import { createEditable, submitCode, toggleEditorMode } from '../../modules/rule/slice';
 import {Button} from 'antd';
+import {message as antdMessage} from 'antd';
 import { AppDispatch } from '../..';
 import { getPostsRefresh, getSpamsRefresh } from '../../modules/post/actions';
 import { SerializedError } from '@reduxjs/toolkit';
+import CopyToClipboard from 'react-copy-to-clipboard';
 
 interface RuleActionsProps {
   message: SerializedError | null;
@@ -39,9 +40,18 @@ function RuleActions({ message, mode, code, title }: RuleActionsProps) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [code])
 
+  const handleCopy = () => {
+    antdMessage.info('Copied!');
+  }
+
   return (
-    <RuleActionsBlock>
-      <a download={title} href={downloadLink}>
+    <div className='flex'>
+      <CopyToClipboard text={code} onCopy={handleCopy} >
+        <Button size='large' className='mr-2'>
+          Copy
+        </Button>
+      </CopyToClipboard>
+      <a download={title} href={downloadLink} className='mr-2'>
         <Button size="large">
           Export YAML
         </Button>
@@ -50,14 +60,8 @@ function RuleActions({ message, mode, code, title }: RuleActionsProps) {
       <Button onClick={handleClickRun} type='primary' size="large">
         {mode === "edit" ? 'Run' : 'Edit'}
       </Button>
-    </RuleActionsBlock>
+    </div>
   );
 }
 
-const RuleActionsBlock = styled.div`
-  display: flex;
-  button {
-    margin-left: 1rem;
-  }
-`;
 export default RuleActions;

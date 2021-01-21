@@ -14,6 +14,7 @@ import { getMatch } from '../../lib/utils/match';
 import SpamItem from './SpamItem';
 import ListHeader from './ListHeader';
 import BarRate from '../vis/BarRate';
+import { Empty } from 'antd';
 
 interface SpamListProps {
   spamsAll: Spam[];
@@ -117,7 +118,7 @@ function SpamList({
                 ▼ Affected by Automod
               </div>
               {
-                spamsFiltered.map((spam) => {
+                spamsFiltered.length !== 0 ? spamsFiltered.map((spam) => {
                   return (<SpamItem
                     spam={spam}
                     selected={selectedSpamId.includes(spam._id)}
@@ -125,7 +126,11 @@ function SpamList({
                     match={getMatch(code, spam)}
                     key={spam._id}
                   />)
-                })
+                }) : (
+                  <div className="flex justify-center items-center h-full">
+                    <Empty description="No filtered post" />
+                  </div>
+                )
               }
               {
                 spamsFiltered.length > 8 && (
@@ -157,7 +162,7 @@ function SpamList({
           </SplitPane>
         ) : (
           <>
-            {spamsAll.map((spam) => {
+            {spamsAll.length !== 0 ? (spamsAll.map((spam) => {
               return (<SpamItem
                 spam={spam}
                 selected={selectedSpamId.includes(spam._id)}
@@ -165,7 +170,11 @@ function SpamList({
                 match={getMatch(code, spam)}
                 key={spam._id}
               />)
-            })}
+            })) : (
+              <div className='flex justify-center items-center h-full'>
+                <Empty description="Import moderated posts"/>
+              </div>
+            )}
             {spamsAll.length > 8 && (
               <div ref={setTarget} className="last-item-all"></div>
             )}

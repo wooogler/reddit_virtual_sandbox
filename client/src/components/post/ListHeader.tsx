@@ -110,7 +110,7 @@ function ListHeader({
         <Tooltip placement="right" title={tooltipText}>
           <InfoCircleOutlined />
         </Tooltip>
-        <div className="flex ml-auto">
+        <div className="flex ml-auto mr-2">
           <Popconfirm
             placement="bottom"
             title="Are you sure?"
@@ -137,13 +137,13 @@ function ListHeader({
           <PostForm onClickClose={handleClickCloseModal} list={list} />
         </DraggableModal>
       </div>
-      <div className="option-group">
-        <div className="select-group">
+      <div className='flex flex-wrap'>
+        <div>
           <Select
             defaultValue="all"
             onChange={handleChangeView}
             size="small"
-            className="select-view"
+            className="mr-1 w-28"
           >
             <Option value="all">All Posts</Option>
             <Option value="submission">Submission</Option>
@@ -154,7 +154,7 @@ function ListHeader({
               onChange={handleChangeSort}
               placeholder="sort"
               size="small"
-              className="select-sort"
+              className="w-24 mr-2"
             >
               <Option value="new">New</Option>
               <Option value="old">Old</Option>
@@ -164,7 +164,7 @@ function ListHeader({
               onChange={handleChangeSort}
               placeholder="sort"
               size="small"
-              className="select-sort"
+              className="w-24 mr-2"
             >
               <OptGroup label="created by">
                 <Option value="created-new">New</Option>
@@ -177,7 +177,7 @@ function ListHeader({
             </Select>
           )}
         </div>
-        <div className="checkbox-group">
+        <div>
           <Checkbox onChange={handleChangeUserImported} checked={userImported}>
             User Imported
           </Checkbox>

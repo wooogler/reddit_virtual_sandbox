@@ -27,8 +27,9 @@ function RuleEditor({code}: RuleEditorProps) {
       setOptions={{
         showGutter: false,
         fontFamily: 'Courier',
-        fontSize: '16px'
+        fontSize: '20px'
       }}
+      placeholder={"---\ntitle: ['hi', 'hello']\nbody (includes): ['have']\n---"}
     />
   );
 }
