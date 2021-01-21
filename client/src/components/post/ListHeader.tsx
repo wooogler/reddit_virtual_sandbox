@@ -43,51 +43,6 @@ function ListHeader({
   const { Option, OptGroup } = Select;
   const [isAddOpen, setIsAddOpen] = useState(false);
 
-  const headerRef = useRef<HTMLDivElement>(null);
-
-  useLayoutEffect(() => {
-    if(list === 'unmoderated') {
-      const height = headerRef.current?.offsetHeight;
-      if (height) {
-        dispatch(commonActions.changePostListHeaderHeight(height));
-      }
-    }
-    else if(list==='moderated') {
-      const height = headerRef.current?.offsetHeight;
-      if (height) {
-        dispatch(commonActions.changeSpamListHeaderHeight(height));
-      }
-    }
-  }, [dispatch, list])
-
-  useLayoutEffect(() => {
-    let resizetimer: NodeJS.Timeout
-    const updateHeight = () => {
-      if(list === 'unmoderated') {
-        const height = headerRef.current?.offsetHeight;
-        if (height) {
-          clearTimeout(resizetimer);
-          resizetimer = setTimeout(() => {
-            dispatch(commonActions.changePostListHeaderHeight(height));
-          }, 250);
-        }
-      }
-      else if(list==='moderated') {
-        const height = headerRef.current?.offsetHeight;
-        if (height) {
-          clearTimeout(resizetimer);
-          resizetimer = setTimeout(() => {
-            dispatch(commonActions.changeSpamListHeaderHeight(height));
-          }, 250);
-        }
-      }
-    };
-    window.addEventListener('resize', updateHeight);
-    return () => {
-      window.removeEventListener('resize', updateHeight);
-    };
-  }, [dispatch, list]);
-
   const handleClickAddPost = () => {
     setIsAddOpen(true);
   };
@@ -153,27 +108,13 @@ function ListHeader({
   };
 
   return (
-    <ListHeaderDiv ref={headerRef}>
-      <div className="list-info">
-        <div className="name">{name}</div>
+    <>
+      <div className='flex flex-wrap items-center'>
+        <div className="text-2xl mx-2">{name}</div>
         <Tooltip placement="right" title={tooltipText}>
           <InfoCircleOutlined />
         </Tooltip>
-        <div className="stat">
-          {list === 'unmoderated' ? (
-            <div>
-              filtered: {count.posts.filtered} / all: {count.posts.all} (
-              {((count.posts.filtered / count.posts.all) * 100).toFixed(1)}%)
-            </div>
-          ) : (
-            <div>
-              filtered: {count.spams.filtered} / all: {count.spams.all} (
-              {((count.spams.filtered / count.spams.all) * 100).toFixed(1)}%)
-            </div>
-          )}
-        </div>
-
-        <div className="button-group">
+        <div className="flex ml-auto">
           <Popconfirm
             placement="bottom"
             title="Are you sure?"
@@ -187,7 +128,7 @@ function ListHeader({
               Delete All
             </Button>
           </Popconfirm>
-          <Button type="primary" size="small" onClick={handleClickAddPost}>
+          <Button className='ml-1' type="primary" size="small" onClick={handleClickAddPost}>
             Add {list === 'unmoderated' ? 'post' : 'spam'}
           </Button>
         </div>
@@ -252,63 +193,8 @@ function ListHeader({
           </Checkbox>
         </div>
       </div>
-    </ListHeaderDiv>
+    </>
   );
 }
-
-const ListHeaderDiv = styled.div`
-  padding: 0.2rem;
-  .list-info {
-    display: flex;
-    width: 100%;
-    align-items: center;
-    .name {
-      font-size: 1.5rem;
-      margin: 0.3rem;
-    }
-    .button-group {
-      margin-left: auto;
-      button {
-        margin-left: 0.5rem;
-      }
-    }
-    svg {
-      margin-left: 0.2rem;
-    }
-    .stat {
-      margin-left: 0.5rem;
-      font-size: 0.9rem;
-      color: ${palette.gray[8]};
-    }
-  }
-  .option-group {
-    display: flex;
-    width: 100%;
-    flex-wrap: wrap;
-    align-items: center;
-    .select-group {
-      display: flex;
-      align-items: center;
-      .select-sort {
-        width: 5rem;
-        margin-left: 0.5rem;
-      }
-      .select-view {
-        width: 7rem;
-        margin-left: 0.5rem;
-      }
-    }
-    .checkbox-group {
-      display: flex;
-      margin: 0.2rem;
-      span {
-        padding: 0.1rem;
-      }
-      .ant-checkbox-wrapper {
-        margin-left: 0.2rem;
-      }
-    }
-  }
-`;
 
 export default ListHeader;

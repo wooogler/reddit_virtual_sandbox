@@ -35,10 +35,10 @@ function OverlayWithButton({
 
   return (
     <Overlay>
-      <OverlayDiv>
-        <div className="text">{text}</div>
-        <div className='button-group'>
-          <Button type='primary' size="large" onClick={handleClickButton1}>
+      <div className='flex flex-col items-center'>
+        <div className="text-2xl mb-4 font-bold">{text}</div>
+        <div className='flex flex-col'>
+          <Button className='mb-2' type='primary' size="large" onClick={handleClickButton1}>
             {buttonText1}
           </Button>
           {buttonText2 && (
@@ -50,7 +50,7 @@ function OverlayWithButton({
             
           )}
         </div>
-      </OverlayDiv>
+      </div>
     </Overlay>
   );
 }

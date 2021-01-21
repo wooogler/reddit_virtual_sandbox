@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import OverlayWithButton from '../common/OverlayWithButton';
-import { useDispatch } from 'react-redux';
-import { postActions } from '../../modules/post/slice';
+import { useDispatch, useSelector } from 'react-redux';
+import { postActions, postSelector } from '../../modules/post/slice';
 import SplitPane from 'react-split-pane';
 import palette from '../../lib/styles/palette';
 import { useInfiniteScroll } from '../../lib/hooks';
@@ -17,6 +17,8 @@ import {
 import { AppDispatch } from '../..';
 import PostItem from './PostItem';
 import { getMatch } from '../../lib/utils/match';
+import ListHeader from './ListHeader';
+import BarRate from '../vis/BarRate';
 
 interface PostListProps {
   postsAll: Post[];
@@ -29,7 +31,9 @@ interface PostListProps {
   loadingRule: boolean;
   loadingImport: boolean;
   code: string;
-  listHeaderHeight: number;
+  splitPostList: boolean;
+  postUserImported: boolean;
+  postSpan: boolean;
 }
 
 function PostList({
@@ -43,10 +47,13 @@ function PostList({
   loadingRule,
   loadingImport,
   code,
-  listHeaderHeight,
+  splitPostList,
+  postUserImported,
+  postSpan
 }: PostListProps) {
   const dispatch: AppDispatch = useDispatch();
   const [target, setTarget] = useState<any>(null);
+  const count = useSelector(postSelector.count);
 
   useInfiniteScroll({
     target,
@@ -82,7 +89,7 @@ function PostList({
   };
 
   return (
-    <PostListBlock listHeaderHeight={listHeaderHeight}>
+    <div className='relative flex flex-col h-full'>
       {selectedSpamPostId.length !== 0 && (
         <OverlayWithButton
           text={
@@ -98,7 +105,16 @@ function PostList({
       )}
       {loadingPost && <OverlayLoading text="Loading Posts..." />}
       {loadingRule && <OverlayLoading text="Applying Rules..." />}
-      <div className="list">
+      <ListHeader
+        list="unmoderated"
+        name="Posts"
+        splitView={splitPostList}
+        tooltipText='Posts imported from real subreddit'
+        userImported={postUserImported}
+        span={postSpan}
+      />
+      <BarRate total={count.posts.all} part={count.posts.filtered}/>
+      <SplitPaneDiv className='flex-1 overflow-y-auto'>
         {splitView ? (
           <SplitPane
             split="horizontal"
@@ -106,9 +122,9 @@ function PostList({
             style={{ position: 'relative' }}
             paneStyle={{ overflow: 'auto' }}
           >
-            <div className="split-pane">
-              <div className="pane-label">▼ Affected by Automod</div>
-              {postsFiltered.map((post, index) => {
+            <div className="w-full">
+              <div className="flex justify-center">▼ Affected by Automod</div>
+              {postsFiltered.map((post) => {
                 return (
                   <PostItem
                     post={post}
@@ -123,8 +139,8 @@ function PostList({
                 <div ref={setTarget} className="last-item-filtered"></div>
               )}
             </div>
-            <div className="split-pane">
-              <div className="pane-label">▼ Not Affected by Automod</div>
+            <div className="w-full">
+              <div className="flex justify-center">▼ Not Affected by Automod</div>
               {postsUnfiltered.map((post, index) => {
                 return (
                   <PostItem
@@ -142,7 +158,7 @@ function PostList({
             </div>
           </SplitPane>
         ) : (
-          <>
+          <div>
             {postsAll.map((post) => {
               return (
               <PostItem
@@ -157,33 +173,14 @@ function PostList({
             {postsAll.length > 8 && (
               <div ref={setTarget} className="last-item-all"></div>
             )}
-          </>
+          </div>
         )}
-      </div>
-    </PostListBlock>
+      </SplitPaneDiv>
+    </div>
   );
 }
 
-const PostListBlock = styled.div<{listHeaderHeight: number}>`
-  display: flex;
-  flex-direction: column;
-  height: calc(100% - ${(props) => props.listHeaderHeight}px);
-  .list {
-    height: 100%;
-    overflow-y: auto;
-    .split-pane {
-      width: 100%;
-      .pane-label {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding-top: 0.3rem;
-        border-bottom: 0.1rem solid ${palette.gray[2]};
-        font-size: 0.9rem;
-        color: ${palette.gray[7]};
-      }
-    }
-  }
+const SplitPaneDiv= styled.div`
   .Resizer.horizontal {
     height: 0.3rem;
     background-color: ${palette.blue[2]};

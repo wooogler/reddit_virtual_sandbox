@@ -34,14 +34,6 @@ function SpamListContainer() {
 
   return (
     <>
-      <ListHeader
-        list="moderated"
-        name="Seed posts"
-        splitView={splitSpamList}
-        tooltipText='Posts which needs moderation --- you can bring the posts from spam and reports'
-        userImported={spamUserImported}
-        span={spamSpan}
-      />
       {spamsAll && (
         <SpamList
           spamsAll={spamsAll}
@@ -54,7 +46,9 @@ function SpamListContainer() {
           loadingRule={loadingRule}
           loadingSpamImport={loadingSpamImport}
           code={code}
-          listHeaderHeight={listHeaderHeight}
+          splitSpamList={splitSpamList}
+          spamUserImported={spamUserImported}
+          spamSpan={spamSpan}
         />
       )}
     </>

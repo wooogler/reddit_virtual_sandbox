@@ -34,18 +34,8 @@ function PostListContainer() {
   const loadingImport = useSelector(postSelector.loadingImport);
   const code = useSelector(ruleSelector.submittedCode)
 
-  const listHeaderHeight = useSelector((state: RootState) => state.common.postListHeaderHeight)
-
   return (
     <>
-      <ListHeader
-        list="unmoderated"
-        name="Posts"
-        splitView={splitPostList}
-        tooltipText='Posts imported from real subreddit'
-        userImported={postUserImported}
-        span={postSpan}
-      />
       {
         loadingImport && (
           <OverlayLoading text='Importing Posts' />
@@ -63,7 +53,9 @@ function PostListContainer() {
           loadingRule={loadingRule}
           loadingImport={loadingImport}
           code={code}
-          listHeaderHeight={listHeaderHeight}
+          splitPostList={splitPostList}
+          postUserImported={postUserImported}
+          postSpan={postSpan}
         />
       )}
     </>

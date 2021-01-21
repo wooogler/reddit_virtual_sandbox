@@ -12,7 +12,7 @@ function SpamFrame({ spam }: SpamFrameProps) {
     <div>
       {spam.banned_by && spam.banned_at_utc && (
         <>
-          <div className="flex">
+          <div className="flex flex-wrap">
             <AuthorText text={spam.banned_by} spam/>
             <DatetimeText datetime={spam.banned_at_utc} />
           </div>
