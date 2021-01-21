@@ -1,26 +1,35 @@
 import React from 'react';
 import moment from 'moment';
-import palette from '../../lib/styles/palette';
-import styled from 'styled-components';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import relativeTime from 'dayjs/plugin/relativeTime';
+import { Tooltip } from 'antd';
 
 export interface DatetimeTextProps {
   datetime: number | string;
 }
 
+dayjs.extend(utc);
+dayjs.extend(relativeTime);
+
 function DatetimeText({ datetime }: DatetimeTextProps) {
   return (
-    <DatetimeDiv>
-      {typeof datetime === 'number'
-        ? moment.unix(datetime).local().format('MMM Do YYYY, hh:mm:ss')
-        : moment(datetime).local().format('MMM Do YYYY, hh:mm:ss')}
-    </DatetimeDiv>
+    <Tooltip
+      placement="top"
+      title={
+        typeof datetime === 'number'
+          ? dayjs.unix(datetime).local().format('ddd MMM D YYYY hh:mm:ss')
+          : dayjs(datetime).local().format('ddd MMM D YYYY hh:mm:ss')
+      }
+    >
+      
+      <div className='font-display text-sm text-gray-500 mx-2 hover:underline'>
+        {typeof datetime === 'number'
+          ? dayjs.unix(datetime).local().fromNow()
+          : moment(datetime).local().fromNow()}
+      </div>
+    </Tooltip>
   );
 }
-
-const DatetimeDiv = styled.div`
-  color: ${palette.gray[7]};
-  font-size: 0.8rem;
-  display: inline-flex;
-`;
 
 export default DatetimeText;

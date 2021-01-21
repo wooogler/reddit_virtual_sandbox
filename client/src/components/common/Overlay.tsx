@@ -1,31 +1,16 @@
-import React from 'react'
-import styled from 'styled-components';
+import React from 'react';
 
 interface OverlayProps {
   children?: React.ReactNode;
   opacity?: number;
 }
 
-function Overlay({children, opacity=0.8}: OverlayProps) {
+function Overlay({ children }: OverlayProps) {
   return (
-    <OverlayDiv opacity={opacity}>
+    <div className="absolute inset-0 flex items-center justify-center flex-col bg-white bg-opacity-80 z-10">
       {children}
-    </OverlayDiv>
-  )
+    </div>
+  );
 }
 
-const OverlayDiv = styled.div<{opacity: number}>`
-  position: absolute;
-  top: 0;
-  left: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  background-color: rgba(255, 255, 255, ${props => props.opacity});
-  width: 100%;
-  height: 100%;
-  z-index: 200;
-`;
-
-export default Overlay
+export default Overlay;

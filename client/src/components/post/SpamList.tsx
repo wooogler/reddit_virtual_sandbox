@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import OverlayWithButton from '../common/OverlayWithButton';
-import { useDispatch } from 'react-redux';
-import { postActions } from '../../modules/post/slice';
+import { useDispatch, useSelector } from 'react-redux';
+import { postActions, postSelector } from '../../modules/post/slice';
 import SplitPane from 'react-split-pane';
 import palette from '../../lib/styles/palette';
 import { useInfiniteScroll } from '../../lib/hooks';
@@ -12,6 +12,9 @@ import { AppDispatch } from '../..';
 import { deletePosts, getPostsRefresh, getSpamsRefresh, movePosts } from '../../modules/post/actions';
 import { getMatch } from '../../lib/utils/match';
 import SpamItem from './SpamItem';
+import ListHeader from './ListHeader';
+import BarRate from '../vis/BarRate';
+import { Empty } from 'antd';
 
 interface SpamListProps {
   spamsAll: Spam[];
@@ -24,7 +27,9 @@ interface SpamListProps {
   loadingRule: boolean;
   loadingSpamImport: boolean;
   code: string;
-  listHeaderHeight: number;
+  splitSpamList: boolean;
+  spamUserImported: boolean;
+  spamSpan: boolean;
 }
 
 function SpamList({
@@ -37,10 +42,13 @@ function SpamList({
   loadingSpam,
   loadingRule,
   code,
-  listHeaderHeight,
+  splitSpamList,
+  spamUserImported,
+  spamSpan,
 }: SpamListProps) {
   const dispatch: AppDispatch = useDispatch();
   const [target, setTarget] = useState<any>(null);
+  const count = useSelector(postSelector.count);
   
   useInfiniteScroll({
     target,
@@ -76,7 +84,7 @@ function SpamList({
   };
 
   return (
-    <SpamPostListBlock listHeaderHeight={listHeaderHeight}>
+    <div className='relative flex flex-col h-full'>
       {selectedPostId.length !== 0 && (
         <OverlayWithButton
           text={selectedPostId.length ===1 ? `1 post selected` : `${selectedPostId.length} posts selected`}
@@ -88,7 +96,16 @@ function SpamList({
       )}
       {loadingSpam && <OverlayLoading text="Loading Posts..." />}
       {loadingRule && <OverlayLoading text="Applying Rules..." />}
-      <div className="list">
+      <ListHeader
+        list="moderated"
+        name="Moderated"
+        splitView={splitSpamList}
+        tooltipText='Posts imported from real subreddit'
+        userImported={spamUserImported}
+        span={spamSpan}
+      />
+      <BarRate total={count.spams.all} part={count.spams.filtered} />
+      <SplitPaneDiv className='flex-1 overflow-y-auto'>
         {splitView ? (
           <SplitPane
             split="horizontal"
@@ -96,12 +113,12 @@ function SpamList({
             style={{ position: 'relative' }}
             paneStyle={{ overflow: 'auto' }}
           >
-            <div className='split-pane'>
-              <div className='pane-label'>
+            <div className='w-full'>
+              <div className='flex justify-center'>
                 ▼ Affected by Automod
               </div>
               {
-                spamsFiltered.map((spam) => {
+                spamsFiltered.length !== 0 ? spamsFiltered.map((spam) => {
                   return (<SpamItem
                     spam={spam}
                     selected={selectedSpamId.includes(spam._id)}
@@ -109,7 +126,11 @@ function SpamList({
                     match={getMatch(code, spam)}
                     key={spam._id}
                   />)
-                })
+                }) : (
+                  <div className="flex justify-center items-center h-full">
+                    <Empty description="No filtered post" />
+                  </div>
+                )
               }
               {
                 spamsFiltered.length > 8 && (
@@ -117,8 +138,8 @@ function SpamList({
                 )
               }
             </div>
-            <div className='split-pane'>
-              <div className='pane-label'>
+            <div className='w-full'>
+              <div className='flex justify-center'>
                 ▼ Not Affected by Automod
               </div>
               {
@@ -141,7 +162,7 @@ function SpamList({
           </SplitPane>
         ) : (
           <>
-            {spamsAll.map((spam) => {
+            {spamsAll.length !== 0 ? (spamsAll.map((spam) => {
               return (<SpamItem
                 spam={spam}
                 selected={selectedSpamId.includes(spam._id)}
@@ -149,38 +170,22 @@ function SpamList({
                 match={getMatch(code, spam)}
                 key={spam._id}
               />)
-            })}
+            })) : (
+              <div className='flex justify-center items-center h-full'>
+                <Empty description="Import moderated posts"/>
+              </div>
+            )}
             {spamsAll.length > 8 && (
               <div ref={setTarget} className="last-item-all"></div>
             )}
           </>
         )}
-      </div>
-    </SpamPostListBlock>
+      </SplitPaneDiv>
+    </div>
   );
 }
 
-const SpamPostListBlock = styled.div<{listHeaderHeight: number}>`
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  height: calc(100% - ${(props) => props.listHeaderHeight}px);
-  .list {
-    height: 100%;
-    overflow-y: auto;
-    .split-pane {
-      width: 100%;
-      .pane-label {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding-top: 0.3rem;
-        border-bottom: 0.1rem solid ${palette.gray[2]};
-        font-size: 0.9rem;
-        color: ${palette.gray[7]}
-      }
-    }
-  }
+const SplitPaneDiv = styled.div`
   .Resizer.horizontal {
     height: 0.3rem;
     background-color: ${palette.blue[2]};

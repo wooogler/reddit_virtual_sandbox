@@ -260,7 +260,7 @@ export type NewPost = {
   author: string | undefined;
   body: string;
   title: string;
-  url: string;
+  domain: string;
 };
 
 export type NewSpam = {
@@ -269,7 +269,7 @@ export type NewSpam = {
   author: string | undefined;
   body: string;
   title: string;
-  url: string;
+  domain: string;
 };
 
 export type Spam = {

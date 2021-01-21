@@ -1,5 +1,4 @@
 import React from 'react';
-import styled from 'styled-components';
 import {Button, Popconfirm} from 'antd';
 import Overlay from './Overlay';
 
@@ -35,10 +34,10 @@ function OverlayWithButton({
 
   return (
     <Overlay>
-      <OverlayDiv>
-        <div className="text">{text}</div>
-        <div className='button-group'>
-          <Button type='primary' size="large" onClick={handleClickButton1}>
+      <div className='flex flex-col items-center'>
+        <div className="text-2xl mb-4 font-bold">{text}</div>
+        <div className='flex flex-col'>
+          <Button className='mb-2' type='primary' size="large" onClick={handleClickButton1}>
             {buttonText1}
           </Button>
           {buttonText2 && (
@@ -50,27 +49,9 @@ function OverlayWithButton({
             
           )}
         </div>
-      </OverlayDiv>
+      </div>
     </Overlay>
   );
 }
-
-const OverlayDiv = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  .text{
-    font-size: 2rem;
-    margin-bottom: 1rem;
-  }
-  .button-group {
-    display: flex;
-    flex-direction: column;
-    margin-left: 1rem;
-    button {
-      margin-bottom: 0.5rem;
-    }
-  }
-`
 
 export default OverlayWithButton;
