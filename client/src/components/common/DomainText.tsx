@@ -1,6 +1,4 @@
 import React, { ReactElement } from 'react';
-import styled from 'styled-components';
-import palette from '../../lib/styles/palette';
 import { Index } from '../../lib/utils/match';
 import InteractionText from './InteractionText';
 
@@ -11,20 +9,14 @@ interface Props {
 
 function DomainText({ text, matchDomain }: Props): ReactElement {
   return (
-    <DomainDiv>
+    <div className={text.startsWith('/r/') ? 'text-xs':'text-sm'}>
       {matchDomain ? (
         <InteractionText text={text} match={matchDomain} />
       ) : (
         <>{text}</>
       )}
-    </DomainDiv>
+    </div>
   );
 }
-
-const DomainDiv = styled.div`
-  font-size: 0.9rem;
-  font-style: italic;
-  color: ${palette.gray[7]}
-`;
 
 export default DomainText;

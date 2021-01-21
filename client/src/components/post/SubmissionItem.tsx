@@ -30,7 +30,15 @@ function SubmissionItem({submission, match, spam}: SubmissionItemProps) {
     }
     return acc;
   }, [])
+
   const matchBody = match.filter(matchItem => matchItem.target==='body').reduce<Index[]>((acc, item) => {
+    if(item.indexes) {
+      return acc.concat(item.indexes);
+    }
+    return acc;
+  }, [])
+
+  const matchDomain = match.filter(matchItem => matchItem.target==='domain').reduce<Index[]>((acc, item) => {
     if(item.indexes) {
       return acc.concat(item.indexes);
     }
@@ -59,7 +67,7 @@ function SubmissionItem({submission, match, spam}: SubmissionItemProps) {
       {submission.domain && submission.domain.startsWith('self.') ? 
         <BodyText text={submission.body} matchBody={matchBody} type={submission._type} url={submission.full_link}/>
         :
-        <UrlText text={submission.url} link={submission.full_link} matchUrl={matchUrl} />
+        <UrlText text={submission.url} link={submission.full_link} domain={submission.domain} matchDomain={matchDomain} matchUrl={matchUrl} />
       }
       </div>
       {spam && <SpamFrame spam={submission as Spam}/>}

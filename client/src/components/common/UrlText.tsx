@@ -2,15 +2,24 @@ import { LinkOutlined } from '@ant-design/icons';
 import React, { ReactElement } from 'react';
 import { Index } from '../../lib/utils/match';
 import { ExternalIcon } from '../../static/svg';
+import DomainText from './DomainText';
 import InteractionText from './InteractionText';
 
 interface Props {
   text: string;
   matchUrl?: Index[];
   link: string;
+  domain: string;
+  matchDomain?: Index[];
 }
 
-function UrlText({ text, matchUrl, link }: Props): ReactElement {
+function UrlText({
+  text,
+  matchUrl,
+  link,
+  domain,
+  matchDomain,
+}: Props): ReactElement {
   return (
     <>
       <div className="text-sm font-body text-blue-600">
@@ -20,7 +29,7 @@ function UrlText({ text, matchUrl, link }: Props): ReactElement {
           <>{text}</>
         )}
       </div>
-      <div className='flex items-center opacity-60'>
+      <div className="flex items-center opacity-60">
         <a
           href={text}
           onClick={(e) => {
@@ -30,7 +39,7 @@ function UrlText({ text, matchUrl, link }: Props): ReactElement {
           rel="noopener noreferrer"
           className="hover:bg-gray-200 p-1 flex"
         >
-          <ExternalIcon className='w-5'/>
+          <ExternalIcon className="w-5" />
         </a>
         <a
           href={link}
@@ -42,8 +51,12 @@ function UrlText({ text, matchUrl, link }: Props): ReactElement {
           className="flex p-1 items-center text-sm"
         >
           <LinkOutlined />
-          <div className='ml-1'>link</div>
+          <div className="mx-1">link</div>
         </a>
+        <div className="flex items-center">
+          <div className='mr-1'>domain:</div>
+          <DomainText text={domain} matchDomain={matchDomain} />
+        </div>
       </div>
     </>
   );
