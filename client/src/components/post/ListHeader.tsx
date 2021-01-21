@@ -1,7 +1,6 @@
-import React, { useLayoutEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Tooltip, Popconfirm } from 'antd';
-import styled from 'styled-components';
 import { Select, Checkbox } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
 
@@ -16,8 +15,6 @@ import { Button } from 'antd';
 import DraggableModal from '../common/DraggableModal';
 import PostForm from './PostForm';
 import { getPostsRefresh, getSpamsRefresh } from '../../modules/post/actions';
-import palette from '../../lib/styles/palette';
-import { commonActions } from '../../modules/common/slice';
 
 export interface ListHeaderProps {
   list: 'unmoderated' | 'moderated';
@@ -39,7 +36,6 @@ function ListHeader({
   const dispatch = useDispatch();
   const loadingDelete = useSelector(postSelector.loadingDelete);
   const loadingSpamDelete = useSelector(postSelector.loadingSpamDelete);
-  const count = useSelector(postSelector.count);
   const { Option, OptGroup } = Select;
   const [isAddOpen, setIsAddOpen] = useState(false);
 

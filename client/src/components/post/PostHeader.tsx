@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import styled from 'styled-components';
 import { getUserInfo, logout, UserInfo } from '../../modules/user/slice';
-import { Button } from 'antd';
+import { Button, Dropdown, Menu, message } from 'antd';
 import DraggableModal from '../common/DraggableModal';
 import PostImportForm from './PostImportForm';
 import axios from 'axios';
@@ -44,35 +43,43 @@ function PostHeader({ userInfo, redditLogged }: PostHeaderProps) {
     }
   };
 
-  return (
-    <PostHeaderDiv>
-      <Button
-        type="primary"
-        size="large"
+  const redditLogInWarning = () => {
+    message.warning({
+      content:
+        'Please log in Reddit to access moderated posts in your subreddit',
+      duration: 3,
+      style: {
+        marginTop: '2rem',
+      },
+    });
+  };
+
+  const menu = (
+    <Menu>
+      <Menu.Item onClick={() => setIsPostImportOpen(true)}>
+        Import Subreddit Posts
+      </Menu.Item>
+      <Menu.Item
         onClick={() => {
-          setIsPostImportOpen(true);
+          if (redditLogged) {
+            setIsSpamImportOpen(true);
+          } else {
+            redditLogInWarning();
+          }
         }}
       >
-        Import subreddit posts
-      </Button>
-      {redditLogged ? (
-        <>
-          <Button
-            type="primary"
-            size="large"
-            onClick={() => setIsSpamImportOpen(true)}
-          >
-            Import seed posts
-          </Button>
-          <Button danger size="large" onClick={handleClickRedditLogout}>
-            Reddit Logout
-          </Button>
-        </>
-      ) : (
-        <Button type="primary" size="large" onClick={handleClickRedditLogin}>
-          Reddit Login
+        Import Moderated Posts
+      </Menu.Item>
+    </Menu>
+  );
+
+  return (
+    <div className="flex w-full">
+      <Dropdown overlay={menu}>
+        <Button type="primary" size="large">
+          Import
         </Button>
-      )}
+      </Dropdown>
 
       <DraggableModal
         isOpen={isPostImportOpen}
@@ -92,43 +99,35 @@ function PostHeader({ userInfo, redditLogged }: PostHeaderProps) {
         handleText={`Import seed posts`}
       >
         <SpamImportForm
-          onClickClose={()=> {
+          onClickClose={() => {
             setIsSpamImportOpen(false);
           }}
         />
       </DraggableModal>
 
-      <div className="right">
-        {/* {userInfo && <div>username: {userInfo.username}</div>} */}
+      <div className="ml-auto flex items-center">
+        <div className="mr-3 text-lg">Hi, {userInfo?.username}</div>
+        {redditLogged ? (
+          <Button danger size="large" onClick={handleClickRedditLogout}>
+            Reddit Logout
+          </Button>
+        ) : (
+          <Button type="primary" size="large" onClick={handleClickRedditLogin}>
+            Reddit Login
+          </Button>
+        )}
         <Button
           danger
           type="primary"
           size="large"
           onClick={handleClickLogout}
-          className="logout-button"
+          className="ml-2"
         >
           Log out
         </Button>
       </div>
-    </PostHeaderDiv>
+    </div>
   );
 }
-
-const PostHeaderDiv = styled.div`
-  display: flex;
-  width: 100%;
-  align-items: center;
-  button {
-    margin-right: 1rem;
-  }
-  .right {
-    margin-left: auto;
-    display: flex;
-    align-items: center;
-    button {
-      margin-left: 2rem;
-    }
-  }
-`;
 
 export default PostHeader;

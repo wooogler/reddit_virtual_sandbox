@@ -1,6 +1,5 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import ListHeader from '../../components/post/ListHeader';
 import SpamList from '../../components/post/SpamList';
 import { RootState } from '../../modules';
 import { postSelector } from '../../modules/post/slice';
@@ -30,7 +29,6 @@ function SpamListContainer() {
   const loadingSpamImport = useSelector(postSelector.loadingSpamImport);
   const code = useSelector(ruleSelector.submittedCode);
   const spamSpan = useSelector((state: RootState) => state.post.spams.span)
-  const listHeaderHeight = useSelector((state: RootState) => state.common.spamListHeaderHeight)
 
   return (
     <>
