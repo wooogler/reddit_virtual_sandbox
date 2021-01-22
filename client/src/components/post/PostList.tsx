@@ -100,6 +100,11 @@ function PostList({
     dispatch(postActions.clearSelectedSpamPostId());
   };
 
+  const handleClickBar = () => {
+    dispatch(postActions.toggleSplitPostList());
+    dispatch(getPostsRefresh());
+  }
+
   return (
     <div className="relative flex flex-col h-full">
       {selectedSpamPostId.length !== 0 && (
@@ -125,7 +130,9 @@ function PostList({
         userImported={postUserImported}
         span={postSpan}
       />
-      <BarRate total={count.posts.all} part={count.posts.filtered} />
+      <div onClick={handleClickBar} className='cursor-pointer hover:opacity-70'>
+        <BarRate total={count.posts.all} part={count.posts.filtered}/>
+      </div>
       <SplitPaneDiv className="flex-1 overflow-y-auto">
         {splitView ? (
           <SplitPane
@@ -135,7 +142,7 @@ function PostList({
             paneStyle={{ overflow: 'auto' }}
           >
             <div className="w-full">
-              <div className="flex justify-center">▼ Affected by Automod</div>
+              <div className="flex justify-center">▼ Filtered by Automod</div>
               {postsFiltered.length !== 0 ? (
                 postsFiltered.map((post) => {
                   return (
@@ -159,7 +166,7 @@ function PostList({
             </div>
             <div className="w-full">
               <div className="flex justify-center">
-                ▼ Not Affected by Automod
+                ▼ Not Filtered by Automod
               </div>
               {postsUnfiltered.map((post) => {
                 return (

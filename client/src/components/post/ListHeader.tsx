@@ -182,7 +182,7 @@ function ListHeader({
             User Imported
           </Checkbox>
           <Checkbox onChange={handleChangeSplitView} checked={splitView}>
-            Split View
+            Filtered Only
           </Checkbox>
           <Checkbox onChange={handleChangeSpanAll} checked={span}>
             Span All

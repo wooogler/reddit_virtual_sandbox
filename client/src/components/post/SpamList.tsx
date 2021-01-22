@@ -95,6 +95,11 @@ function SpamList({
     dispatch(postActions.clearSelectedPostId());
   };
 
+  const handleClickBar = () => {
+    dispatch(postActions.toggleSplitSpamPostList());
+    dispatch(getSpamsRefresh());
+  }
+
   return (
     <div className='relative flex flex-col h-full'>
       {selectedPostId.length !== 0 && (
@@ -116,7 +121,9 @@ function SpamList({
         userImported={spamUserImported}
         span={spamSpan}
       />
-      <BarRate total={count.spams.all} part={count.spams.filtered} />
+      <div onClick={handleClickBar} className='cursor-pointer hover:opacity-70'>
+        <BarRate total={count.spams.all} part={count.spams.filtered} /> 
+      </div>
       <SplitPaneDiv className='flex-1 overflow-y-auto'>
         {splitView ? (
           <SplitPane
@@ -127,7 +134,7 @@ function SpamList({
           >
             <div className='w-full'>
               <div className='flex justify-center'>
-                ▼ Affected by Automod
+                ▼ Filtered by Automod
               </div>
               {
                 spamsFiltered.length !== 0 ? spamsFiltered.map((spam) => {
@@ -152,7 +159,7 @@ function SpamList({
             </div>
             <div className='w-full'>
               <div className='flex justify-center'>
-                ▼ Not Affected by Automod
+                ▼ Not Filtered by Automod
               </div>
               {
                 spamsUnfiltered.map((spam) => {

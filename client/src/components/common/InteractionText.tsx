@@ -30,8 +30,6 @@ function InteractionText({ text, match }: Props): ReactElement {
   );
 
   const handleClickHighlight = (value: string, e:React.MouseEvent) => {
-    console.log(value);
-    console.log(keyMaps);
     const original = keyMaps.find((item) => item.changed === value)?.original
     if(original) {
       dispatch(clickMatchedThunk(original))
@@ -46,23 +44,18 @@ function InteractionText({ text, match }: Props): ReactElement {
           return <span key={index}>{part}</span>;
         }
         return (
-          <Highlight
+          <span style={{backgroundColor: 'yellow'}} className='cursor-pointer underline text-blue-700'
             onClick={(e) =>
               handleClickHighlight(match[(index - 1) / 2].matchIndex, e)
             }
             key={index}
           >
             {part}
-          </Highlight>
+          </span>
         );
       })}
     </>
   );
 }
-
-const Highlight = styled.span`
-  background-color: yellow;
-  cursor: pointer;
-`;
 
 export default InteractionText;
