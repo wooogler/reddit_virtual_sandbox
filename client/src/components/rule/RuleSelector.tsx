@@ -1,12 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Rule, ruleSelector, submitCode } from '../../modules/rule/slice';
+import { createKeyMaps, Rule, ruleSelector, submitCode } from '../../modules/rule/slice';
 import { Tree } from 'antd';
 import { cloneDeep } from 'lodash';
 import 'antd/dist/antd.css';
 import { useDispatch, useSelector } from 'react-redux';
 import OverlayLoading from '../common/OverlayLoading';
-import { keysToTree, makeTree, treeToCode } from '../../lib/utils/tree';
+import { keysToTree, makeTree, treeToCode, treeToKeyMaps } from '../../lib/utils/tree';
 import { AppDispatch } from '../..';
 import { getPostsRefresh, getSpamsRefresh } from '../../modules/post/actions';
 
@@ -20,15 +20,16 @@ function RuleSelector({ editables, loadingRule }: RuleSelectorProps) {
 
   const treeDataOriginal = makeTree(editables)
 
-  const onCheck = (checkedKeys: any, info: any) => {
+const onCheck = (checkedKeys: any, info: any) => {
     const treeData = cloneDeep(treeDataOriginal);
-    const code = treeToCode(
-      keysToTree(treeData, [...checkedKeys, ...info.halfCheckedKeys]),
-    );
+    const tree = keysToTree(treeData, [...checkedKeys, ...info.halfCheckedKeys])
+    const code = treeToCode(tree);
+    const keyMaps = treeToKeyMaps(tree)
     dispatch(submitCode(code)).then(() => {
       dispatch(getPostsRefresh());
       dispatch(getSpamsRefresh());
     })
+    dispatch(createKeyMaps(keyMaps));
   };
 
   const clickedRuleIndex = useSelector(ruleSelector.clickedRuleIndex)

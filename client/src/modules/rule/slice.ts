@@ -10,6 +10,7 @@ import {
 import YAML from 'yaml';
 import { RootState } from '..';
 import { submitCodeAPI } from '../../lib/api/modsandbox/rule';
+import { KeyMap } from '../../lib/utils/tree';
 
 export type File = {
   tab: number;
@@ -35,6 +36,7 @@ export type RuleState = {
   editables: Rule[];
   submittedCode: string;
   clickedRuleIndex: string;
+  keyMaps: KeyMap[]
 };
 
 export const initialState: RuleState = {
@@ -52,6 +54,7 @@ export const initialState: RuleState = {
   editables: [],
   submittedCode: '',
   clickedRuleIndex: '',
+  keyMaps: [],
 };
 
 export const clickMatchedThunk = (
@@ -140,6 +143,9 @@ const ruleSlice = createSlice({
         state.error = Error(err);
       }
     },
+    createKeyMaps: (state, action: PayloadAction<KeyMap[]>) => {
+      state.keyMaps = action.payload;
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(submitCode.pending, (state) => {
@@ -194,6 +200,7 @@ export const {
   createEditable,
   clearMatched,
   clickMatched,
+  createKeyMaps,
 } = actions;
 
 export default reducer;

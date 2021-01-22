@@ -1,7 +1,8 @@
 import React, { ReactElement } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { Index } from '../../lib/utils/match';
+import { RootState } from '../../modules';
 import { clickMatchedThunk } from '../../modules/rule/slice';
 
 interface Props {
@@ -10,6 +11,7 @@ interface Props {
 }
 
 function InteractionText({ text, match }: Props): ReactElement {
+  const keyMaps = useSelector((state: RootState) => state.rule.keyMaps )
   const dispatch = useDispatch();
   const matchArray = match.reduce<string[]>(
     (acc, index) => {
@@ -28,8 +30,12 @@ function InteractionText({ text, match }: Props): ReactElement {
   );
 
   const handleClickHighlight = (value: string, e:React.MouseEvent) => {
-    console.log(match);
-    dispatch(clickMatchedThunk(value))
+    console.log(value);
+    console.log(keyMaps);
+    const original = keyMaps.find((item) => item.changed === value)?.original
+    if(original) {
+      dispatch(clickMatchedThunk(original))
+    }
     e.stopPropagation();
   };
 
