@@ -1,6 +1,5 @@
 import React, { ReactElement } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import styled from 'styled-components';
 import { Index } from '../../lib/utils/match';
 import { RootState } from '../../modules';
 import { clickMatchedThunk } from '../../modules/rule/slice';
