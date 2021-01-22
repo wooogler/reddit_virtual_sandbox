@@ -19,7 +19,7 @@ function SpamImportForm({ onClickClose }: SpamImportFormProps) {
 
   const [modSubreddits, errorSub, loadingSub] = useGetApi<string[]>(
     token,
-    'http://localhost:8000/mod_subreddits/',
+    '/mod_subreddits/',
   );
 
   const formik = useFormik({
@@ -29,7 +29,7 @@ function SpamImportForm({ onClickClose }: SpamImportFormProps) {
       removal_reason: 'all',
       community_rule: 'all',
       moderator_name: 'all',
-      reported_by: 'all'
+      reported_by: 'all',
     },
     onSubmit: (values) => {
       dispatch(
@@ -39,30 +39,28 @@ function SpamImportForm({ onClickClose }: SpamImportFormProps) {
           removal_reason: values.removal_reason,
           community_rule: values.community_rule,
           moderator_name: values.moderator_name,
-          reported_by: values.reported_by
+          reported_by: values.reported_by,
         }),
       );
       onClickClose();
     },
   });
 
-  const [removalReasons, errorReasons, loadingReasons] = useGetApiWithParam<string[]>(
-    token,
-    'http://localhost:8000/removal_reasons/',
-    formik.values.subreddit,
-  );
+  const [removalReasons, errorReasons, loadingReasons] = useGetApiWithParam<
+    string[]
+  >(token, '/removal_reasons/', formik.values.subreddit);
 
   const [rules, errorRules, loadingRules] = useGetApiWithParam<string[]>(
     token,
-    'http://localhost:8000/community_rules',
+    '/community_rules',
     formik.values.subreddit,
-  )
+  );
 
   const [mods, errorMods, loadingMods] = useGetApiWithParam<string[]>(
     token,
-    'http://localhost:8000/get_moderators/',
+    '/get_moderators/',
     formik.values.subreddit,
-  )
+  );
 
   return (
     <SpamImportFormDiv onSubmit={formik.handleSubmit}>
@@ -94,70 +92,27 @@ function SpamImportForm({ onClickClose }: SpamImportFormProps) {
         <Option value="reports">Reports</Option>
         <Option value="spam">Spam</Option>
       </Select>
-      {
-        formik.values.mod_type === 'spam' && 
+      {formik.values.mod_type === 'spam' && (
         <>
-        <label>Target Removal Reason</label>
-        <Select
-          size="large"
-          onChange={(value) => {
-            formik.setFieldValue('removal_reason', value);
-          }}
-          defaultValue='all'
-          disabled={!!errorReasons}
-          loading={loadingReasons}
-        >
-          <Option value='all'>All</Option>
-          {
-            removalReasons && removalReasons.map((reason) => (
-              <Option value={reason} key={reason}>
-                {reason}
-              </Option>
-            ))
-          }
-        </Select>
-        <label>Banned by</label>
-        <Select
-          size="large"
-          onChange={(value) => {
-            formik.setFieldValue('moderator_name', value);
-          }}
-          disabled={!!errorMods}
-          loading={loadingMods}
-          defaultValue='all'
-        >
-          <Option value='all'>All Moderators</Option>
-          {
-            mods && mods.map((reason) => (
-              <Option value={reason} key={reason}>
-                {reason}
-              </Option>
-            ))
-          }
-        </Select>
-        </>
-      }
-      {
-        formik.values.mod_type === 'reports' && 
-        <>
-        <label>Reports by</label>
-        <Select
-          size="large"
-          onChange={(value) => {
-            formik.setFieldValue('reported_by', value);
-          }}
-          disabled={!!errorRules}
-          loading={loadingRules}
-          defaultValue='all'
-        >
-          <Option value='all'>Moderators and Users</Option>
-          <Option value='mod'>Moderators</Option>
-          <Option value='user'>Users</Option>
-        </Select>
-        {
-          formik.values.reported_by === 'mod' ? 
-          <>
-          <label>Moderator who reported</label>
+          <label>Target Removal Reason</label>
+          <Select
+            size="large"
+            onChange={(value) => {
+              formik.setFieldValue('removal_reason', value);
+            }}
+            defaultValue="all"
+            disabled={!!errorReasons}
+            loading={loadingReasons}
+          >
+            <Option value="all">All</Option>
+            {removalReasons &&
+              removalReasons.map((reason) => (
+                <Option value={reason} key={reason}>
+                  {reason}
+                </Option>
+              ))}
+          </Select>
+          <label>Banned by</label>
           <Select
             size="large"
             onChange={(value) => {
@@ -165,46 +120,82 @@ function SpamImportForm({ onClickClose }: SpamImportFormProps) {
             }}
             disabled={!!errorMods}
             loading={loadingMods}
-            defaultValue='all'
+            defaultValue="all"
           >
-            <Option value='all'>All Moderators</Option>
-            {
-              mods && mods.map((reason) => (
+            <Option value="all">All Moderators</Option>
+            {mods &&
+              mods.map((reason) => (
                 <Option value={reason} key={reason}>
                   {reason}
                 </Option>
-              ))
-            }
+              ))}
           </Select>
-          </>
-          :
-          formik.values.reported_by === 'user' &&
-          <>
-          <label>Target Community Rules</label>
+        </>
+      )}
+      {formik.values.mod_type === 'reports' && (
+        <>
+          <label>Reports by</label>
           <Select
             size="large"
             onChange={(value) => {
-              formik.setFieldValue('community_rule', value);
+              formik.setFieldValue('reported_by', value);
             }}
             disabled={!!errorRules}
             loading={loadingRules}
-            defaultValue='all'
+            defaultValue="all"
           >
-            <Option value='all'>All</Option>
-            {
-              rules && rules.map((rule) => (
-                <Option value={rule} key={rule}>
-                  {rule}
-                </Option>
-              ))
-            }
+            <Option value="all">Moderators and Users</Option>
+            <Option value="mod">Moderators</Option>
+            <Option value="user">Users</Option>
           </Select>
-          </>
-        }
-        
+          {formik.values.reported_by === 'mod' ? (
+            <>
+              <label>Moderator who reported</label>
+              <Select
+                size="large"
+                onChange={(value) => {
+                  formik.setFieldValue('moderator_name', value);
+                }}
+                disabled={!!errorMods}
+                loading={loadingMods}
+                defaultValue="all"
+              >
+                <Option value="all">All Moderators</Option>
+                {mods &&
+                  mods.map((reason) => (
+                    <Option value={reason} key={reason}>
+                      {reason}
+                    </Option>
+                  ))}
+              </Select>
+            </>
+          ) : (
+            formik.values.reported_by === 'user' && (
+              <>
+                <label>Target Community Rules</label>
+                <Select
+                  size="large"
+                  onChange={(value) => {
+                    formik.setFieldValue('community_rule', value);
+                  }}
+                  disabled={!!errorRules}
+                  loading={loadingRules}
+                  defaultValue="all"
+                >
+                  <Option value="all">All</Option>
+                  {rules &&
+                    rules.map((rule) => (
+                      <Option value={rule} key={rule}>
+                        {rule}
+                      </Option>
+                    ))}
+                </Select>
+              </>
+            )
+          )}
         </>
-      }
-      
+      )}
+
       <div className="buttons">
         <Button onClick={onClickClose}>Close</Button>
         <Button type="primary" htmlType="submit">

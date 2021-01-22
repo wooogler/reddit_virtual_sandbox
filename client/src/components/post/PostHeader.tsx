@@ -27,7 +27,7 @@ function PostHeader({ userInfo, redditLogged }: PostHeaderProps) {
 
   const handleClickRedditLogin = async () => {
     const token = localStorage.getItem('token');
-    const response = await axios.get('http://localhost:8000/reddit_login/', {
+    const response = await axios.get('/reddit_login/', {
       headers: { Authorization: `Token ${token}` },
     });
     window.location.href = response.data;
@@ -35,7 +35,7 @@ function PostHeader({ userInfo, redditLogged }: PostHeaderProps) {
 
   const handleClickRedditLogout = async () => {
     const token = localStorage.getItem('token');
-    await axios.get('http://localhost:8000/reddit_logout/', {
+    await axios.get('/reddit_logout/', {
       headers: { Authorization: `Token ${token}` },
     });
     if (token) {

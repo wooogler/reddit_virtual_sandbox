@@ -2,6 +2,8 @@ import axios from 'axios';
 import moment from 'moment';
 import { Filtered, PostType, SortType } from '../../../modules/post/slice';
 
+axios.defaults.baseURL = 'http://3.34.192.145:8080';
+
 export async function getPostsAPI(
   token: string | null,
   postType: PostType,
@@ -11,7 +13,7 @@ export async function getPostsAPI(
   userImported: boolean,
 ) {
   const response = await axios
-    .get<PaginatedPostResponse>('http://localhost:8000/post/', {
+    .get<PaginatedPostResponse>('/post/', {
       params: {
         post_type: postType,
         sort: postSortType,
@@ -37,7 +39,7 @@ export async function getSpamsAPI(
 ) {
   if (userImported) {
     const response = await axios
-      .get<PaginatedSpamResponse>('http://localhost:8000/spam/', {
+      .get<PaginatedSpamResponse>('/spam/', {
         params: {
           post_type: spamType,
           sort: spamSortType,
@@ -53,7 +55,7 @@ export async function getSpamsAPI(
     return response.data;
   }
   const response = await axios
-    .get<PaginatedSpamResponse>('http://localhost:8000/spam/', {
+    .get<PaginatedSpamResponse>('/spam/', {
       params: {
         post_type: spamType,
         sort: spamSortType,
@@ -89,13 +91,9 @@ export async function importSubredditPostsAPI(
   token: string,
   values: ImportPostQuery,
 ) {
-  const response = await axios.post(
-    'http://localhost:8000/post/crawl/',
-    values,
-    {
-      headers: { Authorization: `Token ${token}` },
-    },
-  );
+  const response = await axios.post('/post/crawl/', values, {
+    headers: { Authorization: `Token ${token}` },
+  });
 
   return response.statusText;
 }
@@ -104,20 +102,16 @@ export async function importSpamPostsAPI(
   token: string,
   values: ImportSpamQuery,
 ) {
-  const response = await axios.post(
-    'http://localhost:8000/spam/crawl/',
-    values,
-    {
-      headers: { Authorization: `Token ${token}` },
-    },
-  );
+  const response = await axios.post('/spam/crawl/', values, {
+    headers: { Authorization: `Token ${token}` },
+  });
 
   return response.statusText;
 }
 
 export async function deletePostsAPI(token: string, ids: string[]) {
   const response = await axios.post(
-    'http://localhost:8000/post/deletes/',
+    '/post/deletes/',
     { ids },
     {
       headers: { Authorization: `Token ${token}` },
@@ -129,7 +123,7 @@ export async function deletePostsAPI(token: string, ids: string[]) {
 
 export async function deleteSpamsAPI(token: string, ids: string[]) {
   const response = await axios.post(
-    'http://localhost:8000/spam/deletes/',
+    '/spam/deletes/',
     { ids },
     {
       headers: { Authorization: `Token ${token}` },
@@ -140,32 +134,24 @@ export async function deleteSpamsAPI(token: string, ids: string[]) {
 }
 
 export async function deleteAllPostsAPI(token: string) {
-  const response = await axios.post(
-    'http://localhost:8000/post/delete_all/',
-    null,
-    {
-      headers: { Authorization: `Token ${token}` },
-    },
-  );
+  const response = await axios.post('/post/delete_all/', null, {
+    headers: { Authorization: `Token ${token}` },
+  });
 
   return response.statusText;
 }
 
 export async function deleteAllSpamsAPI(token: string) {
-  const response = await axios.post(
-    'http://localhost:8000/spam/delete_all/',
-    null,
-    {
-      headers: { Authorization: `Token ${token}` },
-    },
-  );
+  const response = await axios.post('/spam/delete_all/', null, {
+    headers: { Authorization: `Token ${token}` },
+  });
 
   return response.statusText;
 }
 
 export async function movePostsAPI(token: string, ids: string[]) {
   const response = await axios.post(
-    'http://localhost:8000/post/moves/',
+    '/post/moves/',
     { ids },
     {
       headers: { Authorization: `Token ${token}` },
@@ -177,7 +163,7 @@ export async function movePostsAPI(token: string, ids: string[]) {
 
 export async function moveSpamsAPI(token: string, ids: string[]) {
   const response = await axios.post(
-    'http://localhost:8000/spam/moves/',
+    '/spam/moves/',
     { ids },
     {
       headers: { Authorization: `Token ${token}` },
@@ -189,7 +175,7 @@ export async function moveSpamsAPI(token: string, ids: string[]) {
 
 export async function addPostAPI(token: string, newPost: NewPost) {
   const response = await axios.post<Post>(
-    'http://localhost:8000/post/',
+    '/post/',
     {
       ...newPost,
       created_utc: moment(new Date()).utc().format('YYYY-MM-DD HH:mm:ss'),
@@ -209,7 +195,7 @@ export async function addSpamAPI(
 ) {
   const now = moment(new Date()).utc().format('YYYY-MM-DD HH:mm:ss');
   const response = await axios.post<Spam>(
-    'http://localhost:8000/spam/',
+    '/spam/',
     {
       ...newSpam,
       created_utc: now,
@@ -274,7 +260,7 @@ export type NewSpam = {
 
 export type Spam = {
   _id: string;
-  _type: SpamType
+  _type: SpamType;
   author: string;
   body: string;
   created_utc: string;
