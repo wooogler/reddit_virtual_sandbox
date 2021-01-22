@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import OverlayWithButton from '../common/OverlayWithButton';
 import { useDispatch, useSelector } from 'react-redux';
@@ -46,7 +46,6 @@ function PostList({
   splitView,
   loadingPost,
   loadingRule,
-  loadingImport,
   code,
   splitPostList,
   postUserImported,
@@ -162,7 +161,7 @@ function PostList({
               <div className="flex justify-center">
                 ▼ Not Affected by Automod
               </div>
-              {postsUnfiltered.map((post, index) => {
+              {postsUnfiltered.map((post) => {
                 return (
                   <PostItem
                     post={post}

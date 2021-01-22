@@ -47,22 +47,34 @@ function SpamList({
   spamSpan,
 }: SpamListProps) {
   const dispatch: AppDispatch = useDispatch();
-  const [target, setTarget] = useState<any>(null);
+  const [targetAll, setTargetAll] = useState<any>(null);
+  const [targetFiltered, setTargetFiltered] = useState<any>(null);
+  const [targetUnfiltered, setTargetUnfiltered] = useState<any>(null);
   const count = useSelector(postSelector.count);
   
   useInfiniteScroll({
-    target,
+    target: targetAll,
     onIntersect: ([{ isIntersecting }]) => {
       if (isIntersecting) {
-        if(target.className === 'last-item-all') {
-          dispatch(postActions.getAllSpamsMore());
-        }
-        if(target.className === 'last-item-filtered') {
-          dispatch(postActions.getFilteredSpamsMore());
-        }
-        if(target.className === 'last-item-unfiltered') {
-          dispatch(postActions.getUnfilteredSpamsMore());
-        }
+        dispatch(postActions.getAllSpamsMore());
+      }
+    },
+    threshold: 0.7,
+  });
+  useInfiniteScroll({
+    target: targetFiltered,
+    onIntersect: ([{ isIntersecting }]) => {
+      if (isIntersecting) {
+        dispatch(postActions.getFilteredSpamsMore());
+      }
+    },
+    threshold: 0.7,
+  });
+  useInfiniteScroll({
+    target: targetUnfiltered,
+    onIntersect: ([{ isIntersecting }]) => {
+      if (isIntersecting) {
+        dispatch(postActions.getUnfilteredSpamsMore());
       }
     },
     threshold: 0.7,
@@ -134,7 +146,7 @@ function SpamList({
               }
               {
                 spamsFiltered.length > 8 && (
-                  <div ref={setTarget} className="last-item-filtered"></div>
+                  <div ref={setTargetFiltered} className="last-item-filtered"></div>
                 )
               }
             </div>
@@ -155,7 +167,7 @@ function SpamList({
               }
               {
                 spamsUnfiltered.length > 8 && (
-                  <div ref={setTarget} className="last-item-unfiltered"></div>
+                  <div ref={setTargetUnfiltered} className="last-item-unfiltered"></div>
                 )
               }
             </div>
@@ -176,7 +188,7 @@ function SpamList({
               </div>
             )}
             {spamsAll.length > 8 && (
-              <div ref={setTarget} className="last-item-all"></div>
+              <div ref={setTargetAll} className="last-item-all"></div>
             )}
           </>
         )}
