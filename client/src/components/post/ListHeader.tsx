@@ -121,11 +121,11 @@ function ListHeader({
               size="small"
               loading={list === 'unmoderated' ? loadingDelete : loadingSpamDelete}
             >
-              Delete All
+              Delete all
             </Button>
           </Popconfirm>
           <Button className='ml-1' type="primary" size="small" onClick={handleClickAddPost}>
-            Add {list === 'unmoderated' ? 'post' : 'spam'}
+            Add {list === 'unmoderated' ? 'test post' : 'test spam'}
           </Button>
         </div>
 

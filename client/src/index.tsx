@@ -7,7 +7,7 @@ import * as serviceWorker from './serviceWorker';
 import createSagaMiddleware from 'redux-saga';
 import rootReducer, { rootSaga } from './modules';
 import 'antd/dist/antd.css';
-import './index.css'
+import './index.css';
 import { configureStore } from '@reduxjs/toolkit';
 
 const sagaMiddleware = createSagaMiddleware();
@@ -20,7 +20,8 @@ const sagaMiddleware = createSagaMiddleware();
 const store = configureStore({
   reducer: rootReducer,
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({serializableCheck: false}).prepend(sagaMiddleware),
+    getDefaultMiddleware({ serializableCheck: false }).prepend(sagaMiddleware),
+  devTools: process.env.NODE_ENV === 'development',
 });
 
 export type AppDispatch = typeof store.dispatch;
