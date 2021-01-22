@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import OverlayWithButton from '../common/OverlayWithButton';
 import { useDispatch, useSelector } from 'react-redux';
@@ -53,22 +53,34 @@ function PostList({
   postSpan,
 }: PostListProps) {
   const dispatch: AppDispatch = useDispatch();
-  const [target, setTarget] = useState<any>(null);
+  const [targetAll, setTargetAll] = useState<any>(null);
+  const [targetFiltered, setTargetFiltered] = useState<any>(null);
+  const [targetUnfiltered, setTargetUnfiltered] = useState<any>(null);
   const count = useSelector(postSelector.count);
 
   useInfiniteScroll({
-    target,
+    target: targetAll,
     onIntersect: ([{ isIntersecting }]) => {
       if (isIntersecting) {
-        if (target.className === 'last-item-all') {
-          dispatch(postActions.getAllPostsMore());
-        }
-        if (target.className === 'last-item-filtered') {
-          dispatch(postActions.getFilteredPostsMore());
-        }
-        if (target.className === 'last-item-unfiltered') {
-          dispatch(postActions.getUnfilteredPostsMore());
-        }
+        dispatch(postActions.getAllPostsMore());
+      }
+    },
+    threshold: 0.7,
+  });
+  useInfiniteScroll({
+    target: targetFiltered,
+    onIntersect: ([{ isIntersecting }]) => {
+      if (isIntersecting) {
+        dispatch(postActions.getFilteredPostsMore());
+      }
+    },
+    threshold: 0.7,
+  });
+  useInfiniteScroll({
+    target: targetUnfiltered,
+    onIntersect: ([{ isIntersecting }]) => {
+      if (isIntersecting) {
+        dispatch(postActions.getUnfilteredPostsMore());
       }
     },
     threshold: 0.7,
@@ -143,7 +155,7 @@ function PostList({
                 </div>
               )}
               {postsFiltered.length > 8 && (
-                <div ref={setTarget} className="last-item-filtered"></div>
+                <div ref={setTargetFiltered} className="last-item-filtered"></div>
               )}
             </div>
             <div className="w-full">
@@ -162,7 +174,7 @@ function PostList({
                 );
               })}
               {postsUnfiltered.length > 8 && (
-                <div ref={setTarget} className="last-item-unfiltered"></div>
+                <div ref={setTargetUnfiltered} className="last-item-unfiltered"></div>
               )}
             </div>
           </SplitPane>
@@ -186,7 +198,7 @@ function PostList({
               </div>
             )}
             {postsAll.length > 8 && (
-              <div ref={setTarget} className="last-item-all"></div>
+              <div ref={setTargetAll} className="last-item-all"></div>
             )}
           </div>
         )}

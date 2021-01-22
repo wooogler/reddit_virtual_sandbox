@@ -100,7 +100,7 @@ function SpamList({
         list="moderated"
         name="Moderated"
         splitView={splitSpamList}
-        tooltipText='Posts imported from real subreddit'
+        tooltipText='Moderated posts from spam, reports, mod queue in your subreddit'
         userImported={spamUserImported}
         span={spamSpan}
       />
