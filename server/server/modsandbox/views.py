@@ -1,23 +1,21 @@
-import logging
-import json
-from datetime import datetime
 import os
+import json
+import logging
+from datetime import datetime
+
 import praw
-
-
-# Create your views here.
-
-from rest_framework import viewsets, status
-from rest_framework.decorators import action, api_view
-from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from django.shortcuts import redirect
-from .models import Post, Profile, Rule
-from .reddit_handler import RedditHandler
+from rest_framework import viewsets, status
+from rest_framework.response import Response
+from rest_framework.decorators import action, api_view
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+
 from .praw_handler import PrawHandler
-from .automod import Ruleset, RuleTarget
+from .models import Post, Profile, Rule
 from .serializers import PostSerializer
+from .automod import Ruleset, RuleTarget
 from .pagintations import PostPagination
+from .reddit_handler import RedditHandler
 
 
 logger = logging.getLogger(__name__)
@@ -189,7 +187,11 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
             queryset = queryset.order_by("-created_utc")
         elif sort == "old":
             queryset = queryset.order_by("created_utc")
-
+        elif sort == "votes_desc":
+            queryset = queryset.order_by("-votes")
+        elif sort == "votes_asc":
+            queryset = queryset.order_by("votes")
+        
         if filtered == "all":
             queryset = queryset.all()
         elif filtered == "filtered":

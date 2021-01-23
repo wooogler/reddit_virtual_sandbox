@@ -40,13 +40,16 @@ $ python manage.py shell  # Interactive shell.
 #### /post/
 - [Available Parameters]
   - type (str): 'comment', 'submission'
-  - sort (str): 'new', 'old'
+  - sort (str): 'new', 'old', 'votes_desc', 'votes_asc'
   - page (int): number.
 - [Example]
   ```bash
   $ /post/?type=comment&&sort=new
   $ /post/{id}
   ```
+- WARNING
+  - Number of votes retrieved by PRAW API seems unreliable..!
+  - Sorting by votes is currently implemented as sorting by "scores" (upvotes - downvotes).
 
 ### 2-2. POST
 
