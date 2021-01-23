@@ -16,13 +16,28 @@ $ python manage.py migrate
 $ python manage.py runserver
 
 # (4. Other utils)
-$ python manage.py flush  # You can use this command to clean the database.
+$ python manage.py flush  # You can use this command to clean the entire database.
 $ python manage.py shell  # Interactive shell.
 ```
 
 ## 2. Available API Interface
+
+### 2-0. Authentication
+- `IsAuthenticatedOrReadOnly`: unauthorized users -> only read requests.
+- rest-auth/registration: Sign up.
+  ```bash
+  $ curl -i -XPOST "http://127.0.0.1:8000/rest-auth/registration/" -H "Content-Type: application/json" -d '{"username": "user",
+  "password1": "user123123", "password2": "user123123"}'
+  ```
+- rest-auth/login: Login.
+  ```bash
+  $ curl -i -XPOST "http://127.0.0.1:8000/rest-auth/login/" -H 'Content-Type: application/json' -H  'Authorization: Token tokenstring' -d '{"username": "user", "password": "user123123"}'
+  ```
+
+- You have to include -H  'Authorization: Token tokenstring' for all POST requests (to be authenticated as logged-in user.)
+- cf) I commented out rest_framework.authentication.SessionAuthentication from settings.py...to make it work. (I only tested with server up, and sending requests via command line.)
 ### 2-1. GET
-#### 2-1-1. /post/
+#### /post/
 - [Available Parameters]
   - type (str): 'comment', 'submission'
   - sort (str): 'new', 'old'
@@ -35,22 +50,28 @@ $ python manage.py shell  # Interactive shell.
 
 ### 2-2. POST
 
-#### 2-2-1. /post/crawl/
+#### /post/crawl/
 - [Description]
   - Crawl posts (Submission or Comment) from Reddit & Save them to Post database.
   - If you are trying to save already saved posts, it will be skipped so it's ok if you run duplicate requests again and again.
 - [Example]
   ```bash
-  $ curl -i -XPOST "http://127.0.0.1:8000/post/crawl/" -H "Content-Type: application/json" -d '{"subreddit": "Cooking", "start_time": "2020-10-10-00:00:30", "end_time": "2020-10-11-00:30:00", "type": "comment", "max_size": 200}'
+  $ curl -i -XPOST "http://127.0.0.1:8000/post/crawl/" -H "Content-Type: application/json" -H  'Authorization: Token tokenstring' -d '{"subreddit": "Cooking", "after": 1602255600, "before": 1602343800, "post_type": "comment", "max_size": 100}'
 
-  # (Mandatory) subreddit, start_time, end_time
+  # (Mandatory) subreddit, after (ts), before (ts)
   ```
 - [Warning]
   - It may "skip" some posts inside the designated time interval passed by the user. (it's implemented with this limitation to simplify the implementation considering the fact that pushshift.io returns 500 posts at maximum for one request...But if I get any better idea, I will definitely modify the implementation! Please let me know!)
+  - running the same query multiple times may insert different posts into database. (최대 max_size에 있는 만큼 새로 인서트가 허용되므로...계속 돌고돌아서.)
 
+#### /post/bring/
+- ? 
 
+#### /post/deletes/
+#### /post/delete_all/
+#### /post/moves/
 
-
+#### /spam/
 
 ## 3. Reddit Data
 - Reference
