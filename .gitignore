@@ -31,3 +31,14 @@ Temporary Items
 .apdisk
 
 # End of https://www.toptal.com/developers/gitignore/api/macos
+
+
+
+# server ##########
+db.sqlite3
+__pycache__/
+*.pyc
+0*.py
+venv_hello/
+.idea
+####################
