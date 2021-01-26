@@ -234,10 +234,9 @@ export type Post = {
   subreddit: string;
   title: string;
   matching_rules: number[];
-  ups: number;
-  downs: number;
   domain: string;
   url: string;
+  votes: number;
 };
 
 export type NewPost = {
