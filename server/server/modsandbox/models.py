@@ -35,8 +35,8 @@ class Post(models.Model):
     url = models.CharField(max_length=500, null=True)
     matching_rules = models.ManyToManyField(Rule, blank=True)
     # for vote
-    ups = models.IntegerField(default=0)
-    downs = models.IntegerField(default=0)
+    votes = models.IntegerField(default=0)  # ups - downs
+
     # for spam_
     banned_by = models.CharField(max_length=300, null=True)
     banned_at_utc = models.DateTimeField(null=True)

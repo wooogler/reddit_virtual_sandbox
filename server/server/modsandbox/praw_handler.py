@@ -1,10 +1,12 @@
-import praw
 import os
 import json
-from datetime import datetime, timezone
 import logging
+from datetime import datetime, timezone
+
+import praw
 
 from .models import Post
+
 
 logger = logging.getLogger(__name__)
 

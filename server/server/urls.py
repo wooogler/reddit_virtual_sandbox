@@ -26,9 +26,8 @@ from rest_framework import routers
 
 from .modsandbox import views
 
+
 router = routers.DefaultRouter()
-# router.register(r'submissions', views.SubmissionViewSet)
-# router.register(r'comments', views.CommentViewSet)
 router.register(r'post', views.PostHandlerViewSet, basename='post')
 router.register(r'spam', views.SpamHandlerViewSet, basename='spam')
 
