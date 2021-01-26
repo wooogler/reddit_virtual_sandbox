@@ -63,7 +63,7 @@ class RedditHandler():
         fullname2votes = {res.id: res.score for res in self.reddit.info(post_ids)}
 
         for i in range(len(posts)):
-            score = fullname2votes.get(fullname(posts[i]), 0)
+            score = fullname2votes.get(posts[i]['_id'], 0)
             posts[i]['votes'] = score
             
         return posts
