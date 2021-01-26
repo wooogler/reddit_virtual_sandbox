@@ -40,12 +40,12 @@ class Post(models.Model):
     # for spam_
     banned_by = models.CharField(max_length=300, null=True)
     banned_at_utc = models.DateTimeField(null=True)
+    mod_reason_title = models.CharField(null=True, max_length=300)
     # for reports_
     user_reports = models.JSONField(null=True) # [['spam',2],['trolling',1]]
     mod_reports = models.JSONField(null=True) # [['spam','mod_1'],['spam','mod_2'],['Can someone take a look at this?','mod_3']]
     # for post DB 
     is_private = models.BooleanField(default=True)
-    mod_reason_title = models.CharField(null=True, max_length=300)
 
     TYPE_CHOICES = [
         ("submission", "submission"),

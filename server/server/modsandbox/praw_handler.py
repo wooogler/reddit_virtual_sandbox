@@ -41,8 +41,7 @@ class PrawHandler:
                 "mod_reason_title": spam.mod_reason_title,
                 "user_reports": spam.user_reports,
                 "mod_reports": spam.mod_reports,
-                "ups": spam.ups,
-                "downs": spam.downs,
+                "votes": spam.votes,
                 "domain": spam.domain,
                 "url": spam.url,
             }
@@ -63,8 +62,7 @@ class PrawHandler:
             "mod_reason_title": spam.mod_reason_title,
             "user_reports": spam.user_reports,
             "mod_reports": spam.mod_reports,
-            "ups": spam.ups,
-            "downs": spam.downs,
+            "votes": spam.votes,
         }
 
     @staticmethod
@@ -83,8 +81,7 @@ class PrawHandler:
                 "_type": "reports_submission",
                 "user_reports": reports.user_reports,
                 "mod_reports": reports.mod_reports,
-                "ups": reports.ups,
-                "downs": reports.downs,
+                "votes": reports.votes,
                 "domain": reports.domain,
                 "url": reports.url,
             }
@@ -100,8 +97,7 @@ class PrawHandler:
             "_type": "reports_comment",
             "user_reports": reports.user_reports,
             "mod_reports": reports.mod_reports,
-            "ups": reports.ups,
-            "downs": reports.downs,
+            "votes": reports.votes
         }
     
     def project_modqueue(self, modqueue):

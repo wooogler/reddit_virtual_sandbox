@@ -48,8 +48,7 @@ class PostSerializer(serializers.ModelSerializer):
             "mod_reason_title",
             "mod_reports",
             "user_reports",
-            "ups",
-            "downs",
+            "votes",
             "domain",
             "url",
         ]
