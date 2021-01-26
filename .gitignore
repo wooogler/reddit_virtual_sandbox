@@ -41,4 +41,6 @@ __pycache__/
 0*.py
 venv_hello/
 .idea
+env/
+nohup.out
 ####################
