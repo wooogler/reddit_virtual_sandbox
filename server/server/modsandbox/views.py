@@ -1,23 +1,21 @@
-import logging
-import json
-from datetime import datetime
 import os
+import json
+import logging
+from datetime import datetime
+
 import praw
-
-
-# Create your views here.
-
-from rest_framework import viewsets, status
-from rest_framework.decorators import action, api_view
-from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from django.shortcuts import redirect
-from .models import Post, Profile, Rule
-from .reddit_handler import RedditHandler
+from rest_framework import viewsets, status
+from rest_framework.response import Response
+from rest_framework.decorators import action, api_view
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+
 from .praw_handler import PrawHandler
-from .automod import Ruleset, RuleTarget
+from .models import Post, Profile, Rule
 from .serializers import PostSerializer
+from .automod import Ruleset, RuleTarget
 from .pagintations import PostPagination
+from .reddit_handler import RedditHandler
 
 
 logger = logging.getLogger(__name__)
@@ -188,7 +186,11 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
             queryset = queryset.order_by("-created_utc")
         elif sort == "old":
             queryset = queryset.order_by("created_utc")
-
+        elif sort == "votes_desc":
+            queryset = queryset.order_by("-votes")
+        elif sort == "votes_asc":
+            queryset = queryset.order_by("votes")
+        
         if filtered == "all":
             queryset = queryset.all()
         elif filtered == "filtered":
@@ -232,7 +234,7 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
             subreddit = request.data["subreddit"]
             after = request.data["after"]
             before = request.data["before"]
-            post_type = request.data.get("post_type", None)
+            post_type = request.data.get("post_type", "all")
             max_size = request.data.get("max_size", None)
 
         except Exception as e:
@@ -256,7 +258,7 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
                 return Response(status=status.HTTP_201_CREATED)
 
         except Exception as e:
-            logger.error(e)
+            logger.exception(e)
 
         return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -372,14 +374,14 @@ class SpamHandlerViewSet(viewsets.ModelViewSet):
             profile = Profile.objects.get(user=request.user.id)
 
         try:
-            praw_hanlder = PrawHandler(profile.reddit_token)
+            praw_handler = PrawHandler(profile.reddit_token)
             subreddit_name = request.data["subreddit_name"]
             mod_type = request.data["mod_type"]
             removal_reason = request.data["removal_reason"]
             community_rule = request.data["community_rule"]
             moderator_name = request.data['moderator_name']
             reported_by = request.data['reported_by']
-            if praw_hanlder.run(
+            if praw_handler.run(
                 profile=profile, subreddit_name=subreddit_name, mod_type=mod_type, 
                 removal_reason=removal_reason, community_rule=community_rule, moderator_name=moderator_name,
                 reported_by=reported_by

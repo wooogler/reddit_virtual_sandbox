@@ -47,22 +47,34 @@ function SpamList({
   spamSpan,
 }: SpamListProps) {
   const dispatch: AppDispatch = useDispatch();
-  const [target, setTarget] = useState<any>(null);
+  const [targetAll, setTargetAll] = useState<any>(null);
+  const [targetFiltered, setTargetFiltered] = useState<any>(null);
+  const [targetUnfiltered, setTargetUnfiltered] = useState<any>(null);
   const count = useSelector(postSelector.count);
   
   useInfiniteScroll({
-    target,
+    target: targetAll,
     onIntersect: ([{ isIntersecting }]) => {
       if (isIntersecting) {
-        if(target.className === 'last-item-all') {
-          dispatch(postActions.getAllSpamsMore());
-        }
-        if(target.className === 'last-item-filtered') {
-          dispatch(postActions.getFilteredSpamsMore());
-        }
-        if(target.className === 'last-item-unfiltered') {
-          dispatch(postActions.getUnfilteredSpamsMore());
-        }
+        dispatch(postActions.getAllSpamsMore());
+      }
+    },
+    threshold: 0.7,
+  });
+  useInfiniteScroll({
+    target: targetFiltered,
+    onIntersect: ([{ isIntersecting }]) => {
+      if (isIntersecting) {
+        dispatch(postActions.getFilteredSpamsMore());
+      }
+    },
+    threshold: 0.7,
+  });
+  useInfiniteScroll({
+    target: targetUnfiltered,
+    onIntersect: ([{ isIntersecting }]) => {
+      if (isIntersecting) {
+        dispatch(postActions.getUnfilteredSpamsMore());
       }
     },
     threshold: 0.7,
@@ -83,6 +95,11 @@ function SpamList({
     dispatch(postActions.clearSelectedPostId());
   };
 
+  const handleClickBar = () => {
+    dispatch(postActions.toggleSplitSpamPostList());
+    dispatch(getSpamsRefresh());
+  }
+
   return (
     <div className='relative flex flex-col h-full'>
       {selectedPostId.length !== 0 && (
@@ -100,11 +117,13 @@ function SpamList({
         list="moderated"
         name="Moderated"
         splitView={splitSpamList}
-        tooltipText='Posts imported from real subreddit'
+        tooltipText='Moderated posts from spam, reports, mod queue in your subreddit'
         userImported={spamUserImported}
         span={spamSpan}
       />
-      <BarRate total={count.spams.all} part={count.spams.filtered} />
+      <div onClick={handleClickBar} className='cursor-pointer hover:opacity-70'>
+        <BarRate total={count.spams.all} part={count.spams.filtered} /> 
+      </div>
       <SplitPaneDiv className='flex-1 overflow-y-auto'>
         {splitView ? (
           <SplitPane
@@ -115,7 +134,7 @@ function SpamList({
           >
             <div className='w-full'>
               <div className='flex justify-center'>
-                ▼ Affected by Automod
+                ▼ Filtered by Automod
               </div>
               {
                 spamsFiltered.length !== 0 ? spamsFiltered.map((spam) => {
@@ -134,13 +153,13 @@ function SpamList({
               }
               {
                 spamsFiltered.length > 8 && (
-                  <div ref={setTarget} className="last-item-filtered"></div>
+                  <div ref={setTargetFiltered} className="last-item-filtered"></div>
                 )
               }
             </div>
             <div className='w-full'>
               <div className='flex justify-center'>
-                ▼ Not Affected by Automod
+                ▼ Not Filtered by Automod
               </div>
               {
                 spamsUnfiltered.map((spam) => {
@@ -155,7 +174,7 @@ function SpamList({
               }
               {
                 spamsUnfiltered.length > 8 && (
-                  <div ref={setTarget} className="last-item-unfiltered"></div>
+                  <div ref={setTargetUnfiltered} className="last-item-unfiltered"></div>
                 )
               }
             </div>
@@ -176,7 +195,7 @@ function SpamList({
               </div>
             )}
             {spamsAll.length > 8 && (
-              <div ref={setTarget} className="last-item-all"></div>
+              <div ref={setTargetAll} className="last-item-all"></div>
             )}
           </>
         )}

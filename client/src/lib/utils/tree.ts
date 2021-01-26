@@ -34,7 +34,11 @@ export const makeTree = (editables: Rule[]): Tree => {
   });
 };
 
+export type KeyMap = { original: string; changed: string };
+
+
 export const keysToTree = (treeData: Tree, keys: string[]) => {
+
   treeData.forEach((tree1, tree1Index, treeObject) => {
     if (!keys.includes(tree1.key)) {
       treeObject.splice(tree1Index, 1);
@@ -45,13 +49,28 @@ export const keysToTree = (treeData: Tree, keys: string[]) => {
       }
       tree2.children.forEach((tree3, tree3Index, tree2Object) => {
         if (!keys.includes(tree3.key)) {
-          tree2Object.splice(tree3Index, 1, {...tree2Object[tree3Index], title:'DTNq3g6*&%mF_'});
+          tree2Object.splice(tree3Index, 1);
         }
       });
     });
   });
   return treeData;
 };
+
+//선택하는 부분에서 key가 틀어지는 것을 막기 위해 원래 위치를 저장하는 함수
+export const treeToKeyMaps = (treeData: Tree) => {
+  let keyMaps: KeyMap[] = [];
+  treeData.forEach((tree1, tree1Index) => {
+    keyMaps.push({original: tree1.key, changed: `${tree1Index}`})
+    tree1.children.forEach((tree2, tree2Index) => {
+      keyMaps.push({original: tree2.key, changed: `${tree1Index}-${tree2Index}`})
+      tree2.children.forEach((tree3, tree3Index) => {
+        keyMaps.push({original: tree3.key, changed: `${tree1Index}-${tree2Index}-${tree3Index}`})
+      })
+    })
+  });
+  return keyMaps;
+}
 
 export const treeToCode = (treeData: Tree) => {
   let code = '';

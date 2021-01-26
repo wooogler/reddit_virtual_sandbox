@@ -46,29 +46,40 @@ function PostList({
   splitView,
   loadingPost,
   loadingRule,
-  loadingImport,
   code,
   splitPostList,
   postUserImported,
   postSpan,
 }: PostListProps) {
   const dispatch: AppDispatch = useDispatch();
-  const [target, setTarget] = useState<any>(null);
+  const [targetAll, setTargetAll] = useState<any>(null);
+  const [targetFiltered, setTargetFiltered] = useState<any>(null);
+  const [targetUnfiltered, setTargetUnfiltered] = useState<any>(null);
   const count = useSelector(postSelector.count);
 
   useInfiniteScroll({
-    target,
+    target: targetAll,
     onIntersect: ([{ isIntersecting }]) => {
       if (isIntersecting) {
-        if (target.className === 'last-item-all') {
-          dispatch(postActions.getAllPostsMore());
-        }
-        if (target.className === 'last-item-filtered') {
-          dispatch(postActions.getFilteredPostsMore());
-        }
-        if (target.className === 'last-item-unfiltered') {
-          dispatch(postActions.getUnfilteredPostsMore());
-        }
+        dispatch(postActions.getAllPostsMore());
+      }
+    },
+    threshold: 0.7,
+  });
+  useInfiniteScroll({
+    target: targetFiltered,
+    onIntersect: ([{ isIntersecting }]) => {
+      if (isIntersecting) {
+        dispatch(postActions.getFilteredPostsMore());
+      }
+    },
+    threshold: 0.7,
+  });
+  useInfiniteScroll({
+    target: targetUnfiltered,
+    onIntersect: ([{ isIntersecting }]) => {
+      if (isIntersecting) {
+        dispatch(postActions.getUnfilteredPostsMore());
       }
     },
     threshold: 0.7,
@@ -88,6 +99,11 @@ function PostList({
     });
     dispatch(postActions.clearSelectedSpamPostId());
   };
+
+  const handleClickBar = () => {
+    dispatch(postActions.toggleSplitPostList());
+    dispatch(getPostsRefresh());
+  }
 
   return (
     <div className="relative flex flex-col h-full">
@@ -114,7 +130,9 @@ function PostList({
         userImported={postUserImported}
         span={postSpan}
       />
-      <BarRate total={count.posts.all} part={count.posts.filtered} />
+      <div onClick={handleClickBar} className='cursor-pointer hover:opacity-70'>
+        <BarRate total={count.posts.all} part={count.posts.filtered}/>
+      </div>
       <SplitPaneDiv className="flex-1 overflow-y-auto">
         {splitView ? (
           <SplitPane
@@ -124,7 +142,7 @@ function PostList({
             paneStyle={{ overflow: 'auto' }}
           >
             <div className="w-full">
-              <div className="flex justify-center">▼ Affected by Automod</div>
+              <div className="flex justify-center">▼ Filtered by Automod</div>
               {postsFiltered.length !== 0 ? (
                 postsFiltered.map((post) => {
                   return (
@@ -143,14 +161,14 @@ function PostList({
                 </div>
               )}
               {postsFiltered.length > 8 && (
-                <div ref={setTarget} className="last-item-filtered"></div>
+                <div ref={setTargetFiltered} className="last-item-filtered"></div>
               )}
             </div>
             <div className="w-full">
               <div className="flex justify-center">
-                ▼ Not Affected by Automod
+                ▼ Not Filtered by Automod
               </div>
-              {postsUnfiltered.map((post, index) => {
+              {postsUnfiltered.map((post) => {
                 return (
                   <PostItem
                     post={post}
@@ -162,7 +180,7 @@ function PostList({
                 );
               })}
               {postsUnfiltered.length > 8 && (
-                <div ref={setTarget} className="last-item-unfiltered"></div>
+                <div ref={setTargetUnfiltered} className="last-item-unfiltered"></div>
               )}
             </div>
           </SplitPane>
@@ -186,7 +204,7 @@ function PostList({
               </div>
             )}
             {postsAll.length > 8 && (
-              <div ref={setTarget} className="last-item-all"></div>
+              <div ref={setTargetAll} className="last-item-all"></div>
             )}
           </div>
         )}

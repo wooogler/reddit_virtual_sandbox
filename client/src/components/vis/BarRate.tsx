@@ -7,8 +7,9 @@ interface Props {
 }
 
 function BarRate({ total, part }: Props): ReactElement {
+
   return (
-    <div className="flex h-6 w-full bg-gray-100 relative">
+    <div className="flex h-6 w-full bg-gray-100 relative cursor-pointer">
       <div className="absolute inset-0 flex justify-center items-center">
         <div className="mr-2">
           filtered: {part} / all: {total}

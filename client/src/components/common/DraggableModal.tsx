@@ -51,6 +51,7 @@ const modalStyle: Modal.Styles = {
   overlay: {
     width: 0,
     height: 0,
+    zIndex: 100,
   },
   content: {
     overflow: 'visible',

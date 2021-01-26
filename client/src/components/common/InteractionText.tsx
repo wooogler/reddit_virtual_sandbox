@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
-import { useDispatch } from 'react-redux';
-import styled from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
 import { Index } from '../../lib/utils/match';
+import { RootState } from '../../modules';
 import { clickMatchedThunk } from '../../modules/rule/slice';
 
 interface Props {
@@ -10,6 +10,7 @@ interface Props {
 }
 
 function InteractionText({ text, match }: Props): ReactElement {
+  const keyMaps = useSelector((state: RootState) => state.rule.keyMaps )
   const dispatch = useDispatch();
   const matchArray = match.reduce<string[]>(
     (acc, index) => {
@@ -28,7 +29,10 @@ function InteractionText({ text, match }: Props): ReactElement {
   );
 
   const handleClickHighlight = (value: string, e:React.MouseEvent) => {
-    dispatch(clickMatchedThunk(value))
+    const original = keyMaps.find((item) => item.changed === value)?.original
+    if(original) {
+      dispatch(clickMatchedThunk(original))
+    }
     e.stopPropagation();
   };
 
@@ -39,23 +43,18 @@ function InteractionText({ text, match }: Props): ReactElement {
           return <span key={index}>{part}</span>;
         }
         return (
-          <Highlight
+          <span style={{backgroundColor: 'yellow'}} className='cursor-pointer underline text-blue-700'
             onClick={(e) =>
               handleClickHighlight(match[(index - 1) / 2].matchIndex, e)
             }
             key={index}
           >
             {part}
-          </Highlight>
+          </span>
         );
       })}
     </>
   );
 }
-
-const Highlight = styled.span`
-  background-color: yellow;
-  cursor: pointer;
-`;
 
 export default InteractionText;
