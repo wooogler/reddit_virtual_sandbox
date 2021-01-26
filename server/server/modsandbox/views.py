@@ -65,8 +65,7 @@ def reddit_auth(request):
     profile.reddit_token = token
     profile.save()
 
-    return redirect("http://localhost:3000/")
-
+    return redirect("http://modsandbox.s3-website.ap-northeast-2.amazonaws.com/")
 
 @api_view(["GET"])
 def reddit_logged(request):
