@@ -197,9 +197,10 @@ const getMatchIndexes = (
 export const getMatch = (code: string, post: Post | Spam) => {
   const sections = code.split(/---/m).map((section) => _.trim(section, '\r\n'));
   const rules = sections.map((section) => YAML.parse(section)).filter((n) => n);
-  return rules.reduce<MatchIndex[]>((acc, rule, ruleIndex) => {
+  const match =  rules.reduce<MatchIndex[]>((acc, rule, ruleIndex) => {
     const matches = getMatchPatterns(rule);
     const matchIndex = getMatchIndexes(post, ruleIndex, matches);
     return [...acc, ...matchIndex];
   }, []);
+  return match;
 };

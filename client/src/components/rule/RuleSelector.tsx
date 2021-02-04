@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import {
   createKeyMaps,
@@ -6,7 +6,7 @@ import {
   ruleSelector,
   submitCode,
 } from '../../modules/rule/slice';
-import { Tree } from 'antd';
+import { notification, Tree } from 'antd';
 import { cloneDeep } from 'lodash';
 import 'antd/dist/antd.css';
 import { useDispatch, useSelector } from 'react-redux';
@@ -19,6 +19,7 @@ import {
 } from '../../lib/utils/tree';
 import { AppDispatch } from '../..';
 import { getPostsRefresh, getSpamsRefresh } from '../../modules/post/actions';
+import { RootState } from '../../modules';
 
 interface RuleSelectorProps {
   editables: Rule[];
@@ -27,6 +28,19 @@ interface RuleSelectorProps {
 
 function RuleSelector({ editables, loadingRule }: RuleSelectorProps) {
   const dispatch: AppDispatch = useDispatch();
+  const ruleState = useSelector((state: RootState) => state.rule);
+  const error = ruleState.error;
+
+  useEffect(() => {
+    if(error) {
+      notification.error({
+        message: 'Parsing Error',
+        description: error,
+      })
+    }
+  }, [error]);
+
+  
 
   const treeDataOriginal = makeTree(editables);
 
@@ -62,19 +76,6 @@ function RuleSelector({ editables, loadingRule }: RuleSelectorProps) {
 }
 
 const RuleSelectorDiv = styled.div`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  .words {
-    display: flex;
-  }
-  .line {
-    display: flex;
-  }
-  .list {
-    display: flex;
-  }
   .ant-tree {
     font-size: 16px;
     font-family: 'Courier';

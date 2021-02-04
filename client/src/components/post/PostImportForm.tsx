@@ -4,7 +4,8 @@ import {
   Input,
   Select,
   InputNumber,
-  Button
+  Button,
+  Checkbox,
 } from 'antd';
 import { useFormik } from 'formik';
 import moment from 'moment';
@@ -29,6 +30,7 @@ function PostImportForm({ onClickClose }: PostImportFormProps) {
       subreddit: '',
       post_type: 'all',
       max_size: null,
+      user_imported: true,
     },
     onSubmit: (values) => {
       dispatch(
@@ -38,6 +40,7 @@ function PostImportForm({ onClickClose }: PostImportFormProps) {
           before: moment.utc(values.before).unix(),
           post_type: values.post_type,
           max_size: values.max_size,
+          user_imported: values.user_imported,
         })
       );
       onClickClose();
@@ -88,6 +91,8 @@ function PostImportForm({ onClickClose }: PostImportFormProps) {
           formik.setFieldValue('max_size', value);
         }}
       />
+      <label htmlFor='user_imported'>User Imported</label>
+      <Checkbox name='user_imported' onChange={(e) => {formik.setFieldValue('user_imported', e.target.checked)}} checked={formik.values.user_imported} />
       <div className="buttons">
         <Button onClick={onClickClose}>
           Close

@@ -5,17 +5,15 @@ import {Button} from 'antd';
 import {message as antdMessage} from 'antd';
 import { AppDispatch } from '../..';
 import { getPostsRefresh, getSpamsRefresh } from '../../modules/post/actions';
-import { SerializedError } from '@reduxjs/toolkit';
 import CopyToClipboard from 'react-copy-to-clipboard';
 
 interface RuleActionsProps {
-  message: SerializedError | null;
   mode: 'edit' | 'select';
   code: string;
   title: string;
 }
 
-function RuleActions({ message, mode, code, title }: RuleActionsProps) {
+function RuleActions({ mode, code, title }: RuleActionsProps) {
   const dispatch: AppDispatch = useDispatch();
   const [downloadLink, setDownloadLink] = useState('')
 
@@ -25,10 +23,10 @@ function RuleActions({ message, mode, code, title }: RuleActionsProps) {
         dispatch(getPostsRefresh());
         dispatch(getSpamsRefresh());
       })
+      dispatch(toggleEditorMode());
     } else {
       dispatch(createEditable());
     }
-    dispatch(toggleEditorMode());
   };
 
   
@@ -56,7 +54,6 @@ function RuleActions({ message, mode, code, title }: RuleActionsProps) {
           Export YAML
         </Button>
       </a>
-      <span>{message && String(message)}</span>
       <Button onClick={handleClickRun} type='primary' size="large">
         {mode === "edit" ? 'Run' : 'Edit'}
       </Button>
