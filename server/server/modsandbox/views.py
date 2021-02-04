@@ -167,7 +167,7 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
         queryset = super().get_queryset()
         if self.request.user.is_authenticated:
             profile = Profile.objects.get(user=self.request.user.id)
-            queryset = queryset.filter(_id__in=profile.used_posts.all())
+            
         try:
             post_type = self.request.query_params.get("post_type", "all")
             sort = self.request.query_params.get("sort", "new")
@@ -176,6 +176,11 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
         except Exception as e:
             logger.error(e)
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        if is_private == 'true':
+            queryset = queryset.filter(_id__in=profile.used_posts.all())
+        elif is_private == 'false':
+            queryset = queryset.filter(profile__isnull=True)
 
         if post_type == "all":
             queryset = queryset.all()
@@ -197,11 +202,6 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(matching_rules__in=profile.user.rules.all())
         elif filtered == "unfiltered":
             queryset = queryset.exclude(matching_rules__in=profile.user.rules.all())
-
-        if is_private == 'true':
-            queryset = queryset.filter(is_private=True)
-        elif is_private == 'false':
-            queryset = queryset.filter(is_private=False)
 
         return queryset
 
@@ -236,6 +236,7 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
             before = request.data["before"]
             post_type = request.data.get("post_type", "all")
             max_size = request.data.get("max_size", None)
+            is_private = request.data['user_imported']
 
         except Exception as e:
             logger.error(e)
@@ -253,7 +254,7 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
                 before=before,
                 post_type=post_type,
                 max_size=max_size,
-                profile=profile,
+                profile=profile if is_private else None,
             ):
                 return Response(status=status.HTTP_201_CREATED)
 
