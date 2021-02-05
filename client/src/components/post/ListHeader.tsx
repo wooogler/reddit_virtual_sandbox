@@ -130,9 +130,9 @@ function ListHeader({
         </div>
 
         <DraggableModal
-          isOpen={isAddOpen}
-          position={{ x: 800, y: 150 }}
-          handleText={`Add a new ${list === 'unmoderated' ? 'post' : 'spam'}`}
+          visible={isAddOpen}
+          setVisible={setIsAddOpen}
+          title={`Add a new ${list === 'unmoderated' ? 'post' : 'spam'}`}
         >
           <PostForm onClickClose={handleClickCloseModal} list={list} />
         </DraggableModal>

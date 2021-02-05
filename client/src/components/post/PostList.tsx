@@ -103,7 +103,7 @@ function PostList({
   const handleClickBar = () => {
     dispatch(postActions.toggleSplitPostList());
     dispatch(getPostsRefresh());
-  }
+  };
 
   return (
     <div className="relative flex flex-col h-full">
@@ -130,8 +130,8 @@ function PostList({
         userImported={postUserImported}
         span={postSpan}
       />
-      <div onClick={handleClickBar} className='cursor-pointer hover:opacity-70'>
-        <BarRate total={count.posts.all} part={count.posts.filtered}/>
+      <div onClick={handleClickBar} className="cursor-pointer hover:opacity-70">
+        <BarRate total={count.posts.all} part={count.posts.filtered} />
       </div>
       <SplitPaneDiv className="flex-1 overflow-y-auto">
         {splitView ? (
@@ -142,7 +142,9 @@ function PostList({
             paneStyle={{ overflow: 'auto' }}
           >
             <div className="w-full">
-              <div className="flex justify-center">▼ Filtered by Automod</div>
+              <div className="flex justify-center sticky bg-white top-0 z-10">
+                ▼ Filtered by Automod
+              </div>
               {postsFiltered.length !== 0 ? (
                 postsFiltered.map((post) => {
                   return (
@@ -161,26 +163,38 @@ function PostList({
                 </div>
               )}
               {postsFiltered.length > 8 && (
-                <div ref={setTargetFiltered} className="last-item-filtered"></div>
+                <div
+                  ref={setTargetFiltered}
+                  className="last-item-filtered"
+                ></div>
               )}
             </div>
-            <div className="w-full">
-              <div className="flex justify-center">
+            <div className="w-full h-full">
+              <div className="flex justify-center sticky bg-white top-0 z-10">
                 ▼ Not Filtered by Automod
               </div>
-              {postsUnfiltered.map((post) => {
-                return (
-                  <PostItem
-                    post={post}
-                    selected={selectedPostId.includes(post._id)}
-                    isMatched={post.matching_rules.length !== 0}
-                    match={getMatch(code, post)}
-                    key={post._id}
-                  />
-                );
-              })}
+              {postsUnfiltered.length !== 0 ? (
+                postsUnfiltered.map((post) => {
+                  return (
+                    <PostItem
+                      post={post}
+                      selected={selectedPostId.includes(post._id)}
+                      isMatched={post.matching_rules.length !== 0}
+                      match={getMatch(code, post)}
+                      key={post._id}
+                    />
+                  );
+                })
+              ) : (
+                <div className="flex justify-center items-center h-full">
+                  <Empty description="No unfiltered post" />
+                </div>
+              )}
               {postsUnfiltered.length > 8 && (
-                <div ref={setTargetUnfiltered} className="last-item-unfiltered"></div>
+                <div
+                  ref={setTargetUnfiltered}
+                  className="last-item-unfiltered"
+                ></div>
               )}
             </div>
           </SplitPane>

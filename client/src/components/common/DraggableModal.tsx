@@ -1,65 +1,83 @@
-import React from 'react';
-import Draggable from 'react-draggable';
-import Modal from 'react-modal';
+import React, { useState, useRef } from 'react';
+import Draggable, { DraggableData, DraggableEvent } from 'react-draggable';
+// import Modal from 'react-modal';
+import { Modal } from 'antd';
 import styled from 'styled-components';
 import palette from '../../lib/styles/palette';
 
 interface DraggableModalProps {
-  isOpen: boolean;
-  position: { x: number; y: number };
-  handleText: string;
+  visible: boolean;
+  title: string;
   children: React.ReactNode;
+  setVisible: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-function DraggableModal({
-  isOpen,
-  position,
-  handleText,
-  children,
-}: DraggableModalProps) {
+function DraggableModal({ visible, title, children, setVisible }: DraggableModalProps) {
+  const [disabled, setDisabled] = useState(true);
+  const [bounds, setBounds] = useState({
+    left: 0,
+    top: 0,
+    bottom: 0,
+    right: 0,
+  });
+
+  const draggleRef = useRef<HTMLDivElement>(null);
+
+  const onStart = (event: DraggableEvent, uiData: DraggableData) => {
+    const { clientWidth, clientHeight } = window?.document?.documentElement;
+    const targetRect = draggleRef?.current?.getBoundingClientRect();
+    if (targetRect) {
+      setBounds({
+        left: -targetRect?.left + uiData?.x,
+        right: clientWidth - (targetRect?.right - uiData?.x),
+        top: -targetRect?.top + uiData?.y,
+        bottom: clientHeight - (targetRect?.bottom - uiData?.y),
+      });
+    }
+  };
+
+  const handleCancel = () => {
+    setVisible(false);
+  }
 
   return (
-    <Modal isOpen={isOpen} style={modalStyle} ariaHideApp={false}>
-      <Draggable handle=".handle" defaultPosition={position}>
-        <Content>
-          <div className="handle">{handleText}</div>
-          {children}
-        </Content>
-      </Draggable>
+    <Modal
+      title={
+        <div
+          style={{ width: '100%', cursor: 'move' }}
+          onMouseOver={() => {
+            if (disabled) {
+              setDisabled(false);
+            }
+          }}
+          onMouseOut={() => {
+            setDisabled(true);
+          }}
+          onFocus={() => {}}
+          onBlur={() => {}}
+        >
+          {title}
+        </div>
+      }
+      visible={visible}
+      modalRender={(modal) => (
+        <Draggable
+          disabled={disabled}
+          bounds={bounds}
+          onStart={(event, uiData) => onStart(event, uiData)}
+        >
+          <div ref={draggleRef}>{modal}</div>
+        </Draggable>
+      )}
+      footer={null}
+      onCancel={handleCancel}
+      mask={false}
+      width='36rem'
+      bodyStyle={{padding: '1rem'}}
+    >
+      {children}
     </Modal>
   );
 }
-
-const Content = styled.div`
-  border-radius: 4px;
-  background: white;
-  border: 1px solid rgb(204, 204, 204);
-  width: 35rem;
-  padding: 0;
-  pointer-events: all;
-  overflow: hidden;
-  .handle {
-    padding: 0.2rem;
-    display: flex;
-    justify-content: center;
-    background: ${palette.blue[1]};
-    cursor: move;
-  }
-`;
-
-const modalStyle: Modal.Styles = {
-  overlay: {
-    width: 0,
-    height: 0,
-    zIndex: 100,
-  },
-  content: {
-    overflow: 'visible',
-    padding: 0,
-    border: 'none',
-    borderRadius: 0,
-    background: 'white',
-  },
-};
 
 export default DraggableModal;

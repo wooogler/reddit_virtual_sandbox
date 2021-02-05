@@ -82,9 +82,9 @@ function PostHeader({ userInfo, redditLogged }: PostHeaderProps) {
       </Dropdown>
 
       <DraggableModal
-        isOpen={isPostImportOpen}
-        position={{ x: 800, y: 150 }}
-        handleText={`Import subreddit posts`}
+        visible={isPostImportOpen}
+        setVisible={setIsPostImportOpen}
+        title={`Import subreddit posts`}
       >
         <PostImportForm
           onClickClose={() => {
@@ -94,9 +94,9 @@ function PostHeader({ userInfo, redditLogged }: PostHeaderProps) {
       </DraggableModal>
 
       <DraggableModal
-        isOpen={isSpamImportOpen}
-        position={{ x: 800, y: 150 }}
-        handleText={`Import seed posts`}
+        visible={isSpamImportOpen}
+        setVisible={setIsSpamImportOpen}
+        title={`Import seed posts`}
       >
         <SpamImportForm
           onClickClose={() => {

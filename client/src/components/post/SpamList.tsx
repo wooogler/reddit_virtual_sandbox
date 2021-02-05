@@ -9,7 +9,12 @@ import { useInfiniteScroll } from '../../lib/hooks';
 import OverlayLoading from '../common/OverlayLoading';
 import { Spam } from '../../lib/api/modsandbox/post';
 import { AppDispatch } from '../..';
-import { deletePosts, getPostsRefresh, getSpamsRefresh, movePosts } from '../../modules/post/actions';
+import {
+  deletePosts,
+  getPostsRefresh,
+  getSpamsRefresh,
+  movePosts,
+} from '../../modules/post/actions';
 import { getMatch } from '../../lib/utils/match';
 import SpamItem from './SpamItem';
 import ListHeader from './ListHeader';
@@ -51,7 +56,7 @@ function SpamList({
   const [targetFiltered, setTargetFiltered] = useState<any>(null);
   const [targetUnfiltered, setTargetUnfiltered] = useState<any>(null);
   const count = useSelector(postSelector.count);
-  
+
   useInfiniteScroll({
     target: targetAll,
     onIntersect: ([{ isIntersecting }]) => {
@@ -90,7 +95,7 @@ function SpamList({
 
   const handleClickDelete = () => {
     dispatch(deletePosts(selectedPostId)).then(() => {
-      dispatch(getPostsRefresh())
+      dispatch(getPostsRefresh());
     });
     dispatch(postActions.clearSelectedPostId());
   };
@@ -98,16 +103,20 @@ function SpamList({
   const handleClickBar = () => {
     dispatch(postActions.toggleSplitSpamPostList());
     dispatch(getSpamsRefresh());
-  }
+  };
 
   return (
-    <div className='relative flex flex-col h-full'>
+    <div className="relative flex flex-col h-full">
       {selectedPostId.length !== 0 && (
         <OverlayWithButton
-          text={selectedPostId.length ===1 ? `1 post selected` : `${selectedPostId.length} posts selected`}
+          text={
+            selectedPostId.length === 1
+              ? `1 post selected`
+              : `${selectedPostId.length} posts selected`
+          }
           buttonText1="Move to Seed posts"
           onClickButton1={handleClickMove}
-          buttonText2='Delete from Posts'
+          buttonText2="Delete from Posts"
           onClickButton2={handleClickDelete}
         />
       )}
@@ -117,14 +126,14 @@ function SpamList({
         list="moderated"
         name="Moderated"
         splitView={splitSpamList}
-        tooltipText='Moderated posts from spam, reports, mod queue in your subreddit'
+        tooltipText="Moderated posts from spam, reports, mod queue in your subreddit"
         userImported={spamUserImported}
         span={spamSpan}
       />
-      <div onClick={handleClickBar} className='cursor-pointer hover:opacity-70'>
-        <BarRate total={count.spams.all} part={count.spams.filtered} /> 
+      <div onClick={handleClickBar} className="cursor-pointer hover:opacity-70">
+        <BarRate total={count.spams.all} part={count.spams.filtered} />
       </div>
-      <SplitPaneDiv className='flex-1 overflow-y-auto'>
+      <SplitPaneDiv className="flex-1 overflow-y-auto">
         {splitView ? (
           <SplitPane
             split="horizontal"
@@ -132,66 +141,80 @@ function SpamList({
             style={{ position: 'relative' }}
             paneStyle={{ overflow: 'auto' }}
           >
-            <div className='w-full'>
-              <div className='flex justify-center'>
+            <div className="w-full">
+              <div className="flex justify-center sticky bg-white top-0 z-10">
                 ▼ Filtered by Automod
               </div>
-              {
-                spamsFiltered.length !== 0 ? spamsFiltered.map((spam) => {
-                  return (<SpamItem
-                    spam={spam}
-                    selected={selectedSpamId.includes(spam._id)}
-                    isMatched={spam.matching_rules.length !== 0}
-                    match={getMatch(code, spam)}
-                    key={spam._id}
-                  />)
-                }) : (
-                  <div className="flex justify-center items-center h-full">
-                    <Empty description="No filtered post" />
-                  </div>
-                )
-              }
-              {
-                spamsFiltered.length > 8 && (
-                  <div ref={setTargetFiltered} className="last-item-filtered"></div>
-                )
-              }
+              {spamsFiltered.length !== 0 ? (
+                spamsFiltered.map((spam) => {
+                  return (
+                    <SpamItem
+                      spam={spam}
+                      selected={selectedSpamId.includes(spam._id)}
+                      isMatched={spam.matching_rules.length !== 0}
+                      match={getMatch(code, spam)}
+                      key={spam._id}
+                    />
+                  );
+                })
+              ) : (
+                <div className="flex justify-center items-center h-full">
+                  <Empty description="No unfiltered spam" />
+                </div>
+              )}
+              {spamsFiltered.length > 8 && (
+                <div
+                  ref={setTargetFiltered}
+                  className="last-item-filtered"
+                ></div>
+              )}
             </div>
-            <div className='w-full'>
-              <div className='flex justify-center'>
+            <div className="w-full h-full">
+              <div className="flex justify-center sticky bg-white top-0 z-10">
                 ▼ Not Filtered by Automod
               </div>
-              {
+              {spamsUnfiltered.length !== 0 ? (
                 spamsUnfiltered.map((spam) => {
-                  return (<SpamItem
-                    spam={spam}
-                    selected={selectedSpamId.includes(spam._id)}
-                    isMatched={spam.matching_rules.length !== 0}
-                    match={getMatch(code, spam)}
-                    key={spam._id}
-                  />)
+                  return (
+                    <SpamItem
+                      spam={spam}
+                      selected={selectedSpamId.includes(spam._id)}
+                      isMatched={spam.matching_rules.length !== 0}
+                      match={getMatch(code, spam)}
+                      key={spam._id}
+                    />
+                  );
                 })
-              }
-              {
-                spamsUnfiltered.length > 8 && (
-                  <div ref={setTargetUnfiltered} className="last-item-unfiltered"></div>
-                )
-              }
+              ) : (
+                <div className="flex justify-center items-center h-full">
+                  <Empty description="No unfiltered post" />
+                </div>
+              )}
+              {spamsUnfiltered.length > 8 && (
+                <div
+                  ref={setTargetUnfiltered}
+                  className="last-item-unfiltered"
+                ></div>
+              )}
             </div>
           </SplitPane>
         ) : (
           <>
-            {spamsAll.length !== 0 ? (spamsAll.map((spam) => {
-              return (<SpamItem
-                spam={spam}
-                selected={selectedSpamId.includes(spam._id)}
-                isMatched={spam.matching_rules.length !== 0}
-                match={getMatch(code, spam)}
-                key={spam._id}
-              />)
-            })) : (
-              <div className='flex justify-center items-center h-full'>
-                <Empty description="Import moderated posts"/>
+            {spamsAll.length !== 0 ? (
+              spamsAll.map((spam) => {
+                return (
+                  <SpamItem
+                    spam={spam}
+                    selected={selectedSpamId.includes(spam._id)}
+                    isMatched={spam.matching_rules.length !== 0}
+                    match={getMatch(code, spam)}
+                    key={spam._id}
+                  />
+                );
+              })
+            ) : (
+              <div className="flex justify-center items-center h-full">
+                <Empty description="Import moderated posts" />
               </div>
             )}
             {spamsAll.length > 8 && (
