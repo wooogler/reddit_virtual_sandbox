@@ -1,10 +1,25 @@
-import { createSelector, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import {
+  createSelector,
+  createSlice,
+  PayloadAction,
+  SerializedError,
+} from '@reduxjs/toolkit';
 import { RootState } from '..';
-import { ImportQuery, Post, Spam } from '../../lib/api/modsandbox/post';
+import {
+  ImportPostQuery,
+  ImportSpamQuery,
+  Post,
+  Spam,
+} from '../../lib/api/modsandbox/post';
+import { addPost, addSpam, deletePosts, deleteSpams } from './actions';
 
 export type PostType = 'submission' | 'comment' | 'all';
-export type SpamType = 'spam_submission' | 'spam_comment' | 'all';
 export type SortType = 'new' | 'old';
+export type SpamSortType =
+  | 'created-new'
+  | 'created-old'
+  | 'banned-new'
+  | 'banned-old';
 export type Filtered = 'all' | 'filtered' | 'unfiltered';
 
 export type PostState = {
@@ -12,57 +27,75 @@ export type PostState = {
     all: {
       data: Post[];
       page: number;
+      count: number;
     };
     filtered: {
       data: Post[];
       page: number;
+      count: number;
     };
     unfiltered: {
       data: Post[];
       page: number;
+      count: number;
     };
     import: {
       loading: boolean;
       error: Error | null;
     };
-    deleteAll: {
+    add: {
       loading: boolean;
-      error: Error | null;
+      error: SerializedError | null;
+    };
+    delete: {
+      loading: boolean;
+      error: SerializedError | null;
     };
     loading: boolean;
     error: Error | null;
     type: PostType;
     sort: SortType;
     selected: string[];
+    userImported: boolean;
     split: boolean;
+    span: boolean;
   };
   spams: {
     all: {
       data: Spam[];
       page: number;
+      count: number;
     };
     filtered: {
       data: Spam[];
       page: number;
+      count: number;
     };
     unfiltered: {
       data: Spam[];
       page: number;
+      count: number;
     };
     import: {
       loading: boolean;
       error: Error | null;
     };
-    deleteAll: {
+    delete: {
       loading: boolean;
-      error: Error | null;
+      error: SerializedError | null;
+    };
+    add: {
+      loading: boolean;
+      error: SerializedError | null;
     };
     loading: boolean;
     error: Error | null;
-    type: SpamType;
-    sort: SortType;
+    type: PostType;
+    sort: SpamSortType;
     selected: string[];
     split: boolean;
+    userImported: boolean;
+    span: boolean;
   };
 };
 
@@ -71,20 +104,27 @@ export const initialState: PostState = {
     all: {
       data: [],
       page: 0,
+      count: 0,
     },
     filtered: {
       data: [],
       page: 0,
+      count: 0,
     },
     unfiltered: {
       data: [],
       page: 0,
+      count: 0,
     },
     import: {
       loading: false,
       error: null,
     },
-    deleteAll: {
+    delete: {
+      loading: false,
+      error: null,
+    },
+    add: {
       loading: false,
       error: null,
     },
@@ -93,35 +133,46 @@ export const initialState: PostState = {
     type: 'all',
     sort: 'new',
     split: false,
+    userImported: true,
     selected: [],
+    span: false,
   },
   spams: {
     all: {
       data: [],
       page: 0,
+      count: 0,
     },
     filtered: {
       data: [],
       page: 0,
+      count: 0,
     },
     unfiltered: {
       data: [],
       page: 0,
+      count: 0,
     },
     import: {
       loading: false,
       error: null,
     },
-    deleteAll: {
+    delete: {
+      loading: false,
+      error: null,
+    },
+    add: {
       loading: false,
       error: null,
     },
     loading: false,
     error: null,
     type: 'all',
-    sort: 'new',
+    sort: 'created-new',
     split: false,
     selected: [],
+    userImported: true,
+    span: false,
   },
 };
 
@@ -136,11 +187,12 @@ const postSlice = createSlice({
     },
     getAllPostsSuccess: (
       state,
-      action: PayloadAction<{ data: Post[]; nextPage: number }>,
+      action: PayloadAction<{ data: Post[]; nextPage: number; count: number }>,
     ) => {
       state.posts.all.data = action.payload.data;
       state.posts.loading = false;
       state.posts.all.page = action.payload.nextPage;
+      state.posts.all.count = action.payload.count;
     },
     getAllPostsError: (state, action: PayloadAction<Error>) => {
       state.posts.error = action.payload;
@@ -154,11 +206,12 @@ const postSlice = createSlice({
     },
     getFilteredPostsSuccess: (
       state,
-      action: PayloadAction<{ data: Post[]; nextPage: number }>,
+      action: PayloadAction<{ data: Post[]; nextPage: number; count: number }>,
     ) => {
       state.posts.filtered.data = action.payload.data;
       state.posts.loading = false;
       state.posts.filtered.page = action.payload.nextPage;
+      state.posts.filtered.count = action.payload.count;
     },
     getFilteredPostsError: (state, action: PayloadAction<Error>) => {
       state.posts.error = action.payload;
@@ -172,11 +225,12 @@ const postSlice = createSlice({
     },
     getUnfilteredPostsSuccess: (
       state,
-      action: PayloadAction<{ data: Post[]; nextPage: number }>,
+      action: PayloadAction<{ data: Post[]; nextPage: number; count: number }>,
     ) => {
       state.posts.unfiltered.data = action.payload.data;
       state.posts.loading = false;
       state.posts.unfiltered.page = action.payload.nextPage;
+      state.posts.unfiltered.count = action.payload.count;
     },
     getUnfilteredPostsError: (state, action: PayloadAction<Error>) => {
       state.posts.error = action.payload;
@@ -197,11 +251,12 @@ const postSlice = createSlice({
     },
     getAllSpamsSuccess: (
       state,
-      action: PayloadAction<{ data: Spam[]; nextPage: number }>,
+      action: PayloadAction<{ data: Spam[]; nextPage: number; count: number }>,
     ) => {
       state.spams.all.data = action.payload.data;
       state.spams.loading = false;
       state.spams.all.page = action.payload.nextPage;
+      state.spams.all.count = action.payload.count;
     },
     getAllSpamsError: (state, action: PayloadAction<Error>) => {
       state.spams.error = action.payload;
@@ -215,11 +270,12 @@ const postSlice = createSlice({
     },
     getFilteredSpamsSuccess: (
       state,
-      action: PayloadAction<{ data: Spam[]; nextPage: number }>,
+      action: PayloadAction<{ data: Spam[]; nextPage: number; count: number }>,
     ) => {
       state.spams.filtered.data = action.payload.data;
       state.spams.loading = false;
       state.spams.filtered.page = action.payload.nextPage;
+      state.spams.filtered.count = action.payload.count;
     },
     getFilteredSpamsError: (state, action: PayloadAction<Error>) => {
       state.spams.error = action.payload;
@@ -233,11 +289,12 @@ const postSlice = createSlice({
     },
     getUnfilteredSpamsSuccess: (
       state,
-      action: PayloadAction<{ data: Spam[]; nextPage: number }>,
+      action: PayloadAction<{ data: Spam[]; nextPage: number; count: number }>,
     ) => {
       state.spams.unfiltered.data = action.payload.data;
       state.spams.loading = false;
       state.spams.unfiltered.page = action.payload.nextPage;
+      state.spams.unfiltered.count = action.payload.count;
     },
     getUnfilteredSpamsError: (state, action: PayloadAction<Error>) => {
       state.spams.error = action.payload;
@@ -245,24 +302,24 @@ const postSlice = createSlice({
     },
     getUnfilteredSpamsMore: () => {},
     getSpamsRefresh: () => {},
-    changeSpamType: (state, action: PayloadAction<SpamType>) => {
+    changeSpamType: (state, action: PayloadAction<PostType>) => {
       state.spams.type = action.payload;
     },
-    changeSpamSortType: (state, action: PayloadAction<SortType>) => {
+    changeSpamSortType: (state, action: PayloadAction<SpamSortType>) => {
       state.spams.sort = action.payload;
     },
     togglePostSelect: (state, action: PayloadAction<string>) => {
-      const index = state.posts.selected.indexOf(action.payload);
-      if (index > -1) {
-        state.posts.selected.splice(index, 1);
+      const idx = state.posts.selected.indexOf(action.payload);
+      if (idx > -1) {
+        state.posts.selected.splice(idx, 1);
       } else {
         state.posts.selected.push(action.payload);
       }
     },
     toggleSpamPostSelect: (state, action: PayloadAction<string>) => {
-      const index = state.spams.selected.indexOf(action.payload);
-      if (index > -1) {
-        state.spams.selected.splice(index, 1);
+      const idx = state.spams.selected.indexOf(action.payload);
+      if (idx > -1) {
+        state.spams.selected.splice(idx, 1);
       } else {
         state.spams.selected.push(action.payload);
       }
@@ -279,11 +336,23 @@ const postSlice = createSlice({
     toggleSplitSpamPostList: (state) => {
       state.spams.split = !state.spams.split;
     },
+    togglePostUserImported: (state) => {
+      state.posts.userImported = !state.posts.userImported;
+    },
+    toggleSpamUserImported: (state) => {
+      state.spams.userImported = !state.spams.userImported;
+    },
+    togglePostSpan: (state) => {
+      state.posts.span = !state.posts.span;
+    },
+    toggleSpamSpan: (state) => {
+      state.spams.span = !state.spams.span;
+    },
     importSubredditPosts: {
       reducer: (state) => {
         state.posts.import.loading = true;
       },
-      prepare: (values: ImportQuery) => ({
+      prepare: (values: ImportPostQuery) => ({
         payload: values,
       }),
     },
@@ -294,16 +363,84 @@ const postSlice = createSlice({
       state.posts.import.loading = false;
       state.posts.import.error = action.payload;
     },
+    importSpamPosts: {
+      reducer: (state) => {
+        state.spams.import.loading = true;
+      },
+      prepare: (values: ImportSpamQuery) => ({
+        payload: values,
+      }),
+    },
+    importSpamPostsSuccess: (state) => {
+      state.spams.import.loading = false;
+    },
+    importSpamPostsError: (state, action) => {
+      state.spams.import.loading = false;
+      state.spams.import.error = action.payload;
+    },
     deleteAllPosts: (state) => {
-      state.posts.deleteAll.loading = true;
+      state.posts.delete.loading = true;
     },
     deleteAllPostsSuccess: (state) => {
-      state.posts.deleteAll.loading = false;
+      state.posts.delete.loading = false;
     },
     deleteAllPostsError: (state, action) => {
-      state.posts.deleteAll.loading = false;
-      state.posts.deleteAll.error = action.payload;
+      state.posts.delete.loading = false;
+      state.posts.delete.error = action.payload;
     },
+    deleteAllSpams: (state) => {
+      state.spams.delete.loading = true;
+    },
+    deleteAllSpamsSuccess: (state) => {
+      state.spams.delete.loading = false;
+    },
+    deleteAllSpamsError: (state, action) => {
+      state.spams.delete.loading = false;
+      state.spams.delete.error = action.payload;
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(deletePosts.pending, (state) => {
+        state.posts.delete.loading = true;
+      })
+      .addCase(deletePosts.fulfilled, (state) => {
+        state.posts.delete.loading = false;
+      })
+      .addCase(deletePosts.rejected, (state, action) => {
+        state.posts.delete.loading = false;
+        state.posts.delete.error = action.error;
+      })
+      .addCase(deleteSpams.pending, (state) => {
+        state.spams.delete.loading = true;
+      })
+      .addCase(deleteSpams.fulfilled, (state) => {
+        state.spams.delete.loading = false;
+      })
+      .addCase(deleteSpams.rejected, (state, action) => {
+        state.spams.delete.loading = false;
+        state.spams.delete.error = action.error;
+      })
+      .addCase(addPost.pending, (state) => {
+        state.posts.add.loading = true;
+      })
+      .addCase(addPost.fulfilled, (state) => {
+        state.posts.add.loading = false;
+      })
+      .addCase(addPost.rejected, (state, action) => {
+        state.posts.add.loading = false;
+        state.posts.add.error = action.error;
+      })
+      .addCase(addSpam.pending, (state) => {
+        state.spams.add.loading = true;
+      })
+      .addCase(addSpam.fulfilled, (state) => {
+        state.spams.add.loading = false;
+      })
+      .addCase(addSpam.rejected, (state, action) => {
+        state.spams.add.loading = false;
+        state.spams.add.error = action.error;
+      });
   },
 });
 
@@ -337,7 +474,6 @@ const selectPostsFiltered = createSelector<PostState, Post[], Post[]>(
   (data) => data,
 );
 
-
 const selectSpamPageAll = createSelector<PostState, number, number>(
   (state) => state.spams.all.page,
   (page) => page,
@@ -367,14 +503,6 @@ const selectSpamsFiltered = createSelector<PostState, Spam[], Spam[]>(
   (state) => state.spams.filtered.data,
   (data) => data,
 );
-// const selectPostsMatchingRulesAll = createSelector<
-//   PostState,
-//   Post[],
-//   number[][]
-// >(
-//   (state) => state.posts.all.data,
-//   (data) => data.map((post) => post.matching_rules),
-// );
 
 const selectPostType = createSelector<PostState, PostType, PostType>(
   (state) => state.posts.type,
@@ -387,12 +515,12 @@ const selectPostSort = createSelector<PostState, SortType, SortType>(
 );
 
 const selectSpamType = createSelector<PostState, PostType, PostType>(
-  (state) => state.posts.type,
+  (state) => state.spams.type,
   (type) => type,
 );
 
-const selectSpamSort = createSelector<PostState, SortType, SortType>(
-  (state) => state.posts.sort,
+const selectSpamSort = createSelector<PostState, SpamSortType, SpamSortType>(
+  (state) => state.spams.sort,
   (sort) => sort,
 );
 
@@ -415,8 +543,8 @@ const selectLoadingImport = createSelector<PostState, boolean, boolean>(
   (loading) => loading,
 );
 
-const selectLoadingDeleteAll = createSelector<PostState, boolean, boolean>(
-  (state) => state.posts.deleteAll.loading,
+const selectLoadingDelete = createSelector<PostState, boolean, boolean>(
+  (state) => state.posts.delete.loading,
   (loading) => loading,
 );
 
@@ -430,8 +558,8 @@ const selectLoadingSpamImport = createSelector<PostState, boolean, boolean>(
   (loading) => loading,
 );
 
-const selectLoadingSpamDeleteAll = createSelector<PostState, boolean, boolean>(
-  (state) => state.spams.deleteAll.loading,
+const selectLoadingSpamDelete = createSelector<PostState, boolean, boolean>(
+  (state) => state.spams.delete.loading,
   (loading) => loading,
 );
 
@@ -445,6 +573,36 @@ const selectSplitSpamList = createSelector<PostState, boolean, boolean>(
   (split) => split,
 );
 
+const selectPostUserImported = createSelector<PostState, boolean, boolean>(
+  (state) => state.posts.userImported,
+  (split) => split,
+);
+
+const selectSpamUserImported = createSelector<PostState, boolean, boolean>(
+  (state) => state.spams.userImported,
+  (split) => split,
+);
+
+const selectPostCount = createSelector(
+  (state: PostState) => state.posts.all.count,
+  (state: PostState) => state.posts.filtered.count,
+  (state: PostState) => state.posts.unfiltered.count,
+  (all, filtered, unfiltered) => ({ all, filtered, unfiltered }),
+);
+
+const selectSpamCount = createSelector(
+  (state: PostState) => state.spams.all.count,
+  (state: PostState) => state.spams.filtered.count,
+  (state: PostState) => state.spams.unfiltered.count,
+  (all, filtered, unfiltered) => ({ all, filtered, unfiltered }),
+);
+
+const selectCount = createSelector(
+  selectPostCount,
+  selectSpamCount,
+  (posts, spams) => ({ posts, spams }),
+);
+
 export const postSelector = {
   pageAll: (state: RootState) => selectPageAll(state.post),
   postsAll: (state: RootState) => selectPostsAll(state.post),
@@ -456,7 +614,8 @@ export const postSelector = {
   spamsAll: (state: RootState) => selectSpamsAll(state.post),
   spamPageFiltered: (state: RootState) => selectSpamPageFiltered(state.post),
   spamsFiltered: (state: RootState) => selectSpamsFiltered(state.post),
-  spamPageUnfiltered: (state: RootState) => selectSpamPageUnfiltered(state.post),
+  spamPageUnfiltered: (state: RootState) =>
+    selectSpamPageUnfiltered(state.post),
   spamsUnfiltered: (state: RootState) => selectSpamsUnfiltered(state.post),
   postType: (state: RootState) => selectPostType(state.post),
   postSort: (state: RootState) => selectPostSort(state.post),
@@ -466,12 +625,15 @@ export const postSelector = {
   selectedSpamId: (state: RootState) => selectSelectedSpamId(state.post),
   loadingPost: (state: RootState) => selectLoadingPost(state.post),
   loadingImport: (state: RootState) => selectLoadingImport(state.post),
-  loadingDeleteAll: (state: RootState) => selectLoadingDeleteAll(state.post),
+  loadingDelete: (state: RootState) => selectLoadingDelete(state.post),
   splitPostList: (state: RootState) => selectSplitPostList(state.post),
   loadingSpam: (state: RootState) => selectLoadingSpam(state.post),
   loadingSpamImport: (state: RootState) => selectLoadingSpamImport(state.post),
-  loadingSpamDeleteAll: (state: RootState) => selectLoadingSpamDeleteAll(state.post),
+  loadingSpamDelete: (state: RootState) => selectLoadingSpamDelete(state.post),
   splitSpamList: (state: RootState) => selectSplitSpamList(state.post),
+  postUserImported: (state: RootState) => selectPostUserImported(state.post),
+  spamUserImported: (state: RootState) => selectSpamUserImported(state.post),
+  count: (state: RootState) => selectCount(state.post),
 };
 
 const { actions, reducer } = postSlice;

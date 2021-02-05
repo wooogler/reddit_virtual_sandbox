@@ -24,7 +24,7 @@ const Grid = styled.div`
   display: grid;
   height: 100vh;
   grid-template-columns: minmax(0, 1fr) 1fr;
-  grid-template-rows: 4rem 1fr;
+  grid-template-rows: 3rem 1fr;
 `;
 
 const PostHeaderLayout = styled.div`

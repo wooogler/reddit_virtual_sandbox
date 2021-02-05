@@ -1,6 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
-import {Button} from 'antd';
+import {Button, Popconfirm} from 'antd';
 import Overlay from './Overlay';
 
 export interface OverlayWithButtonProps {
@@ -11,7 +10,7 @@ export interface OverlayWithButtonProps {
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => void;
   onClickButton2?: (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    event: React.MouseEvent<HTMLElement, MouseEvent>,
   ) => void;
 }
 
@@ -28,39 +27,31 @@ function OverlayWithButton({
     onClickButton1(e);
   };
   const handleClickButton2 = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    e: React.MouseEvent<HTMLElement, MouseEvent> | undefined,
   ) => {
-    onClickButton2 && onClickButton2(e);
+    e && onClickButton2 && onClickButton2(e);
   };
 
   return (
-    <CustomOverlay>
-      <TextDiv className="text">{text}</TextDiv>
-      <div className='button-group'>
-        <Button type='primary' size="large" onClick={handleClickButton1}>
-          {buttonText1}
-        </Button>
-        {buttonText2 && (
-          <Button danger type='primary' size="large" onClick={handleClickButton2}>
-            {buttonText2}
+    <Overlay>
+      <div className='flex flex-col items-center'>
+        <div className="text-2xl mb-4 font-bold">{text}</div>
+        <div className='flex flex-col'>
+          <Button className='mb-2' type='primary' size="large" onClick={handleClickButton1}>
+            {buttonText1}
           </Button>
-        )}
+          {buttonText2 && (
+            <Popconfirm placement='bottom' title='Are you sure?' onConfirm={handleClickButton2}>
+              <Button danger type='primary' size="large">
+                {buttonText2}
+              </Button>
+            </Popconfirm>
+            
+          )}
+        </div>
       </div>
-    </CustomOverlay>
+    </Overlay>
   );
 }
-
-const TextDiv = styled.div`
-  font-size: 2rem;
-  margin-bottom: 1rem;
-  .button-group {
-    display: flex;
-    margin-left: 1rem;
-  }
-`;
-
-const CustomOverlay = styled(Overlay)`
-  
-`
 
 export default OverlayWithButton;

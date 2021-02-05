@@ -1,5 +1,6 @@
 import re
 import yaml
+from rest_framework import exceptions
 
 class AutoModeratorSyntaxError(ValueError):
     def __init__(self, message, yaml):
@@ -28,7 +29,7 @@ class Ruleset(object):
             try:
                 parsed = yaml.safe_load(section)
             except Exception as e:
-                raise ValueError(
+                raise exceptions.ParseError(
                     "YAML parsing error in section %s: %s" % (section_num, e)
                 )
 
@@ -110,7 +111,7 @@ class RuleTarget(object):
         """Parse a key defining a match against fields into its components."""
         matches = self._match_field_key_regex.match(key)
         if not matches:
-            raise Exception("Invalid search check: `%s`" % key)
+            raise exceptions.ParseError("Invalid search check: `%s`" % key)
         parsed = {}
         name = matches.group(1)
 
@@ -120,13 +121,13 @@ class RuleTarget(object):
         ]
         for field in fields:
             if field not in all_valid_fields:
-                raise Exception("Invalid search check: `%s`" % key)
+                raise exceptions.ParseError("Invalid search check: '%s'" % key)
 
         valid_fields = self._match_fields_by_type[self.target_type]
         fields = {field for field in fields if field in valid_fields}
 
         if not fields:
-            raise Exception("Can't search `%s` on this type" % key)
+            raise exceptions.ParseError("Can't search '%s' on this type" % key)
 
         modifiers = matches.group(2)
         if modifiers:
@@ -135,7 +136,7 @@ class RuleTarget(object):
             modifiers = []
         for mod in modifiers:
             if mod not in self._match_modifiers:
-                raise Exception("Unknown modifier `%s` in `%s`" % (mod, key))
+                raise exceptions.ParseError("Unknown modifier '%s' in '%s'" % (mod, key))
 
         return {
             "name": name,
@@ -188,7 +189,7 @@ class RuleTarget(object):
             try:
                 match_patterns[key] = re.compile(pattern, flags)
             except Exception as e:
-                raise Exception("Generated an invalid regex for `%s`: %s" % (key, e))
+                raise exceptions.ParseError("Generated an invalid regex for '%s': %s" % (key, e))
 
         return match_patterns
 

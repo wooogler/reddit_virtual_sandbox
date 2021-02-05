@@ -1,7 +1,5 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import OverlayLoading from '../../components/common/OverlayLoading';
-import ListHeader from '../../components/post/ListHeader';
 import SpamList from '../../components/post/SpamList';
 import { RootState } from '../../modules';
 import { postSelector } from '../../modules/post/slice';
@@ -21,26 +19,19 @@ function SpamListContainer() {
   )
 
   const splitSpamList = useSelector(
-    (state: RootState) => state.post.spams.split,
+    postSelector.splitSpamList
   );
+
+  const spamUserImported = useSelector(postSelector.spamUserImported);
 
   const loadingRule = useSelector(ruleSelector.loading);
   const loadingSpam = useSelector(postSelector.loadingSpam)
   const loadingSpamImport = useSelector(postSelector.loadingSpamImport);
+  const code = useSelector(ruleSelector.submittedCode);
+  const spamSpan = useSelector((state: RootState) => state.post.spams.span)
 
   return (
     <>
-      <ListHeader
-        list="moderated"
-        name="Seed posts"
-        splitView={splitSpamList}
-        tooltipText='Posts which needs moderation --- you can bring the posts from spam and reports'
-      />
-      {
-        loadingSpamImport && (
-          <OverlayLoading text='Importing Posts' />
-        )
-      }
       {spamsAll && (
         <SpamList
           spamsAll={spamsAll}
@@ -52,6 +43,10 @@ function SpamListContainer() {
           loadingSpam={loadingSpam}
           loadingRule={loadingRule}
           loadingSpamImport={loadingSpamImport}
+          code={code}
+          splitSpamList={splitSpamList}
+          spamUserImported={spamUserImported}
+          spamSpan={spamSpan}
         />
       )}
     </>

@@ -1,15 +1,14 @@
 import React from 'react';
-import styled from 'styled-components';
-import palette from '../../lib/styles/palette';
 
 interface AuthorTextProps {
   text: string;
+  spam?: boolean;
 }
 
-function AuthorText({ text }: AuthorTextProps) {
+function AuthorText({ text, spam }: AuthorTextProps) {
   return (
-    <div>
-      <AuthorSpan>by </AuthorSpan>
+    <div className='flex text-sm text-gray-500 font-display'>
+      <div className='mr-1'>{spam ? 'Removed':'Posted'} by</div>
       <a
         href={`https://www.reddit.com/user/${text}`}
         onClick={(e) => {
@@ -18,22 +17,10 @@ function AuthorText({ text }: AuthorTextProps) {
         target="_blank"
         rel="noopener noreferrer"
       >
-        <AuthorDiv>{text}</AuthorDiv>
+        <div className='hover:underline'>{spam && 'Mod'} u/{text}</div>
       </a>
     </div>
   );
 }
-
-const AuthorSpan = styled.span`
-  color: ${palette.gray[7]};
-  font-size: 0.9rem;
-`;
-
-const AuthorDiv = styled.div`
-  font-weight: 800;
-  color: ${palette.gray[8]};
-  font-size: 0.9rem;
-  display: inline-flex;
-`;
 
 export default AuthorText;

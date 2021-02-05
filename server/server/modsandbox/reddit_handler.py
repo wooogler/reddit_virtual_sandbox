@@ -1,10 +1,14 @@
-from datetime import datetime, timezone
+import os
 import json
-import logging
 import time
+import logging
 import requests
+from datetime import datetime, timezone
+
+import praw
 
 from .models import Post
+
 
 logger = logging.getLogger(__name__)
 
@@ -16,15 +20,11 @@ class RedditHandler():
         }
         self.request_size = 100
 
-    # def _size_limit_test(self): 
-    #     try:
-    #         response = requests.get(self.endpoint['submission'], params={'size': self.request_size, 'subreddit': 'AskReddit'})
-    #         assert response.status_code == 200
-    #         posts = json.loads(response.content)['data']
-    #         self.request_size = len(posts)
-    #         logger.info('size limit = %d' % self.request_size)
-    #     except Exception as e:
-    #         logger.error(e)
+        self.reddit = praw.Reddit(
+            client_id=os.environ.get("client_id"),
+            client_secret=os.environ.get("client_secret"),
+            user_agent=os.environ.get("user_agent")
+        )
 
     def _get_reddit_posts(self, uri, params, max_retries=2):
         """Send HTTP request to 'uri'
@@ -42,14 +42,32 @@ class RedditHandler():
 
                 project_meta = self.project_submission if uri == self.endpoint['submission'] else self.project_comment
                 posts = list(map(project_meta, posts))  # List of dicts, where each dict = info for each post.
+                posts = self._update_votes(posts)
                 return posts
+
             except Exception as e:
                 logger.error(e)
                 time.sleep(1)
                 trials += 1
         logger.error('Failed to retrieve posts.')
         return -1
+    
+    def _update_votes(self, posts):
+        def fullname(post):
+            if post['_type'] == 'submission':
+                return 't3_' + post['_id']
+            else:
+                return 't1_' + post['_id']
 
+        post_ids = [fullname(post) for post in posts]
+        fullname2votes = {res.id: res.score for res in self.reddit.info(post_ids)}
+
+        for i in range(len(posts)):
+            score = fullname2votes.get(posts[i]['_id'], 0)
+            posts[i]['votes'] = score
+            
+        return posts
+    
     @staticmethod
     def project_submission(post):
         return {
@@ -60,7 +78,9 @@ class RedditHandler():
             '_id': post['id'],
             'subreddit': post['subreddit'],
             'title': post['title'],
-            '_type': 'submission'
+            '_type': 'submission',
+            'domain': post['domain'],
+            'url': post['url'],
         }
     
     @staticmethod
@@ -74,7 +94,7 @@ class RedditHandler():
             'subreddit': post['subreddit'],
             # 'link_id': post['link_id'][3:]  # link_id always starts with 't3_'--> id of a submission that this comment is linked to.
             'title': '',
-            '_type': 'comment'
+            '_type': 'comment',
         }
 
     def run(self, **kwargs):
@@ -103,31 +123,36 @@ class RedditHandler():
         for post_type in post_types:
             logger.info(f'Crawl {post_type}')
             n = self.request_size
+            term = kwargs["before"] - kwargs["after"]
             params['after'] = kwargs['after']
 
             while (n == self.request_size):
                 logger.info(f'Querying starting from {datetime.fromtimestamp(params["after"], tz=timezone.utc)}')
+                logger.info(f'{post_type} : {round((params["after"]-kwargs["after"])/term*100,2)}%')
                 posts = self._get_reddit_posts(self.endpoint[post_type], params)
                 if posts == -1:
                     return False
 
                 logger.info(f'Retrieved {len(posts)} {post_type}s.')
                 for post in posts:
-                    obj, created = Post.objects.get_or_create(**post)
+                    votes = post.pop('votes')
+                    obj, created = Post.objects.update_or_create({'votes': votes}, **post)
+
                     if profile is not None:
                         obj.profile_set.add(profile)
                     if created:
                         stat[post_type] += 1
                         stat['tot'] += 1
                         if max_size is not None and stat['tot'] >= max_size:
-                            logger.info(f'Number of newly inserted posts: {stat}')
+                            logger.info(f'Finished: Number of newly inserted posts: {stat}')
                             return True
 
                 # For the next loop.
                 n = len(posts)
                 if len(posts) != 0:
                     params['after'] = int(datetime.timestamp(posts[-1]['created_utc']))  # Might skip some posts.
+                logger.info(f'Iteration: Number of newly inserted posts: {stat}')
             logger.info(f'Last data time is {datetime.fromtimestamp(params["after"], tz=timezone.utc)}')
 
-        logger.info(f'Number of newly inserted posts: {stat}')
+        logger.info(f'Finished: Number of newly inserted posts: {stat}')
         return True

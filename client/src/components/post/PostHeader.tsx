@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import styled from 'styled-components';
 import { getUserInfo, logout, UserInfo } from '../../modules/user/slice';
-import { Button } from 'antd';
+import { Button, Dropdown, Menu, message } from 'antd';
 import DraggableModal from '../common/DraggableModal';
 import PostImportForm from './PostImportForm';
 import axios from 'axios';
+import SpamImportForm from './SpamImportForm';
 
 interface PostHeaderProps {
   userInfo: UserInfo | null;
@@ -14,20 +14,20 @@ interface PostHeaderProps {
 
 function PostHeader({ userInfo, redditLogged }: PostHeaderProps) {
   const dispatch = useDispatch();
-  const [isImportOpen, setIsImportOpen] = useState(false);
+  const [isPostImportOpen, setIsPostImportOpen] = useState(false);
+  const [isSpamImportOpen, setIsSpamImportOpen] = useState(false);
 
   const handleClickLogout = () => {
     const token = localStorage.getItem('token');
     if (token) {
       dispatch(logout(token));
       localStorage.removeItem('token');
-      console.log('removed', localStorage.getItem('token'));
     }
   };
 
   const handleClickRedditLogin = async () => {
     const token = localStorage.getItem('token');
-    const response = await axios.get('http://localhost:8000/reddit_login/', {
+    const response = await axios.get('/reddit_login/', {
       headers: { Authorization: `Token ${token}` },
     });
     window.location.href = response.data;
@@ -35,7 +35,7 @@ function PostHeader({ userInfo, redditLogged }: PostHeaderProps) {
 
   const handleClickRedditLogout = async () => {
     const token = localStorage.getItem('token');
-    await axios.get('http://localhost:8000/reddit_logout/', {
+    await axios.get('/reddit_logout/', {
       headers: { Authorization: `Token ${token}` },
     });
     if (token) {
@@ -43,81 +43,91 @@ function PostHeader({ userInfo, redditLogged }: PostHeaderProps) {
     }
   };
 
-  const handleClickImportSeed = async () => {
-    const token = localStorage.getItem('token');
-    await axios.post('http://localhost:8000/spam/crawl/', null, {
-      headers: { Authorization: `Token ${token}` },
+  const redditLogInWarning = () => {
+    message.warning({
+      content:
+        'Please log in Reddit to access moderated posts in your subreddit',
+      duration: 3,
+      style: {
+        marginTop: '2rem',
+      },
     });
   };
 
-  return (
-    <PostHeaderDiv>
-      <Button
-        type="primary"
-        size="large"
+  const menu = (
+    <Menu>
+      <Menu.Item onClick={() => setIsPostImportOpen(true)}>
+        Import Subreddit Posts
+      </Menu.Item>
+      <Menu.Item
         onClick={() => {
-          setIsImportOpen(true);
+          if (redditLogged) {
+            setIsSpamImportOpen(true);
+          } else {
+            redditLogInWarning();
+          }
         }}
       >
-        Import subreddit posts
-      </Button>
-      {redditLogged ? (
-        <>
-          <Button type="primary" size="large" onClick={handleClickImportSeed}>
-            Import seed posts
-          </Button>
-          <Button danger size="large" onClick={handleClickRedditLogout}>
-            Reddit Logout
-          </Button>
-        </>
-      ) : (
-        <Button type="primary" size="large" onClick={handleClickRedditLogin}>
-          Reddit Login
+        Import Moderated Posts
+      </Menu.Item>
+    </Menu>
+  );
+
+  return (
+    <div className="flex w-full">
+      <Dropdown overlay={menu}>
+        <Button type="primary" size="large">
+          Import
         </Button>
-      )}
+      </Dropdown>
 
       <DraggableModal
-        isOpen={isImportOpen}
-        position={{ x: 800, y: 150 }}
-        handleText={`Import subreddit posts`}
+        visible={isPostImportOpen}
+        setVisible={setIsPostImportOpen}
+        title={`Import subreddit posts`}
       >
         <PostImportForm
           onClickClose={() => {
-            setIsImportOpen(false);
+            setIsPostImportOpen(false);
           }}
         />
       </DraggableModal>
-      <div className="right">
-        {/* {userInfo && <div>username: {userInfo.username}</div>} */}
+
+      <DraggableModal
+        visible={isSpamImportOpen}
+        setVisible={setIsSpamImportOpen}
+        title={`Import seed posts`}
+      >
+        <SpamImportForm
+          onClickClose={() => {
+            setIsSpamImportOpen(false);
+          }}
+        />
+      </DraggableModal>
+
+      <div className="ml-auto flex items-center">
+        <div className="mr-3 text-lg">Hi, {userInfo?.username}</div>
+        {redditLogged ? (
+          <Button danger size="large" onClick={handleClickRedditLogout}>
+            Reddit Logout
+          </Button>
+        ) : (
+          <Button type="primary" size="large" onClick={handleClickRedditLogin}>
+            Reddit Login
+          </Button>
+        )}
         <Button
           danger
           type="primary"
           size="large"
           onClick={handleClickLogout}
-          className="logout-button"
+          className="ml-2"
         >
           Log out
         </Button>
       </div>
-    </PostHeaderDiv>
+    </div>
   );
 }
-
-const PostHeaderDiv = styled.div`
-  display: flex;
-  width: 100%;
-  align-items: center;
-  button {
-    margin-right: 1rem;
-  }
-  .right {
-    margin-left: auto;
-    display: flex;
-    align-items: center;
-    button {
-      margin-left: 2rem;
-    }
-  }
-`;
 
 export default PostHeader;

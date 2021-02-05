@@ -1,25 +1,31 @@
-import logging
-import json
-import praw
 import os
+import json
+import logging
+from datetime import datetime
 
-# Create your views here.
-
-from rest_framework import viewsets, status
-from rest_framework.decorators import action, api_view
-from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+import praw
 from django.shortcuts import redirect
-from .models import Post, Profile, Rule
-from .reddit_handler import RedditHandler
+from rest_framework import viewsets, status
+from rest_framework.response import Response
+from rest_framework.decorators import action, api_view
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+
 from .praw_handler import PrawHandler
-from .automod import Ruleset, RuleTarget
+from .models import Post, Profile, Rule
 from .serializers import PostSerializer
+from .automod import Ruleset, RuleTarget
 from .pagintations import PostPagination
+from .reddit_handler import RedditHandler
+from .file_handler import FileHandler
 
 
 logger = logging.getLogger(__name__)
 
+@api_view(['GET'])
+def save_files(request):
+    file_handler = FileHandler("../../reddit_archived/RS_2020-04.zst")
+    file_handler.run()
+    return Response(True)
 
 @api_view(["GET"])
 def reddit_login(request):
@@ -34,7 +40,7 @@ def reddit_login(request):
     )
     return Response(
         reddit.auth.url(
-            ["identity", "read", "mysubreddits"], request.user.id, "permanent"
+            ["identity", "read", "mysubreddits", "modcontributors"], request.user.id, "permanent"
         )
     )
 
@@ -63,8 +69,7 @@ def reddit_auth(request):
     profile.reddit_token = token
     profile.save()
 
-    return redirect("http://localhost:3000/")
-
+    return redirect("http://modsandbox.s3-website.ap-northeast-2.amazonaws.com/")
 
 @api_view(["GET"])
 def reddit_logged(request):
@@ -87,7 +92,8 @@ def reddit_logout(request):
 
     return Response(status=status.HTTP_200_OK)
 
-@api_view(['POST'])
+
+@api_view(["POST"])
 def apply_rules(request):
     """
     POST /apply_rules/
@@ -118,6 +124,45 @@ def apply_rules(request):
     return Response(status=status.HTTP_202_ACCEPTED)
 
 
+@api_view(["GET"])
+def mod_subreddits(request):
+    profile = Profile.objects.get(user=request.user.id)
+    praw_handler = PrawHandler(profile.reddit_token)
+    return Response(praw_handler.get_mod_subreddits())
+
+@api_view(["GET"])
+def removal_reasons(request):
+    try:
+        subreddit_name = request.query_params.get("param")
+    except Exception as e:
+        logger.error(e)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+    profile = Profile.objects.get(user=request.user.id)
+    praw_handler = PrawHandler(profile.reddit_token)
+    return Response(praw_handler.get_removal_reasons(subreddit_name))
+
+@api_view(["GET"])
+def community_rules(request):
+    try:
+        subreddit_name = request.query_params.get("param")
+    except Exception as e:
+        logger.error(e)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+    profile = Profile.objects.get(user=request.user.id)
+    praw_handler = PrawHandler(profile.reddit_token)
+    return Response(praw_handler.get_community_rules(subreddit_name))
+
+@api_view(["GET"])
+def get_moderators(request):
+    try:
+        subreddit_name = request.query_params.get("param")
+    except Exception as e:
+        logger.error(e)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+    profile = Profile.objects.get(user=request.user.id)
+    praw_handler = PrawHandler(profile.reddit_token)
+    return Response(praw_handler.get_moderators(subreddit_name))
+
 class PostHandlerViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.filter(_type__in=["submission", "comment"])
     serializer_class = PostSerializer
@@ -128,10 +173,20 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
         queryset = super().get_queryset()
         if self.request.user.is_authenticated:
             profile = Profile.objects.get(user=self.request.user.id)
+            
+        try:
+            post_type = self.request.query_params.get("post_type", "all")
+            sort = self.request.query_params.get("sort", "new")
+            filtered = self.request.query_params.get("filtered", "all")
+            is_private = self.request.query_params.get('is_private', 'true')
+        except Exception as e:
+            logger.error(e)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        if is_private == 'true':
             queryset = queryset.filter(_id__in=profile.used_posts.all())
-        post_type = self.request.query_params.get("post_type", "all")
-        sort = self.request.query_params.get("sort", "new")
-        filtered = self.request.query_params.get("filtered", "all")
+        elif is_private == 'false':
+            queryset = queryset.filter(profile__isnull=True)
 
         if post_type == "all":
             queryset = queryset.all()
@@ -142,7 +197,11 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
             queryset = queryset.order_by("-created_utc")
         elif sort == "old":
             queryset = queryset.order_by("created_utc")
-
+        elif sort == "votes_desc":
+            queryset = queryset.order_by("-votes")
+        elif sort == "votes_asc":
+            queryset = queryset.order_by("votes")
+        
         if filtered == "all":
             queryset = queryset.all()
         elif filtered == "filtered":
@@ -181,8 +240,9 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
             subreddit = request.data["subreddit"]
             after = request.data["after"]
             before = request.data["before"]
-            post_type = request.data.get("post_type", None)
+            post_type = request.data.get("post_type", "all")
             max_size = request.data.get("max_size", None)
+            is_private = request.data['user_imported']
 
         except Exception as e:
             logger.error(e)
@@ -200,57 +260,73 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
                 before=before,
                 post_type=post_type,
                 max_size=max_size,
-                profile=profile,
+                profile=profile if is_private else None,
             ):
                 return Response(status=status.HTTP_201_CREATED)
 
         except Exception as e:
-            logger.error(e)
+            logger.exception(e)
 
         return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @action(methods=["post"], detail=False)
-    def delete_all(self, request):
+    def deletes(self, request):
+        try:
+            ids = request.data["ids"]
+        except Exception as e:
+            logger.error(e)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        queryset = super().get_queryset()
         if request.user:
-            profile = Profile.objects.get(user=request.user.id)
-            profile.used_posts.filter(_type__in=['submission', 'comment']).delete()
+            queryset.filter(profile__pk=request.user.id).filter(_id__in=ids).delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
 
         return Response(status=status.HTTP_401_UNAUTHORIZED)
 
     @action(methods=["post"], detail=False)
-    def apply_rules(self, request):
-        """
-        POST /post/apply_rules/
-        """
+    def delete_all(self, request):
+        queryset = super().get_queryset()
+        if request.user:
+            queryset.filter(profile__pk=request.user.id).delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+    @action(methods=["post"], detail=False)
+    def moves(self, request):
         try:
-            yaml = request.data["yaml"]
-            rule_set = Ruleset(yaml)
+            ids = request.data["ids"]
         except Exception as e:
             logger.error(e)
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        profile = Profile.objects.get(user=request.user.id)
-        profile.user.rules.all().delete()
-        rules = rule_set.rules
+        queryset = super().get_queryset()
+        if request.user:
+            profile = Profile.objects.get(user=request.user.id)
+            posts = queryset.filter(profile__pk=request.user.id).filter(_id__in=ids)
+            for post in posts:
+                post.banned_by = profile.username
+                post.banned_at_utc = datetime.now()
+                if post._type == "submission":
+                    post._type = "spam_submission"
+                elif post._type == "comment":
+                    post._type = "spam_comment"
+                post.save()
+            return Response(status=status.HTTP_204_NO_CONTENT)
 
-        for index, rule in enumerate(rules):
-            rule_object = Rule(
-                user=profile.user, rule_index=index, content=json.dumps(rule)
-            )
-            rule_object.save()
-
-        for post in profile.used_posts.all():
-            for rule in Rule.objects.filter(user=profile.user):
-                rule_target = RuleTarget("Link", json.loads(rule.content))
-                if rule_target.check_item(post, ""):
-                    post.matching_rules.add(rule)
-
-        return Response(status=status.HTTP_202_ACCEPTED)
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 
 class SpamHandlerViewSet(viewsets.ModelViewSet):
-    queryset = Post.objects.filter(_type__in=["spam_submission", "spam_comment"])
+    queryset = Post.objects.filter(
+        _type__in=[
+            "spam_submission",
+            "spam_comment",
+            "reports_submission",
+            "reports_comment",
+        ]
+    )
     serializer_class = PostSerializer
     pagination_class = PostPagination
     permission_classes = [IsAuthenticatedOrReadOnly]
@@ -260,19 +336,29 @@ class SpamHandlerViewSet(viewsets.ModelViewSet):
         if self.request.user.is_authenticated:
             profile = Profile.objects.get(user=self.request.user.id)
             queryset = queryset.filter(_id__in=profile.used_posts.all())
+        else:
+            queryset = queryset.filter(profile__isnull=True)
         post_type = self.request.query_params.get("post_type", "all")
-        sort = self.request.query_params.get("sort", "new")
+        sort = self.request.query_params.get("sort", "created-new")
         filtered = self.request.query_params.get("filtered", "all")
 
         if post_type == "all":
             queryset = queryset.all()
-        else:
-            queryset = queryset.filter(_type=post_type)
+        elif post_type == "submission":
+            queryset = queryset.filter(
+                _type__in=["spam_submission", "reports_submission"]
+            )
+        elif post_type == "comment":
+            queryset = queryset.filter(_type__in=["spam_comment", "reports_comment"])
 
-        if sort == "new":
+        if sort == "created-new":
             queryset = queryset.order_by("-created_utc")
-        elif sort == "old":
+        elif sort == "created-old":
             queryset = queryset.order_by("created_utc")
+        if sort == "banned-new":
+            queryset = queryset.order_by("-banned_at_utc")
+        elif sort == "banned-old":
+            queryset = queryset.order_by("banned_at_utc")
 
         if filtered == "all":
             queryset = queryset.all()
@@ -282,6 +368,8 @@ class SpamHandlerViewSet(viewsets.ModelViewSet):
             queryset = queryset.exclude(matching_rules__in=profile.user.rules.all())
 
         return queryset
+    
+    
 
     @action(methods=["post"], detail=False, name="Crawl Spams from PRAW")
     def crawl(self, request):
@@ -293,8 +381,18 @@ class SpamHandlerViewSet(viewsets.ModelViewSet):
             profile = Profile.objects.get(user=request.user.id)
 
         try:
-            praw_hanlder = PrawHandler(profile.reddit_token)
-            if praw_hanlder.run(profile=profile):
+            praw_handler = PrawHandler(profile.reddit_token)
+            subreddit_name = request.data["subreddit_name"]
+            mod_type = request.data["mod_type"]
+            removal_reason = request.data["removal_reason"]
+            community_rule = request.data["community_rule"]
+            moderator_name = request.data['moderator_name']
+            reported_by = request.data['reported_by']
+            if praw_handler.run(
+                profile=profile, subreddit_name=subreddit_name, mod_type=mod_type, 
+                removal_reason=removal_reason, community_rule=community_rule, moderator_name=moderator_name,
+                reported_by=reported_by
+            ):
                 return Response(status=status.HTTP_201_CREATED)
 
         except Exception as e:
@@ -302,10 +400,49 @@ class SpamHandlerViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
     @action(methods=["post"], detail=False)
+    def deletes(self, request):
+        try:
+            ids = request.data["ids"]
+        except Exception as e:
+            logger.error(e)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        queryset = super().get_queryset()
+        if request.user:
+            queryset.filter(profile__pk=request.user.id).filter(_id__in=ids).delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+    @action(methods=["post"], detail=False)
     def delete_all(self, request):
+        queryset = super().get_queryset()
+        if request.user:
+            queryset.filter(profile__pk=request.user.id).delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+    @action(methods=["post"], detail=False)
+    def moves(self, request):
+        try:
+            ids = request.data["ids"]
+        except Exception as e:
+            logger.error(e)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        queryset = super().get_queryset()
         if request.user:
             profile = Profile.objects.get(user=request.user.id)
-            profile.used_posts.filter(_type__in=['spam_submission', 'spam_comment']).delete()
+            posts = queryset.filter(profile__pk=request.user.id).filter(_id__in=ids)
+            for post in posts:
+                post.banned_by = None
+                post.banned_at_utc = None
+                if post._type == ("spam_submission" or "reports_submission"):
+                    post._type = "submission"
+                elif post._type == ("spam_comment" or "reports_comment"):
+                    post._type = "comment"
+                post.save()
             return Response(status=status.HTTP_204_NO_CONTENT)
 
         return Response(status=status.HTTP_401_UNAUTHORIZED)

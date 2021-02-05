@@ -1,54 +1,52 @@
+import { Checkbox } from 'antd';
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import styled from 'styled-components';
 import { Spam } from '../../lib/api/modsandbox/post';
-import palette from '../../lib/styles/palette';
+import { MatchIndex } from '../../lib/utils/match';
 import { postActions } from '../../modules/post/slice';
 import CommentItem from './CommentItem';
-import SpamFrame from './SpamFrame';
 import SubmissionItem from './SubmissionItem';
 
 export interface SpamItemProps {
   spam: Spam;
-  selectedSpamId: string[]
+  selected: boolean;
+  isMatched: boolean;
+  match: MatchIndex[];
 }
 
-function SpamItem({ spam, selectedSpamId }: SpamItemProps) {
+function SpamItem({ spam, isMatched, match }: SpamItemProps) {
   const dispatch = useDispatch();
 
-  const isMatched = spam.matching_rules.length !== 0;
   const handleClickSpam = () => {
     dispatch(postActions.toggleSpamPostSelect(spam._id));
   };
 
   return (
-    <SpamPostItemDiv selected={selectedSpamId.includes(spam._id)} onClick={handleClickSpam}>
-    {
-      spam._type === 'spam_submission' ? (
-        <SpamFrame spam={spam}>
-          <SubmissionItem
-            submission={spam}
-            action={isMatched ? 'remove' : undefined}
-          />
-        </SpamFrame>
-      ) : (
-        <SpamFrame spam={spam}>
-          <CommentItem comment={spam} action={isMatched ? 'remove' : undefined}/>
-        </SpamFrame>
-      )
-    }
-    </SpamPostItemDiv>
-  ) 
+    <div
+      className={
+        'border border-gray-200 ' + (isMatched ? 'bg-red-200' : '')
+      }
+    >
+      <div
+        className={
+          'flex border-l-4 p-1 ' +
+          (spam._type === 'spam_submission' || spam._type === 'spam_comment'
+            ? 'border-red-400'
+            : 'border-yellow-400')
+        }
+      >
+        <div className="flex mr-1">
+          <Checkbox onClick={handleClickSpam} />
+        </div>
+        {spam._type === 'spam_submission' ||
+        spam._type === 'reports_submission' ? (
+          <SubmissionItem spam match={isMatched ? match : []} submission={spam} />
+        ) : (
+          <CommentItem spam match={isMatched ? match : []} comment={spam} />
+        )}
+      </div>
+    </div>
+  );
 }
-
-const SpamPostItemDiv = styled.div<{ selected: boolean }>`
-  > div {
-    box-shadow: 0 0 0 3px
-    ${(props) => (props.selected ? `${palette.red[7]}` : 'none')}
-    inset;
-  }
-  background-color: ${palette.gray[3]};
-  cursor: default;
-`;
 
 export default SpamItem;

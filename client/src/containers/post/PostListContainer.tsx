@@ -1,7 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import OverlayLoading from '../../components/common/OverlayLoading';
-import ListHeader from '../../components/post/ListHeader';
 import PostList from '../../components/post/PostList';
 import { RootState } from '../../modules';
 import { postSelector } from '../../modules/post/slice';
@@ -17,22 +16,25 @@ function PostListContainer() {
     postSelector.selectedSpamId
   );
 
+  const selectedPostId = useSelector(
+    postSelector.selectedPostId
+  )
+
   const splitPostList = useSelector(
-    (state: RootState) => state.post.posts.split,
+    postSelector.splitPostList
   );
+
+  const postUserImported = useSelector(postSelector.postUserImported);
+  const postSpan = useSelector((state: RootState) => state.post.posts.span);
+
 
   const loadingRule = useSelector(ruleSelector.loading);
   const loadingPost = useSelector(postSelector.loadingPost)
   const loadingImport = useSelector(postSelector.loadingImport);
+  const code = useSelector(ruleSelector.submittedCode)
 
   return (
     <>
-      <ListHeader
-        list="unmoderated"
-        name="Posts"
-        splitView={splitPostList}
-        tooltipText='Posts imported from real subreddit'
-      />
       {
         loadingImport && (
           <OverlayLoading text='Importing Posts' />
@@ -44,10 +46,15 @@ function PostListContainer() {
           postsFiltered={postsFiltered}
           postsUnfiltered={postsUnfiltered}
           selectedSpamPostId={selectedSpamPostId}
+          selectedPostId={selectedPostId}
           splitView={splitPostList}
           loadingPost={loadingPost}
           loadingRule={loadingRule}
           loadingImport={loadingImport}
+          code={code}
+          splitPostList={splitPostList}
+          postUserImported={postUserImported}
+          postSpan={postSpan}
         />
       )}
     </>

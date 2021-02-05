@@ -1,143 +1,198 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import {Tooltip} from 'antd';
-import styled from 'styled-components';
-import {Select, Checkbox} from 'antd';
-import {InfoCircleOutlined} from '@ant-design/icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { Tooltip, Popconfirm } from 'antd';
+import { Select, Checkbox } from 'antd';
+import { InfoCircleOutlined } from '@ant-design/icons';
 
 import {
   postActions,
+  postSelector,
   PostType,
   SortType,
-  SpamType,
+  SpamSortType,
 } from '../../modules/post/slice';
-import {Button} from 'antd';
+import { Button } from 'antd';
 import DraggableModal from '../common/DraggableModal';
 import PostForm from './PostForm';
+import { getPostsRefresh, getSpamsRefresh } from '../../modules/post/actions';
 
 export interface ListHeaderProps {
-  list: string;
+  list: 'unmoderated' | 'moderated';
   name: string;
   splitView: boolean;
+  userImported: boolean;
   tooltipText?: string;
+  span: boolean;
 }
 
-function ListHeader({ list, name, splitView, tooltipText }: ListHeaderProps) {
+function ListHeader({
+  list,
+  name,
+  splitView,
+  tooltipText,
+  userImported,
+  span,
+}: ListHeaderProps) {
   const dispatch = useDispatch();
-  const {Option} = Select;
+  const loadingDelete = useSelector(postSelector.loadingDelete);
+  const loadingSpamDelete = useSelector(postSelector.loadingSpamDelete);
+  const { Option, OptGroup } = Select;
   const [isAddOpen, setIsAddOpen] = useState(false);
 
   const handleClickAddPost = () => {
     setIsAddOpen(true);
   };
 
+  const handleClickDeleteAll = () => {
+    if (list === 'unmoderated') {
+      dispatch(postActions.deleteAllPosts());
+    } else {
+      dispatch(postActions.deleteAllSpams());
+    }
+  };
+
   const handleClickCloseModal = () => {
     setIsAddOpen(false);
   };
 
-  const handleChangeView = (type: PostType | SpamType) => {
+  const handleChangeView = (type: PostType) => {
     if (list === 'unmoderated') {
-      dispatch(postActions.changePostType(type as PostType));
-      dispatch(postActions.getPostsRefresh())
-    }
-    if (list === 'moderated') {
-      dispatch(postActions.changeSpamType(type as SpamType));
-      dispatch(postActions.getPostsRefresh())
+      dispatch(postActions.changePostType(type));
+      dispatch(getPostsRefresh());
+    } else if (list === 'moderated') {
+      dispatch(postActions.changeSpamType(type));
+      dispatch(getSpamsRefresh());
     }
   };
 
-  const handleChangeSort = (sort: SortType) => {
+  const handleChangeSort = (sort: SortType | SpamSortType) => {
     if (list === 'unmoderated') {
-      dispatch(postActions.changeSortType(sort));
-      dispatch(postActions.getPostsRefresh());
-    }
-    if (list === 'moderated') {
-      dispatch(postActions.changeSpamSortType(sort));
-      dispatch(postActions.getSpamsRefresh());
+      dispatch(postActions.changeSortType(sort as SortType));
+      dispatch(getPostsRefresh());
+    } else if (list === 'moderated') {
+      dispatch(postActions.changeSpamSortType(sort as SpamSortType));
+      dispatch(getSpamsRefresh());
     }
   };
 
   const handleChangeSplitView = () => {
     if (list === 'unmoderated') {
       dispatch(postActions.toggleSplitPostList());
-      dispatch(postActions.getPostsRefresh())
-    }
-    if (list === 'moderated') {
+      dispatch(getPostsRefresh());
+    } else if (list === 'moderated') {
       dispatch(postActions.toggleSplitSpamPostList());
-      dispatch(postActions.getSpamsRefresh())
+      dispatch(getSpamsRefresh());
+    }
+  };
+
+  const handleChangeUserImported = () => {
+    if (list === 'unmoderated') {
+      dispatch(postActions.togglePostUserImported());
+      dispatch(getPostsRefresh());
+    } else if (list === 'moderated') {
+      dispatch(postActions.toggleSpamUserImported());
+      dispatch(getSpamsRefresh());
+    }
+  };
+
+  const handleChangeSpanAll = () => {
+    if (list === 'unmoderated') {
+      dispatch(postActions.togglePostSpan());
+    } else if (list === 'moderated') {
+      dispatch(postActions.toggleSpamSpan());
     }
   };
 
   return (
-    <ListHeaderDiv>
-      <div className="list-info">
-        <div className="name">{name}</div>
-        <Tooltip placement='right' title={tooltipText}>
+    <>
+      <div className='flex flex-wrap items-center'>
+        <div className="text-2xl mx-2">{name}</div>
+        <Tooltip placement="right" title={tooltipText}>
           <InfoCircleOutlined />
         </Tooltip>
-        <Button type='primary' size="small" onClick={handleClickAddPost}>
-          add post
-        </Button>
+        <div className="flex ml-auto mr-2">
+          <Popconfirm
+            placement="bottom"
+            title="Are you sure?"
+            onConfirm={handleClickDeleteAll}
+          >
+            <Button
+              danger
+              size="small"
+              loading={list === 'unmoderated' ? loadingDelete : loadingSpamDelete}
+            >
+              Delete all
+            </Button>
+          </Popconfirm>
+          <Button className='ml-1' type="primary" size="small" onClick={handleClickAddPost}>
+            Add {list === 'unmoderated' ? 'test post' : 'test spam'}
+          </Button>
+        </div>
+
         <DraggableModal
-          isOpen={isAddOpen}
-          position={{ x: 800, y: 150 }}
-          handleText={`Add new post to ${list}`}
+          visible={isAddOpen}
+          setVisible={setIsAddOpen}
+          title={`Add a new ${list === 'unmoderated' ? 'post' : 'spam'}`}
         >
           <PostForm onClickClose={handleClickCloseModal} list={list} />
         </DraggableModal>
       </div>
-      <div className="select-group">
-        <Select defaultValue='all' onChange={handleChangeView} size='small' className='select-view'>
-          <Option value='all'>All Posts</Option>
-          <Option value='submission'>Submission</Option>
-          <Option value='comment'>Comment</Option>
-        </Select>
-        <Select onChange={handleChangeSort} placeholder='sort' size='small' className='select-sort'>
-          <Option value='new'>New</Option>
-          <Option value='old'>Old</Option>
-        </Select>
-        <div className="checkbox">
-          <Checkbox onChange={handleChangeSplitView} checked={splitView}>Split View</Checkbox>
+      <div className='flex flex-wrap'>
+        <div>
+          <Select
+            defaultValue="all"
+            onChange={handleChangeView}
+            size="small"
+            className="mr-1 w-28"
+          >
+            <Option value="all">All Posts</Option>
+            <Option value="submission">Submission</Option>
+            <Option value="comment">Comment</Option>
+          </Select>
+          {list === 'unmoderated' ? (
+            <Select
+              onChange={handleChangeSort}
+              placeholder="sort"
+              size="small"
+              className="w-28 mr-2"
+            >
+              <Option value="new">New</Option>
+              <Option value="old">Old</Option>
+              <Option value='votes_desc'>more votes</Option>
+              <Option value='votes_asc'>less votes</Option>
+            </Select>
+          ) : (
+            <Select
+              onChange={handleChangeSort}
+              placeholder="sort"
+              size="small"
+              className="w-24 mr-2"
+            >
+              <OptGroup label="created by">
+                <Option value="created-new">New</Option>
+                <Option value="created-old">Old</Option>
+              </OptGroup>
+              <OptGroup label="banned by">
+                <Option value="banned-new">New</Option>
+                <Option value="banned-old">Old</Option>
+              </OptGroup>
+            </Select>
+          )}
+        </div>
+        <div>
+          <Checkbox onChange={handleChangeUserImported} checked={userImported}>
+            User Imported
+          </Checkbox>
+          <Checkbox onChange={handleChangeSplitView} checked={splitView}>
+            Filtered Only
+          </Checkbox>
+          <Checkbox onChange={handleChangeSpanAll} checked={span}>
+            Span All
+          </Checkbox>
         </div>
       </div>
-    </ListHeaderDiv>
+    </>
   );
 }
-
-const ListHeaderDiv = styled.div`
-  padding: 0.2rem;
-  height: 4rem;
-  .list-info {
-    display: flex;
-    width: 100%;
-    align-items: center;
-    .name {
-      font-size: 1.5rem;
-      margin: 0.3rem;
-    }
-    button {
-      margin-left: auto;
-    }
-    svg {
-      margin-left: 0.2rem;
-    }
-  }
-  .select-group {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    .select-sort {
-      width: 4rem;
-      margin-left: 0.5rem;
-    }
-    .select-view {
-      width: 7rem;
-      margin-left: 0.5rem;
-    }
-    .checkbox {
-      margin-left: auto;
-    }
-  }
-`;
 
 export default ListHeader;

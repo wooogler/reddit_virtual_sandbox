@@ -26,9 +26,8 @@ from rest_framework import routers
 
 from .modsandbox import views
 
+
 router = routers.DefaultRouter()
-# router.register(r'submissions', views.SubmissionViewSet)
-# router.register(r'comments', views.CommentViewSet)
 router.register(r'post', views.PostHandlerViewSet, basename='post')
 router.register(r'spam', views.SpamHandlerViewSet, basename='spam')
 
@@ -41,6 +40,11 @@ urlpatterns = [
     path('reddit_logged/', views.reddit_logged),
     path('reddit_logout/', views.reddit_logout),
     path('apply_rules/', views.apply_rules),
+    path('mod_subreddits/', views.mod_subreddits),
+    path('removal_reasons/', views.removal_reasons),
+    path('community_rules/', views.community_rules),
+    path('get_moderators/', views.get_moderators),
+    path('save_files/', views.save_files),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('rest-auth/', include('rest_auth.urls')),
     path('rest-auth/registration/', include('rest_auth.registration.urls'))

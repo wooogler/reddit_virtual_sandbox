@@ -1,126 +1,84 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { Rule, submitCode } from '../../modules/rule/slice';
-import { Tree } from 'antd';
+import {
+  createKeyMaps,
+  Rule,
+  ruleSelector,
+  submitCode,
+} from '../../modules/rule/slice';
+import { notification, Tree } from 'antd';
 import { cloneDeep } from 'lodash';
 import 'antd/dist/antd.css';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import OverlayLoading from '../common/OverlayLoading';
+import {
+  keysToTree,
+  makeTree,
+  treeToCode,
+  treeToKeyMaps,
+} from '../../lib/utils/tree';
+import { AppDispatch } from '../..';
+import { getPostsRefresh, getSpamsRefresh } from '../../modules/post/actions';
+import { RootState } from '../../modules';
 
 interface RuleSelectorProps {
   editables: Rule[];
   loadingRule: boolean;
 }
 
-type Tree = {
-  title: string;
-  key: string;
-  children: {
-    title: string;
-    key: string;
-    children: {
-      title: string;
-      key: string;
-    }[];
-  }[];
-}[];
-
 function RuleSelector({ editables, loadingRule }: RuleSelectorProps) {
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
+  const ruleState = useSelector((state: RootState) => state.rule);
+  const error = ruleState.error;
 
-  const treeDataOriginal: Tree = editables.map((rule, ruleIndex) => {
-    return {
-      title: `--- # Rule ${ruleIndex+1}`,
-      key: `${ruleIndex}`,
-      children: rule.lines.map((line, lineIndex) => {
-        return {
-          title: line.key,
-          key: `${ruleIndex}-${lineIndex}`,
-          children: line.words.map((word, wordIndex) => {
-            return {
-              title: word,
-              key: `${ruleIndex}-${lineIndex}-${wordIndex}`,
-            };
-          }),
-        };
-      }),
-    };
-  });
+  useEffect(() => {
+    if(error) {
+      notification.error({
+        message: 'Parsing Error',
+        description: error,
+      })
+    }
+  }, [error]);
 
-  const keysToTree = (treeData: Tree, keys: string[]) => {
-    treeData.forEach((tree1, tree1Index, treeObject) => {
-      if (!keys.includes(tree1.key)) {
-        treeObject.splice(tree1Index, 1);
-      }
-      tree1.children.forEach((tree2, tree2Index, tree1Object) => {
-        if (!keys.includes(tree2.key)) {
-          tree1Object.splice(tree2Index, 1);
-        }
-        tree2.children.forEach((tree3, tree3Index, tree2Object) => {
-          if (!keys.includes(tree3.key)) {
-            tree2Object.splice(tree3Index, 1);
-          }
-        });
-      });
-    });
-    return treeData;
-  };
+  
 
-  const treeToCode = (treeData: Tree) => {
-    let code = '';
-    treeData.forEach((tree1) => {
-      code = code + `${tree1.title}\n`;
-      tree1.children.forEach((tree2) => {
-        code = code + `${tree2.title}: [`;
-        tree2.children.forEach((tree3, index, arr) => {
-          code = code + `'${tree3.title}'`;
-          if (index !== arr.length - 1) {
-            code = code + `, `;
-          }
-        });
-        code = code + ']\n';
-      });
-    });
-    return code;
-  };
+  const treeDataOriginal = makeTree(editables);
 
   const onCheck = (checkedKeys: any, info: any) => {
     const treeData = cloneDeep(treeDataOriginal);
-    const code = treeToCode(
-      keysToTree(treeData, [...checkedKeys, ...info.halfCheckedKeys]),
-    );
-    dispatch(submitCode(code));
+    const tree = keysToTree(treeData, [
+      ...checkedKeys,
+      ...info.halfCheckedKeys,
+    ]);
+    const code = treeToCode(tree);
+    const keyMaps = treeToKeyMaps(tree);
+    dispatch(submitCode(code)).then(() => {
+      dispatch(getPostsRefresh());
+      dispatch(getSpamsRefresh());
+    });
+    dispatch(createKeyMaps(keyMaps));
   };
+
+  const clickedRuleIndex = useSelector(ruleSelector.clickedRuleIndex);
 
   return (
     <RuleSelectorDiv>
-      {loadingRule && <OverlayLoading text='Apply Rules...' />}
+      {loadingRule && <OverlayLoading text="Apply Rules..." />}
       <Tree
         checkable
         onCheck={onCheck}
         treeData={treeDataOriginal}
         defaultExpandAll={true}
-        selectable={false}
+        selectedKeys={[clickedRuleIndex]}
       />
     </RuleSelectorDiv>
   );
 }
 
 const RuleSelectorDiv = styled.div`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  font-family: 'Courier';
-  height: 100%;
-  font-size: 16px;
-  .words {
-    display: flex;
-  }
-  .line {
-    display: flex;
-  }
-  .list {
-    display: flex;
+  .ant-tree {
+    font-size: 16px;
+    font-family: 'Courier';
   }
 `;
 

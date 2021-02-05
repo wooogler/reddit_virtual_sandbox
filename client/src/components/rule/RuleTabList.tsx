@@ -16,7 +16,7 @@ function RuleTabList({files, selectedTab, disabled}: RuleTabListProps) {
     <RuleTabListBlock>
       {disabled && <Overlay opacity={0.5}>Press Edit to access</Overlay>}
       {files.map((file, index) => (
-        <RuleTabItem active={index===selectedTab} tab={index} key={file.tab}>{file.title}</RuleTabItem>
+        <RuleTabItem active={index===selectedTab} tab={index} key={file.tab} title={file.title} />
       ))}
       <RuleTabAdd newTab={files.length}/>
     </RuleTabListBlock>

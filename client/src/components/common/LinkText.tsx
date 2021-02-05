@@ -19,7 +19,7 @@ const LinkDiv = styled.div`
   text-decoration: underline;
   cursor: pointer;
   color: ${palette.blue[7]};
-  font-size: 1rem;
+  font-size: 0.9rem;
   display: inline-flex;
   align-items: center;
 `

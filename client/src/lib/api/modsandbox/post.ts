@@ -1,5 +1,8 @@
 import axios from 'axios';
-import { Filtered, PostType, SortType, SpamType } from '../../../modules/post/slice';
+import moment from 'moment';
+import { Filtered, PostType, SortType } from '../../../modules/post/slice';
+
+axios.defaults.baseURL = 'http://3.34.192.145:8080';
 
 export async function getPostsAPI(
   token: string | null,
@@ -7,40 +10,58 @@ export async function getPostsAPI(
   postSortType: SortType,
   filtered: Filtered,
   page: number,
+  userImported: boolean,
 ) {
   const response = await axios
-    .get<PaginatedPostResponse>('http://localhost:8000/post/', {
+    .get<PaginatedPostResponse>('/post/', {
       params: {
         post_type: postType,
         sort: postSortType,
-        filtered, 
+        filtered,
         page,
+        is_private: userImported,
       },
       headers: { Authorization: `Token ${token}` },
     })
     .catch((error) => {
       return error.message;
     });
-
   return response.data;
 }
 
 export async function getSpamsAPI(
   token: string | null,
-  spamType: SpamType,
+  spamType: PostType,
   spamSortType: SortType,
   filtered: Filtered,
   page: number,
+  userImported: boolean,
 ) {
+  if (userImported) {
+    const response = await axios
+      .get<PaginatedSpamResponse>('/spam/', {
+        params: {
+          post_type: spamType,
+          sort: spamSortType,
+          filtered,
+          page,
+        },
+        headers: { Authorization: `Token ${token}` },
+      })
+      .catch((error) => {
+        return error.message;
+      });
+
+    return response.data;
+  }
   const response = await axios
-    .get<PaginatedSpamResponse>('http://localhost:8000/spam/', {
+    .get<PaginatedSpamResponse>('/spam/', {
       params: {
         post_type: spamType,
         sort: spamSortType,
-        filtered, 
+        filtered,
         page,
       },
-      headers: { Authorization: `Token ${token}` },
     })
     .catch((error) => {
       return error.message;
@@ -49,39 +70,145 @@ export async function getSpamsAPI(
   return response.data;
 }
 
-export interface ImportQuery {
+export interface ImportPostQuery {
   subreddit: string;
   after: number;
   before: number;
   post_type: string;
   max_size: number | null;
+  user_imported: boolean;
+}
+
+export interface ImportSpamQuery {
+  subreddit_name: string | undefined;
+  mod_type: string;
+  removal_reason: string;
+  community_rule: string;
+  moderator_name: string;
+  reported_by: string;
 }
 
 export async function importSubredditPostsAPI(
   token: string,
-  values: ImportQuery,
+  values: ImportPostQuery,
 ) {
-  const response = await axios.post(
-    'http://localhost:8000/post/crawl/',
-    values,
-    {
-      headers: { Authorization: `Token ${token}` },
-    },
-  );
+  const response = await axios.post('/post/crawl/', values, {
+    headers: { Authorization: `Token ${token}` },
+  });
 
   return response.statusText;
 }
 
-export async function deleteAllPostsAPI(token: string) {
+export async function importSpamPostsAPI(
+  token: string,
+  values: ImportSpamQuery,
+) {
+  const response = await axios.post('/spam/crawl/', values, {
+    headers: { Authorization: `Token ${token}` },
+  });
+
+  return response.statusText;
+}
+
+export async function deletePostsAPI(token: string, ids: string[]) {
   const response = await axios.post(
-    'http://localhost:8000/post/delete_all/',
-    null,
+    '/post/deletes/',
+    { ids },
     {
       headers: { Authorization: `Token ${token}` },
     },
   );
 
+  return response.status;
+}
+
+export async function deleteSpamsAPI(token: string, ids: string[]) {
+  const response = await axios.post(
+    '/spam/deletes/',
+    { ids },
+    {
+      headers: { Authorization: `Token ${token}` },
+    },
+  );
+
+  return response.status;
+}
+
+export async function deleteAllPostsAPI(token: string) {
+  const response = await axios.post('/post/delete_all/', null, {
+    headers: { Authorization: `Token ${token}` },
+  });
+
   return response.statusText;
+}
+
+export async function deleteAllSpamsAPI(token: string) {
+  const response = await axios.post('/spam/delete_all/', null, {
+    headers: { Authorization: `Token ${token}` },
+  });
+
+  return response.statusText;
+}
+
+export async function movePostsAPI(token: string, ids: string[]) {
+  const response = await axios.post(
+    '/post/moves/',
+    { ids },
+    {
+      headers: { Authorization: `Token ${token}` },
+    },
+  );
+
+  return response.status;
+}
+
+export async function moveSpamsAPI(token: string, ids: string[]) {
+  const response = await axios.post(
+    '/spam/moves/',
+    { ids },
+    {
+      headers: { Authorization: `Token ${token}` },
+    },
+  );
+
+  return response.status;
+}
+
+export async function addPostAPI(token: string, newPost: NewPost) {
+  const response = await axios.post<Post>(
+    '/post/',
+    {
+      ...newPost,
+      created_utc: moment(new Date()).utc().format('YYYY-MM-DD HH:mm:ss'),
+    },
+    {
+      headers: { Authorization: `Token ${token}` },
+    },
+  );
+
+  return response.data;
+}
+
+export async function addSpamAPI(
+  token: string,
+  newSpam: NewSpam,
+  username: string | undefined,
+) {
+  const now = moment(new Date()).utc().format('YYYY-MM-DD HH:mm:ss');
+  const response = await axios.post<Spam>(
+    '/spam/',
+    {
+      ...newSpam,
+      created_utc: now,
+      banned_at_utc: now,
+      banned_by: username ? username : 'fake_user',
+    },
+    {
+      headers: { Authorization: `Token ${token}` },
+    },
+  );
+
+  return response.data;
 }
 
 export interface PaginatedPostResponse {
@@ -108,11 +235,32 @@ export type Post = {
   subreddit: string;
   title: string;
   matching_rules: number[];
+  domain: string;
+  url: string;
+  votes: number;
+};
+
+export type NewPost = {
+  _id: string;
+  _type: 'comment' | 'submission';
+  author: string | undefined;
+  body: string;
+  title: string;
+  domain: string;
+};
+
+export type NewSpam = {
+  _id: string;
+  _type: 'spam_comment' | 'spam_submission';
+  author: string | undefined;
+  body: string;
+  title: string;
+  domain: string;
 };
 
 export type Spam = {
   _id: string;
-  _type: 'spam_comment' | 'spam_submission';
+  _type: SpamType;
   author: string;
   body: string;
   created_utc: string;
@@ -120,6 +268,17 @@ export type Spam = {
   subreddit: string;
   title: string;
   matching_rules: number[];
-  banned_by: string;
-  banned_at_utc: string;
+  banned_by: string | null;
+  banned_at_utc: string | null;
+  mod_reason_title: string | null;
+  mod_reports: [string, string][];
+  user_reports: [string, number][];
+  domain: string;
+  url: string;
 };
+
+export type SpamType =
+  | 'spam_comment'
+  | 'spam_submission'
+  | 'reports_comment'
+  | 'reports_submission';

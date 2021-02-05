@@ -4,15 +4,15 @@ import {
   Input,
   Select,
   InputNumber,
-  Button
+  Button,
+  Checkbox,
 } from 'antd';
 import { useFormik } from 'formik';
 import moment from 'moment';
 import styled from 'styled-components';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import {
   postActions,
-  postSelector,
 } from '../../modules/post/slice';
 export interface PostImportFormProps {
   onClickClose: () => void;
@@ -20,13 +20,9 @@ export interface PostImportFormProps {
 
 function PostImportForm({ onClickClose }: PostImportFormProps) {
   const dispatch = useDispatch();
-  const loadingDeleteAll = useSelector(postSelector.loadingDeleteAll);
   const { RangePicker } = DatePicker;
   const { Option } = Select;
 
-  const handleDeleteAll = () => {
-    dispatch(postActions.deleteAllPosts());
-  };
   const formik = useFormik({
     initialValues: {
       after: moment().subtract(2, 'hours').startOf('hour'),
@@ -34,6 +30,7 @@ function PostImportForm({ onClickClose }: PostImportFormProps) {
       subreddit: '',
       post_type: 'all',
       max_size: null,
+      user_imported: true,
     },
     onSubmit: (values) => {
       dispatch(
@@ -43,9 +40,9 @@ function PostImportForm({ onClickClose }: PostImportFormProps) {
           before: moment.utc(values.before).unix(),
           post_type: values.post_type,
           max_size: values.max_size,
-        }),
+          user_imported: values.user_imported,
+        })
       );
-      console.log(values);
       onClickClose();
     },
   });
@@ -94,15 +91,13 @@ function PostImportForm({ onClickClose }: PostImportFormProps) {
           formik.setFieldValue('max_size', value);
         }}
       />
-      <label>Delete All Posts</label>
-      <Button danger loading={loadingDeleteAll} onClick={handleDeleteAll}>
-        Delete all posts
-      </Button>
+      <label htmlFor='user_imported'>User Imported</label>
+      <Checkbox name='user_imported' onChange={(e) => {formik.setFieldValue('user_imported', e.target.checked)}} checked={formik.values.user_imported} />
       <div className="buttons">
         <Button onClick={onClickClose}>
           Close
         </Button>
-        <Button type='primary' htmlType="submit">Save</Button>
+        <Button type='primary' htmlType="submit">Import</Button>
       </div>
     </PostImportFormDiv>
   );

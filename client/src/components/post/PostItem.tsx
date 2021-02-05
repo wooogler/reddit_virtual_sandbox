@@ -2,42 +2,47 @@ import React from 'react';
 import { Post } from '../../lib/api/modsandbox/post';
 import SubmissionItem from './SubmissionItem';
 import CommentItem from './CommentItem';
-import styled from 'styled-components';
-import palette from '../../lib/styles/palette';
 import { useDispatch } from 'react-redux';
 import { postActions } from '../../modules/post/slice';
+import { MatchIndex } from '../../lib/utils/match';
+import Checkbox from 'antd/lib/checkbox/Checkbox';
+import { DownArrowIcon, UpArrowIcon } from '../../static/svg';
 
 interface PostItemProps {
   post: Post;
-  selectedPostId: string[];
+  selected: boolean;
   isMatched: boolean;
+  match: MatchIndex[];
 }
 
-function PostItem({ post, selectedPostId, isMatched }: PostItemProps) {
+function PostItem({ post, isMatched, match }: PostItemProps) {
   const dispatch = useDispatch();
   const handleClickPost = () => {
     dispatch(postActions.togglePostSelect(post._id));
   };
 
   return (
-    <PostItemDiv selected={selectedPostId.includes(post._id)} onClick={handleClickPost}>
+    <div
+      className={
+        'flex border border-gray-200 p-1 ' + (isMatched ? 'bg-red-200' : '')
+      }
+    >
+      <div className="flex flex-col mr-1 items-center">
+        <Checkbox onClick={handleClickPost} />
+        <UpArrowIcon className='mt-2 opacity-30 w-3'/>
+        <div className='font-display font-bold'>{post.votes}</div>
+        <DownArrowIcon className='opacity-30 w-3'/>
+      </div>
       {post._type === 'submission' ? (
-        <SubmissionItem submission={post} action={isMatched ? 'remove' : undefined} />
+        <SubmissionItem match={isMatched ? match : []} submission={post} />
       ) : (
-        <CommentItem comment={post} action={isMatched ? 'remove' : undefined} />
+        <CommentItem
+          match={isMatched ? match : []}
+          comment={post}
+        />
       )}
-    </PostItemDiv>
+    </div>
   );
 }
-
-const PostItemDiv = styled.div<{ selected: boolean }>`
-  > div  {
-    box-shadow: 0 0 0 3px
-    ${(props) => (props.selected ? `${palette.red[7]}` : 'none')}
-    inset;
-  }
-  background-color: ${palette.gray[3]};
-  cursor: default;
-`;
 
 export default PostItem;

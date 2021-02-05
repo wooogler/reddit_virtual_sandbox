@@ -1,47 +1,64 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import styled from 'styled-components';
 import { createEditable, submitCode, toggleEditorMode } from '../../modules/rule/slice';
 import {Button} from 'antd';
+import {message as antdMessage} from 'antd';
+import { AppDispatch } from '../..';
+import { getPostsRefresh, getSpamsRefresh } from '../../modules/post/actions';
+import CopyToClipboard from 'react-copy-to-clipboard';
 
 interface RuleActionsProps {
-  message: Error | null;
   mode: 'edit' | 'select';
   code: string;
+  title: string;
 }
 
-function RuleActions({ message, mode, code }: RuleActionsProps) {
-  const dispatch = useDispatch();
+function RuleActions({ mode, code, title }: RuleActionsProps) {
+  const dispatch: AppDispatch = useDispatch();
+  const [downloadLink, setDownloadLink] = useState('')
 
   const handleClickRun = () => {
-    dispatch(createEditable());
-    dispatch(toggleEditorMode());
     if(mode === 'select') {
-      dispatch(submitCode(''))
+      dispatch(submitCode('')).then(() => {
+        dispatch(getPostsRefresh());
+        dispatch(getSpamsRefresh());
+      })
+      dispatch(toggleEditorMode());
+    } else {
+      dispatch(createEditable());
     }
   };
 
-  const handleClickExport = () => {
-    dispatch(createEditable())
+  
+
+  useEffect(() => {
+    const data = new Blob([code], {type: 'text/plain'})
+    if(downloadLink !== '') window.URL.revokeObjectURL(downloadLink);
+    setDownloadLink(window.URL.createObjectURL(data))
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [code])
+
+  const handleCopy = () => {
+    antdMessage.info('Copied!');
   }
 
   return (
-    <RuleActionsBlock>
-      <span>{message && String(message)}</span>
+    <div className='flex'>
+      <CopyToClipboard text={code} onCopy={handleCopy} >
+        <Button size='large' className='mr-2'>
+          Copy
+        </Button>
+      </CopyToClipboard>
+      <a download={title} href={downloadLink} className='mr-2'>
+        <Button size="large">
+          Export YAML
+        </Button>
+      </a>
       <Button onClick={handleClickRun} type='primary' size="large">
         {mode === "edit" ? 'Run' : 'Edit'}
       </Button>
-      <Button onClick={handleClickExport} size="large">
-        Export YAML
-      </Button>
-    </RuleActionsBlock>
+    </div>
   );
 }
 
-const RuleActionsBlock = styled.div`
-  display: flex;
-  button {
-    margin-left: 1rem;
-  }
-`;
 export default RuleActions;
