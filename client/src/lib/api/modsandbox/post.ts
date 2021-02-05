@@ -76,6 +76,7 @@ export interface ImportPostQuery {
   before: number;
   post_type: string;
   max_size: number | null;
+  user_imported: boolean;
 }
 
 export interface ImportSpamQuery {

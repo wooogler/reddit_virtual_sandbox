@@ -4,10 +4,11 @@ import {
   createSelector,
   createSlice,
   PayloadAction,
-  SerializedError,
   ThunkAction,
 } from '@reduxjs/toolkit';
+import { AxiosError } from 'axios';
 import YAML from 'yaml';
+import { YAMLError } from 'yaml/util';
 import { RootState } from '..';
 import { submitCodeAPI } from '../../lib/api/modsandbox/rule';
 import { KeyMap } from '../../lib/utils/tree';
@@ -27,21 +28,28 @@ export interface Line {
   words: string[];
 }
 
+type Item = {
+  [key: string]: string[] | string | null;
+};
+
 export type RuleState = {
   loading: boolean;
-  error: SerializedError | null;
+  // error: SerializedError | null;
+  error?: string;
+  parseError?: YAMLError[][];
   files: File[];
   mode: 'edit' | 'select';
   selectedTab: number;
   editables: Rule[];
   submittedCode: string;
   clickedRuleIndex: string;
-  keyMaps: KeyMap[]
+  keyMaps: KeyMap[];
 };
 
 export const initialState: RuleState = {
   loading: false,
-  error: null,
+  error: undefined,
+  parseError: undefined,
   mode: 'edit',
   files: [
     {
@@ -64,13 +72,26 @@ export const clickMatchedThunk = (
   setTimeout(() => dispatch(clearMatched()), 2000);
 };
 
-export const submitCode = createAsyncThunk<void, string,{state: RootState}>(
-  'rule/submitCode',
-  async(code, {getState}) => {
-    const token = getState().user.token;
+interface ParsingError {
+  detail: string;
+}
+
+export const submitCode = createAsyncThunk<
+  void,
+  string,
+  { state: RootState; rejectValue: ParsingError }
+>('rule/submitCode', async (code, { getState, rejectWithValue }) => {
+  const token = getState().user.token;
+  try {
     await submitCodeAPI(token, code);
+  } catch (err) {
+    let error: AxiosError<ParsingError> = err;
+    if (!error.response) {
+      throw err;
+    }
+    return rejectWithValue(error.response.data);
   }
-)
+});
 
 const ruleSlice = createSlice({
   name: 'rule',
@@ -109,21 +130,19 @@ const ruleSlice = createSlice({
       state.clickedRuleIndex = '';
     },
     createEditable: (state) => {
-      try {
-        const code = state.files[state.selectedTab].code;
-        const parsedCode = YAML.parseAllDocuments(code, {
-          prettyErrors: true,
+      const code = state.files[state.selectedTab].code;
+      const parsedCode = YAML.parseAllDocuments(code, { prettyErrors: true });
+
+      if (parsedCode.find(item => item.errors.length !== 0)) {
+        state.parseError = parsedCode.map((item) => {
+          return item.errors;
         });
+      } else {
+        state.parseError = undefined;
         const parsedArray = parsedCode.map((item) =>
           JSON.parse(JSON.stringify(item)),
         );
-        type Item = {
-          [key: string]: string[] | string | null;
-        };
-
         let editables: Rule[] = [];
-
-        // 코드를 파싱해서 line, word 단위로 쪼갠다.
         parsedArray.forEach((item: Item | null) => {
           let rule: Rule = { lines: [] };
           if (item) {
@@ -137,28 +156,33 @@ const ruleSlice = createSlice({
             editables.push(rule);
           }
         });
-
         state.editables = editables;
-      } catch (err) {
-        state.error = Error(err);
+        state.mode='select';
       }
     },
     createKeyMaps: (state, action: PayloadAction<KeyMap[]>) => {
       state.keyMaps = action.payload;
-    }
+    },
   },
   extraReducers: (builder) => {
-    builder.addCase(submitCode.pending, (state) => {
-      state.loading = true;
-    }).addCase(submitCode.fulfilled, (state, action) => {
-      state.loading = false;
-      state.submittedCode = action.meta.arg
-    }).addCase(submitCode.rejected, (state, action) => {
-      state.error = action.error;
-      state.loading = false;
-    })
-  }
-    
+    builder
+      .addCase(submitCode.pending, (state) => {
+        state.loading = true;
+        state.error = undefined;
+      })
+      .addCase(submitCode.fulfilled, (state, action) => {
+        state.loading = false;
+        state.submittedCode = action.meta.arg;
+      })
+      .addCase(submitCode.rejected, (state, action) => {
+        if (action.payload) {
+          state.error = action.payload.detail;
+        } else {
+          state.error = action.error.message;
+        }
+        state.loading = false;
+      });
+  },
 });
 
 const selectLoading = createSelector<RuleState, boolean, boolean>(
@@ -178,8 +202,8 @@ const selectClickedRuleIndex = createSelector<RuleState, string, string>(
 
 const selectNumberOfTabs = createSelector<RuleState, File[], number>(
   (state) => state.files,
-  (files) => files.length
-)
+  (files) => files.length,
+);
 
 export const ruleSelector = {
   loading: (state: RootState) => selectLoading(state.rule),

@@ -5,7 +5,6 @@ import { RootState } from '../../modules';
 
 function RuleActionsContainer() {
   const ruleState = useSelector((state: RootState) => state.rule);
-  const error = ruleState.error;
   const fileIndex = ruleState.files.findIndex(
     (file) => file.tab === ruleState.selectedTab,
   );
@@ -13,7 +12,6 @@ function RuleActionsContainer() {
   return (
     <>
       <RuleActions
-        message={error}
         mode={ruleState.mode}
         code={ruleState.files[fileIndex].code}
         title={ruleState.files[fileIndex].title}
