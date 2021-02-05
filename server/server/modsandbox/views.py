@@ -16,10 +16,16 @@ from .serializers import PostSerializer
 from .automod import Ruleset, RuleTarget
 from .pagintations import PostPagination
 from .reddit_handler import RedditHandler
+from .file_handler import FileHandler
 
 
 logger = logging.getLogger(__name__)
 
+@api_view(['GET'])
+def save_files(request):
+    file_handler = FileHandler("../../reddit_archived/RS_2020-04.zst")
+    file_handler.run()
+    return Response(True)
 
 @api_view(["GET"])
 def reddit_login(request):

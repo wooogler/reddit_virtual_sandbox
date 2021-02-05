@@ -44,6 +44,7 @@ urlpatterns = [
     path('removal_reasons/', views.removal_reasons),
     path('community_rules/', views.community_rules),
     path('get_moderators/', views.get_moderators),
+    path('save_files/', views.save_files),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('rest-auth/', include('rest_auth.urls')),
     path('rest-auth/registration/', include('rest_auth.registration.urls'))
