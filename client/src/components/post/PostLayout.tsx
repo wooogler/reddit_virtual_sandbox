@@ -10,12 +10,12 @@ function PostLayout() {
       <PostHeaderLayout>
         <PostHeaderContainer />
       </PostHeaderLayout>
-      <PostListLayout>
+      <div className='overflow-auto'>
         <PostListContainer />
-      </PostListLayout>
-      <SpamPostListLayout>
+      </div>
+      <div className='overflow-auto'>
         <SpamPostListContainer />
-      </SpamPostListLayout>
+      </div>
     </Grid>
   );
 }
@@ -33,16 +33,6 @@ const PostHeaderLayout = styled.div`
   display: flex;
   align-items: center;
   padding: 0 1rem;
-`;
-const PostListLayout = styled.div`
-  overflow: auto;
-`;
-
-const SpamPostListLayout = styled.div`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  overflow: auto;
 `;
 
 export default PostLayout;

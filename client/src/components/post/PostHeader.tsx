@@ -74,7 +74,7 @@ function PostHeader({ userInfo, redditLogged }: PostHeaderProps) {
   );
 
   return (
-    <div className="flex w-full">
+    <div className="flex w-full mt-2">
       <Dropdown overlay={menu}>
         <Button type="primary" size="large">
           Import

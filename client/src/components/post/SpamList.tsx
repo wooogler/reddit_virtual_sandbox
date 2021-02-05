@@ -106,7 +106,7 @@ function SpamList({
   };
 
   return (
-    <div className="relative flex flex-col h-full">
+    <div className="relative flex flex-col h-full mx-2">
       {selectedPostId.length !== 0 && (
         <OverlayWithButton
           text={
@@ -130,7 +130,7 @@ function SpamList({
         userImported={spamUserImported}
         span={spamSpan}
       />
-      <div onClick={handleClickBar} className="cursor-pointer hover:opacity-70">
+      <div onClick={handleClickBar} className="cursor-pointer hover:opacity-70  mb-2">
         <BarRate total={count.spams.all} part={count.spams.filtered} />
       </div>
       <SplitPaneDiv className="flex-1 overflow-y-auto">
