@@ -2,8 +2,6 @@ import React, { useState, useRef } from 'react';
 import Draggable, { DraggableData, DraggableEvent } from 'react-draggable';
 // import Modal from 'react-modal';
 import { Modal } from 'antd';
-import styled from 'styled-components';
-import palette from '../../lib/styles/palette';
 
 interface DraggableModalProps {
   visible: boolean;
