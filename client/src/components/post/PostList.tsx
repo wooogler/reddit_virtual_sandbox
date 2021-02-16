@@ -9,6 +9,7 @@ import { useInfiniteScroll } from '../../lib/hooks';
 import { Post } from '../../lib/api/modsandbox/post';
 import OverlayLoading from '../common/OverlayLoading';
 import {
+  applySeeds,
   deleteSpams,
   getPostsRefresh,
   getSpamsRefresh,
@@ -100,6 +101,13 @@ function PostList({
     dispatch(postActions.clearSelectedSpamPostId());
   };
 
+  const handleClickSeeds = () => {
+    dispatch(applySeeds(selectedSpamPostId)).then(() => {
+      dispatch(getSpamsRefresh());
+    });
+    dispatch(postActions.clearSelectedSpamPostId());
+  };
+
   const handleClickBar = () => {
     dispatch(postActions.toggleSplitPostList());
     dispatch(getPostsRefresh());
@@ -116,8 +124,10 @@ function PostList({
           }
           buttonText1="Move to Posts"
           onClickButton1={handleClickMove}
-          buttonText2="Delete from Seed posts"
+          buttonText2="Delete posts"
           onClickButton2={handleClickDelete}
+          buttonText3="Apply as seeds"
+          onClickButton3={handleClickSeeds}
         />
       )}
       {loadingPost && <OverlayLoading text="Loading Posts..." />}
@@ -130,7 +140,10 @@ function PostList({
         userImported={postUserImported}
         span={postSpan}
       />
-      <div onClick={handleClickBar} className="cursor-pointer hover:opacity-70 mb-2">
+      <div
+        onClick={handleClickBar}
+        className="cursor-pointer hover:opacity-70 mb-2"
+      >
         <BarRate total={count.posts.all} part={count.posts.filtered} />
       </div>
       <SplitPaneDiv className="flex-1 overflow-y-auto">

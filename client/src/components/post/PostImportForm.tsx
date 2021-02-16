@@ -25,8 +25,10 @@ function PostImportForm({ onClickClose }: PostImportFormProps) {
 
   const formik = useFormik({
     initialValues: {
-      after: moment().subtract(2, 'hours').startOf('hour'),
-      before: moment().subtract(1, 'hours').startOf('hour'),
+      // after: moment().subtract(2, 'days'),
+      // before: moment().subtract(1, 'days'),
+      after: null,
+      before: null,
       subreddit: '',
       post_type: 'all',
       max_size: null,
@@ -46,6 +48,7 @@ function PostImportForm({ onClickClose }: PostImportFormProps) {
       onClickClose();
     },
   });
+
   return (
     <PostImportFormDiv onSubmit={formik.handleSubmit}>
       <div className="title">Import Subreddits</div>

@@ -11,7 +11,7 @@ import {
   Post,
   Spam,
 } from '../../lib/api/modsandbox/post';
-import { addPost, addSpam, deletePosts, deleteSpams } from './actions';
+import { addPost, addSpam, applySeeds, deletePosts, deleteSpams } from './actions';
 
 export type PostType = 'submission' | 'comment' | 'all';
 export type SortType = 'new' | 'old';
@@ -85,6 +85,10 @@ export type PostState = {
       error: SerializedError | null;
     };
     add: {
+      loading: boolean;
+      error: SerializedError | null;
+    };
+    applySeeds: {
       loading: boolean;
       error: SerializedError | null;
     };
@@ -162,6 +166,10 @@ export const initialState: PostState = {
       error: null,
     },
     add: {
+      loading: false,
+      error: null,
+    },
+    applySeeds: {
       loading: false,
       error: null,
     },
@@ -440,7 +448,17 @@ const postSlice = createSlice({
       .addCase(addSpam.rejected, (state, action) => {
         state.spams.add.loading = false;
         state.spams.add.error = action.error;
-      });
+      })
+      .addCase(applySeeds.pending, (state) => {
+        state.spams.applySeeds.loading = true;
+      })
+      .addCase(applySeeds.fulfilled, (state) => {
+        state.spams.applySeeds.loading = false;
+      })
+      .addCase(applySeeds.rejected, (state, action) => {
+        state.spams.applySeeds.loading = false;
+        state.spams.applySeeds.error = action.error;
+      })
   },
 });
 

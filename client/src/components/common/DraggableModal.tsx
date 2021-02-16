@@ -2,15 +2,23 @@ import React, { useState, useRef } from 'react';
 import Draggable, { DraggableData, DraggableEvent } from 'react-draggable';
 // import Modal from 'react-modal';
 import { Modal } from 'antd';
+import { SpamImportType } from '../post/PostHeader';
 
 interface DraggableModalProps {
-  visible: boolean;
+  visible: boolean | SpamImportType;
   title: string;
   children: React.ReactNode;
-  setVisible: React.Dispatch<React.SetStateAction<boolean>>
+  setVisible:
+    | React.Dispatch<React.SetStateAction<false | SpamImportType>>
+    | React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-function DraggableModal({ visible, title, children, setVisible }: DraggableModalProps) {
+function DraggableModal({
+  visible,
+  title,
+  children,
+  setVisible,
+}: DraggableModalProps) {
   const [disabled, setDisabled] = useState(true);
   const [bounds, setBounds] = useState({
     left: 0,
@@ -36,7 +44,7 @@ function DraggableModal({ visible, title, children, setVisible }: DraggableModal
 
   const handleCancel = () => {
     setVisible(false);
-  }
+  };
 
   return (
     <Modal
@@ -57,7 +65,7 @@ function DraggableModal({ visible, title, children, setVisible }: DraggableModal
           {title}
         </div>
       }
-      visible={visible}
+      visible={!!visible}
       modalRender={(modal) => (
         <Draggable
           disabled={disabled}
@@ -70,8 +78,8 @@ function DraggableModal({ visible, title, children, setVisible }: DraggableModal
       footer={null}
       onCancel={handleCancel}
       mask={false}
-      width='36rem'
-      bodyStyle={{padding: '1rem'}}
+      width="36rem"
+      bodyStyle={{ padding: '1rem' }}
     >
       {children}
     </Modal>

@@ -3,9 +3,9 @@ import moment from 'moment';
 import { Filtered, PostType, SortType } from '../../../modules/post/slice';
 
 //amazon ec2
-axios.defaults.baseURL = 'http://3.34.192.145:8080';
+// axios.defaults.baseURL = 'http://3.34.192.145:8080';
 //kixlab2
-// axios.defaults.baseURL = 'http://143.248.48.96:8889';
+axios.defaults.baseURL = 'http://143.248.48.96:8887';
 
 export async function getPostsAPI(
   token: string | null,
@@ -177,6 +177,18 @@ export async function moveSpamsAPI(token: string, ids: string[]) {
   return response.status;
 }
 
+export async function applySeedsAPI(token: string, ids: string[]) {
+  const response = await axios.post(
+    '/post/apply_seeds/', 
+    {ids},
+    {
+      headers: { Authorization: `Token ${token}` },
+    },
+  )
+
+  return response.status;
+}
+
 export async function addPostAPI(token: string, newPost: NewPost) {
   const response = await axios.post<Post>(
     '/post/',
@@ -191,6 +203,8 @@ export async function addPostAPI(token: string, newPost: NewPost) {
 
   return response.data;
 }
+
+
 
 export async function addSpamAPI(
   token: string,

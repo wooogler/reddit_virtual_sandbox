@@ -12,10 +12,14 @@ interface PostHeaderProps {
   redditLogged: boolean;
 }
 
+export type SpamImportType = 'spam' | 'reports' | 'modqueue';
+
 function PostHeader({ userInfo, redditLogged }: PostHeaderProps) {
   const dispatch = useDispatch();
   const [isPostImportOpen, setIsPostImportOpen] = useState(false);
-  const [isSpamImportOpen, setIsSpamImportOpen] = useState(false);
+  const [isSpamImportOpen, setIsSpamImportOpen] = useState<
+    false | SpamImportType
+  >(false);
 
   const handleClickLogout = () => {
     const token = localStorage.getItem('token');
@@ -43,10 +47,9 @@ function PostHeader({ userInfo, redditLogged }: PostHeaderProps) {
     }
   };
 
-  const redditLogInWarning = () => {
+  const redditLogInWarning = (spamImportType: SpamImportType) => {
     message.warning({
-      content:
-        'Please log in Reddit to access moderated posts in your subreddit',
+      content: `Please log in Reddit to access ${spamImportType} in your subreddit`,
       duration: 3,
       style: {
         marginTop: '2rem',
@@ -62,13 +65,35 @@ function PostHeader({ userInfo, redditLogged }: PostHeaderProps) {
       <Menu.Item
         onClick={() => {
           if (redditLogged) {
-            setIsSpamImportOpen(true);
+            setIsSpamImportOpen('spam');
           } else {
-            redditLogInWarning();
+            redditLogInWarning('spam');
           }
         }}
       >
-        Import Moderated Posts
+        Import Spam
+      </Menu.Item>
+      <Menu.Item
+        onClick={() => {
+          if (redditLogged) {
+            setIsSpamImportOpen('reports');
+          } else {
+            redditLogInWarning('reports');
+          }
+        }}
+      >
+        Import Reports
+      </Menu.Item>
+      <Menu.Item
+        onClick={() => {
+          if (redditLogged) {
+            setIsSpamImportOpen('modqueue');
+          } else {
+            redditLogInWarning('modqueue');
+          }
+        }}
+      >
+        Import Mod Queue
       </Menu.Item>
     </Menu>
   );
@@ -84,7 +109,7 @@ function PostHeader({ userInfo, redditLogged }: PostHeaderProps) {
       <DraggableModal
         visible={isPostImportOpen}
         setVisible={setIsPostImportOpen}
-        title={`Import subreddit posts`}
+        title={`Import Subreddit Posts`}
       >
         <PostImportForm
           onClickClose={() => {
@@ -96,9 +121,16 @@ function PostHeader({ userInfo, redditLogged }: PostHeaderProps) {
       <DraggableModal
         visible={isSpamImportOpen}
         setVisible={setIsSpamImportOpen}
-        title={`Import seed posts`}
+        title={`Import ${
+          isSpamImportOpen === 'spam'
+            ? 'Spam'
+            : isSpamImportOpen === 'reports'
+            ? 'Reports'
+            : isSpamImportOpen === 'modqueue' && 'Mod Queue'
+        }`}
       >
         <SpamImportForm
+          spamImportType={isSpamImportOpen}
           onClickClose={() => {
             setIsSpamImportOpen(false);
           }}

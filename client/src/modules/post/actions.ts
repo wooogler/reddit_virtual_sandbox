@@ -3,6 +3,7 @@ import { RootState } from '..';
 import {
   addPostAPI,
   addSpamAPI,
+  applySeedsAPI,
   deletePostsAPI,
   deleteSpamsAPI,
   movePostsAPI,
@@ -61,6 +62,14 @@ export const movePosts = createAsyncThunk<void, string[], { state: RootState }>(
     await movePostsAPI(token, ids);
   },
 );
+
+export const applySeeds = createAsyncThunk<void, string[], {state: RootState}> (
+  'post/applySeeds',
+  async (ids, thunkAPI) => {
+    const token = thunkAPI.getState().user.token;
+    await applySeedsAPI(token, ids);
+  },
+)
 
 export const moveSpams = createAsyncThunk<void, string[], { state: RootState }>(
   'post/moveSpams',

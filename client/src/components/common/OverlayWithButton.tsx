@@ -4,12 +4,16 @@ import Overlay from './Overlay';
 
 export interface OverlayWithButtonProps {
   text: string;
-  buttonText1: String;
-  buttonText2?: String;
+  buttonText1: string;
+  buttonText2?: string;
+  buttonText3?: string
   onClickButton1: (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => void;
   onClickButton2?: (
+    event: React.MouseEvent<HTMLElement, MouseEvent>,
+  ) => void;
+  onClickButton3?: (
     event: React.MouseEvent<HTMLElement, MouseEvent>,
   ) => void;
 }
@@ -20,6 +24,8 @@ function OverlayWithButton({
   onClickButton1,
   buttonText2,
   onClickButton2,
+  buttonText3,
+  onClickButton3,
 }: OverlayWithButtonProps) {
   const handleClickButton1 = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -31,6 +37,11 @@ function OverlayWithButton({
   ) => {
     e && onClickButton2 && onClickButton2(e);
   };
+  const handleClickButton3 = (
+    e: React.MouseEvent<HTMLElement, MouseEvent> | undefined,
+  ) => {
+    e && onClickButton3 && onClickButton3(e);
+  };
 
   return (
     <Overlay>
@@ -41,12 +52,18 @@ function OverlayWithButton({
             {buttonText1}
           </Button>
           {buttonText2 && (
-            <Popconfirm placement='bottom' title='Are you sure?' onConfirm={handleClickButton2}>
+            <Popconfirm className='mb-2' placement='bottom' title='Are you sure?' onConfirm={handleClickButton2}>
               <Button danger type='primary' size="large">
                 {buttonText2}
               </Button>
             </Popconfirm>
-            
+          )}
+          {buttonText3 && (
+            <Popconfirm placement='bottom' title='Are you sure?' onConfirm={handleClickButton3}>
+              <Button danger type='primary' size="large">
+                {buttonText3}
+              </Button>
+            </Popconfirm>
           )}
         </div>
       </div>

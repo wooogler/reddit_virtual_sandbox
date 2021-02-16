@@ -6,12 +6,14 @@ import styled from 'styled-components';
 import { useGetApi, useGetApiWithParam } from '../../lib/hooks';
 import { postActions } from '../../modules/post/slice';
 import { userSelector } from '../../modules/user/slice';
+import { SpamImportType } from './PostHeader';
 
 interface SpamImportFormProps {
+  spamImportType: SpamImportType | false
   onClickClose: () => void;
 }
 
-function SpamImportForm({ onClickClose }: SpamImportFormProps) {
+function SpamImportForm({ onClickClose, spamImportType }: SpamImportFormProps) {
   const dispatch = useDispatch();
   const token = useSelector(userSelector.token);
 
@@ -25,7 +27,6 @@ function SpamImportForm({ onClickClose }: SpamImportFormProps) {
   const formik = useFormik({
     initialValues: {
       subreddit: '',
-      mod_type: '',
       removal_reason: 'all',
       community_rule: 'all',
       moderator_name: 'all',
@@ -35,7 +36,7 @@ function SpamImportForm({ onClickClose }: SpamImportFormProps) {
       dispatch(
         postActions.importSpamPosts({
           subreddit_name: values.subreddit,
-          mod_type: values.mod_type,
+          mod_type: spamImportType as string,
           removal_reason: values.removal_reason,
           community_rule: values.community_rule,
           moderator_name: values.moderator_name,
@@ -64,7 +65,12 @@ function SpamImportForm({ onClickClose }: SpamImportFormProps) {
 
   return (
     <SpamImportFormDiv onSubmit={formik.handleSubmit}>
-      <div className="title">Import Seeds</div>
+      <div className="title">Import {
+        spamImportType === 'spam' ? 'Spam' : 
+        spamImportType === 'reports' ? 'Reports' :
+        spamImportType === 'modqueue' ? 'Mod Queue' :
+        'Seed Posts'
+      }</div>
       <label>Target mod subreddit</label>
       <Select
         size="large"
@@ -81,18 +87,7 @@ function SpamImportForm({ onClickClose }: SpamImportFormProps) {
             </Option>
           ))}
       </Select>
-      <label>Target queues</label>
-      <Select
-        size="large"
-        onChange={(value) => {
-          formik.setFieldValue('mod_type', value);
-        }}
-      >
-        <Option value="modqueue">Mod queue</Option>
-        <Option value="reports">Reports</Option>
-        <Option value="spam">Spam</Option>
-      </Select>
-      {formik.values.mod_type === 'spam' && (
+      {spamImportType === 'spam' && (
         <>
           <label>Target Removal Reason</label>
           <Select
@@ -132,7 +127,7 @@ function SpamImportForm({ onClickClose }: SpamImportFormProps) {
           </Select>
         </>
       )}
-      {formik.values.mod_type === 'reports' && (
+      {spamImportType === 'reports' && (
         <>
           <label>Reports by</label>
           <Select
