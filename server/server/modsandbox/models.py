@@ -58,7 +58,7 @@ class Post(models.Model):
     _type = models.CharField(max_length=18, choices=TYPE_CHOICES)
 
     def __str__(self):
-        return self._type + self.full_link
+        return self.full_link
 
 
 class Profile(models.Model):

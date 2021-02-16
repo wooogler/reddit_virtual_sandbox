@@ -26,7 +26,7 @@ class RedditHandler():
             user_agent=os.environ.get("user_agent")
         )
 
-    def _get_reddit_posts(self, uri, params, max_retries=2):
+    def _get_reddit_posts(self, uri, params, max_retries=4):
         """Send HTTP request to 'uri'
         
         Returns:
@@ -126,7 +126,7 @@ class RedditHandler():
             term = kwargs["before"] - kwargs["after"]
             params['after'] = kwargs['after']
 
-            while (n == self.request_size):
+            while (n == self.request_size or n==self.request_size-1):
                 logger.info(f'Querying starting from {datetime.fromtimestamp(params["after"], tz=timezone.utc)}')
                 logger.info(f'{post_type} : {round((params["after"]-kwargs["after"])/term*100,2)}%')
                 posts = self._get_reddit_posts(self.endpoint[post_type], params)
