@@ -105,7 +105,7 @@ function ListHeader({
 
   return (
     <>
-      <div className='flex flex-wrap items-center'>
+      <div className="flex flex-wrap items-center my-1">
         <div className="text-2xl mx-2">{name}</div>
         <Tooltip placement="right" title={tooltipText}>
           <InfoCircleOutlined />
@@ -119,12 +119,19 @@ function ListHeader({
             <Button
               danger
               size="small"
-              loading={list === 'unmoderated' ? loadingDelete : loadingSpamDelete}
+              loading={
+                list === 'unmoderated' ? loadingDelete : loadingSpamDelete
+              }
             >
               Delete all
             </Button>
           </Popconfirm>
-          <Button className='ml-1' type="primary" size="small" onClick={handleClickAddPost}>
+          <Button
+            className="ml-1"
+            type="primary"
+            size="small"
+            onClick={handleClickAddPost}
+          >
             Add {list === 'unmoderated' ? 'test post' : 'test spam'}
           </Button>
         </div>
@@ -137,7 +144,7 @@ function ListHeader({
           <PostForm onClickClose={handleClickCloseModal} list={list} />
         </DraggableModal>
       </div>
-      <div className='flex flex-wrap'>
+      <div className="flex flex-wrap mb-2">
         <div>
           <Select
             defaultValue="all"
@@ -158,8 +165,8 @@ function ListHeader({
             >
               <Option value="new">New</Option>
               <Option value="old">Old</Option>
-              <Option value='votes_desc'>more votes</Option>
-              <Option value='votes_asc'>less votes</Option>
+              <Option value="votes_desc">more votes</Option>
+              <Option value="votes_asc">less votes</Option>
             </Select>
           ) : (
             <Select

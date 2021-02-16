@@ -106,7 +106,7 @@ function PostList({
   };
 
   return (
-    <div className="relative flex flex-col h-full">
+    <div className="relative flex flex-col h-full mx-2">
       {selectedSpamPostId.length !== 0 && (
         <OverlayWithButton
           text={
@@ -130,7 +130,7 @@ function PostList({
         userImported={postUserImported}
         span={postSpan}
       />
-      <div onClick={handleClickBar} className="cursor-pointer hover:opacity-70">
+      <div onClick={handleClickBar} className="cursor-pointer hover:opacity-70 mb-2">
         <BarRate total={count.posts.all} part={count.posts.filtered} />
       </div>
       <SplitPaneDiv className="flex-1 overflow-y-auto">
