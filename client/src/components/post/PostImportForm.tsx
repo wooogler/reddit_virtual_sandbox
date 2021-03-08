@@ -21,7 +21,7 @@ export interface PostImportFormProps {
 function PostImportForm({ onClickClose }: PostImportFormProps) {
   const dispatch = useDispatch();
   const { RangePicker } = DatePicker;
-  const { Option } = Select;
+const { Option } = Select;
 
   const formik = useFormik({
     initialValues: {
