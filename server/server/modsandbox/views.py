@@ -341,7 +341,7 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
             # filtered_posts = queryset.filter(matching_rules__in=profile.user.rules.all()) # Posts에서 필터링된 포스트들의 집합
             seeds_array = [{'_id': seed._id, 'body': seed.body if seed.body != '' else seed.title} for seed in seeds] # 이렇게 array를 만든 후에 사용해야 함 (dict[])
             # filtered_posts_array = [{'_id': post._id, 'body': post.body} for post in filtered_posts] # 이렇게 array를 만든 후에 사용해야 함 (dict[])
-            posts_array = [{'_id': post._id, 'body': post.body if post.body != '' else post.title} for post in used_posts]
+            posts_array = [{'_id': post._id, 'body': post.body if post.body not in ['', '[removed]']  else post.title} for post in used_posts]
             
             # 출력 결과
             #seeds_array = [{'_id': 'gk0p7ra', 'body': 'asdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfqwer\n\nqwerqwerqwerqwerqwerqewr'}, {'_id': 'l1p3je', 'body': 'asdfasdfasdfasdfqw\n\n&#x200B;\n\nasdfawerqweqwerqwer\n\nqwerqwerqwer'}]

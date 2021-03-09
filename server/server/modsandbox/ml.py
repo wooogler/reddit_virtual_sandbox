@@ -1,9 +1,12 @@
 import re
 import unicodedata
 from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.feature_extraction.text import CountVectorizer
 
 from nltk.tokenize import sent_tokenize
+from nltk.corpus import stopwords
 from sentence_transformers import SentenceTransformer
+
 import numpy as np
 
 # https://stackoverflow.com/questions/23394608/python-regex-fails-to-identify-markdown-links
@@ -83,18 +86,35 @@ def compute_cosine_similarity(seeds, filtered_posts):
     print(len(seeds))
     # get ML embeddings for seed samples
     seed_embs = []
+    seed_documents = []
     for seed in seeds:
-        seed_emb, _ = process_and_return_embedding(seed['body'])
+        seed_emb, seed_processed_sentences = process_and_return_embedding(seed['body'])
+        seed_document = ' '.join(seed_processed_sentences)
+        seed_documents.append(seed_document)
         # print(np.array(seed_emb).shape) # number of sentences, 768 
         seed_embs.append(np.mean(seed_emb, axis=0)) # 768
    
     
     # get ML embeddings for filtered posts
     filtered_embs = []
+    filtered_documents = []
     for filtered_post in filtered_posts:
-        filtered_emb, _ = process_and_return_embedding(filtered_post['body'])
+        filtered_emb, filtered_processed_sentences = process_and_return_embedding(filtered_post['body'])
+        filtered_document = ' '.join(filtered_processed_sentences)
+        filtered_documents.append(filtered_document)
         filtered_embs.append(np.mean(filtered_emb, axis=0))
         #print(filtered_embs[-1].shape) # 768
+
+    vector = CountVectorizer(stop_words=stopwords.words('english'), min_df = 1)
+    dtm = vector.fit_transform(filtered_documents).toarray()
+    np_dtm = np.sum(dtm, axis=0)
+    vocab = vector.vocabulary_
+    vocab_df = {}
+    for key, val in vocab.items():
+        vocab_df[key] = np_dtm[val]
+    
+    print(vocab_df)
+
 
     filtered_embs = np.array(filtered_embs) # [# of filtered posts, dim]
     
