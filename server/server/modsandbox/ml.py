@@ -57,6 +57,9 @@ def process_and_return_embedding(raw):
         if len(text) > 0:
             processed_sentences.append(text)
 
+    if processed_sentences == []:
+        processed_sentences=['no content']
+    
     sentence_embeddings = model.encode(processed_sentences)
 
     return (sentence_embeddings, processed_sentences)
