@@ -34,9 +34,9 @@ class Post(models.Model):
     domain = models.CharField(max_length=300, default='')
     url = models.CharField(max_length=500, null=True)
     matching_rules = models.ManyToManyField(Rule, blank=True)
-    # for vote
+    # for sort
     votes = models.IntegerField(default=0)  # ups - downs
-
+    similarity = models.FloatField(default=0)
     # for spam_
     banned_by = models.CharField(max_length=300, null=True)
     banned_at_utc = models.DateTimeField(null=True)

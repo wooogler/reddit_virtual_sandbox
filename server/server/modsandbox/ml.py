@@ -26,10 +26,11 @@ def fraction_finder(text):
             passed.append(s)
     return ''.join(passed)
 
-def process_and_return_embedding(text):
-    text = unicodedata.normalize("NFKD", text)
-    sentences = sent_tokenize(text) # split post into sentences
+def process_and_return_embedding(raw):
+    raw = unicodedata.normalize("NFKD", raw)
+    sentences = sent_tokenize(raw) # split post into sentences
     processed_sentences = []
+
     for text in sentences:
         # remove special chr
         text = text.replace('&amp;#x200B;', '')
@@ -69,20 +70,31 @@ def compute_cosine_similarity(seeds, filtered_posts):
 
     # TODO: sentence or post?
 
+    #seeds = [{'_id': 'seed1', 
+    #    'body': 'asdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfqwer\n\nqwerqwerqwerqwerqwerqewr'}, 
+    #    {'_id': 'seed2', 'body': 'asdfasdfasdfasdfqw\n\n&#x200B;\n\nasdfawerqweqwerqwer\n\nqwerqwerqwer'}]
+    #filtered_posts = [{'_id': 'gk0p7ra', 'body': 'asdfasdfasdfasdfasdfasdffasdfasdfasdfasdfasdfasdfasdfasdfqwer\n\nqwerqwerqwerqwerqwerqewr'}, {'_id': 'l1p3je', 'body': 'asdfasdfasdfasdfqw\n\n&#x200B;\n\nasdfawerqweqwerqwer\n\nqwerqwerqwer'}]
+    
+    #seeds = [{'_id': 'seed1', 'body': 'haha'}]
+    #filtered_posts = [{'_id':'sample1', 'body': 'haha'}]
+    print(len(seeds))
     # get ML embeddings for seed samples
     seed_embs = []
     for seed in seeds:
         seed_emb, _ = process_and_return_embedding(seed['body'])
-        seed_embs.append(np.mean(seed_emb, axis=0))
-
+        # print(np.array(seed_emb).shape) # number of sentences, 768 
+        seed_embs.append(np.mean(seed_emb, axis=0)) # 768
+   
+    
     # get ML embeddings for filtered posts
     filtered_embs = []
     for filtered_post in filtered_posts:
         filtered_emb, _ = process_and_return_embedding(filtered_post['body'])
-        filtered_embs.append(filtered_emb)
+        filtered_embs.append(np.mean(filtered_emb, axis=0))
+        #print(filtered_embs[-1].shape) # 768
 
     filtered_embs = np.array(filtered_embs) # [# of filtered posts, dim]
-
+    
     # get average ML embedding
     seed_avg_emb = np.mean(np.array(seed_embs), axis=0).reshape(1, -1) # [1, dim]
 
