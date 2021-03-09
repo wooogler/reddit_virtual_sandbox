@@ -21,9 +21,9 @@ export const getPostsRefresh = (): ThunkAction<
   unknown,
   Action<string>
 > => (dispatch, getState) => {
-  dispatch(postActions.getAllPosts());
-  dispatch(postActions.getFilteredPosts());
-  dispatch(postActions.getUnfilteredPosts());
+  dispatch(postActions.getAllPosts(getState().post.posts.all.page));
+  dispatch(postActions.getFilteredPosts(getState().post.posts.filtered.page));
+  dispatch(postActions.getUnfilteredPosts(getState().post.posts.unfiltered.page));
 };
 
 export const getSpamsRefresh = (): ThunkAction<
@@ -32,9 +32,10 @@ export const getSpamsRefresh = (): ThunkAction<
   unknown,
   Action<string>
 > => (dispatch, getState) => {
-  dispatch(postActions.getAllSpams());
-  dispatch(postActions.getFilteredSpams());
-  dispatch(postActions.getUnfilteredSpams());
+
+  dispatch(postActions.getAllSpams(getState().post.spams.all.page));
+  dispatch(postActions.getFilteredSpams(getState().post.spams.filtered.page));
+  dispatch(postActions.getUnfilteredSpams(getState().post.spams.unfiltered.page));
 };
 
 export const deletePosts = createAsyncThunk<
@@ -63,13 +64,14 @@ export const movePosts = createAsyncThunk<void, string[], { state: RootState }>(
   },
 );
 
-export const applySeeds = createAsyncThunk<void, string[], {state: RootState}> (
-  'post/applySeeds',
-  async (ids, thunkAPI) => {
-    const token = thunkAPI.getState().user.token;
-    await applySeedsAPI(token, ids);
-  },
-)
+export const applySeeds = createAsyncThunk<
+  void,
+  string[],
+  { state: RootState }
+>('post/applySeeds', async (ids, thunkAPI) => {
+  const token = thunkAPI.getState().user.token;
+  await applySeedsAPI(token, ids);
+});
 
 export const moveSpams = createAsyncThunk<void, string[], { state: RootState }>(
   'post/moveSpams',
