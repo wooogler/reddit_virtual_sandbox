@@ -19,7 +19,7 @@ import { getMatch } from '../../lib/utils/match';
 import SpamItem from './SpamItem';
 import ListHeader from './ListHeader';
 import BarRate from '../vis/BarRate';
-import { Empty } from 'antd';
+import { Empty, Pagination } from 'antd';
 
 interface SpamListProps {
   spamsAll: Spam[];
@@ -52,38 +52,10 @@ function SpamList({
   spamSpan,
 }: SpamListProps) {
   const dispatch: AppDispatch = useDispatch();
-  const [targetAll, setTargetAll] = useState<any>(null);
-  const [targetFiltered, setTargetFiltered] = useState<any>(null);
-  const [targetUnfiltered, setTargetUnfiltered] = useState<any>(null);
   const count = useSelector(postSelector.count);
-
-  useInfiniteScroll({
-    target: targetAll,
-    onIntersect: ([{ isIntersecting }]) => {
-      if (isIntersecting) {
-        dispatch(postActions.getAllSpamsMore());
-      }
-    },
-    threshold: 0.7,
-  });
-  useInfiniteScroll({
-    target: targetFiltered,
-    onIntersect: ([{ isIntersecting }]) => {
-      if (isIntersecting) {
-        dispatch(postActions.getFilteredSpamsMore());
-      }
-    },
-    threshold: 0.7,
-  });
-  useInfiniteScroll({
-    target: targetUnfiltered,
-    onIntersect: ([{ isIntersecting }]) => {
-      if (isIntersecting) {
-        dispatch(postActions.getUnfilteredSpamsMore());
-      }
-    },
-    threshold: 0.7,
-  });
+  const spamPageAll = useSelector(postSelector.spamPageAll);
+  const spamPageFiltered = useSelector(postSelector.spamPageFiltered);
+  const spamPageUnfiltered = useSelector(postSelector.spamPageUnfiltered);
 
   const handleClickMove = () => {
     dispatch(movePosts(selectedPostId)).then(() => {
@@ -130,7 +102,10 @@ function SpamList({
         userImported={spamUserImported}
         span={spamSpan}
       />
-      <div onClick={handleClickBar} className="cursor-pointer hover:opacity-70  mb-2">
+      <div
+        onClick={handleClickBar}
+        className="cursor-pointer hover:opacity-70  mb-2"
+      >
         <BarRate total={count.spams.all} part={count.spams.filtered} />
       </div>
       <SplitPaneDiv className="flex-1 overflow-y-auto">
@@ -141,40 +116,80 @@ function SpamList({
             style={{ position: 'relative' }}
             paneStyle={{ overflow: 'auto' }}
           >
-            <div className="w-full">
+            <div className="w-full h-full flex flex-col">
               <div className="flex justify-center sticky bg-white top-0 z-10">
                 ▼ Filtered by Automod
               </div>
-              {spamsFiltered.length !== 0 ? (
-                spamsFiltered.map((spam) => {
-                  return (
-                    <SpamItem
-                      spam={spam}
-                      selected={selectedSpamId.includes(spam._id)}
-                      isMatched={spam.matching_rules.length !== 0}
-                      match={getMatch(code, spam)}
-                      key={spam._id}
-                    />
-                  );
-                })
-              ) : (
-                <div className="flex justify-center items-center h-full">
-                  <Empty description="No unfiltered spam" />
-                </div>
-              )}
-              {spamsFiltered.length > 8 && (
-                <div
-                  ref={setTargetFiltered}
-                  className="last-item-filtered"
-                ></div>
-              )}
+              <div className="flex-1 overflow-auto">
+                {spamsFiltered.length !== 0 ? (
+                  spamsFiltered.map((spam) => {
+                    return (
+                      <SpamItem
+                        spam={spam}
+                        selected={selectedSpamId.includes(spam._id)}
+                        isMatched={spam.matching_rules.length !== 0}
+                        match={getMatch(code, spam)}
+                        key={spam._id}
+                      />
+                    );
+                  })
+                ) : (
+                  <div className="flex justify-center items-center h-full">
+                    <Empty description="No unfiltered spam" />
+                  </div>
+                )}
+              </div>
+              <div className="m-1 justify-center items-center flex">
+                <Pagination
+                  current={spamPageFiltered}
+                  total={count.spams.filtered}
+                  onChange={(page) => {
+                    dispatch(postActions.getFilteredSpams(page));
+                  }}
+                  simple
+                />
+              </div>
             </div>
-            <div className="w-full h-full">
+            <div className="w-full h-full flex flex-col">
               <div className="flex justify-center sticky bg-white top-0 z-10">
                 ▼ Not Filtered by Automod
               </div>
-              {spamsUnfiltered.length !== 0 ? (
-                spamsUnfiltered.map((spam) => {
+              <div className="flex-1 overflow-auto">
+                {spamsUnfiltered.length !== 0 ? (
+                  spamsUnfiltered.map((spam) => {
+                    return (
+                      <SpamItem
+                        spam={spam}
+                        selected={selectedSpamId.includes(spam._id)}
+                        isMatched={spam.matching_rules.length !== 0}
+                        match={getMatch(code, spam)}
+                        key={spam._id}
+                      />
+                    );
+                  })
+                ) : (
+                  <div className="flex justify-center items-center h-full">
+                    <Empty description="No unfiltered post" />
+                  </div>
+                )}
+              </div>
+              <div className="m-1 justify-center items-center flex">
+                <Pagination
+                  current={spamPageUnfiltered}
+                  total={count.spams.unfiltered}
+                  onChange={(page) => {
+                    dispatch(postActions.getUnfilteredSpams(page));
+                  }}
+                  simple
+                />
+              </div>
+            </div>
+          </SplitPane>
+        ) : (
+          <div className="w-full h-full flex flex-col">
+            <div className="flex-1 overflow-auto">
+              {spamsAll.length !== 0 ? (
+                spamsAll.map((spam) => {
                   return (
                     <SpamItem
                       spam={spam}
@@ -187,40 +202,21 @@ function SpamList({
                 })
               ) : (
                 <div className="flex justify-center items-center h-full">
-                  <Empty description="No unfiltered post" />
+                  <Empty description="Import moderated posts" />
                 </div>
               )}
-              {spamsUnfiltered.length > 8 && (
-                <div
-                  ref={setTargetUnfiltered}
-                  className="last-item-unfiltered"
-                ></div>
-              )}
             </div>
-          </SplitPane>
-        ) : (
-          <>
-            {spamsAll.length !== 0 ? (
-              spamsAll.map((spam) => {
-                return (
-                  <SpamItem
-                    spam={spam}
-                    selected={selectedSpamId.includes(spam._id)}
-                    isMatched={spam.matching_rules.length !== 0}
-                    match={getMatch(code, spam)}
-                    key={spam._id}
-                  />
-                );
-              })
-            ) : (
-              <div className="flex justify-center items-center h-full">
-                <Empty description="Import moderated posts" />
-              </div>
-            )}
-            {spamsAll.length > 8 && (
-              <div ref={setTargetAll} className="last-item-all"></div>
-            )}
-          </>
+            <div className="m-1 justify-center items-center flex">
+              <Pagination
+                current={spamPageAll}
+                total={count.spams.all}
+                onChange={(page) => {
+                  dispatch(postActions.getAllSpams(page));
+                }}
+                simple
+              />
+            </div>
+          </div>
         )}
       </SplitPaneDiv>
     </div>

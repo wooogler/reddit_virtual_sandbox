@@ -41,6 +41,7 @@ function PostItem({ post, isMatched, match }: PostItemProps) {
           comment={post}
         />
       )}
+      <div>{post.similarity}</div>
     </div>
   );
 }
