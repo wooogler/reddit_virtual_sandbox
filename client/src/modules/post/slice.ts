@@ -20,7 +20,7 @@ import {
 } from './actions';
 
 export type PostType = 'submission' | 'comment' | 'all';
-export type SortType = 'new' | 'old';
+export type SortType = 'new' | 'old' | 'votes_desc' | 'votes_asc' | 'fpfn';
 export type SpamSortType =
   | 'created-new'
   | 'created-old'

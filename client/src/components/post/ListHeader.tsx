@@ -167,6 +167,7 @@ function ListHeader({
               <Option value="old">Old</Option>
               <Option value="votes_desc">more votes</Option>
               <Option value="votes_asc">less votes</Option>
+              <Option value='fpfn'>FP & FN</Option>
             </Select>
           ) : (
             <Select

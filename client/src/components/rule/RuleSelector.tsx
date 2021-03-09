@@ -32,19 +32,18 @@ function RuleSelector({ editables, loadingRule }: RuleSelectorProps) {
   const error = ruleState.error;
 
   useEffect(() => {
-    if(error) {
+    if (error) {
       notification.error({
         message: 'Parsing Error',
         description: error,
-      })
+      });
     }
   }, [error]);
-
-  
 
   const treeDataOriginal = makeTree(editables);
 
   const onCheck = (checkedKeys: any, info: any) => {
+    console.log(treeDataOriginal);
     const treeData = cloneDeep(treeDataOriginal);
     const tree = keysToTree(treeData, [
       ...checkedKeys,
