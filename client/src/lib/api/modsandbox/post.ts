@@ -255,6 +255,7 @@ export type Post = {
   domain: string;
   url: string;
   votes: number;
+  similarity: number;
 };
 
 export type NewPost = {

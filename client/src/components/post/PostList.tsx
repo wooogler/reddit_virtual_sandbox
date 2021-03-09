@@ -20,7 +20,7 @@ import PostItem from './PostItem';
 import { getMatch } from '../../lib/utils/match';
 import ListHeader from './ListHeader';
 import BarRate from '../vis/BarRate';
-import { Empty } from 'antd';
+import { Empty, Pagination } from 'antd';
 
 interface PostListProps {
   postsAll: Post[];
@@ -53,38 +53,10 @@ function PostList({
   postSpan,
 }: PostListProps) {
   const dispatch: AppDispatch = useDispatch();
-  const [targetAll, setTargetAll] = useState<any>(null);
-  const [targetFiltered, setTargetFiltered] = useState<any>(null);
-  const [targetUnfiltered, setTargetUnfiltered] = useState<any>(null);
   const count = useSelector(postSelector.count);
-
-  useInfiniteScroll({
-    target: targetAll,
-    onIntersect: ([{ isIntersecting }]) => {
-      if (isIntersecting) {
-        dispatch(postActions.getAllPostsMore());
-      }
-    },
-    threshold: 0.7,
-  });
-  useInfiniteScroll({
-    target: targetFiltered,
-    onIntersect: ([{ isIntersecting }]) => {
-      if (isIntersecting) {
-        dispatch(postActions.getFilteredPostsMore());
-      }
-    },
-    threshold: 0.7,
-  });
-  useInfiniteScroll({
-    target: targetUnfiltered,
-    onIntersect: ([{ isIntersecting }]) => {
-      if (isIntersecting) {
-        dispatch(postActions.getUnfilteredPostsMore());
-      }
-    },
-    threshold: 0.7,
-  });
+  const pageAll = useSelector(postSelector.pageAll);
+  const pageFiltered = useSelector(postSelector.pageFiltered);
+  const pageUnfiltered = useSelector(postSelector.pageUnfiltered);
 
   const handleClickMove = () => {
     dispatch(moveSpams(selectedSpamPostId)).then(() => {
@@ -154,40 +126,80 @@ function PostList({
             style={{ position: 'relative' }}
             paneStyle={{ overflow: 'auto' }}
           >
-            <div className="w-full">
+            <div className="w-full h-full flex flex-col">
               <div className="flex justify-center sticky bg-white top-0 z-10">
                 ▼ Filtered by Automod
               </div>
-              {postsFiltered.length !== 0 ? (
-                postsFiltered.map((post) => {
-                  return (
-                    <PostItem
-                      post={post}
-                      selected={selectedPostId.includes(post._id)}
-                      isMatched={post.matching_rules.length !== 0}
-                      match={getMatch(code, post)}
-                      key={post._id}
-                    />
-                  );
-                })
-              ) : (
-                <div className="flex justify-center items-center h-full">
-                  <Empty description="No filtered post" />
-                </div>
-              )}
-              {postsFiltered.length > 8 && (
-                <div
-                  ref={setTargetFiltered}
-                  className="last-item-filtered"
-                ></div>
-              )}
+              <div className="flex-1 overflow-auto">
+                {postsFiltered.length !== 0 ? (
+                  postsFiltered.map((post) => {
+                    return (
+                      <PostItem
+                        post={post}
+                        selected={selectedPostId.includes(post._id)}
+                        isMatched={post.matching_rules.length !== 0}
+                        match={getMatch(code, post)}
+                        key={post._id}
+                      />
+                    );
+                  })
+                ) : (
+                  <div className="flex justify-center items-center h-full">
+                    <Empty description="No filtered post" />
+                  </div>
+                )}
+              </div>
+              <div className="m-1 justify-center items-center flex">
+                <Pagination
+                  current={pageFiltered}
+                  total={count.posts.filtered}
+                  onChange={(page) => {
+                    dispatch(postActions.getFilteredPosts(page));
+                  }}
+                  simple
+                />
+              </div>
             </div>
-            <div className="w-full h-full">
+            <div className="w-full h-full flex flex-col">
               <div className="flex justify-center sticky bg-white top-0 z-10">
                 ▼ Not Filtered by Automod
               </div>
-              {postsUnfiltered.length !== 0 ? (
-                postsUnfiltered.map((post) => {
+              <div className="flex-1 overflow-auto">
+                {postsUnfiltered.length !== 0 ? (
+                  postsUnfiltered.map((post) => {
+                    return (
+                      <PostItem
+                        post={post}
+                        selected={selectedPostId.includes(post._id)}
+                        isMatched={post.matching_rules.length !== 0}
+                        match={getMatch(code, post)}
+                        key={post._id}
+                      />
+                    );
+                  })
+                ) : (
+                  <div className="flex justify-center items-center h-full">
+                    <Empty description="No unfiltered post" />
+                  </div>
+                )}
+              </div>
+              <div className="m-1 justify-center items-center flex">
+                <Pagination
+                  current={pageUnfiltered}
+                  total={count.posts.unfiltered}
+                  onChange={(page) => {
+                    dispatch(postActions.getUnfilteredPosts(page));
+                  }}
+                  simple
+                />
+              </div>
+            </div>
+          </SplitPane>
+        ) : (
+          <div className="w-full h-full flex flex-col">
+            <div className="flex-1 overflow-auto">
+              {postsAll.length !== 0 ? (
+                postsAll.map((post) => {
                   return (
                     <PostItem
                       post={post}
@@ -199,40 +211,21 @@ function PostList({
                   );
                 })
               ) : (
-                <div className="flex justify-center items-center h-full">
-                  <Empty description="No unfiltered post" />
+                <div className="flex justify-center items-center flex-1">
+                  <Empty description="Import subreddit posts" />
                 </div>
               )}
-              {postsUnfiltered.length > 8 && (
-                <div
-                  ref={setTargetUnfiltered}
-                  className="last-item-unfiltered"
-                ></div>
-              )}
             </div>
-          </SplitPane>
-        ) : (
-          <div className="h-full">
-            {postsAll.length !== 0 ? (
-              postsAll.map((post) => {
-                return (
-                  <PostItem
-                    post={post}
-                    selected={selectedPostId.includes(post._id)}
-                    isMatched={post.matching_rules.length !== 0}
-                    match={getMatch(code, post)}
-                    key={post._id}
-                  />
-                );
-              })
-            ) : (
-              <div className="flex justify-center items-center h-full">
-                <Empty description="Import subreddit posts" />
-              </div>
-            )}
-            {postsAll.length > 8 && (
-              <div ref={setTargetAll} className="last-item-all"></div>
-            )}
+            <div className="m-1 justify-center items-center flex">
+              <Pagination
+                current={pageAll}
+                total={count.posts.all}
+                onChange={(page) => {
+                  dispatch(postActions.getAllPosts(page));
+                }}
+                simple
+              />
+            </div>
           </div>
         )}
       </SplitPaneDiv>

@@ -11,7 +11,13 @@ import {
   Post,
   Spam,
 } from '../../lib/api/modsandbox/post';
-import { addPost, addSpam, applySeeds, deletePosts, deleteSpams } from './actions';
+import {
+  addPost,
+  addSpam,
+  applySeeds,
+  deletePosts,
+  deleteSpams,
+} from './actions';
 
 export type PostType = 'submission' | 'comment' | 'all';
 export type SortType = 'new' | 'old';
@@ -107,17 +113,17 @@ export const initialState: PostState = {
   posts: {
     all: {
       data: [],
-      page: 0,
+      page: 1,
       count: 0,
     },
     filtered: {
       data: [],
-      page: 0,
+      page: 1,
       count: 0,
     },
     unfiltered: {
       data: [],
-      page: 0,
+      page: 1,
       count: 0,
     },
     import: {
@@ -144,17 +150,17 @@ export const initialState: PostState = {
   spams: {
     all: {
       data: [],
-      page: 0,
+      page: 1,
       count: 0,
     },
     filtered: {
       data: [],
-      page: 0,
+      page: 1,
       count: 0,
     },
     unfiltered: {
       data: [],
-      page: 0,
+      page: 1,
       count: 0,
     },
     import: {
@@ -188,56 +194,54 @@ const postSlice = createSlice({
   name: 'post',
   initialState,
   reducers: {
-    getAllPosts: (state) => {
+    getAllPosts: (state, action: PayloadAction<number>) => {
       state.posts.loading = true;
-      state.posts.all.page = 0;
       state.posts.all.data = [];
+      state.posts.all.page = action.payload;
     },
     getAllPostsSuccess: (
       state,
-      action: PayloadAction<{ data: Post[]; nextPage: number; count: number }>,
+      action: PayloadAction<{ data: Post[]; page: number; count: number }>,
     ) => {
       state.posts.all.data = action.payload.data;
       state.posts.loading = false;
-      state.posts.all.page = action.payload.nextPage;
+      state.posts.all.page = action.payload.page;
       state.posts.all.count = action.payload.count;
     },
     getAllPostsError: (state, action: PayloadAction<Error>) => {
       state.posts.error = action.payload;
       state.posts.loading = false;
     },
-    getAllPostsMore: () => {},
-    getFilteredPosts: (state) => {
+    getFilteredPosts: (state, action: PayloadAction<number>) => {
       state.posts.loading = true;
-      state.posts.filtered.page = 0;
+      state.posts.filtered.page = action.payload;
       state.posts.filtered.data = [];
     },
     getFilteredPostsSuccess: (
       state,
-      action: PayloadAction<{ data: Post[]; nextPage: number; count: number }>,
+      action: PayloadAction<{ data: Post[]; page: number; count: number }>,
     ) => {
       state.posts.filtered.data = action.payload.data;
       state.posts.loading = false;
-      state.posts.filtered.page = action.payload.nextPage;
+      state.posts.filtered.page = action.payload.page;
       state.posts.filtered.count = action.payload.count;
     },
     getFilteredPostsError: (state, action: PayloadAction<Error>) => {
       state.posts.error = action.payload;
       state.posts.loading = false;
     },
-    getFilteredPostsMore: () => {},
-    getUnfilteredPosts: (state) => {
+    getUnfilteredPosts: (state, action: PayloadAction<number>) => {
       state.posts.loading = true;
-      state.posts.unfiltered.page = 0;
+      state.posts.unfiltered.page = action.payload;
       state.posts.unfiltered.data = [];
     },
     getUnfilteredPostsSuccess: (
       state,
-      action: PayloadAction<{ data: Post[]; nextPage: number; count: number }>,
+      action: PayloadAction<{ data: Post[]; page: number; count: number }>,
     ) => {
       state.posts.unfiltered.data = action.payload.data;
       state.posts.loading = false;
-      state.posts.unfiltered.page = action.payload.nextPage;
+      state.posts.unfiltered.page = action.payload.page;
       state.posts.unfiltered.count = action.payload.count;
     },
     getUnfilteredPostsError: (state, action: PayloadAction<Error>) => {
@@ -252,63 +256,60 @@ const postSlice = createSlice({
     changeSortType: (state, action: PayloadAction<SortType>) => {
       state.posts.sort = action.payload;
     },
-    getAllSpams: (state) => {
+    getAllSpams: (state, action: PayloadAction<number>) => {
       state.spams.loading = true;
-      state.spams.all.page = 0;
+      state.spams.all.page = action.payload;
       state.spams.all.data = [];
     },
     getAllSpamsSuccess: (
       state,
-      action: PayloadAction<{ data: Spam[]; nextPage: number; count: number }>,
+      action: PayloadAction<{ data: Spam[]; page: number; count: number }>,
     ) => {
       state.spams.all.data = action.payload.data;
       state.spams.loading = false;
-      state.spams.all.page = action.payload.nextPage;
+      state.spams.all.page = action.payload.page;
       state.spams.all.count = action.payload.count;
     },
     getAllSpamsError: (state, action: PayloadAction<Error>) => {
       state.spams.error = action.payload;
       state.spams.loading = false;
     },
-    getAllSpamsMore: () => {},
-    getFilteredSpams: (state) => {
+    getFilteredSpams: (state, action: PayloadAction<number>) => {
       state.spams.loading = true;
-      state.spams.filtered.page = 0;
+      state.spams.filtered.page = action.payload;
       state.spams.filtered.data = [];
     },
     getFilteredSpamsSuccess: (
       state,
-      action: PayloadAction<{ data: Spam[]; nextPage: number; count: number }>,
+      action: PayloadAction<{ data: Spam[]; page: number; count: number }>,
     ) => {
       state.spams.filtered.data = action.payload.data;
       state.spams.loading = false;
-      state.spams.filtered.page = action.payload.nextPage;
+      state.spams.filtered.page = action.payload.page;
       state.spams.filtered.count = action.payload.count;
     },
     getFilteredSpamsError: (state, action: PayloadAction<Error>) => {
       state.spams.error = action.payload;
       state.spams.loading = false;
     },
-    getFilteredSpamsMore: () => {},
-    getUnfilteredSpams: (state) => {
+    getUnfilteredSpams: (state, action: PayloadAction<number>) => {
       state.spams.loading = true;
-      state.spams.unfiltered.page = 0;
+      state.spams.unfiltered.page = action.payload;
       state.spams.unfiltered.data = [];
     },
     getUnfilteredSpamsSuccess: (
       state,
-      action: PayloadAction<{ data: Spam[]; nextPage: number; count: number }>,
+      action: PayloadAction<{ data: Spam[]; page: number; count: number }>,
     ) => {
       state.spams.unfiltered.data = action.payload.data;
       state.spams.loading = false;
-      state.spams.unfiltered.page = action.payload.nextPage;
+      state.spams.unfiltered.page = action.payload.page;
       state.spams.unfiltered.count = action.payload.count;
     },
     getUnfilteredSpamsError: (state, action: PayloadAction<Error>) => {
       state.spams.error = action.payload;
       state.spams.loading = false;
     },
-    getUnfilteredSpamsMore: () => {},
     getSpamsRefresh: () => {},
     changeSpamType: (state, action: PayloadAction<PostType>) => {
       state.spams.type = action.payload;
@@ -458,7 +459,7 @@ const postSlice = createSlice({
       .addCase(applySeeds.rejected, (state, action) => {
         state.spams.applySeeds.loading = false;
         state.spams.applySeeds.error = action.error;
-      })
+      });
   },
 });
 
