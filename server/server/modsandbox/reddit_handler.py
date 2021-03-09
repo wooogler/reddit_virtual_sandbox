@@ -72,7 +72,7 @@ class RedditHandler():
     def project_submission(post):
         return {
             'author': post['author'],
-            'body': '[no content]' if post.get('selftext', '')=='' else post.get('selftext', ''),
+            'body': post.get('selftext', ''),
             'created_utc': datetime.fromtimestamp(post['created_utc'], tz=timezone.utc),
             'full_link': post['full_link'],
             '_id': post['id'],
@@ -87,7 +87,7 @@ class RedditHandler():
     def project_comment(post):
         return {
             'author': post['author'],
-            'body': '[no content]' if post.get('body', '') == '' else post.get('body', ''),
+            'body': post.get('body', ''),
             'created_utc': datetime.fromtimestamp(post['created_utc'], tz=timezone.utc),
             'full_link': 'https://www.reddit.com' + post['permalink'],
             '_id': post['id'],
