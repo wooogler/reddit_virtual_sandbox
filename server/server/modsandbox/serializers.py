@@ -51,4 +51,5 @@ class PostSerializer(serializers.ModelSerializer):
             "votes",
             "domain",
             "url",
+            "similarity",
         ]

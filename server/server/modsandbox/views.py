@@ -335,9 +335,9 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
             seeds = Post.objects.filter(_id__in=ids) # Moderated에서 seed로 선택된 포스트들의 집합
             used_posts = queryset.filter(_id__in=profile.used_posts.all())
             # filtered_posts = queryset.filter(matching_rules__in=profile.user.rules.all()) # Posts에서 필터링된 포스트들의 집합
-            seeds_array = [{'_id': seed._id, 'body': seed.title} for seed in seeds] # 이렇게 array를 만든 후에 사용해야 함 (dict[])
+            seeds_array = [{'_id': seed._id, 'body': seed.body} for seed in seeds] # 이렇게 array를 만든 후에 사용해야 함 (dict[])
             # filtered_posts_array = [{'_id': post._id, 'body': post.body} for post in filtered_posts] # 이렇게 array를 만든 후에 사용해야 함 (dict[])
-            posts_array = [{'_id': post._id, 'body': post.title} for post in used_posts]
+            posts_array = [{'_id': post._id, 'body': post.body} for post in used_posts]
             
             # 출력 결과
             #seeds_array = [{'_id': 'gk0p7ra', 'body': 'asdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfasdfqwer\n\nqwerqwerqwerqwerqwerqewr'}, {'_id': 'l1p3je', 'body': 'asdfasdfasdfasdfqw\n\n&#x200B;\n\nasdfawerqweqwerqwer\n\nqwerqwerqwer'}]
@@ -347,7 +347,8 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
             # 여기에 구현하시면 됩니다. 
 
             # compute similarities between seed and filtered posts 
-            # print([post['body'] for post in posts_array])
+            print('posts_array', [post['body'] for post in posts_array])
+            print('seeds_array', [post['body'] for post in seeds_array])
             similarities = compute_cosine_similarity(seeds_array, posts_array) # example of return: [1, 0.8, ..., 0.7] 
             for i, post in enumerate(used_posts):
                 post.similarity = similarities[i]
