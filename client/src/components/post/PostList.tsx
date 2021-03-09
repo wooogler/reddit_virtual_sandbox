@@ -246,7 +246,7 @@ const SplitPaneDiv = styled.div`
     background-color: ${palette.blue[2]};
     cursor: row-resize;
     width: 100%;
-    z-index: 100;
+    z-index: 1;
   }
   .last-item-all {
     width: 100%;
