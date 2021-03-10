@@ -2,6 +2,7 @@ import re
 import unicodedata
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.feature_extraction.text import CountVectorizer
+import spacy
 
 from nltk.tokenize import sent_tokenize
 from nltk.corpus import stopwords
@@ -16,6 +17,9 @@ name_regex = "[^]]+"
 url_regex = "http[s]?://[^)]+"
 # Define model
 model = SentenceTransformer('distilbert-base-nli-stsb-mean-tokens')
+
+# load the language model
+nlp = spacy.load('en_core_web_md')
 
 def fraction_finder(text):
     passed = []
@@ -67,6 +71,33 @@ def process_and_return_embedding(raw):
 
     return (sentence_embeddings, processed_sentences)
 
+def word_similarity(word1, word2): 
+    token1 = nlp(word1)[0]
+    token2 = nlp(word2)[0]
+    return token1.similarity(token2)
+
+def compute_word_frequency_similarity(posts, keyword):
+    documents = []
+    for post in posts:
+        _, processed_sentences = process_and_return_embedding(post['body'])
+        document = ' '.join(processed_sentences)
+        documents.append(document)
+
+    vector = CountVectorizer(stop_words=stopwords.words('english'), min_df = 1)
+    dtm = vector.fit_transform(documents).toarray()
+    np_dtm = np.sum(dtm, axis=0) #[0,1]
+    vocab = vector.vocabulary_ #{'key1': 1, 'key2': 0}
+
+    word_freq_sim = [] #[{'word': 'key1', 'freq': 1, 'sim': 0.1}, {'word': 'key2', 'freq': 0, 'sim': 0.3}]
+    for key, val in vocab.items():
+        vocab_df = {}
+        vocab_df['word'] = key
+        vocab_df['freq'] = np_dtm[val]
+        vocab_df['sim'] = word_similarity(key, keyword)
+        word_freq_sim.append(vocab_df)
+    
+    return word_freq_sim
+
 def compute_cosine_similarity(seeds, filtered_posts):
 
     '''
@@ -86,10 +117,8 @@ def compute_cosine_similarity(seeds, filtered_posts):
     print(len(seeds))
     # get ML embeddings for seed samples
     seed_embs = []
-    seed_documents = []
     for seed in seeds:
-        seed_emb, seed_processed_sentences = process_and_return_embedding(seed['body'])
-        seed_document = ' '.join(seed_processed_sentences)
+        seed_emb, _ = process_and_return_embedding(seed['body'])
         seed_documents.append(seed_document)
         # print(np.array(seed_emb).shape) # number of sentences, 768 
         seed_embs.append(np.mean(seed_emb, axis=0)) # 768
@@ -97,24 +126,10 @@ def compute_cosine_similarity(seeds, filtered_posts):
     
     # get ML embeddings for filtered posts
     filtered_embs = []
-    filtered_documents = []
     for filtered_post in filtered_posts:
-        filtered_emb, filtered_processed_sentences = process_and_return_embedding(filtered_post['body'])
-        filtered_document = ' '.join(filtered_processed_sentences)
-        filtered_documents.append(filtered_document)
+        filtered_emb, _ = process_and_return_embedding(filtered_post['body'])
         filtered_embs.append(np.mean(filtered_emb, axis=0))
         #print(filtered_embs[-1].shape) # 768
-
-    vector = CountVectorizer(stop_words=stopwords.words('english'), min_df = 1)
-    dtm = vector.fit_transform(filtered_documents).toarray()
-    np_dtm = np.sum(dtm, axis=0)
-    vocab = vector.vocabulary_
-    vocab_df = {}
-    for key, val in vocab.items():
-        vocab_df[key] = np_dtm[val]
-    
-    print(vocab_df)
-
 
     filtered_embs = np.array(filtered_embs) # [# of filtered posts, dim]
     

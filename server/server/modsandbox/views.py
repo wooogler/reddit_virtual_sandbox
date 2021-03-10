@@ -17,7 +17,7 @@ from .automod import Ruleset, RuleTarget
 from .pagintations import PostPagination
 from .reddit_handler import RedditHandler
 from .file_handler import FileHandler
-from .ml import compute_cosine_similarity
+from .ml import compute_cosine_similarity, compute_word_frequency_similarity
 
 
 logger = logging.getLogger(__name__)
@@ -337,8 +337,9 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
         if request.user:
             profile = Profile.objects.get(user=request.user.id)
             seeds = Post.objects.filter(_id__in=ids) # Moderated에서 seed로 선택된 포스트들의 집합
-            used_posts = queryset.filter(_id__in=profile.used_posts.all())
-            # filtered_posts = queryset.filter(matching_rules__in=profile.user.rules.all()) # Posts에서 필터링된 포스트들의 집합
+            used_posts = queryset.filter(_id__in=profile.used_posts.all()) # Posts에 불러온 모든 포스트
+            filtered_posts = queryset.filter(matching_rules__in=profile.user.rules.all()) # Posts에서 필터링된 포스트들의 집합
+            unfiltered_posts = queryset.exclude(matching_rules__in=profile.user.rules.all()) # 똑같은데 필터링 되지않은 포스트들
             seeds_array = [{'_id': seed._id, 'body': seed.body if seed.body != '' else seed.title} for seed in seeds] # 이렇게 array를 만든 후에 사용해야 함 (dict[])
             # filtered_posts_array = [{'_id': post._id, 'body': post.body} for post in filtered_posts] # 이렇게 array를 만든 후에 사용해야 함 (dict[])
             posts_array = [{'_id': post._id, 'body': post.body if post.body not in ['', '[removed]']  else post.title} for post in used_posts]
@@ -358,8 +359,26 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
             # assert len(similarities) == len(filtered_post_array)
             # return Response({'_id': post._id, 'similarity': similarities[i]} for i, post in enumerate(filtered_posts))
         return Response(status=status.HTTP_401_UNAUTHORIZED)
-        
 
+    @action(methods=["post"], detail=False)
+    def word_variation(self, request):
+        try:
+            keyword = request.data["keyword"]
+        except Exception as e:
+            logger.error(e)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        
+        queryset=super().get_queryset()
+        if request.user:
+            profile = Profile.objects.get(user=request.user.id)
+            used_posts = queryset.filter(_id__in=profile.used_posts.all())
+            posts_array = [{'_id': post._id, 'body': post.body if post.body not in ['', '[removed]']  else post.title} for post in used_posts]
+
+            word_freq_sim = compute_word_frequency_similarity(posts_array, keyword)
+            print(word_freq_sim)
+            return Response(word_freq_sim)
+
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 
 class SpamHandlerViewSet(viewsets.ModelViewSet):
