@@ -33,7 +33,7 @@ def fraction_finder(text):
             passed.append(s)
     return ''.join(passed)
 
-def process_and_return_embedding(raw):
+def process_and_return_embedding(raw, is_embedding):
     raw = unicodedata.normalize("NFKD", raw)
     sentences = sent_tokenize(raw) # split post into sentences
     processed_sentences = []
@@ -64,12 +64,16 @@ def process_and_return_embedding(raw):
         if len(text) > 0:
             processed_sentences.append(text)
 
-    if processed_sentences == []:
-        processed_sentences=['no content']
-    
-    sentence_embeddings = model.encode(processed_sentences)
+    if is_embedding == True:
+        if processed_sentences == []:
+            processed_sentences=['no content']
+        
+        sentence_embeddings = model.encode(processed_sentences)
 
-    return (sentence_embeddings, processed_sentences)
+        return sentence_embeddings
+
+    else:
+        return processed_sentences
 
 def word_similarity(word1, word2): 
     token1 = nlp(word1)[0]
@@ -79,11 +83,11 @@ def word_similarity(word1, word2):
 def compute_word_frequency_similarity(posts, keyword):
     documents = []
     for post in posts:
-        _, processed_sentences = process_and_return_embedding(post['body'])
+        processed_sentences = process_and_return_embedding(post['body'], False)
         document = ' '.join(processed_sentences)
         documents.append(document)
 
-    vector = CountVectorizer(stop_words=stopwords.words('english'), min_df = 1)
+    vector = CountVectorizer(stop_words=stopwords.words('english'), min_df = 2, ngram_range=(1,2), binary=True)
     dtm = vector.fit_transform(documents).toarray()
     np_dtm = np.sum(dtm, axis=0) #[0,1]
     vocab = vector.vocabulary_ #{'key1': 1, 'key2': 0}
@@ -97,6 +101,27 @@ def compute_word_frequency_similarity(posts, keyword):
         word_freq_sim.append(vocab_df)
     
     return word_freq_sim
+
+def compute_word_frequency(posts):
+    documents = []
+    for post in posts:
+        processed_sentences = process_and_return_embedding(post['body'], False)
+        document = ' '.join(processed_sentences)
+        documents.append(document)
+
+    vector = CountVectorizer(stop_words=stopwords.words('english'), min_df = 1, ngram_range=(1,2), binary=True)
+    dtm = vector.fit_transform(documents).toarray()
+    np_dtm = np.sum(dtm, axis=0) #[0,1]
+    vocab = vector.vocabulary_ #{'key1': 1, 'key2': 0}
+
+    word_freq = []
+    for key, val in vocab.items():
+        vocab_df = {}
+        vocab_df['word'] = key
+        vocab_df['freq'] = np_dtm[val]
+        word_freq.append(vocab_df)
+    
+    return word_freq
 
 def compute_cosine_similarity(seeds, filtered_posts):
 
@@ -118,7 +143,7 @@ def compute_cosine_similarity(seeds, filtered_posts):
     # get ML embeddings for seed samples
     seed_embs = []
     for seed in seeds:
-        seed_emb, _ = process_and_return_embedding(seed['body'])
+        seed_emb = process_and_return_embedding(seed['body'], True)
         seed_documents.append(seed_document)
         # print(np.array(seed_emb).shape) # number of sentences, 768 
         seed_embs.append(np.mean(seed_emb, axis=0)) # 768
@@ -127,7 +152,7 @@ def compute_cosine_similarity(seeds, filtered_posts):
     # get ML embeddings for filtered posts
     filtered_embs = []
     for filtered_post in filtered_posts:
-        filtered_emb, _ = process_and_return_embedding(filtered_post['body'])
+        filtered_emb = process_and_return_embedding(filtered_post['body'], True)
         filtered_embs.append(np.mean(filtered_emb, axis=0))
         #print(filtered_embs[-1].shape) # 768
 
