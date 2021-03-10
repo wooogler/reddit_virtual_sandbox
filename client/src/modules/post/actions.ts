@@ -12,6 +12,8 @@ import {
   NewSpam,
   Post,
   Spam,
+  Variation,
+  wordVariationAPI,
 } from '../../lib/api/modsandbox/post';
 import { postActions } from './slice';
 
@@ -23,7 +25,9 @@ export const getPostsRefresh = (): ThunkAction<
 > => (dispatch, getState) => {
   dispatch(postActions.getAllPosts(getState().post.posts.all.page));
   dispatch(postActions.getFilteredPosts(getState().post.posts.filtered.page));
-  dispatch(postActions.getUnfilteredPosts(getState().post.posts.unfiltered.page));
+  dispatch(
+    postActions.getUnfilteredPosts(getState().post.posts.unfiltered.page),
+  );
 };
 
 export const getSpamsRefresh = (): ThunkAction<
@@ -32,11 +36,22 @@ export const getSpamsRefresh = (): ThunkAction<
   unknown,
   Action<string>
 > => (dispatch, getState) => {
-
   dispatch(postActions.getAllSpams(getState().post.spams.all.page));
   dispatch(postActions.getFilteredSpams(getState().post.spams.filtered.page));
-  dispatch(postActions.getUnfilteredSpams(getState().post.spams.unfiltered.page));
+  dispatch(
+    postActions.getUnfilteredSpams(getState().post.spams.unfiltered.page),
+  );
 };
+
+export const wordVariation = createAsyncThunk<
+  Variation[],
+  string,
+  { state: RootState }
+>('post/wordVariation', async (keyword, thunkAPI) => {
+  const token = thunkAPI.getState().user.token;
+  const data = await wordVariationAPI(token, keyword);
+  return data;
+});
 
 export const deletePosts = createAsyncThunk<
   void,

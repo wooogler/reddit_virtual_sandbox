@@ -10,6 +10,7 @@ import {
   ImportSpamQuery,
   Post,
   Spam,
+  Variation,
 } from '../../lib/api/modsandbox/post';
 import {
   addPost,
@@ -17,6 +18,7 @@ import {
   applySeeds,
   deletePosts,
   deleteSpams,
+  wordVariation,
 } from './actions';
 
 export type PostType = 'submission' | 'comment' | 'all';
@@ -57,6 +59,11 @@ export type PostState = {
       loading: boolean;
       error: SerializedError | null;
     };
+    wordVariation: {
+      loading: boolean,
+      error: SerializedError | null, 
+      word_freq_sim: Variation[];
+    }
     loading: boolean;
     error: Error | null;
     type: PostType;
@@ -137,6 +144,11 @@ export const initialState: PostState = {
     add: {
       loading: false,
       error: null,
+    },
+    wordVariation: {
+      loading: false,
+      error: null, 
+      word_freq_sim: []
     },
     loading: false,
     error: null,
@@ -459,7 +471,18 @@ const postSlice = createSlice({
       .addCase(applySeeds.rejected, (state, action) => {
         state.spams.applySeeds.loading = false;
         state.spams.applySeeds.error = action.error;
-      });
+      })
+      .addCase(wordVariation.pending, (state) => {
+        state.posts.wordVariation.loading = true;
+        state.posts.wordVariation.word_freq_sim = [];
+      })
+      .addCase(wordVariation.fulfilled, (state, action) => {
+        state.posts.wordVariation.loading = false;
+        state.posts.wordVariation.word_freq_sim = action.payload;
+      }).addCase(wordVariation.rejected, (state, action) => {
+        state.posts.wordVariation.loading = false;
+        state.posts.wordVariation.error = action.error
+      })
   },
 });
 

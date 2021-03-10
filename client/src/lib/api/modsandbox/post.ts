@@ -179,14 +179,26 @@ export async function moveSpamsAPI(token: string, ids: string[]) {
 
 export async function applySeedsAPI(token: string, ids: string[]) {
   const response = await axios.post(
-    '/post/apply_seeds/', 
-    {ids},
+    '/post/apply_seeds/',
+    { ids },
     {
       headers: { Authorization: `Token ${token}` },
     },
-  )
+  );
 
   return response.status;
+}
+
+export async function wordVariationAPI(token: string, keyword: string) {
+  const response = await axios.post<Variation[]>(
+    '/post/word_variation/',
+    { keyword },
+    {
+      headers: { Authorization: `Token ${token}` },
+    },
+  );
+
+  return response.data;
 }
 
 export async function addPostAPI(token: string, newPost: NewPost) {
@@ -203,8 +215,6 @@ export async function addPostAPI(token: string, newPost: NewPost) {
 
   return response.data;
 }
-
-
 
 export async function addSpamAPI(
   token: string,
@@ -226,6 +236,12 @@ export async function addSpamAPI(
   );
 
   return response.data;
+}
+
+export interface Variation {
+  word: string;
+  freq: number;
+  sim: number;
 }
 
 export interface PaginatedPostResponse {

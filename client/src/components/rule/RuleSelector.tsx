@@ -18,8 +18,9 @@ import {
   treeToKeyMaps,
 } from '../../lib/utils/tree';
 import { AppDispatch } from '../..';
-import { getPostsRefresh, getSpamsRefresh } from '../../modules/post/actions';
+import { getPostsRefresh, getSpamsRefresh, wordVariation } from '../../modules/post/actions';
 import { RootState } from '../../modules';
+import WordVariationTable from './WordVariationTable';
 
 interface RuleSelectorProps {
   editables: Rule[];
@@ -29,6 +30,7 @@ interface RuleSelectorProps {
 function RuleSelector({ editables, loadingRule }: RuleSelectorProps) {
   const dispatch: AppDispatch = useDispatch();
   const ruleState = useSelector((state: RootState) => state.rule);
+  const wordFreqSim = useSelector((state: RootState) => state.post.posts.wordVariation.word_freq_sim);
   const error = ruleState.error;
 
   useEffect(() => {
@@ -58,10 +60,14 @@ function RuleSelector({ editables, loadingRule }: RuleSelectorProps) {
     dispatch(createKeyMaps(keyMaps));
   };
 
+  const onSelect = (selectedKeys: any, info: any) => {
+    dispatch(wordVariation(info.node.title));
+  }
+
   const clickedRuleIndex = useSelector(ruleSelector.clickedRuleIndex);
 
   return (
-    <RuleSelectorDiv>
+    <RuleSelectorDiv className='flex flex-col'>
       {loadingRule && <OverlayLoading text="Apply Rules..." />}
       <Tree
         checkable
@@ -69,7 +75,9 @@ function RuleSelector({ editables, loadingRule }: RuleSelectorProps) {
         treeData={treeDataOriginal}
         defaultExpandAll={true}
         selectedKeys={[clickedRuleIndex]}
+        onSelect={onSelect}
       />
+      <WordVariationTable wordVariation={wordFreqSim}/>
     </RuleSelectorDiv>
   );
 }
