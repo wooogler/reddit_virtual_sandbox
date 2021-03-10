@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import OverlayWithButton from '../common/OverlayWithButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { postActions, postSelector } from '../../modules/post/slice';
 import SplitPane from 'react-split-pane';
 import palette from '../../lib/styles/palette';
-import { useInfiniteScroll } from '../../lib/hooks';
 import { Post } from '../../lib/api/modsandbox/post';
 import OverlayLoading from '../common/OverlayLoading';
 import {
@@ -14,6 +13,7 @@ import {
   getPostsRefresh,
   getSpamsRefresh,
   moveSpams,
+  wordFrequency,
 } from '../../modules/post/actions';
 import { AppDispatch } from '../..';
 import PostItem from './PostItem';
@@ -21,6 +21,7 @@ import { getMatch } from '../../lib/utils/match';
 import ListHeader from './ListHeader';
 import BarRate from '../vis/BarRate';
 import { Empty, Pagination } from 'antd';
+import { changeTool } from '../../modules/rule/slice';
 
 interface PostListProps {
   postsAll: Post[];
@@ -80,10 +81,20 @@ function PostList({
     dispatch(postActions.clearSelectedSpamPostId());
   };
 
+  const handleClickFreq = () => {
+    dispatch(wordFrequency(selectedSpamPostId)).then(() => {
+      dispatch(getSpamsRefresh());
+    })
+    dispatch(postActions.clearSelectedSpamPostId());
+    dispatch(changeTool('freq'));
+  }
+
   const handleClickBar = () => {
     dispatch(postActions.toggleSplitPostList());
     dispatch(getPostsRefresh());
   };
+
+  
 
   return (
     <div className="relative flex flex-col h-full mx-2">
@@ -100,6 +111,8 @@ function PostList({
           onClickButton2={handleClickDelete}
           buttonText3="Apply as seeds"
           onClickButton3={handleClickSeeds}
+          buttonText4='Keyword frequency'
+          onClickButton4={handleClickFreq}
         />
       )}
       {loadingPost && <OverlayLoading text="Loading Posts..." />}
@@ -156,6 +169,7 @@ function PostList({
                   onChange={(page) => {
                     dispatch(postActions.getFilteredPosts(page));
                   }}
+                  pageSize={20}
                   simple
                 />
               </div>
@@ -190,6 +204,7 @@ function PostList({
                   onChange={(page) => {
                     dispatch(postActions.getUnfilteredPosts(page));
                   }}
+                  pageSize={20}
                   simple
                 />
               </div>
@@ -223,6 +238,7 @@ function PostList({
                 onChange={(page) => {
                   dispatch(postActions.getAllPosts(page));
                 }}
+                pageSize={20}
                 simple
               />
             </div>

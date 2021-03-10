@@ -5,7 +5,6 @@ import {
   Select,
   InputNumber,
   Button,
-  Checkbox,
 } from 'antd';
 import { useFormik } from 'formik';
 import moment from 'moment';
@@ -94,8 +93,8 @@ const { Option } = Select;
           formik.setFieldValue('max_size', value);
         }}
       />
-      <label htmlFor='user_imported'>User Imported</label>
-      <Checkbox name='user_imported' onChange={(e) => {formik.setFieldValue('user_imported', e.target.checked)}} checked={formik.values.user_imported} />
+      {/* <label htmlFor='user_imported'>User Imported</label>
+      <Checkbox name='user_imported' onChange={(e) => {formik.setFieldValue('user_imported', e.target.checked)}} checked={formik.values.user_imported} /> */}
       <div className="buttons">
         <Button onClick={onClickClose}>
           Close

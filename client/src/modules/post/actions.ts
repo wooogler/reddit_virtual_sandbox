@@ -13,6 +13,8 @@ import {
   Post,
   Spam,
   Variation,
+  WordFreq,
+  wordFrequencyAPI,
   wordVariationAPI,
 } from '../../lib/api/modsandbox/post';
 import { postActions } from './slice';
@@ -52,6 +54,12 @@ export const wordVariation = createAsyncThunk<
   const data = await wordVariationAPI(token, keyword);
   return data;
 });
+
+export const wordFrequency = createAsyncThunk<WordFreq[], string[], {state: RootState}>('post/wordFrequency', async (ids, thunkAPI) => {
+  const token = thunkAPI.getState().user.token;
+  const data = await wordFrequencyAPI(token, ids);
+  return data;
+})
 
 export const deletePosts = createAsyncThunk<
   void,

@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import OverlayWithButton from '../common/OverlayWithButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { postActions, postSelector } from '../../modules/post/slice';
 import SplitPane from 'react-split-pane';
 import palette from '../../lib/styles/palette';
-import { useInfiniteScroll } from '../../lib/hooks';
 import OverlayLoading from '../common/OverlayLoading';
 import { Spam } from '../../lib/api/modsandbox/post';
 import { AppDispatch } from '../..';
@@ -96,9 +95,9 @@ function SpamList({
       {loadingRule && <OverlayLoading text="Applying Rules..." />}
       <ListHeader
         list="moderated"
-        name="Moderated"
+        name="Targets"
         splitView={splitSpamList}
-        tooltipText="Moderated posts from spam, reports, mod queue in your subreddit"
+        tooltipText="The posts you want to target"
         userImported={spamUserImported}
         span={spamSpan}
       />
@@ -146,6 +145,7 @@ function SpamList({
                   onChange={(page) => {
                     dispatch(postActions.getFilteredSpams(page));
                   }}
+                  pageSize={20}
                   simple
                 />
               </div>
@@ -180,6 +180,7 @@ function SpamList({
                   onChange={(page) => {
                     dispatch(postActions.getUnfilteredSpams(page));
                   }}
+                  pageSize={20}
                   simple
                 />
               </div>
@@ -213,6 +214,7 @@ function SpamList({
                 onChange={(page) => {
                   dispatch(postActions.getAllSpams(page));
                 }}
+                pageSize={20}
                 simple
               />
             </div>

@@ -1,12 +1,15 @@
-import { Table } from 'antd';
+import { Table, Input } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import React, { ReactElement } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Variation } from '../../lib/api/modsandbox/post';
 import { RootState } from '../../modules';
+import { wordVariation } from '../../modules/post/actions';
+
+const { Search } = Input;
 
 interface Props {
-  wordVariation: Variation[];
+  wordVar: Variation[];
 }
 
 const columns: ColumnsType<any> = [
@@ -17,7 +20,6 @@ const columns: ColumnsType<any> = [
   {
     title: 'Document Frequency',
     dataIndex: 'freq',
-    defaultSortOrder: 'descend',
     sorter: (a, b) => a.freq - b.freq,
   },
   {
@@ -28,13 +30,35 @@ const columns: ColumnsType<any> = [
   },
 ];
 
-function WordVariationTable({ wordVariation }: Props): ReactElement {
-  const loading = useSelector((state: RootState) => state.post.posts.wordVariation.loading);
+function WordVariationTable({ wordVar }: Props): ReactElement {
+  const dispatch = useDispatch();
+  const loading = useSelector(
+    (state: RootState) => state.post.posts.wordVariation.loading,
+  );
 
-  const wordVariationWithKey = wordVariation.map((item, index) => {
-    return { key: index, ...item };
+  const wordVariationWithKey = wordVar.map((item, index) => {
+    return { ...item, key: index, sim: item.sim.toFixed(2) };
   });
-  return <Table columns={columns} dataSource={wordVariationWithKey} size="small" loading={loading}/>;
+
+  const onSearch = (value: string) => {
+    dispatch(wordVariation(value));
+  };
+  return (
+    <div className="flex flex-col">
+      <Search
+        placeholder="type a keyword"
+        onSearch={onSearch}
+        className="mb-3 w-60"
+      />
+      <Table
+        pagination={{ pageSize: 5, showSizeChanger: false }}
+        columns={columns}
+        dataSource={wordVariationWithKey}
+        size="small"
+        loading={loading}
+      />
+    </div>
+  );
 }
 
 export default WordVariationTable;

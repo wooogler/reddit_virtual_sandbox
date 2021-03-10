@@ -27,7 +27,7 @@ function RuleEditor({ code }: RuleEditorProps) {
         onChange={handleChange}
         value={code}
         width="100%"
-        height="100%"
+        height='100%'
         setOptions={{
           showGutter: true,
           fontFamily: 'Courier',

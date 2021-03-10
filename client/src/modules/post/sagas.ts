@@ -8,8 +8,6 @@ import {
   importSubredditPostsAPI,
   PaginatedPostResponse,
   PaginatedSpamResponse,
-  Post,
-  Spam,
 } from '../../lib/api/modsandbox/post';
 import { userSelector } from '../user/slice';
 import { postActions, postSelector, PostType, SortType } from './slice';

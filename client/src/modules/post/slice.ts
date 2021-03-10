@@ -11,6 +11,7 @@ import {
   Post,
   Spam,
   Variation,
+  WordFreq,
 } from '../../lib/api/modsandbox/post';
 import {
   addPost,
@@ -18,6 +19,7 @@ import {
   applySeeds,
   deletePosts,
   deleteSpams,
+  wordFrequency,
   wordVariation,
 } from './actions';
 
@@ -60,10 +62,10 @@ export type PostState = {
       error: SerializedError | null;
     };
     wordVariation: {
-      loading: boolean,
-      error: SerializedError | null, 
+      loading: boolean;
+      error: SerializedError | null;
       word_freq_sim: Variation[];
-    }
+    };
     loading: boolean;
     error: Error | null;
     type: PostType;
@@ -104,6 +106,11 @@ export type PostState = {
     applySeeds: {
       loading: boolean;
       error: SerializedError | null;
+    };
+    wordFrequency: {
+      loading: boolean;
+      error: SerializedError | null;
+      data: WordFreq[];
     };
     loading: boolean;
     error: Error | null;
@@ -147,8 +154,8 @@ export const initialState: PostState = {
     },
     wordVariation: {
       loading: false,
-      error: null, 
-      word_freq_sim: []
+      error: null,
+      word_freq_sim: [],
     },
     loading: false,
     error: null,
@@ -190,6 +197,11 @@ export const initialState: PostState = {
     applySeeds: {
       loading: false,
       error: null,
+    },
+    wordFrequency: {
+      loading: false,
+      error: null,
+      data: [],
     },
     loading: false,
     error: null,
@@ -479,10 +491,23 @@ const postSlice = createSlice({
       .addCase(wordVariation.fulfilled, (state, action) => {
         state.posts.wordVariation.loading = false;
         state.posts.wordVariation.word_freq_sim = action.payload;
-      }).addCase(wordVariation.rejected, (state, action) => {
-        state.posts.wordVariation.loading = false;
-        state.posts.wordVariation.error = action.error
       })
+      .addCase(wordVariation.rejected, (state, action) => {
+        state.posts.wordVariation.loading = false;
+        state.posts.wordVariation.error = action.error;
+      })
+      .addCase(wordFrequency.pending, (state) => {
+        state.spams.wordFrequency.loading = true;
+        state.spams.wordFrequency.data = [];
+      })
+      .addCase(wordFrequency.fulfilled, (state, action) => {
+        state.spams.wordFrequency.data = action.payload;
+        state.spams.wordFrequency.loading = false;
+      })
+      .addCase(wordFrequency.rejected, (state, action) => {
+        state.spams.wordFrequency.error = action.error;
+        state.spams.wordFrequency.loading = false;
+      });
   },
 });
 

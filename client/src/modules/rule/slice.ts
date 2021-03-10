@@ -32,6 +32,8 @@ type Item = {
   [key: string]: string[] | string | null;
 };
 
+type Tool = 'none' | 'freq' | 'sim'
+
 export type RuleState = {
   loading: boolean;
   // error: SerializedError | null;
@@ -44,6 +46,7 @@ export type RuleState = {
   submittedCode: string;
   clickedRuleIndex: string;
   keyMaps: KeyMap[];
+  tool: Tool;
 };
 
 export const initialState: RuleState = {
@@ -63,6 +66,7 @@ export const initialState: RuleState = {
   submittedCode: '',
   clickedRuleIndex: '',
   keyMaps: [],
+  tool: 'none',
 };
 
 export const clickMatchedThunk = (
@@ -133,7 +137,7 @@ const ruleSlice = createSlice({
       const code = state.files[state.selectedTab].code;
       const parsedCode = YAML.parseAllDocuments(code, { prettyErrors: true });
 
-      if (parsedCode.find(item => item.errors.length !== 0)) {
+      if (parsedCode.find((item) => item.errors.length !== 0)) {
         state.parseError = parsedCode.map((item) => {
           return item.errors;
         });
@@ -157,12 +161,15 @@ const ruleSlice = createSlice({
           }
         });
         state.editables = editables;
-        state.mode='select';
+        state.mode = 'select';
       }
     },
     createKeyMaps: (state, action: PayloadAction<KeyMap[]>) => {
       state.keyMaps = action.payload;
     },
+    changeTool: (state, action: PayloadAction<Tool>) => {
+      state.tool = action.payload;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -225,6 +232,7 @@ export const {
   clearMatched,
   clickMatched,
   createKeyMaps,
+  changeTool,
 } = actions;
 
 export default reducer;

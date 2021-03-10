@@ -85,15 +85,15 @@ function ListHeader({
     }
   };
 
-  const handleChangeUserImported = () => {
-    if (list === 'unmoderated') {
-      dispatch(postActions.togglePostUserImported());
-      dispatch(getPostsRefresh());
-    } else if (list === 'moderated') {
-      dispatch(postActions.toggleSpamUserImported());
-      dispatch(getSpamsRefresh());
-    }
-  };
+  // const handleChangeUserImported = () => {
+  //   if (list === 'unmoderated') {
+  //     dispatch(postActions.togglePostUserImported());
+  //     dispatch(getPostsRefresh());
+  //   } else if (list === 'moderated') {
+  //     dispatch(postActions.toggleSpamUserImported());
+  //     dispatch(getSpamsRefresh());
+  //   }
+  // };
 
   const handleChangeSpanAll = () => {
     if (list === 'unmoderated') {
@@ -132,14 +132,14 @@ function ListHeader({
             size="small"
             onClick={handleClickAddPost}
           >
-            Add {list === 'unmoderated' ? 'test post' : 'test spam'}
+            Add test post
           </Button>
         </div>
 
         <DraggableModal
           visible={isAddOpen}
           setVisible={setIsAddOpen}
-          title={`Add a new ${list === 'unmoderated' ? 'post' : 'spam'}`}
+          title={'Add a new post'}
         >
           <PostForm onClickClose={handleClickCloseModal} list={list} />
         </DraggableModal>
@@ -167,7 +167,7 @@ function ListHeader({
               <Option value="old">Old</Option>
               <Option value="votes_desc">more votes</Option>
               <Option value="votes_asc">less votes</Option>
-              <Option value='fpfn'>FP & FN</Option>
+              <Option value="fpfn">FP & FN</Option>
             </Select>
           ) : (
             <Select
@@ -188,9 +188,9 @@ function ListHeader({
           )}
         </div>
         <div>
-          <Checkbox onChange={handleChangeUserImported} checked={userImported}>
+          {/* <Checkbox onChange={handleChangeUserImported} checked={userImported}>
             User Imported
-          </Checkbox>
+          </Checkbox> */}
           <Checkbox onChange={handleChangeSplitView} checked={splitView}>
             Filtered Only
           </Checkbox>

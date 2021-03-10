@@ -42,7 +42,6 @@ const EditorFrame = styled.div`
 
 const ActionsFrame = styled.div`
   display: flex;
-  justify-content: flex-end;
   background-color: ${palette.gray[2]};
   align-items: center;
   padding: 0 1rem;

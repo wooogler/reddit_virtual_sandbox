@@ -15,7 +15,7 @@ interface PostItemProps {
   match: MatchIndex[];
 }
 
-function PostItem({ post, isMatched, match }: PostItemProps) {
+function PostItem({ post, selected, isMatched, match }: PostItemProps) {
   const dispatch = useDispatch();
   const handleClickPost = () => {
     dispatch(postActions.togglePostSelect(post._id));
@@ -28,7 +28,7 @@ function PostItem({ post, isMatched, match }: PostItemProps) {
       }
     >
       <div className="flex flex-col mr-1 items-center">
-        <Checkbox onClick={handleClickPost} />
+        <Checkbox onClick={handleClickPost} checked={selected} />
         <UpArrowIcon className='mt-2 opacity-30 w-3'/>
         <div className='font-display font-bold'>{post.votes}</div>
         <DownArrowIcon className='opacity-30 w-3'/>
@@ -41,7 +41,7 @@ function PostItem({ post, isMatched, match }: PostItemProps) {
           comment={post}
         />
       )}
-      <div>{post.similarity}</div>
+      {/* <div>{post.similarity}</div> */}
     </div>
   );
 }

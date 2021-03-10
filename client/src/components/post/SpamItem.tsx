@@ -14,7 +14,7 @@ export interface SpamItemProps {
   match: MatchIndex[];
 }
 
-function SpamItem({ spam, isMatched, match }: SpamItemProps) {
+function SpamItem({ spam, isMatched, match, selected }: SpamItemProps) {
   const dispatch = useDispatch();
 
   const handleClickSpam = () => {
@@ -23,9 +23,7 @@ function SpamItem({ spam, isMatched, match }: SpamItemProps) {
 
   return (
     <div
-      className={
-        'border border-gray-200 ' + (isMatched ? 'bg-red-200' : '')
-      }
+      className={'border border-gray-200 ' + (isMatched ? 'bg-red-200' : '')}
     >
       <div
         className={
@@ -36,11 +34,15 @@ function SpamItem({ spam, isMatched, match }: SpamItemProps) {
         }
       >
         <div className="flex mr-1">
-          <Checkbox onClick={handleClickSpam} />
+          <Checkbox onClick={handleClickSpam} checked={selected} />
         </div>
         {spam._type === 'spam_submission' ||
         spam._type === 'reports_submission' ? (
-          <SubmissionItem spam match={isMatched ? match : []} submission={spam} />
+          <SubmissionItem
+            spam
+            match={isMatched ? match : []}
+            submission={spam}
+          />
         ) : (
           <CommentItem spam match={isMatched ? match : []} comment={spam} />
         )}
