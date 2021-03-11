@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import OverlayWithButton from '../common/OverlayWithButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { postActions, postSelector } from '../../modules/post/slice';
 import SplitPane from 'react-split-pane';
@@ -8,11 +7,7 @@ import palette from '../../lib/styles/palette';
 import { Post } from '../../lib/api/modsandbox/post';
 import OverlayLoading from '../common/OverlayLoading';
 import {
-  applySeeds,
-  deleteSpams,
   getPostsRefresh,
-  getSpamsRefresh,
-  moveSpams,
 } from '../../modules/post/actions';
 import { AppDispatch } from '../..';
 import PostItem from './PostItem';
@@ -20,8 +15,8 @@ import { getMatch } from '../../lib/utils/match';
 import ListHeader from './ListHeader';
 import BarRate from '../vis/BarRate';
 import { Empty, Pagination } from 'antd';
-import { changeTool } from '../../modules/rule/slice';
-import { wordFrequency } from '../../modules/stat/actions';
+import PostSelected from './PostSelected';
+import { RootState } from '../../modules';
 
 interface PostListProps {
   postsAll: Post[];
@@ -58,36 +53,7 @@ function PostList({
   const pageAll = useSelector(postSelector.pageAll);
   const pageFiltered = useSelector(postSelector.pageFiltered);
   const pageUnfiltered = useSelector(postSelector.pageUnfiltered);
-
-  const handleClickMove = () => {
-    dispatch(moveSpams(selectedSpamPostId)).then(() => {
-      dispatch(getSpamsRefresh());
-      dispatch(getPostsRefresh());
-    });
-    dispatch(postActions.clearSelectedSpamPostId());
-  };
-
-  const handleClickDelete = () => {
-    dispatch(deleteSpams(selectedSpamPostId)).then(() => {
-      dispatch(getSpamsRefresh());
-    });
-    dispatch(postActions.clearSelectedSpamPostId());
-  };
-
-  const handleClickSeeds = () => {
-    dispatch(applySeeds(selectedSpamPostId)).then(() => {
-      dispatch(getSpamsRefresh());
-    });
-    dispatch(postActions.clearSelectedSpamPostId());
-  };
-
-  const handleClickFreq = () => {
-    dispatch(wordFrequency(selectedSpamPostId)).then(() => {
-      dispatch(getSpamsRefresh());
-    })
-    dispatch(postActions.clearSelectedSpamPostId());
-    dispatch(changeTool('freq'));
-  }
+  const loadingApplySeeds = useSelector((state: RootState) => state.post.spams.applySeeds.loading);
 
   const handleClickBar = () => {
     dispatch(postActions.toggleSplitPostList());
@@ -98,25 +64,9 @@ function PostList({
 
   return (
     <div className="relative flex flex-col h-full mx-2">
-      {selectedSpamPostId.length !== 0 && (
-        <OverlayWithButton
-          text={
-            selectedSpamPostId.length === 1
-              ? `1 post selected`
-              : `${selectedSpamPostId.length} posts selected`
-          }
-          buttonText1="Move to Posts"
-          onClickButton1={handleClickMove}
-          buttonText2="Delete posts"
-          onClickButton2={handleClickDelete}
-          buttonText3="Apply as seeds"
-          onClickButton3={handleClickSeeds}
-          buttonText4='Keyword frequency'
-          onClickButton4={handleClickFreq}
-        />
-      )}
       {loadingPost && <OverlayLoading text="Loading Posts..." />}
       {loadingRule && <OverlayLoading text="Applying Rules..." />}
+      {loadingApplySeeds && <OverlayLoading text="Finding FP & FN..." />}
       <ListHeader
         list="unmoderated"
         name="Posts"
@@ -127,10 +77,11 @@ function PostList({
       />
       <div
         onClick={handleClickBar}
-        className="cursor-pointer hover:opacity-70 mb-2"
+        className="cursor-pointer hover:opacity-70"
       >
         <BarRate total={count.posts.all} part={count.posts.filtered} />
       </div>
+      <PostSelected />
       <SplitPaneDiv className="flex-1 overflow-y-auto">
         {splitView ? (
           <SplitPane

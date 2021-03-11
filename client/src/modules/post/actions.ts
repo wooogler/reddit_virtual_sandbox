@@ -11,6 +11,8 @@ import {
   NewPost,
   NewSpam,
   Post,
+  selectAllPostsAPI,
+  selectAllSpamsAPI,
   Spam,
 } from '../../lib/api/modsandbox/post';
 import { postActions } from './slice';
@@ -66,6 +68,24 @@ export const movePosts = createAsyncThunk<void, string[], { state: RootState }>(
     await movePostsAPI(token, ids);
   },
 );
+
+export const selectAllPosts = createAsyncThunk<string[], void, {state: RootState}>(
+  'post/selectAllPosts',
+  async (_, thunkAPI) => {
+    const token = thunkAPI.getState().user.token;
+    const data = await selectAllPostsAPI(token);
+    return data;
+  }
+)
+
+export const selectAllSpams = createAsyncThunk<string[], void, {state: RootState}>(
+  'post/selectAllSpams',
+  async (_, thunkAPI) => {
+    const token = thunkAPI.getState().user.token;
+    const data = await selectAllSpamsAPI(token);
+    return data;
+  }
+)
 
 export const applySeeds = createAsyncThunk<
   void,

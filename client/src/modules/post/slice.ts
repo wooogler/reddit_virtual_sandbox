@@ -17,6 +17,8 @@ import {
   applySeeds,
   deletePosts,
   deleteSpams,
+  selectAllPosts,
+  selectAllSpams,
 } from './actions';
 
 export type PostType = 'submission' | 'comment' | 'all';
@@ -25,7 +27,8 @@ export type SpamSortType =
   | 'created-new'
   | 'created-old'
   | 'banned-new'
-  | 'banned-old';
+  | 'banned-old'
+  | 'fpfn';
 export type Filtered = 'all' | 'filtered' | 'unfiltered';
 
 export type PostState = {
@@ -57,6 +60,10 @@ export type PostState = {
       loading: boolean;
       error: SerializedError | null;
     };
+    selectAll: {
+      loading: boolean;
+      error: SerializedError | null;
+    }
     loading: boolean;
     error: Error | null;
     type: PostType;
@@ -98,6 +105,10 @@ export type PostState = {
       loading: boolean;
       error: SerializedError | null;
     };
+    selectAll: {
+      loading: boolean;
+      error: SerializedError | null;
+    }
     loading: boolean;
     error: Error | null;
     type: PostType;
@@ -135,6 +146,10 @@ export const initialState: PostState = {
       error: null,
     },
     add: {
+      loading: false,
+      error: null,
+    },
+    selectAll: {
       loading: false,
       error: null,
     },
@@ -176,6 +191,10 @@ export const initialState: PostState = {
       error: null,
     },
     applySeeds: {
+      loading: false,
+      error: null,
+    },
+    selectAll: {
       loading: false,
       error: null,
     },
@@ -407,6 +426,10 @@ const postSlice = createSlice({
       state.spams.delete.loading = false;
       state.spams.delete.error = action.payload;
     },
+    splitList: (state) => {
+      state.posts.split = true;
+      state.spams.split = true;
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -459,6 +482,23 @@ const postSlice = createSlice({
       .addCase(applySeeds.rejected, (state, action) => {
         state.spams.applySeeds.loading = false;
         state.spams.applySeeds.error = action.error;
+      }).addCase(selectAllPosts.pending, (state) => {
+        state.posts.selectAll.loading = true;
+      }).addCase(selectAllPosts.fulfilled, (state, action) => {
+        state.posts.selectAll.loading = false;
+        state.posts.selected = action.payload;
+      }).addCase(selectAllPosts.rejected, (state, action) => {
+        state.posts.selectAll.loading = false;
+        state.posts.selectAll.error= action.error;
+      })
+      .addCase(selectAllSpams.pending, (state) => {
+        state.spams.selectAll.loading = true;
+      }).addCase(selectAllSpams.fulfilled, (state, action) => {
+        state.spams.selectAll.loading = false;
+        state.spams.selected = action.payload;
+      }).addCase(selectAllSpams.rejected, (state, action) => {
+        state.spams.selectAll.loading = false;
+        state.spams.selectAll.error= action.error;
       })
   },
 });

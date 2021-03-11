@@ -22,6 +22,7 @@ function PostItem({ post, selected, isMatched, match }: PostItemProps) {
   };
 
   return (
+    <>
     <div
       className={
         'flex border border-gray-200 p-1 ' + (isMatched ? 'bg-red-200' : '')
@@ -41,8 +42,9 @@ function PostItem({ post, selected, isMatched, match }: PostItemProps) {
           comment={post}
         />
       )}
-      {/* <div>{post.similarity}</div> */}
     </div>
+    {/* <div>{post.similarity}</div> */}
+    </>
   );
 }
 
