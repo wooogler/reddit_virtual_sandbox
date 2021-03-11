@@ -368,13 +368,19 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
             logger.error(e)
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
-        queryset=super().get_queryset()
         if request.user:
             profile = Profile.objects.get(user=request.user.id)
-            used_posts = queryset.filter(_id__in=profile.used_posts.all())
+            used_posts = Post.objects.filter(_id__in=profile.used_posts.all(), _type__in=["submission", "comment"])
+            used_spams = Post.objects.filter(_id__in=profile.used_posts.all(), _type__in=[
+                "spam_submission",
+                "spam_comment",
+                "reports_submission",
+                "reports_comment",
+            ])
             posts_array = [{'_id': post._id, 'body': post.body if post.body not in ['', '[removed]']  else post.title} for post in used_posts]
+            spams_array = [{'_id': post._id, 'body': post.body if post.body not in ['', '[removed]']  else post.title} for post in used_spams]
 
-            word_freq_sim = compute_word_frequency_similarity(posts_array, keyword)
+            word_freq_sim = compute_word_frequency_similarity(posts_array, spams_array, keyword)
             return Response(word_freq_sim)
 
         return Response(status=status.HTTP_401_UNAUTHORIZED)

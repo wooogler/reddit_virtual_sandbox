@@ -6,12 +6,10 @@ import {
 } from '@reduxjs/toolkit';
 import { RootState } from '..';
 import {
-  Frequency,
   ImportPostQuery,
   ImportSpamQuery,
   Post,
   Spam,
-  Variation,
 } from '../../lib/api/modsandbox/post';
 import {
   addPost,

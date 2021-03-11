@@ -18,8 +18,13 @@ const columns: ColumnsType<any> = [
     dataIndex: 'word',
   },
   {
-    title: 'Document Frequency',
-    dataIndex: 'freq',
+    title: 'Post Frequency',
+    dataIndex: 'post_freq',
+    sorter: (a, b) => a.freq - b.freq,
+  },
+  {
+    title: 'Target Frequency',
+    dataIndex: 'spam_freq',
     sorter: (a, b) => a.freq - b.freq,
   },
   {

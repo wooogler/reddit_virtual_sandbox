@@ -252,7 +252,8 @@ export async function addSpamAPI(
 
 export interface Variation {
   word: string;
-  freq: number;
+  post_freq: number;
+  spam_freq: number;
   sim: number;
 }
 

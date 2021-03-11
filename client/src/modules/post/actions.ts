@@ -12,10 +12,6 @@ import {
   NewSpam,
   Post,
   Spam,
-  Variation,
-  Frequency,
-  wordFrequencyAPI,
-  wordVariationAPI,
 } from '../../lib/api/modsandbox/post';
 import { postActions } from './slice';
 
