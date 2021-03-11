@@ -1,53 +1,68 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { createSlice, SerializedError } from "@reduxjs/toolkit"
+import { Frequency, Variation } from "../../lib/api/modsandbox/post";
+import { wordFrequency, wordVariation } from "./actions";
 
-export type StatState = {
-  data: Stat | null;
-  loading: boolean;
-  error: Error | null;
+export type StatState={
+  wordVariation: {
+    loading: boolean;
+    error: SerializedError | null;
+    data: Variation[]
+  },
+  wordFrequency: {
+    loading: boolean;
+    error: SerializedError | null;
+    data: Frequency[]
+  }
 }
 
-export interface Stat {
-  postsNum: number;
-  targetNum: number;
-  lineStats: LineStat[]
-}
-
-export type LineStat = {
-  filter_id: string;
-  filteredPostsNum: number;
-  filteredTargetNum: number;
-}
-
-export const initialState: StatState = {
-  data: null,
-  loading: false,
-  error: null,
+const initialState: StatState = {
+  wordVariation: {
+    loading: false,
+    error: null,
+    data: []
+  },
+  wordFrequency: {
+    loading: false,
+    error: null,
+    data: []
+  }
 }
 
 const statSlice = createSlice({
   name: 'stat',
   initialState,
   reducers: {
-    getStat: (state) => {
-      state.loading=true;
-      state.data = null;
-    },
-    getStatSuccess: (state, action: PayloadAction<Stat>) => {
-      state.data = action.payload;
-      state.loading = false;
-    },
-    getStatError: (state, action: PayloadAction<Error>) => {
-      state.loading = false;
-      state.error = action.payload;
-    }
+    
+  },
+  extraReducers: (builder) => {
+    builder.addCase(wordVariation.pending, (state) => {
+      state.wordVariation.loading = true;
+      state.wordVariation.data = [];
+    })
+    .addCase(wordVariation.fulfilled, (state, action) => {
+      state.wordVariation.loading = false;
+      state.wordVariation.data = action.payload;
+    })
+    .addCase(wordVariation.rejected, (state, action) => {
+      state.wordVariation.loading = false;
+      state.wordVariation.error = action.error;
+    })
+    .addCase(wordFrequency.pending, (state) => {
+      state.wordFrequency.loading = true;
+      state.wordFrequency.data = [];
+    })
+    .addCase(wordFrequency.fulfilled, (state, action) => {
+      state.wordFrequency.data = action.payload;
+      state.wordFrequency.loading = false;
+    })
+    .addCase(wordFrequency.rejected, (state, action) => {
+      state.wordFrequency.error = action.error;
+      state.wordFrequency.loading = false;
+    });
   }
 })
 
 const {actions, reducer} = statSlice;
-export const {
-  getStat,
-  getStatSuccess,
-  getStatError,
-} = actions;
+export const statActions = actions;
 
 export default reducer;

@@ -6,12 +6,12 @@ import {
 } from '@reduxjs/toolkit';
 import { RootState } from '..';
 import {
+  Frequency,
   ImportPostQuery,
   ImportSpamQuery,
   Post,
   Spam,
   Variation,
-  WordFreq,
 } from '../../lib/api/modsandbox/post';
 import {
   addPost,
@@ -19,8 +19,6 @@ import {
   applySeeds,
   deletePosts,
   deleteSpams,
-  wordFrequency,
-  wordVariation,
 } from './actions';
 
 export type PostType = 'submission' | 'comment' | 'all';
@@ -60,11 +58,6 @@ export type PostState = {
     delete: {
       loading: boolean;
       error: SerializedError | null;
-    };
-    wordVariation: {
-      loading: boolean;
-      error: SerializedError | null;
-      word_freq_sim: Variation[];
     };
     loading: boolean;
     error: Error | null;
@@ -107,11 +100,6 @@ export type PostState = {
       loading: boolean;
       error: SerializedError | null;
     };
-    wordFrequency: {
-      loading: boolean;
-      error: SerializedError | null;
-      data: WordFreq[];
-    };
     loading: boolean;
     error: Error | null;
     type: PostType;
@@ -151,11 +139,6 @@ export const initialState: PostState = {
     add: {
       loading: false,
       error: null,
-    },
-    wordVariation: {
-      loading: false,
-      error: null,
-      word_freq_sim: [],
     },
     loading: false,
     error: null,
@@ -197,11 +180,6 @@ export const initialState: PostState = {
     applySeeds: {
       loading: false,
       error: null,
-    },
-    wordFrequency: {
-      loading: false,
-      error: null,
-      data: [],
     },
     loading: false,
     error: null,
@@ -484,30 +462,6 @@ const postSlice = createSlice({
         state.spams.applySeeds.loading = false;
         state.spams.applySeeds.error = action.error;
       })
-      .addCase(wordVariation.pending, (state) => {
-        state.posts.wordVariation.loading = true;
-        state.posts.wordVariation.word_freq_sim = [];
-      })
-      .addCase(wordVariation.fulfilled, (state, action) => {
-        state.posts.wordVariation.loading = false;
-        state.posts.wordVariation.word_freq_sim = action.payload;
-      })
-      .addCase(wordVariation.rejected, (state, action) => {
-        state.posts.wordVariation.loading = false;
-        state.posts.wordVariation.error = action.error;
-      })
-      .addCase(wordFrequency.pending, (state) => {
-        state.spams.wordFrequency.loading = true;
-        state.spams.wordFrequency.data = [];
-      })
-      .addCase(wordFrequency.fulfilled, (state, action) => {
-        state.spams.wordFrequency.data = action.payload;
-        state.spams.wordFrequency.loading = false;
-      })
-      .addCase(wordFrequency.rejected, (state, action) => {
-        state.spams.wordFrequency.error = action.error;
-        state.spams.wordFrequency.loading = false;
-      });
   },
 });
 

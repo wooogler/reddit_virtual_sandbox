@@ -4,7 +4,7 @@ import React, { ReactElement } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Variation } from '../../lib/api/modsandbox/post';
 import { RootState } from '../../modules';
-import { wordVariation } from '../../modules/post/actions';
+import { wordVariation } from '../../modules/stat/actions';
 
 const { Search } = Input;
 
@@ -33,7 +33,7 @@ const columns: ColumnsType<any> = [
 function WordVariationTable({ wordVar }: Props): ReactElement {
   const dispatch = useDispatch();
   const loading = useSelector(
-    (state: RootState) => state.post.posts.wordVariation.loading,
+    (state: RootState) => state.stat.wordVariation.loading,
   );
 
   const wordVariationWithKey = wordVar.map((item, index) => {

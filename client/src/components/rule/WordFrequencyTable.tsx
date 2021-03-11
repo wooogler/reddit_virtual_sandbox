@@ -1,11 +1,11 @@
 import Table, { ColumnsType } from 'antd/lib/table';
 import React, { ReactElement } from 'react';
 import { useSelector } from 'react-redux';
-import { WordFreq } from '../../lib/api/modsandbox/post';
+import { Frequency } from '../../lib/api/modsandbox/post';
 import { RootState } from '../../modules';
 
 interface Props {
-  wordFreq: WordFreq[];
+  wordFreq: Frequency[];
 }
 
 const columns: ColumnsType<any> = [
@@ -23,7 +23,7 @@ const columns: ColumnsType<any> = [
 
 function WordFrequencyTable({ wordFreq }: Props): ReactElement {
   const loading = useSelector(
-    (state: RootState) => state.post.spams.wordFrequency.loading,
+    (state: RootState) => state.stat.wordFrequency.loading,
   );
   const wordFrequencyWithKey = wordFreq.map((item, index) => {
     return { ...item, key: index };

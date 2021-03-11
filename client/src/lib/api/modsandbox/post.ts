@@ -202,15 +202,15 @@ export async function wordVariationAPI(token: string, keyword: string) {
 }
 
 export async function wordFrequencyAPI(token: string, ids: string[]) {
-  const response = await axios.post<WordFreq[]>(
+  const response = await axios.post<Frequency[]>(
     '/spam/word_frequency/',
-    {ids},
+    { ids },
     {
       headers: { Authorization: `Token ${token}` },
-    }
-  )
+    },
+  );
 
-  return response.data
+  return response.data;
 }
 
 export async function addPostAPI(token: string, newPost: NewPost) {
@@ -256,7 +256,7 @@ export interface Variation {
   sim: number;
 }
 
-export interface WordFreq {
+export interface Frequency {
   word: string;
   freq: number;
 }

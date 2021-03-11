@@ -13,7 +13,6 @@ import {
   getPostsRefresh,
   getSpamsRefresh,
   moveSpams,
-  wordFrequency,
 } from '../../modules/post/actions';
 import { AppDispatch } from '../..';
 import PostItem from './PostItem';
@@ -22,6 +21,7 @@ import ListHeader from './ListHeader';
 import BarRate from '../vis/BarRate';
 import { Empty, Pagination } from 'antd';
 import { changeTool } from '../../modules/rule/slice';
+import { wordFrequency } from '../../modules/stat/actions';
 
 interface PostListProps {
   postsAll: Post[];

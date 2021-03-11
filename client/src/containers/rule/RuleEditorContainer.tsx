@@ -15,10 +15,10 @@ function RuleEditorContainer() {
   const loadingRule = useSelector(ruleSelector.loading);
   const tool = useSelector((state: RootState) => state.rule.tool);
   const wordFreqSim = useSelector(
-    (state: RootState) => state.post.posts.wordVariation.word_freq_sim,
+    (state: RootState) => state.stat.wordVariation.data,
   );
   const wordFreq = useSelector(
-    (state: RootState) => state.post.spams.wordFrequency.data,
+    (state: RootState) => state.stat.wordFrequency.data,
   );
 
   return (
