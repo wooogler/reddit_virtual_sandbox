@@ -97,16 +97,16 @@ def compute_word_frequency_similarity(posts, spams, keyword):
     post_vector = CountVectorizer(stop_words=stopwords.words('english'), min_df = 2, ngram_range=(1,2), binary=True)
 
     post_dtm = post_vector.fit_transform(post_documents).toarray()
-    post_doc_freq = np.sum(dtm, axis=0) #[0,1]
+    post_doc_freq = np.sum(post_dtm, axis=0) #[0,1]
     post_vocab = post_vector.vocabulary_ #{'key1': 1, 'key2': 0}
 
     spam_vector = CountVectorizer(stop_words=stopwords.words('english'), min_df = 1, ngram_range=(1,2), binary=True)
 
     spam_dtm = spam_vector.fit_transform(spam_documents).toarray()
-    spam_doc_freq = np.sum(dtm, axis=0) #[0,1]
+    spam_doc_freq = np.sum(spam_dtm, axis=0) #[0,1]
     spam_vocab = spam_vector.vocabulary_ #{'key1': 1, 'key2': 0}
 
-    vocab = defaultdict(lambda: [0,0])
+    vocab = defaultdict(lambda: [-1,-1])
 
     for k, v in post_vocab.items():
         vocab[k][0] = v
@@ -118,8 +118,8 @@ def compute_word_frequency_similarity(posts, spams, keyword):
     for key, val in vocab.items():
         vocab_df = {}
         vocab_df['word'] = key
-        vocab_df['post_freq'] = post_dtm[val[0]]
-        vocab_df['spam_freq'] = spam_dtm[val[1]]
+        vocab_df['post_freq'] = post_doc_freq[val[0]] if val[0]!=-1 else 0
+        vocab_df['spam_freq'] = spam_doc_freq[val[1]] if val[1]!=-1 else 0
         vocab_df['sim'] = word_similarity(key, keyword)
         word_freq_sim.append(vocab_df)
     
@@ -167,7 +167,6 @@ def compute_cosine_similarity(seeds, filtered_posts):
     seed_embs = []
     for seed in seeds:
         seed_emb = process_and_return_embedding(seed['body'], True)
-        seed_documents.append(seed_document)
         # print(np.array(seed_emb).shape) # number of sentences, 768 
         seed_embs.append(np.mean(seed_emb, axis=0)) # 768
    
