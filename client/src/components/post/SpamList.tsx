@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import OverlayWithButton from '../common/OverlayWithButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { postActions, postSelector } from '../../modules/post/slice';
 import SplitPane from 'react-split-pane';
@@ -9,16 +8,15 @@ import OverlayLoading from '../common/OverlayLoading';
 import { Spam } from '../../lib/api/modsandbox/post';
 import { AppDispatch } from '../..';
 import {
-  deletePosts,
-  getPostsRefresh,
   getSpamsRefresh,
-  movePosts,
 } from '../../modules/post/actions';
 import { getMatch } from '../../lib/utils/match';
 import SpamItem from './SpamItem';
 import ListHeader from './ListHeader';
 import BarRate from '../vis/BarRate';
 import { Empty, Pagination } from 'antd';
+import SpamSelected from './SpamSelected';
+import { RootState } from '../../modules';
 
 interface SpamListProps {
   spamsAll: Spam[];
@@ -55,21 +53,7 @@ function SpamList({
   const spamPageAll = useSelector(postSelector.spamPageAll);
   const spamPageFiltered = useSelector(postSelector.spamPageFiltered);
   const spamPageUnfiltered = useSelector(postSelector.spamPageUnfiltered);
-
-  const handleClickMove = () => {
-    dispatch(movePosts(selectedPostId)).then(() => {
-      dispatch(getPostsRefresh());
-      dispatch(getSpamsRefresh());
-    });
-    dispatch(postActions.clearSelectedPostId());
-  };
-
-  const handleClickDelete = () => {
-    dispatch(deletePosts(selectedPostId)).then(() => {
-      dispatch(getPostsRefresh());
-    });
-    dispatch(postActions.clearSelectedPostId());
-  };
+  const loadingApplySeeds = useSelector((state: RootState) => state.post.spams.applySeeds.loading);
 
   const handleClickBar = () => {
     dispatch(postActions.toggleSplitSpamPostList());
@@ -78,21 +62,9 @@ function SpamList({
 
   return (
     <div className="relative flex flex-col h-full mx-2">
-      {selectedPostId.length !== 0 && (
-        <OverlayWithButton
-          text={
-            selectedPostId.length === 1
-              ? `1 post selected`
-              : `${selectedPostId.length} posts selected`
-          }
-          buttonText1="Move to Seed posts"
-          onClickButton1={handleClickMove}
-          buttonText2="Delete from Posts"
-          onClickButton2={handleClickDelete}
-        />
-      )}
       {loadingSpam && <OverlayLoading text="Loading Posts..." />}
       {loadingRule && <OverlayLoading text="Applying Rules..." />}
+      {loadingApplySeeds && <OverlayLoading text="Finding FP & FN..." />}
       <ListHeader
         list="moderated"
         name="Targets"
@@ -103,10 +75,11 @@ function SpamList({
       />
       <div
         onClick={handleClickBar}
-        className="cursor-pointer hover:opacity-70  mb-2"
+        className="cursor-pointer hover:opacity-70"
       >
         <BarRate total={count.spams.all} part={count.spams.filtered} />
       </div>
+      <SpamSelected/>
       <SplitPaneDiv className="flex-1 overflow-y-auto">
         {splitView ? (
           <SplitPane

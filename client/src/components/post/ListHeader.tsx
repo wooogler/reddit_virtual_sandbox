@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Tooltip, Popconfirm } from 'antd';
+import { Tooltip } from 'antd';
 import { Select, Checkbox } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
 
@@ -34,21 +34,13 @@ function ListHeader({
   span,
 }: ListHeaderProps) {
   const dispatch = useDispatch();
-  const loadingDelete = useSelector(postSelector.loadingDelete);
-  const loadingSpamDelete = useSelector(postSelector.loadingSpamDelete);
+  const postSortType = useSelector(postSelector.postSort);
+  const spamSortType = useSelector(postSelector.spamSort);
   const { Option, OptGroup } = Select;
   const [isAddOpen, setIsAddOpen] = useState(false);
 
   const handleClickAddPost = () => {
     setIsAddOpen(true);
-  };
-
-  const handleClickDeleteAll = () => {
-    if (list === 'unmoderated') {
-      dispatch(postActions.deleteAllPosts());
-    } else {
-      dispatch(postActions.deleteAllSpams());
-    }
   };
 
   const handleClickCloseModal = () => {
@@ -111,21 +103,6 @@ function ListHeader({
           <InfoCircleOutlined />
         </Tooltip>
         <div className="flex ml-auto mr-2">
-          <Popconfirm
-            placement="bottom"
-            title="Are you sure?"
-            onConfirm={handleClickDeleteAll}
-          >
-            <Button
-              danger
-              size="small"
-              loading={
-                list === 'unmoderated' ? loadingDelete : loadingSpamDelete
-              }
-            >
-              Delete all
-            </Button>
-          </Popconfirm>
           <Button
             className="ml-1"
             type="primary"
@@ -162,12 +139,13 @@ function ListHeader({
               placeholder="sort"
               size="small"
               className="w-28 mr-2"
+              value={postSortType}
             >
               <Option value="new">New</Option>
               <Option value="old">Old</Option>
               <Option value="votes_desc">more votes</Option>
               <Option value="votes_asc">less votes</Option>
-              <Option value="fpfn">FP & FN</Option>
+              <Option value="fpfn" disabled>FP & FN</Option>
             </Select>
           ) : (
             <Select
@@ -175,6 +153,7 @@ function ListHeader({
               placeholder="sort"
               size="small"
               className="w-24 mr-2"
+              value={spamSortType}
             >
               <OptGroup label="created by">
                 <Option value="created-new">New</Option>
@@ -184,6 +163,7 @@ function ListHeader({
                 <Option value="banned-new">New</Option>
                 <Option value="banned-old">Old</Option>
               </OptGroup>
+              <Option value="fpfn" disabled>FP & FN</Option>
             </Select>
           )}
         </div>

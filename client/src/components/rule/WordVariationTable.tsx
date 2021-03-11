@@ -20,16 +20,19 @@ const columns: ColumnsType<any> = [
   {
     title: 'Post Frequency',
     dataIndex: 'post_freq',
-    sorter: (a, b) => a.freq - b.freq,
+    sortDirections: ["ascend", "descend", "ascend"],
+    sorter: (a, b) => a.post_freq - b.post_freq,
   },
   {
     title: 'Target Frequency',
     dataIndex: 'spam_freq',
-    sorter: (a, b) => a.freq - b.freq,
+    sortDirections: ["ascend", "descend", "ascend"],
+    sorter: (a, b) => a.spam_freq - b.spam_freq,
   },
   {
     title: 'Similarity',
     dataIndex: 'sim',
+    sortDirections: ["ascend", "descend", "ascend"],
     defaultSortOrder: 'descend',
     sorter: (a, b) => a.sim - b.sim,
   },

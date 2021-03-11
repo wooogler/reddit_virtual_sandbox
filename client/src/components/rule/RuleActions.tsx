@@ -53,14 +53,15 @@ function RuleActions({ mode, code, title }: RuleActionsProps) {
     <>
       <div>
         <Select
-          defaultValue="none"
+          defaultValue="fpfn"
           value={tool}
           className="w-40"
           onSelect={(value) => {
             dispatch(changeTool(value));
           }}
         >
-          <Option value="none">No Tool</Option>
+          {/* <Option value="none">No Tool</Option> */}
+          <Option value="fpfn">Find FP & FN</Option>
           <Option value="freq">Word Frequency</Option>
           <Option value="sim">Word Similarity</Option>
         </Select>

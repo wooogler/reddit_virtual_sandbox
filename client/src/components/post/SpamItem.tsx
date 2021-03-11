@@ -47,6 +47,7 @@ function SpamItem({ spam, isMatched, match, selected }: SpamItemProps) {
           <CommentItem spam match={isMatched ? match : []} comment={spam} />
         )}
       </div>
+      {/* <div>{spam.similarity}</div> */}
     </div>
   );
 }

@@ -32,7 +32,7 @@ type Item = {
   [key: string]: string[] | string | null;
 };
 
-type Tool = 'none' | 'freq' | 'sim'
+type Tool = 'none' | 'freq' | 'sim' | 'fpfn'
 
 export type RuleState = {
   loading: boolean;
@@ -66,7 +66,7 @@ export const initialState: RuleState = {
   submittedCode: '',
   clickedRuleIndex: '',
   keyMaps: [],
-  tool: 'none',
+  tool: 'fpfn',
 };
 
 export const clickMatchedThunk = (

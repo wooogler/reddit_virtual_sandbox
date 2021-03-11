@@ -1,5 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import FindFPFN from '../../components/rule/FindFPFN';
 import RuleEditor from '../../components/rule/RuleEditor';
 import RuleSelector from '../../components/rule/RuleSelector';
 import WordFrequencyTable from '../../components/rule/WordFrequencyTable';
@@ -38,8 +39,8 @@ function RuleEditorContainer() {
           <WordVariationTable wordVar={wordFreqSim} />
         ) : tool === 'freq' ? (
           <WordFrequencyTable wordFreq={wordFreq} />
-        ) : (
-          <></>
+        ) : tool === 'fpfn' && (
+          <FindFPFN />
         )}
       </div>
     </div>

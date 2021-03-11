@@ -5,7 +5,9 @@ import { Filtered, PostType, SortType } from '../../../modules/post/slice';
 //amazon ec2
 // axios.defaults.baseURL = 'http://3.34.192.145:8080';
 //kixlab2
-axios.defaults.baseURL = 'http://143.248.48.96:8887';
+// axios.defaults.baseURL = 'http://143.248.48.96:8887';
+//kixlab3
+axios.defaults.baseURL = 'http://143.248.48.96:9888';
 
 export async function getPostsAPI(
   token: string | null,
@@ -250,6 +252,26 @@ export async function addSpamAPI(
   return response.data;
 }
 
+export async function selectAllPostsAPI(token: string) {
+  const response = await axios.get<string[]>('/post/ids/', {
+    headers: { Authorization: `Token ${token}` },
+  }).catch((error) => {
+    return error.message;
+  });
+
+  return response.data;
+}
+
+export async function selectAllSpamsAPI(token: string) {
+  const response = await axios.get<string[]>('/spam/ids/', {
+    headers: { Authorization: `Token ${token}` },
+  }).catch((error) => {
+    return error.message;
+  });
+
+  return response.data;
+}
+
 export interface Variation {
   word: string;
   post_freq: number;
@@ -327,6 +349,7 @@ export type Spam = {
   user_reports: [string, number][];
   domain: string;
   url: string;
+  similarity: number;
 };
 
 export type SpamType =
