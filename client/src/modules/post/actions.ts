@@ -6,6 +6,7 @@ import {
   applySeedsAPI,
   deletePostsAPI,
   deleteSpamsAPI,
+  importTestDataAPI,
   movePostsAPI,
   moveSpamsAPI,
   NewPost,
@@ -122,3 +123,11 @@ export const addSpam = createAsyncThunk<Spam, NewSpam, { state: RootState }>(
     return data;
   },
 );
+
+export const importTestData = createAsyncThunk<void, void, {state:RootState}> (
+  'post/importTestData',
+  async(_, thunkAPI) => {
+    const token = thunkAPI.getState().user.token;
+    await importTestDataAPI(token);
+  }
+)

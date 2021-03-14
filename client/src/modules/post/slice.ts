@@ -17,6 +17,7 @@ import {
   applySeeds,
   deletePosts,
   deleteSpams,
+  importTestData,
   selectAllPosts,
   selectAllSpams,
 } from './actions';
@@ -50,7 +51,7 @@ export type PostState = {
     };
     import: {
       loading: boolean;
-      error: Error | null;
+      error: Error | null | SerializedError;
     };
     add: {
       loading: boolean;
@@ -91,7 +92,7 @@ export type PostState = {
     };
     import: {
       loading: boolean;
-      error: Error | null;
+      error: Error | null | SerializedError;
     };
     delete: {
       loading: boolean;
@@ -499,6 +500,17 @@ const postSlice = createSlice({
       }).addCase(selectAllSpams.rejected, (state, action) => {
         state.spams.selectAll.loading = false;
         state.spams.selectAll.error= action.error;
+      }).addCase(importTestData.pending, (state) => {
+        state.posts.import.loading = true;
+        state.spams.import.loading = true;
+      }).addCase(importTestData.fulfilled, (state) => {
+        state.posts.import.loading = false;
+        state.spams.import.loading = false;
+      }).addCase(importTestData.rejected, (state, action) => {
+        state.posts.import.loading = false;
+        state.spams.import.loading = false;
+        state.posts.import.error = action.error;
+        state.spams.import.error = action.error;
       })
   },
 });

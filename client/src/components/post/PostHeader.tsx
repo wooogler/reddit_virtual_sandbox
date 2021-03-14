@@ -6,6 +6,8 @@ import DraggableModal from '../common/DraggableModal';
 import PostImportForm from './PostImportForm';
 import axios from 'axios';
 import SpamImportForm from './SpamImportForm';
+import { getPostsRefresh, getSpamsRefresh, importTestData } from '../../modules/post/actions';
+import { AppDispatch } from '../..';
 
 interface PostHeaderProps {
   userInfo: UserInfo | null;
@@ -15,7 +17,7 @@ interface PostHeaderProps {
 export type SpamImportType = 'spam' | 'reports' | 'modqueue';
 
 function PostHeader({ userInfo, redditLogged }: PostHeaderProps) {
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const [isPostImportOpen, setIsPostImportOpen] = useState(false);
   const [isSpamImportOpen, setIsSpamImportOpen] = useState<
     false | SpamImportType
@@ -57,10 +59,20 @@ function PostHeader({ userInfo, redditLogged }: PostHeaderProps) {
     });
   };
 
+  const handleImportTest = () => {
+    dispatch(importTestData()).then(() => {
+      dispatch(getPostsRefresh());
+      dispatch(getSpamsRefresh());
+    })
+  }
+
   const menu = (
     <Menu>
       <Menu.Item onClick={() => setIsPostImportOpen(true)}>
         Import Subreddit Posts
+      </Menu.Item>
+      <Menu.Item onClick={handleImportTest}>
+        Import Test Posts
       </Menu.Item>
       <Menu.Item
         onClick={() => {

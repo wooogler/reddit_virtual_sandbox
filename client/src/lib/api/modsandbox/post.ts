@@ -115,6 +115,16 @@ export async function importSpamPostsAPI(
   return response.statusText;
 }
 
+export async function importTestDataAPI(
+  token: string
+) {
+  const response = await axios.post('/post/import_test_data/', {}, {
+    headers: { Authorization: `Token ${token}` },
+  })
+
+  return response.statusText;
+}
+
 export async function deletePostsAPI(token: string, ids: string[]) {
   const response = await axios.post(
     '/post/deletes/',
