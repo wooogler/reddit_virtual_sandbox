@@ -2,6 +2,7 @@ import os
 import json
 import logging
 from datetime import datetime
+import random
 
 import praw
 from django.shortcuts import redirect
@@ -230,6 +231,34 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
                 queryset = queryset.order_by("-similarity")
 
         return queryset
+
+    @action(methods=["post"], detail=False)
+    def import_test_data(self, request):
+        if self.request.user.is_authenticated:
+            profile = Profile.objects.get(user=request.user.id)
+            script_dir = os.path.dirname(__file__)
+            with open(
+                os.path.join(script_dir, "test_data/politics/normal_comments.json")
+            ) as json_file:
+                normal_comments = json.load(json_file)
+                normal_ids = [comment["id"] for comment in normal_comments]
+                random.seed(100)
+                normal_ids = random.sample(normal_ids, 100)
+                json_file.close()
+
+            with open(
+                os.path.join(script_dir, "test_data/politics/removed_comments.json")
+            ) as json_file:
+                removed_comments = json.load(json_file)
+                json_file.close()
+            try:
+                reddit = RedditHandler()
+                reddit.test_run(normal_ids, removed_comments, profile)
+                return Response(status=status.HTTP_201_CREATED)
+            except Exception as e:
+                logger.exception(e)
+
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
 
     @action(methods=["get"], detail=False)
     def ids(self, request):
