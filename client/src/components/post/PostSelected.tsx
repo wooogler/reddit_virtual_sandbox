@@ -1,7 +1,11 @@
-import { ArrowRightOutlined, DeleteOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Popconfirm, Tooltip } from 'antd';
+import {
+  ArrowRightOutlined,
+  DeleteOutlined,
+  DownOutlined,
+} from '@ant-design/icons';
+import { Button, Checkbox, Dropdown, Menu, Popconfirm, Tooltip } from 'antd';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../..';
 import {
@@ -9,7 +13,7 @@ import {
   getPostsRefresh,
   getSpamsRefresh,
   movePosts,
-  selectAllPosts,
+  selectPosts,
 } from '../../modules/post/actions';
 import { postActions, postSelector } from '../../modules/post/slice';
 
@@ -17,6 +21,9 @@ function PostSelected(): ReactElement {
   const dispatch: AppDispatch = useDispatch();
   const selectedPostId = useSelector(postSelector.selectedPostId);
   const loadingDelete = useSelector(postSelector.loadingDelete);
+  const isSelectAll =
+    useSelector(postSelector.count).posts.all === selectedPostId.length;
+  const isSelectNone = selectedPostId.length === 0;
 
   const handleClickDelete = () => {
     dispatch(deletePosts(selectedPostId)).then(() => {
@@ -33,40 +40,71 @@ function PostSelected(): ReactElement {
     dispatch(postActions.clearSelectedPostId());
   };
 
-  const handleSelectAll = (e: CheckboxChangeEvent) => {
+  const onSelectAll = (e: CheckboxChangeEvent) => {
     if (e.target.checked) {
-      dispatch(selectAllPosts());
+      dispatch(selectPosts('all'));
     } else {
       dispatch(postActions.clearSelectedPostId());
     }
   };
 
+  const onSelectFiltered = () => {
+    dispatch(selectPosts('filtered'));
+  };
+
+  const onSelectUnfiltered = () => {
+    dispatch(selectPosts('unfiltered'));
+  };
+
+  const menu = (
+    <Menu>
+      <Menu.Item key="filtered" onClick={onSelectFiltered}>
+        filtered
+      </Menu.Item>
+      <Menu.Item key="unfiltered" onClick={onSelectUnfiltered}>
+        no filtered
+      </Menu.Item>
+    </Menu>
+  );
+
   return (
     <div className="flex items-center ml-1">
-      <Checkbox onChange={handleSelectAll} className='mr-2'/>
-      <div className='flex justify-center items-center flex-1'>
-        <div className='mr-2'>
+      <Checkbox
+        onChange={onSelectAll}
+        checked={isSelectAll}
+        indeterminate={!isSelectAll && !isSelectNone}
+      />
+      <Dropdown
+        overlay={menu}
+        trigger={['click']}
+        className="pl-1"
+        placement="bottomCenter"
+      >
+        <DownOutlined />
+      </Dropdown>
+      <div className="flex justify-center items-center ml-auto">
+        <div className="mr-2">
           {selectedPostId.length <= 1
-            ? `${selectedPostId.length} post selected`
-            : `${selectedPostId.length} posts selected`}
+            ? `${selectedPostId.length} comment selected`
+            : `${selectedPostId.length} comments selected`}
         </div>
         <Popconfirm
           placement="bottom"
           title="Are you sure?"
           onConfirm={handleClickDelete}
         >
-          <Tooltip title='delete' placement='bottom'>
+          <Tooltip title="delete" placement="bottom">
             <Button
               disabled={selectedPostId.length === 0}
               danger
               type="link"
-              size='small'
+              size="small"
               icon={<DeleteOutlined />}
               loading={loadingDelete}
             />
           </Tooltip>
         </Popconfirm>
-        <Tooltip title='move to Targets' placement='bottom'>
+        {/* <Tooltip title='move to Targets' placement='bottom'>
           <Button
             disabled={selectedPostId.length === 0}
             type="link"
@@ -74,10 +112,8 @@ function PostSelected(): ReactElement {
             size='small'
             onClick={handleClickMove}
           />
-        </Tooltip>
+        </Tooltip> */}
       </div>
-      
-      
     </div>
   );
 }

@@ -10,9 +10,10 @@ interface Props {
 }
 
 function InteractionText({ text, match }: Props): ReactElement {
-  const keyMaps = useSelector((state: RootState) => state.rule.keyMaps )
+  const keyMaps = useSelector((state: RootState) => state.rule.keyMaps);
   const dispatch = useDispatch();
-  const matchArray = match.reduce<string[]>(
+
+  const matchArray = match.sort((a,b) => a.startIndex-b.startIndex).reduce<string[]>(
     (acc, index) => {
       const str = acc[acc.length - 1];
       const prev = acc.slice(0, acc.length - 1);
@@ -28,12 +29,13 @@ function InteractionText({ text, match }: Props): ReactElement {
     [text],
   );
 
-  const handleClickHighlight = (value: string, e:React.MouseEvent) => {
-    const original = keyMaps.find((item) => item.changed === value)?.original
-    if(original) {
-      dispatch(clickMatchedThunk(original))
+  const handleClickHighlight = (value: string, e: React.MouseEvent) => {
+    const original = keyMaps.find((item) => item.changed === value)?.original;
+    if (original) {
+      dispatch(clickMatchedThunk(original));
     }
     e.stopPropagation();
+    console.log(match);
   };
 
   return (
@@ -43,7 +45,9 @@ function InteractionText({ text, match }: Props): ReactElement {
           return <span key={index}>{part}</span>;
         }
         return (
-          <span style={{backgroundColor: 'yellow'}} className='cursor-pointer underline text-blue-700'
+          <span
+            style={{ backgroundColor: 'yellow' }}
+            className="cursor-pointer underline text-blue-700"
             onClick={(e) =>
               handleClickHighlight(match[(index - 1) / 2].matchIndex, e)
             }

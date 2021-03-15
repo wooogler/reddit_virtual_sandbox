@@ -14,7 +14,7 @@ function SpamFrame({ spam }: SpamFrameProps) {
         <>
           <div className="flex flex-wrap">
             <AuthorText text={spam.banned_by} spam/>
-            <DatetimeText datetime={spam.banned_at_utc} />
+            <DatetimeText datetime={spam.banned_at_utc} url={spam.url}/>
           </div>
           {spam.mod_reason_title !== null && (
             <div className='font-display bg-red-100 text-gray-500'>removal reason: {spam.mod_reason_title}</div>

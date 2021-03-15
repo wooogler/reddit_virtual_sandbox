@@ -1,23 +1,27 @@
-import { Button } from 'antd';
-import React, { ReactElement } from 'react';
+import { Button, Input } from 'antd';
+import React, { ReactElement, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../..';
 import {
+  applySeed,
   applySeeds,
   getPostsRefresh,
   getSpamsRefresh,
 } from '../../modules/post/actions';
 import { postActions, postSelector } from '../../modules/post/slice';
 
+const { TextArea } = Input;
+
 function FindFPFN(): ReactElement {
   const dispatch: AppDispatch = useDispatch();
   const selectedSpamId = useSelector(postSelector.selectedSpamId);
   const selectedPostId = useSelector(postSelector.selectedPostId);
+  const [seed, setSeed] = useState('');
   const selectedId = selectedSpamId.concat(selectedPostId);
   const number = selectedId.length;
 
-  const handleClickSeeds = () => {
-    dispatch(applySeeds(selectedId))
+  const handleClickSeed = () => {
+    dispatch(applySeed(seed))
       .then(() => {
         dispatch(postActions.splitList());
         dispatch(postActions.changeSortType('fpfn'));
@@ -32,17 +36,18 @@ function FindFPFN(): ReactElement {
   };
   return (
     <div className="flex flex-col">
+      <TextArea rows={4} onChange={(e) => setSeed(e.target.value)} value={seed} />
       <div className="flex items-center">
-        <div className="mr-4">
+        {/* <div className="mr-4">
           {number <= 1 ? `${number} post selected` : `${number} posts selected`}
-        </div>
+        </div> */}
         <Button
           type="primary"
           size="small"
-          onClick={handleClickSeeds}
-          disabled={!number}
+          onClick={handleClickSeed}
+          // disabled={!number}
         >
-          Show FP & FN
+          Calculate Similarity
         </Button>
       </div>
     </div>

@@ -3,6 +3,7 @@ import { RootState } from '..';
 import {
   addPostAPI,
   addSpamAPI,
+  applySeedAPI,
   applySeedsAPI,
   deletePostsAPI,
   deleteSpamsAPI,
@@ -12,11 +13,12 @@ import {
   NewPost,
   NewSpam,
   Post,
-  selectAllPostsAPI,
-  selectAllSpamsAPI,
+  selectPostsAPI,
+  selectSpamsAPI,
+  SelectType,
   Spam,
 } from '../../lib/api/modsandbox/post';
-import { postActions } from './slice';
+import { postActions, SortType } from './slice';
 
 export const getPostsRefresh = (): ThunkAction<
   void,
@@ -70,23 +72,25 @@ export const movePosts = createAsyncThunk<void, string[], { state: RootState }>(
   },
 );
 
-export const selectAllPosts = createAsyncThunk<string[], void, {state: RootState}>(
-  'post/selectAllPosts',
-  async (_, thunkAPI) => {
-    const token = thunkAPI.getState().user.token;
-    const data = await selectAllPostsAPI(token);
-    return data;
-  }
-)
+export const selectPosts = createAsyncThunk<
+  string[],
+  SelectType,
+  { state: RootState }
+>('post/selectAllPosts', async (type, thunkAPI) => {
+  const token = thunkAPI.getState().user.token;
+  const data = await selectPostsAPI(token, type);
+  return data;
+});
 
-export const selectAllSpams = createAsyncThunk<string[], void, {state: RootState}>(
-  'post/selectAllSpams',
-  async (_, thunkAPI) => {
-    const token = thunkAPI.getState().user.token;
-    const data = await selectAllSpamsAPI(token);
-    return data;
-  }
-)
+export const selectSpams = createAsyncThunk<
+  string[],
+  SelectType,
+  { state: RootState }
+>('post/selectAllSpams', async (type, thunkAPI) => {
+  const token = thunkAPI.getState().user.token;
+  const data = await selectSpamsAPI(token, type);
+  return data;
+});
 
 export const applySeeds = createAsyncThunk<
   void,
@@ -96,6 +100,14 @@ export const applySeeds = createAsyncThunk<
   const token = thunkAPI.getState().user.token;
   await applySeedsAPI(token, ids);
 });
+
+export const applySeed = createAsyncThunk<void, string, { state: RootState }>(
+  'post/applySeeds',
+  async (seed, thunkAPI) => {
+    const token = thunkAPI.getState().user.token;
+    await applySeedAPI(token, seed);
+  },
+);
 
 export const moveSpams = createAsyncThunk<void, string[], { state: RootState }>(
   'post/moveSpams',
@@ -124,10 +136,11 @@ export const addSpam = createAsyncThunk<Spam, NewSpam, { state: RootState }>(
   },
 );
 
-export const importTestData = createAsyncThunk<void, void, {state:RootState}> (
-  'post/importTestData',
-  async(_, thunkAPI) => {
-    const token = thunkAPI.getState().user.token;
-    await importTestDataAPI(token);
-  }
-)
+export const importTestData = createAsyncThunk<
+  void,
+  void,
+  { state: RootState }
+>('post/importTestData', async (_, thunkAPI) => {
+  const token = thunkAPI.getState().user.token;
+  await importTestDataAPI(token);
+});

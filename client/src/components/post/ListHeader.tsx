@@ -98,7 +98,7 @@ function ListHeader({
   return (
     <>
       <div className="flex flex-wrap items-center my-1">
-        <div className="text-2xl mx-2">{name}</div>
+        <div className="text-xl mx-2 font-display">{name}</div>
         <Tooltip placement="right" title={tooltipText}>
           <InfoCircleOutlined />
         </Tooltip>
@@ -122,6 +122,7 @@ function ListHeader({
         </DraggableModal>
       </div>
       <div className="flex flex-wrap mb-2">
+        <div className='mx-2'>Sort by</div>
         <div>
           {/* <Select
             defaultValue="all"
@@ -145,7 +146,8 @@ function ListHeader({
               <Option value="old">Old</Option>
               <Option value="votes_desc">more votes</Option>
               <Option value="votes_asc">less votes</Option>
-              <Option value="fpfn" disabled>FP & FN</Option>
+              <Option value="fpfn">FP & FN</Option>
+              <Option value="tptn">TP & TN</Option>
             </Select>
           ) : (
             <Select
@@ -155,15 +157,16 @@ function ListHeader({
               className="w-24 mr-2"
               value={spamSortType}
             >
-              <OptGroup label="created by">
-                <Option value="created-new">New</Option>
-                <Option value="created-old">Old</Option>
-              </OptGroup>
+              {/* <OptGroup label="created by"> */}
+              <Option value="created-new">New</Option>
+              <Option value="created-old">Old</Option>
+              {/* </OptGroup> */}
               {/* <OptGroup label="banned by">
                 <Option value="banned-new">New</Option>
                 <Option value="banned-old">Old</Option>
               </OptGroup> */}
-              <Option value="fpfn" disabled>FP & FN</Option>
+              <Option value="fpfn">FP & FN</Option>
+              <Option value="tptn">TP & TN</Option>
             </Select>
           )}
         </div>
@@ -172,7 +175,7 @@ function ListHeader({
             User Imported
           </Checkbox> */}
           <Checkbox onChange={handleChangeSplitView} checked={splitView}>
-            Filtered Only
+            Split into Filtered / not Filtered
           </Checkbox>
           {/* <Checkbox onChange={handleChangeSpanAll} checked={span}>
             Span All

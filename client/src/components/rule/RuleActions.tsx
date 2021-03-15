@@ -3,15 +3,23 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   changeTool,
   createEditable,
+  createKeyMaps,
   submitCode,
   toggleEditorMode,
 } from '../../modules/rule/slice';
-import { Button, Select } from 'antd';
+import { Button, Popconfirm, Select } from 'antd';
 import { message as antdMessage } from 'antd';
 import { AppDispatch } from '../..';
-import { getPostsRefresh, getSpamsRefresh } from '../../modules/post/actions';
+import {
+  getPostsRefresh,
+  getSpamsRefresh,
+  importTestData,
+} from '../../modules/post/actions';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import { RootState } from '../../modules';
+import { logout } from '../../modules/user/slice';
+import { makeTree, treeToKeyMaps } from '../../lib/utils/tree';
+import { postActions } from '../../modules/post/slice';
 
 const { Option } = Select;
 
@@ -24,19 +32,21 @@ interface RuleActionsProps {
 function RuleActions({ mode, code, title }: RuleActionsProps) {
   const dispatch: AppDispatch = useDispatch();
   const [downloadLink, setDownloadLink] = useState('');
+  const [importClick, setImportClick] = useState(true);
   const tool = useSelector((state: RootState) => state.rule.tool);
+  const editables = useSelector((state: RootState) => state.rule.editables);
 
-  const handleClickRun = () => {
-    if (mode === 'select') {
-      dispatch(submitCode('')).then(() => {
-        dispatch(getPostsRefresh());
-        dispatch(getSpamsRefresh());
-      });
-      dispatch(toggleEditorMode());
-    } else {
-      dispatch(createEditable());
-    }
-  };
+  // const handleClickRun = () => {
+  //   if (mode === 'select') {
+  //     dispatch(submitCode('')).then(() => {
+  //       dispatch(getPostsRefresh());
+  //       dispatch(getSpamsRefresh());
+  //     });
+  //     dispatch(toggleEditorMode());
+  //   } else {
+  //     dispatch(createEditable());
+  //   }
+  // };
 
   useEffect(() => {
     const data = new Blob([code], { type: 'text/plain' });
@@ -45,8 +55,48 @@ function RuleActions({ mode, code, title }: RuleActionsProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [code]);
 
+  const tree = makeTree(editables);
+
+  const handleClickRun = () => {
+    if (mode === 'select') {
+      dispatch(submitCode('')).then(() => {
+        dispatch(getPostsRefresh());
+        dispatch(getSpamsRefresh());
+      });
+      dispatch(toggleEditorMode());
+      dispatch(postActions.clearSelectedPostId())
+      dispatch(postActions.clearSelectedSpamPostId())
+    } else {
+      const keyMaps = treeToKeyMaps(tree);
+      dispatch(submitCode(code)).then(() => {
+        dispatch(getPostsRefresh());
+        dispatch(getSpamsRefresh());
+      });
+      dispatch(createKeyMaps(keyMaps));
+      dispatch(createEditable());
+      dispatch(postActions.clearSelectedPostId())
+      dispatch(postActions.clearSelectedSpamPostId())
+    }
+  };
+
   const handleCopy = () => {
     antdMessage.info('Copied!');
+  };
+
+  const handleClickLogout = () => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      dispatch(logout(token));
+      localStorage.removeItem('token');
+    }
+  };
+
+  const handleClickImport = () => {
+    dispatch(importTestData()).then(() => {
+      dispatch(getPostsRefresh());
+      dispatch(getSpamsRefresh());
+    });
+    setImportClick(false);
   };
 
   return (
@@ -75,6 +125,24 @@ function RuleActions({ mode, code, title }: RuleActionsProps) {
         <a download={title} href={downloadLink} className="mr-2">
           <Button size="large">Export YAML</Button>
         </a> */}
+        <Popconfirm
+          placement="bottom"
+          title="Are you sure? Time is left."
+          onConfirm={handleClickLogout}
+        >
+          <Button danger type="primary" size="large" className="mr-2">
+            End Experiment
+          </Button>
+        </Popconfirm>
+        <Button
+          onClick={handleClickImport}
+          type="primary"
+          size="large"
+          className="mr-2"
+          disabled={!importClick}
+        >
+          Import
+        </Button>
         <Button onClick={handleClickRun} type="primary" size="large">
           {mode === 'edit' ? 'Run' : 'Edit'}
         </Button>

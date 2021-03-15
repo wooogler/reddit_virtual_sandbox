@@ -14,7 +14,7 @@ import PostItem from './PostItem';
 import { getMatch } from '../../lib/utils/match';
 import ListHeader from './ListHeader';
 import BarRate from '../vis/BarRate';
-import { Empty, Pagination } from 'antd';
+import { Checkbox, Empty, Pagination } from 'antd';
 import PostSelected from './PostSelected';
 import { RootState } from '../../modules';
 
@@ -69,9 +69,9 @@ function PostList({
       {loadingApplySeeds && <OverlayLoading text="Finding FP & FN..." />}
       <ListHeader
         list="unmoderated"
-        name="Posts"
+        name="Subreddit Comments"
         splitView={splitPostList}
-        tooltipText="Posts imported from real subreddit"
+        tooltipText="Comments imported from a specific subreddit"
         userImported={postUserImported}
         span={postSpan}
       />

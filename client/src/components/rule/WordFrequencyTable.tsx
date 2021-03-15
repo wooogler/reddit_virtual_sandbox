@@ -49,7 +49,9 @@ function WordFrequencyTable({ wordFreq }: Props): ReactElement {
     <div className="flex flex-col">
       <div className="flex items-center mb-3">
         <div className="mr-4">
-          {number <= 1 ? `${number} post selected` : `${number} posts selected`}
+          {number <= 1
+            ? `${number} comment selected`
+            : `${number} comments selected`}
         </div>
         <Button
           type="primary"

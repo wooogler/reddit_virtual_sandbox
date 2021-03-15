@@ -115,12 +115,14 @@ export async function importSpamPostsAPI(
   return response.statusText;
 }
 
-export async function importTestDataAPI(
-  token: string
-) {
-  const response = await axios.post('/post/import_test_data/', {}, {
-    headers: { Authorization: `Token ${token}` },
-  })
+export async function importTestDataAPI(token: string) {
+  const response = await axios.post(
+    '/post/import_test_data/',
+    {},
+    {
+      headers: { Authorization: `Token ${token}` },
+    },
+  );
 
   return response.statusText;
 }
@@ -201,6 +203,18 @@ export async function applySeedsAPI(token: string, ids: string[]) {
   return response.status;
 }
 
+export async function applySeedAPI(token: string, seed: string) {
+  const response = await axios.post(
+    '/post/apply_seed/',
+    { seed },
+    {
+      headers: { Authorization: `Token ${token}` },
+    },
+  );
+
+  return response.status;
+}
+
 export async function wordVariationAPI(token: string, keyword: string) {
   const response = await axios.post<Variation[]>(
     '/post/word_variation/',
@@ -262,22 +276,32 @@ export async function addSpamAPI(
   return response.data;
 }
 
-export async function selectAllPostsAPI(token: string) {
-  const response = await axios.get<string[]>('/post/ids/', {
-    headers: { Authorization: `Token ${token}` },
-  }).catch((error) => {
-    return error.message;
-  });
+export async function selectPostsAPI(token: string, type: SelectType) {
+  const response = await axios
+    .get<string[]>('/post/ids/', {
+      params: {
+        type,
+      },
+      headers: { Authorization: `Token ${token}` },
+    })
+    .catch((error) => {
+      return error.message;
+    });
 
   return response.data;
 }
 
-export async function selectAllSpamsAPI(token: string) {
-  const response = await axios.get<string[]>('/spam/ids/', {
-    headers: { Authorization: `Token ${token}` },
-  }).catch((error) => {
-    return error.message;
-  });
+export async function selectSpamsAPI(token: string, type: SelectType) {
+  const response = await axios
+    .get<string[]>('/spam/ids/', {
+      params: {
+        type,
+      },
+      headers: { Authorization: `Token ${token}` },
+    })
+    .catch((error) => {
+      return error.message;
+    });
 
   return response.data;
 }
@@ -367,3 +391,5 @@ export type SpamType =
   | 'spam_submission'
   | 'reports_comment'
   | 'reports_submission';
+
+export type SelectType = 'all' | 'filtered' | 'unfiltered';

@@ -71,7 +71,7 @@ function RuleSelector({ editables, loadingRule }: RuleSelectorProps) {
     <RuleSelectorDiv className="flex flex-col">
       {loadingRule && <OverlayLoading text="Apply Rules..." />}
       <Tree
-        checkable
+        // checkable
         onCheck={onCheck}
         treeData={treeDataOriginal}
         defaultExpandAll={true}

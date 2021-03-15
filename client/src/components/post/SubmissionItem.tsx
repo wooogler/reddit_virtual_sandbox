@@ -60,7 +60,7 @@ function SubmissionItem({submission, match, spam}: SubmissionItemProps) {
         <SubredditText text={submission.subreddit} />
         <div className='mx-1 text-gray-300'>•</div>
         <AuthorText text={submission.author} />
-        <DatetimeText datetime={submission.created_utc} />
+        <DatetimeText datetime={submission.created_utc} url={submission.url}/>
         {/* <DomainText text={submission.domain} matchDomain={matchDomain} /> */}
       </div>
       <div className='pt-2'>

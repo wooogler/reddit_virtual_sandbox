@@ -67,9 +67,9 @@ function SpamList({
       {loadingApplySeeds && <OverlayLoading text="Finding FP & FN..." />}
       <ListHeader
         list="moderated"
-        name="Targets"
+        name="Spam-filtered Comments"
         splitView={splitSpamList}
-        tooltipText="The posts you want to target"
+        tooltipText="Comments moderated by AutoModerator and human moderators"
         userImported={spamUserImported}
         span={spamSpan}
       />

@@ -1,5 +1,5 @@
-import { ArrowLeftOutlined, DeleteOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Popconfirm, Tooltip } from 'antd';
+import { ArrowLeftOutlined, DeleteOutlined, DownOutlined } from '@ant-design/icons';
+import { Button, Checkbox, Dropdown, Menu, Popconfirm, Tooltip } from 'antd';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import React, { ReactElement } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,7 +9,7 @@ import {
   getPostsRefresh,
   getSpamsRefresh,
   moveSpams,
-  selectAllSpams,
+  selectSpams,
 } from '../../modules/post/actions';
 import { postActions, postSelector } from '../../modules/post/slice';
 
@@ -17,6 +17,9 @@ function SpamSelected(): ReactElement {
   const dispatch: AppDispatch = useDispatch();
   const selectedSpamId = useSelector(postSelector.selectedSpamId);
   const loadingDelete = useSelector(postSelector.loadingSpamDelete);
+  const isSelectAll =
+    useSelector(postSelector.count).spams.all === selectedSpamId.length;
+  const isSelectNone = selectedSpamId.length === 0;
 
   const handleClickDelete = () => {
     dispatch(deleteSpams(selectedSpamId)).then(() => {
@@ -33,19 +36,50 @@ function SpamSelected(): ReactElement {
     dispatch(postActions.clearSelectedSpamPostId());
   };
 
-  const handleSelectAll = (e: CheckboxChangeEvent) => {
+  const onSelectAll = (e: CheckboxChangeEvent) => {
     if (e.target.checked) {
-      dispatch(selectAllSpams());
+      dispatch(selectSpams('all'));
     } else {
       dispatch(postActions.clearSelectedSpamPostId());
     }
   };
 
+  const onSelectFiltered = () => {
+    dispatch(selectSpams('filtered'));
+  };
+
+  const onSelectUnfiltered = () => {
+    dispatch(selectSpams('unfiltered'));
+  };
+
+  const menu = (
+    <Menu>
+      <Menu.Item key="filtered" onClick={onSelectFiltered}>
+        filtered
+      </Menu.Item>
+      <Menu.Item key="unfiltered" onClick={onSelectUnfiltered}>
+        no filtered
+      </Menu.Item>
+    </Menu>
+  );
+
   return (
     <div className="flex items-center ml-2">
-      <Checkbox onChange={handleSelectAll} className="mr-2" />
+      <Checkbox
+        onChange={onSelectAll}
+        checked={isSelectAll}
+        indeterminate={!isSelectAll && !isSelectNone}
+      />
+      <Dropdown
+        overlay={menu}
+        trigger={['click']}
+        className="pl-1"
+        placement="bottomCenter"
+      >
+        <DownOutlined />
+      </Dropdown>
       <div className="flex justify-center items-center flex-1">
-        <Tooltip title="move to Targets" placement="bottom">
+        {/* <Tooltip title="move to Targets" placement="bottom">
           <Button
             disabled={selectedSpamId.length === 0}
             type="link"
@@ -53,8 +87,13 @@ function SpamSelected(): ReactElement {
             size="small"
             onClick={handleClickMove}
           />
-        </Tooltip>
-        <Popconfirm 
+        </Tooltip> */}
+        <div className="ml-2">
+          {selectedSpamId.length <= 1
+            ? `${selectedSpamId.length} comment selected`
+            : `${selectedSpamId.length} comments selected`}
+        </div>
+        <Popconfirm
           placement="bottom"
           title="Are you sure?"
           onConfirm={handleClickDelete}
@@ -70,11 +109,6 @@ function SpamSelected(): ReactElement {
             />
           </Tooltip>
         </Popconfirm>
-        <div className="ml-2">
-          {selectedSpamId.length <= 1
-            ? `${selectedSpamId.length} post selected`
-            : `${selectedSpamId.length} posts selected`}
-        </div>
       </div>
     </div>
   );

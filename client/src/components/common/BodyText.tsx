@@ -5,16 +5,34 @@ import { PostType } from '../../modules/post/slice';
 import { SpamType } from '../../lib/api/modsandbox/post';
 import { RootState } from '../../modules';
 import { useSelector } from 'react-redux';
-import {
-  LinkOutlined,
-} from '@ant-design/icons';
+import ReactMarkdown from 'react-markdown';
+import { LinkOutlined } from '@ant-design/icons';
 import { CollapseIcon, ExpandIcon } from '../../static/svg';
+import styled from 'styled-components';
+import { prependListener } from 'process';
+import Linkify from 'linkifyjs/react';
 
 export interface BodyTextProps {
   text: string;
   matchBody?: Index[];
   type: PostType | SpamType;
   url: string;
+}
+
+function LinkRenderer(props: { href: string; children: any }) {
+  return (
+    <a
+      href={
+        props.href.startsWith('/r/')
+          ? 'https://www.reddit.com' + props.href
+          : props.href
+      }
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      {props.children}
+    </a>
+  );
 }
 
 function BodyText({ text, matchBody, type, url }: BodyTextProps) {
@@ -38,16 +56,31 @@ function BodyText({ text, matchBody, type, url }: BodyTextProps) {
     e.stopPropagation();
   };
 
+  const linkProperties = {
+    target: '_blank',
+    rel: 'nofollow noopener noreferrer',
+  };
+
   return (
     <>
-      <div className={'text-sm font-body ' + (ellipsis && 'truncate')}>
-        {matchBody ? (
+      <BodyTextDiv className={'text-sm font-body ' + (ellipsis && 'truncate')}>
+        {matchBody && matchBody.length !== 0 ? (
           <InteractionText text={text} match={matchBody} />
         ) : (
-          <>{text}</>
+          <ReactMarkdown
+            source={text}
+            renderers={{
+              link: LinkRenderer,
+              paragraph: (props) => (
+                <Linkify options={{ target: '_blank' }}>
+                  <p>{props.children}</p>
+                </Linkify>
+              ),
+            }}
+          />
         )}
-      </div>
-      <div className="flex items-center opacity-60">
+      </BodyTextDiv>
+      {/* <div className="flex items-center opacity-60">
         {text.length > 50 && (
           <button
             className="hover:bg-gray-200 p-1 flex w-7"
@@ -68,10 +101,23 @@ function BodyText({ text, matchBody, type, url }: BodyTextProps) {
           <LinkOutlined />
           <div className='ml-1'>link</div>
         </a>
-      </div>
+      </div> */}
     </>
   );
 }
 
+const BodyTextDiv = styled.div`
+  a {
+    text-decoration: underline;
+    color: #0071bc;
+  }
+  ul {
+    list-style-type: disc;
+    padding-left: 15px;
+  }
+  code {
+    color: #ff006d;
+  }
+`;
 
 export default BodyText;

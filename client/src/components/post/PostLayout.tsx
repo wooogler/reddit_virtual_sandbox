@@ -4,26 +4,35 @@ import PostHeaderContainer from '../../containers/post/PostHeaderContainer';
 import PostListContainer from '../../containers/post/PostListContainer';
 import SpamPostListContainer from '../../containers/post/SpamListContainer';
 
-function PostLayout() {
+interface Props {
+  moderated?: boolean;
+}
+
+function PostLayout({ moderated }: Props) {
   return (
-    <Grid>
-      <PostHeaderLayout>
+    <div className="flex flex-col h-full">
+      {/* <div className='h-12'>
         <PostHeaderContainer />
-      </PostHeaderLayout>
-      <div className='overflow-auto'>
-        <PostListContainer />
+      </div> */}
+      <div className="flex flex-1 h-screen">
+        {moderated ? (
+          <div className="overflow-y-auto flex-1">
+            <SpamPostListContainer />
+          </div>
+        ) : (
+          <div className="overflow-y-auto flex-1">
+            <PostListContainer />
+          </div>
+        )}
       </div>
-      <div className='overflow-auto'>
-        <SpamPostListContainer />
-      </div>
-    </Grid>
+    </div>
   );
 }
 
 const Grid = styled.div`
   display: grid;
   height: 100vh;
-  grid-template-columns: minmax(0, 1fr) 1fr;
+  /* grid-template-columns: minmax(0, 1fr) 1fr; */
   grid-template-rows: 3rem 1fr;
 `;
 
