@@ -67,14 +67,14 @@ function RuleActions({ mode, code, title }: RuleActionsProps) {
         </Select>
       </div>
       <div className="ml-auto flex">
-        <CopyToClipboard text={code} onCopy={handleCopy}>
+        {/* <CopyToClipboard text={code} onCopy={handleCopy}>
           <Button size="large" className="mr-2">
             Copy
           </Button>
         </CopyToClipboard>
         <a download={title} href={downloadLink} className="mr-2">
           <Button size="large">Export YAML</Button>
-        </a>
+        </a> */}
         <Button onClick={handleClickRun} type="primary" size="large">
           {mode === 'edit' ? 'Run' : 'Edit'}
         </Button>

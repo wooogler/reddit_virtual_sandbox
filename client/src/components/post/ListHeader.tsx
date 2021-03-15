@@ -123,7 +123,7 @@ function ListHeader({
       </div>
       <div className="flex flex-wrap mb-2">
         <div>
-          <Select
+          {/* <Select
             defaultValue="all"
             onChange={handleChangeView}
             size="small"
@@ -132,7 +132,7 @@ function ListHeader({
             <Option value="all">All Posts</Option>
             <Option value="submission">Submission</Option>
             <Option value="comment">Comment</Option>
-          </Select>
+          </Select> */}
           {list === 'unmoderated' ? (
             <Select
               onChange={handleChangeSort}
@@ -159,10 +159,10 @@ function ListHeader({
                 <Option value="created-new">New</Option>
                 <Option value="created-old">Old</Option>
               </OptGroup>
-              <OptGroup label="banned by">
+              {/* <OptGroup label="banned by">
                 <Option value="banned-new">New</Option>
                 <Option value="banned-old">Old</Option>
-              </OptGroup>
+              </OptGroup> */}
               <Option value="fpfn" disabled>FP & FN</Option>
             </Select>
           )}
@@ -174,9 +174,9 @@ function ListHeader({
           <Checkbox onChange={handleChangeSplitView} checked={splitView}>
             Filtered Only
           </Checkbox>
-          <Checkbox onChange={handleChangeSpanAll} checked={span}>
+          {/* <Checkbox onChange={handleChangeSpanAll} checked={span}>
             Span All
-          </Checkbox>
+          </Checkbox> */}
         </div>
       </div>
     </>

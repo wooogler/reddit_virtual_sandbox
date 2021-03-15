@@ -9,9 +9,9 @@ function RuleLayout() {
 
   return (
     <Grid>
-      <TabsFrame>
+      {/* <TabsFrame>
         <RuleTabListContainer />
-      </TabsFrame>
+      </TabsFrame> */}
       <EditorFrame>
         <RuleEditorContainer/>
       </EditorFrame>
@@ -25,7 +25,8 @@ function RuleLayout() {
 const Grid = styled.div`
   display: grid;
   height: 100vh;
-  grid-template-rows: 3rem 1fr 4rem;
+  /* grid-template-rows: 3rem 1fr 4rem; */
+  grid-template-rows: 1fr 4rem;
 `;
 
 const TabsFrame = styled.div`

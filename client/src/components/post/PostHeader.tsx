@@ -68,11 +68,11 @@ function PostHeader({ userInfo, redditLogged }: PostHeaderProps) {
 
   const menu = (
     <Menu>
-      <Menu.Item onClick={() => setIsPostImportOpen(true)}>
-        Import Subreddit Posts
-      </Menu.Item>
       <Menu.Item onClick={handleImportTest}>
         Import Test Posts
+      </Menu.Item>
+      <Menu.Item onClick={() => setIsPostImportOpen(true)} disabled>
+        Import Subreddit Posts
       </Menu.Item>
       <Menu.Item
         onClick={() => {
@@ -82,6 +82,7 @@ function PostHeader({ userInfo, redditLogged }: PostHeaderProps) {
             redditLogInWarning('spam');
           }
         }}
+        disabled
       >
         Import Spam
       </Menu.Item>
@@ -93,6 +94,7 @@ function PostHeader({ userInfo, redditLogged }: PostHeaderProps) {
             redditLogInWarning('reports');
           }
         }}
+        disabled
       >
         Import Reports
       </Menu.Item>
@@ -104,6 +106,7 @@ function PostHeader({ userInfo, redditLogged }: PostHeaderProps) {
             redditLogInWarning('modqueue');
           }
         }}
+        disabled
       >
         Import Mod Queue
       </Menu.Item>
@@ -151,7 +154,7 @@ function PostHeader({ userInfo, redditLogged }: PostHeaderProps) {
 
       <div className="ml-auto flex items-center">
         <div className="mr-3 text-lg">Hi, {userInfo?.username}</div>
-        {redditLogged ? (
+        {/* {redditLogged ? (
           <Button danger size="large" onClick={handleClickRedditLogout}>
             Reddit Logout
           </Button>
@@ -159,7 +162,7 @@ function PostHeader({ userInfo, redditLogged }: PostHeaderProps) {
           <Button type="primary" size="large" onClick={handleClickRedditLogin}>
             Reddit Login
           </Button>
-        )}
+        )} */}
         <Button
           danger
           type="primary"

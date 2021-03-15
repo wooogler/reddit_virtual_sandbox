@@ -161,7 +161,7 @@ export const initialState: PostState = {
     split: false,
     userImported: true,
     selected: [],
-    span: false,
+    span: true,
   },
   spams: {
     all: {
@@ -206,7 +206,7 @@ export const initialState: PostState = {
     split: false,
     selected: [],
     userImported: true,
-    span: false,
+    span: true,
   },
 };
 
