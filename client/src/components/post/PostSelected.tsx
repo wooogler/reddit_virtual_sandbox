@@ -8,6 +8,7 @@ import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import React, { ReactElement, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../..';
+import { RootState } from '../../modules';
 import {
   deletePosts,
   getPostsRefresh,
@@ -24,6 +25,7 @@ function PostSelected(): ReactElement {
   const isSelectAll =
     useSelector(postSelector.count).posts.all === selectedPostId.length;
   const isSelectNone = selectedPostId.length === 0;
+  const experiment = useSelector((state: RootState) => state.user.experiment);
 
   const handleClickDelete = () => {
     dispatch(deletePosts(selectedPostId)).then(() => {
@@ -74,15 +76,18 @@ function PostSelected(): ReactElement {
         checked={isSelectAll}
         indeterminate={!isSelectAll && !isSelectNone}
       />
-      <Dropdown
-        overlay={menu}
-        trigger={['click']}
-        className="pl-1"
-        placement="bottomCenter"
-      >
-        <DownOutlined />
-      </Dropdown>
-      <div className="flex justify-center items-center ml-auto">
+      {experiment === 'modsandbox' && (
+        <Dropdown
+          overlay={menu}
+          trigger={['hover']}
+          className="pl-1"
+          placement="bottomCenter"
+        >
+          <DownOutlined />
+        </Dropdown>
+      )}
+
+      <div className="flex flex-1 justify-center items-center">
         <div className="mr-2">
           {selectedPostId.length <= 1
             ? `${selectedPostId.length} comment selected`

@@ -1,11 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import SplitPane from 'react-split-pane';
 import styled from 'styled-components';
+import { AppDispatch } from '../..';
 import palette from '../../lib/styles/palette';
+import { getPostsRefresh, getSpamsRefresh } from '../../modules/post/actions';
+import { submitCode } from '../../modules/rule/slice';
 import PostLayout from '../post/PostLayout';
 import RuleLayout from '../rule/RuleLayout';
 
 function HomeLayout() {
+
   return (
     <HomeSplitPane
       split="vertical"

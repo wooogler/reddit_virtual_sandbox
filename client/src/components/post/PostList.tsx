@@ -6,9 +6,7 @@ import SplitPane from 'react-split-pane';
 import palette from '../../lib/styles/palette';
 import { Post } from '../../lib/api/modsandbox/post';
 import OverlayLoading from '../common/OverlayLoading';
-import {
-  getPostsRefresh,
-} from '../../modules/post/actions';
+import { getPostsRefresh } from '../../modules/post/actions';
 import { AppDispatch } from '../..';
 import PostItem from './PostItem';
 import { getMatch } from '../../lib/utils/match';
@@ -53,14 +51,15 @@ function PostList({
   const pageAll = useSelector(postSelector.pageAll);
   const pageFiltered = useSelector(postSelector.pageFiltered);
   const pageUnfiltered = useSelector(postSelector.pageUnfiltered);
-  const loadingApplySeeds = useSelector((state: RootState) => state.post.spams.applySeeds.loading);
+  const loadingApplySeeds = useSelector(
+    (state: RootState) => state.post.spams.applySeeds.loading,
+  );
+  const experiment = useSelector((state: RootState) => state.user.experiment);
 
   const handleClickBar = () => {
     dispatch(postActions.toggleSplitPostList());
     dispatch(getPostsRefresh());
   };
-
-  
 
   return (
     <div className="relative flex flex-col h-full mx-2">
@@ -75,12 +74,15 @@ function PostList({
         userImported={postUserImported}
         span={postSpan}
       />
-      <div
-        onClick={handleClickBar}
-        className="cursor-pointer hover:opacity-70"
-      >
-        <BarRate total={count.posts.all} part={count.posts.filtered} />
-      </div>
+      {experiment !== 'baseline' && (
+        <div
+          onClick={handleClickBar}
+          className="cursor-pointer hover:opacity-70"
+        >
+          <BarRate total={count.posts.all} part={count.posts.filtered} />
+        </div>
+      )}
+
       <PostSelected />
       <SplitPaneDiv className="flex-1 overflow-y-auto">
         {splitView ? (

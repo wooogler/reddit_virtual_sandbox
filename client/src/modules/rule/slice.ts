@@ -32,7 +32,7 @@ type Item = {
   [key: string]: string[] | string | null;
 };
 
-type Tool = 'none' | 'freq' | 'sim' | 'fpfn'
+type Tool = 'none' | 'freq' | 'sim' | 'fpfn';
 
 export type RuleState = {
   loading: boolean;
@@ -66,7 +66,7 @@ export const initialState: RuleState = {
   submittedCode: '',
   clickedRuleIndex: '',
   keyMaps: [],
-  tool: 'fpfn',
+  tool: 'none',
 };
 
 export const clickMatchedThunk = (
@@ -80,14 +80,19 @@ interface ParsingError {
   detail: string;
 }
 
+type SubmitCode = {
+  code: string;
+  multiple: boolean;
+};
+
 export const submitCode = createAsyncThunk<
   void,
-  string,
+  { code: string; multiple: boolean },
   { state: RootState; rejectValue: ParsingError }
->('rule/submitCode', async (code, { getState, rejectWithValue }) => {
+>('rule/submitCode', async (input, { getState, rejectWithValue }) => {
   const token = getState().user.token;
   try {
-    await submitCodeAPI(token, code);
+    await submitCodeAPI(token, input.code, input.multiple);
   } catch (err) {
     let error: AxiosError<ParsingError> = err;
     if (!error.response) {
@@ -169,7 +174,7 @@ const ruleSlice = createSlice({
     },
     changeTool: (state, action: PayloadAction<Tool>) => {
       state.tool = action.payload;
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -179,7 +184,7 @@ const ruleSlice = createSlice({
       })
       .addCase(submitCode.fulfilled, (state, action) => {
         state.loading = false;
-        state.submittedCode = action.meta.arg;
+        state.submittedCode = action.meta.arg.code;
       })
       .addCase(submitCode.rejected, (state, action) => {
         if (action.payload) {

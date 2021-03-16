@@ -42,6 +42,7 @@ function BodyText({ text, matchBody, type, url }: BodyTextProps) {
     }
     return state.post.spams.span;
   });
+  const experiment = useSelector((state: RootState) => state.user.experiment);
   useEffect(() => {
     setEllipsis(!span);
   }, [span]);
@@ -64,7 +65,7 @@ function BodyText({ text, matchBody, type, url }: BodyTextProps) {
   return (
     <>
       <BodyTextDiv className={'text-sm font-body ' + (ellipsis && 'truncate')}>
-        {matchBody && matchBody.length !== 0 ? (
+        {matchBody && matchBody.length !== 0 && experiment === 'modsandbox' ? (
           <InteractionText text={text} match={matchBody} />
         ) : (
           <ReactMarkdown

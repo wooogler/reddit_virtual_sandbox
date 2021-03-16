@@ -13,7 +13,7 @@ export type LoginForm = {
 export type SignupForm = {
   username: string;
   password: string;
-}
+};
 
 export type UserState = {
   loading: boolean;
@@ -21,7 +21,10 @@ export type UserState = {
   token: string;
   reddit_logged: boolean;
   me: UserInfo | null;
+  experiment: Experiment;
 };
+
+export type Experiment = 'baseline' | 'sandbox' | 'modsandbox';
 
 const initialState: UserState = {
   loading: false,
@@ -31,6 +34,7 @@ const initialState: UserState = {
   me: {
     username: '',
   },
+  experiment: 'baseline',
 };
 
 const userSlice = createSlice({
@@ -72,12 +76,19 @@ const userSlice = createSlice({
     getUserInfo: {
       reducer: (state) => {
         state.loading = true;
-      }, 
+      },
       prepare: (token: string) => ({
-        payload: token
-      })
+        payload: token,
+      }),
     },
-    getUserInfoSuccess: (state, action: PayloadAction<{userInfo: UserInfo, token: string, reddit_logged: boolean}>) => {
+    getUserInfoSuccess: (
+      state,
+      action: PayloadAction<{
+        userInfo: UserInfo;
+        token: string;
+        reddit_logged: boolean;
+      }>,
+    ) => {
       state.me = action.payload.userInfo;
       state.reddit_logged = action.payload.reddit_logged;
       state.token = action.payload.token;
@@ -92,11 +103,11 @@ const userSlice = createSlice({
         state.loading = true;
       },
       prepare: (signupForm: SignupForm) => ({
-        payload: signupForm
-      })
+        payload: signupForm,
+      }),
     },
     signupSuccess: (state, action: PayloadAction<string>) => {
-      state.loading=false;
+      state.loading = false;
       state.token = action.payload;
     },
     signupError: (state, action: PayloadAction<Error>) => {
@@ -113,7 +124,7 @@ const selectToken = createSelector<UserState, string, string>(
 
 export const userSelector = {
   token: (state: RootState) => selectToken(state.user),
-}
+};
 
 const { actions, reducer } = userSlice;
 export const {
@@ -128,7 +139,7 @@ export const {
   getUserInfoError,
   signup,
   signupError,
-  signupSuccess
+  signupSuccess,
 } = actions;
 
 export default reducer;

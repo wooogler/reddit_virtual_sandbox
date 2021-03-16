@@ -6,19 +6,17 @@ import RuleTabListContainer from '../../containers/rule/RuleTabListContainer';
 import palette from '../../lib/styles/palette';
 
 function RuleLayout() {
-
   return (
-    <Grid>
+    <div className="flex flex-col h-screen">
       {/* <TabsFrame>
         <RuleTabListContainer />
       </TabsFrame> */}
-      <EditorFrame>
-        <RuleEditorContainer/>
-      </EditorFrame>
-      <ActionsFrame>
-        <RuleActionsContainer/>
-      </ActionsFrame>
-    </Grid>
+      <div className="text-xl mx-2 font-display my-1">AutoModerator Configuration</div>
+      <RuleEditorContainer />
+      <div className='flex bg-gray-200'>
+        <RuleActionsContainer />    
+      </div>
+    </div>
   );
 }
 

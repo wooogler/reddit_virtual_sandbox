@@ -54,7 +54,7 @@ function RuleSelector({ editables, loadingRule }: RuleSelectorProps) {
     ]);
     const code = treeToCode(tree);
     const keyMaps = treeToKeyMaps(tree);
-    dispatch(submitCode(code)).then(() => {
+    dispatch(submitCode({code, multiple: true})).then(() => {
       dispatch(getPostsRefresh());
       dispatch(getSpamsRefresh());
     });

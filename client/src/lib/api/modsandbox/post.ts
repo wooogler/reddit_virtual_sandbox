@@ -254,6 +254,21 @@ export async function addPostAPI(token: string, newPost: NewPost) {
   return response.data;
 }
 
+export async function addTestPostAPI(token: string, newPost: NewPost) {
+  const response = await axios.post<Post>(
+    '/post/add_test/',
+    {
+      ...newPost,
+      created_utc: moment(new Date()).utc().format('YYYY-MM-DD HH:mm:ss'),
+    },
+    {
+      headers: { Authorization: `Token ${token}` },
+    },
+  );
+
+  return response.data;
+}
+
 export async function addSpamAPI(
   token: string,
   newSpam: NewSpam,

@@ -80,6 +80,7 @@ function DraggableModal({
       mask={false}
       width="36rem"
       bodyStyle={{ padding: '1rem' }}
+      destroyOnClose
     >
       {children}
     </Modal>

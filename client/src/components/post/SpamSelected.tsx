@@ -1,9 +1,14 @@
-import { ArrowLeftOutlined, DeleteOutlined, DownOutlined } from '@ant-design/icons';
+import {
+  ArrowLeftOutlined,
+  DeleteOutlined,
+  DownOutlined,
+} from '@ant-design/icons';
 import { Button, Checkbox, Dropdown, Menu, Popconfirm, Tooltip } from 'antd';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import React, { ReactElement } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../..';
+import { RootState } from '../../modules';
 import {
   deleteSpams,
   getPostsRefresh,
@@ -20,6 +25,7 @@ function SpamSelected(): ReactElement {
   const isSelectAll =
     useSelector(postSelector.count).spams.all === selectedSpamId.length;
   const isSelectNone = selectedSpamId.length === 0;
+  const experiment = useSelector((state: RootState) => state.user.experiment);
 
   const handleClickDelete = () => {
     dispatch(deleteSpams(selectedSpamId)).then(() => {
@@ -70,14 +76,16 @@ function SpamSelected(): ReactElement {
         checked={isSelectAll}
         indeterminate={!isSelectAll && !isSelectNone}
       />
-      <Dropdown
-        overlay={menu}
-        trigger={['click']}
-        className="pl-1"
-        placement="bottomCenter"
-      >
-        <DownOutlined />
-      </Dropdown>
+      {experiment === 'modsandbox' && (
+        <Dropdown
+          overlay={menu}
+          trigger={['hover']}
+          className="pl-1"
+          placement="bottomCenter"
+        >
+          <DownOutlined />
+        </Dropdown>
+      )}
       <div className="flex justify-center items-center flex-1">
         {/* <Tooltip title="move to Targets" placement="bottom">
           <Button

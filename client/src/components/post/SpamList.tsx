@@ -7,9 +7,7 @@ import palette from '../../lib/styles/palette';
 import OverlayLoading from '../common/OverlayLoading';
 import { Spam } from '../../lib/api/modsandbox/post';
 import { AppDispatch } from '../..';
-import {
-  getSpamsRefresh,
-} from '../../modules/post/actions';
+import { getSpamsRefresh } from '../../modules/post/actions';
 import { getMatch } from '../../lib/utils/match';
 import SpamItem from './SpamItem';
 import ListHeader from './ListHeader';
@@ -53,7 +51,10 @@ function SpamList({
   const spamPageAll = useSelector(postSelector.spamPageAll);
   const spamPageFiltered = useSelector(postSelector.spamPageFiltered);
   const spamPageUnfiltered = useSelector(postSelector.spamPageUnfiltered);
-  const loadingApplySeeds = useSelector((state: RootState) => state.post.spams.applySeeds.loading);
+  const loadingApplySeeds = useSelector(
+    (state: RootState) => state.post.spams.applySeeds.loading,
+  );
+  const experiment = useSelector((state: RootState) => state.user.experiment);
 
   const handleClickBar = () => {
     dispatch(postActions.toggleSplitSpamPostList());
@@ -73,13 +74,16 @@ function SpamList({
         userImported={spamUserImported}
         span={spamSpan}
       />
-      <div
-        onClick={handleClickBar}
-        className="cursor-pointer hover:opacity-70"
-      >
-        <BarRate total={count.spams.all} part={count.spams.filtered} />
-      </div>
-      <SpamSelected/>
+      {experiment !== 'baseline' && (
+        <div
+          onClick={handleClickBar}
+          className="cursor-pointer hover:opacity-70"
+        >
+          <BarRate total={count.spams.all} part={count.spams.filtered} />
+        </div>
+      )}
+
+      <SpamSelected />
       <SplitPaneDiv className="flex-1 overflow-y-auto">
         {splitView ? (
           <SplitPane

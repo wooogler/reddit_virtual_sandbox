@@ -3,6 +3,7 @@ import { RootState } from '..';
 import {
   addPostAPI,
   addSpamAPI,
+  addTestPostAPI,
   applySeedAPI,
   applySeedsAPI,
   deletePostsAPI,
@@ -125,6 +126,15 @@ export const addPost = createAsyncThunk<Post, NewPost, { state: RootState }>(
     return data;
   },
 );
+
+export const addTestPost = createAsyncThunk<
+  void,
+  NewPost,
+  { state: RootState }
+>('post/addTestPost', async (newPost, thunkAPI) => {
+  const token = thunkAPI.getState().user.token;
+  await addTestPostAPI(token, newPost);
+});
 
 export const addSpam = createAsyncThunk<Spam, NewSpam, { state: RootState }>(
   'post/addSpam',

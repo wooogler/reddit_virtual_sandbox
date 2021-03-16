@@ -23,8 +23,8 @@ function RuleEditorContainer() {
   );
 
   return (
-    <div className="flex flex-col h-full">
-      <div className="flex-1 mb-3">
+    <div className="flex flex-col h-full p-2">
+      <div className="mb-3 flex-1">
         {ruleState.mode === 'edit' ? (
           <RuleEditor code={ruleState.files[fileIndex].code} />
         ) : (

@@ -30,13 +30,18 @@ function FindFPFN(): ReactElement {
       .then(() => {
         dispatch(getPostsRefresh());
         dispatch(getSpamsRefresh());
-      })
+      });
     dispatch(postActions.clearSelectedSpamPostId());
     dispatch(postActions.clearSelectedPostId());
   };
   return (
     <div className="flex flex-col">
-      <TextArea rows={4} onChange={(e) => setSeed(e.target.value)} value={seed} />
+      <TextArea
+        placeholder="type a sentence to calculate similarity"
+        rows={4}
+        onChange={(e) => setSeed(e.target.value)}
+        value={seed}
+      />
       <div className="flex items-center">
         {/* <div className="mr-4">
           {number <= 1 ? `${number} post selected` : `${number} posts selected`}

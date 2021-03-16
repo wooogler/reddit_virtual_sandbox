@@ -35,6 +35,7 @@ function RuleActions({ mode, code, title }: RuleActionsProps) {
   const [importClick, setImportClick] = useState(true);
   const tool = useSelector((state: RootState) => state.rule.tool);
   const editables = useSelector((state: RootState) => state.rule.editables);
+  const experiment = useSelector((state: RootState) => state.user.experiment);
 
   // const handleClickRun = () => {
   //   if (mode === 'select') {
@@ -59,23 +60,45 @@ function RuleActions({ mode, code, title }: RuleActionsProps) {
 
   const handleClickRun = () => {
     if (mode === 'select') {
-      dispatch(submitCode('')).then(() => {
+      dispatch(submitCode({ code: '', multiple: true })).then(() => {
         dispatch(getPostsRefresh());
         dispatch(getSpamsRefresh());
       });
       dispatch(toggleEditorMode());
-      dispatch(postActions.clearSelectedPostId())
-      dispatch(postActions.clearSelectedSpamPostId())
+      dispatch(postActions.clearSelectedPostId());
+      dispatch(postActions.clearSelectedSpamPostId());
     } else {
       const keyMaps = treeToKeyMaps(tree);
-      dispatch(submitCode(code)).then(() => {
+      dispatch(submitCode({ code, multiple: true })).then(() => {
         dispatch(getPostsRefresh());
         dispatch(getSpamsRefresh());
       });
       dispatch(createKeyMaps(keyMaps));
       dispatch(createEditable());
-      dispatch(postActions.clearSelectedPostId())
-      dispatch(postActions.clearSelectedSpamPostId())
+      dispatch(postActions.clearSelectedPostId());
+      dispatch(postActions.clearSelectedSpamPostId());
+    }
+  };
+
+  const handleClickRunBaseline = () => {
+    if (mode === 'select') {
+      dispatch(submitCode({ code: '', multiple: false })).then(() => {
+        dispatch(getPostsRefresh());
+        dispatch(getSpamsRefresh());
+      });
+      dispatch(toggleEditorMode());
+      dispatch(postActions.clearSelectedPostId());
+      dispatch(postActions.clearSelectedSpamPostId());
+    } else {
+      const keyMaps = treeToKeyMaps(tree);
+      dispatch(submitCode({ code, multiple: false })).then(() => {
+        dispatch(getPostsRefresh());
+        dispatch(getSpamsRefresh());
+      });
+      dispatch(createKeyMaps(keyMaps));
+      dispatch(createEditable());
+      dispatch(postActions.clearSelectedPostId());
+      dispatch(postActions.clearSelectedSpamPostId());
     }
   };
 
@@ -100,23 +123,24 @@ function RuleActions({ mode, code, title }: RuleActionsProps) {
   };
 
   return (
-    <>
-      <div>
+    <div className="flex flex-wrap items-center flex-1">
+      {experiment === 'modsandbox' && (
         <Select
           defaultValue="fpfn"
           value={tool}
-          className="w-40"
+          className="w-40 m-2"
           onSelect={(value) => {
             dispatch(changeTool(value));
           }}
         >
-          {/* <Option value="none">No Tool</Option> */}
+          <Option value="none">No Tool</Option>
           <Option value="fpfn">Find FP & FN</Option>
           <Option value="freq">Word Frequency</Option>
           <Option value="sim">Word Similarity</Option>
         </Select>
-      </div>
-      <div className="ml-auto flex">
+      )}
+
+      <div className="flex ml-auto m-2">
         {/* <CopyToClipboard text={code} onCopy={handleCopy}>
           <Button size="large" className="mr-2">
             Copy
@@ -143,11 +167,17 @@ function RuleActions({ mode, code, title }: RuleActionsProps) {
         >
           Import
         </Button>
-        <Button onClick={handleClickRun} type="primary" size="large">
-          {mode === 'edit' ? 'Run' : 'Edit'}
-        </Button>
+        {experiment === 'baseline' ? (
+          <Button onClick={handleClickRunBaseline} type="primary" size="large">
+            {mode === 'edit' ? 'Run' : 'Edit'}
+          </Button>
+        ) : (
+          <Button onClick={handleClickRun} type="primary" size="large">
+            {mode === 'edit' ? 'Run' : 'Edit'}
+          </Button>
+        )}
       </div>
-    </>
+    </div>
   );
 }
 

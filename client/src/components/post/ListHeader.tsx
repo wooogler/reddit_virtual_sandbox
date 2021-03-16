@@ -15,6 +15,7 @@ import { Button } from 'antd';
 import DraggableModal from '../common/DraggableModal';
 import PostForm from './PostForm';
 import { getPostsRefresh, getSpamsRefresh } from '../../modules/post/actions';
+import { RootState } from '../../modules';
 
 export interface ListHeaderProps {
   list: 'unmoderated' | 'moderated';
@@ -38,6 +39,8 @@ function ListHeader({
   const spamSortType = useSelector(postSelector.spamSort);
   const { Option, OptGroup } = Select;
   const [isAddOpen, setIsAddOpen] = useState(false);
+  const ruleEditorMode = useSelector((state: RootState) => state.rule.mode);
+  const experiment = useSelector((state: RootState) => state.user.experiment);
 
   const handleClickAddPost = () => {
     setIsAddOpen(true);
@@ -102,27 +105,30 @@ function ListHeader({
         <Tooltip placement="right" title={tooltipText}>
           <InfoCircleOutlined />
         </Tooltip>
-        <div className="flex ml-auto mr-2">
-          <Button
-            className="ml-1"
-            type="primary"
-            size="small"
-            onClick={handleClickAddPost}
-          >
-            Add test post
-          </Button>
-        </div>
+        {list === 'unmoderated' && (
+          <div className="flex ml-auto mr-2">
+            <Button
+              className="ml-1"
+              type="primary"
+              size="small"
+              onClick={handleClickAddPost}
+              disabled={ruleEditorMode === 'edit'}
+            >
+              Add a test comment
+            </Button>
+          </div>
+        )}
 
         <DraggableModal
           visible={isAddOpen}
           setVisible={setIsAddOpen}
-          title={'Add a new post'}
+          title={'Add a test comment'}
         >
           <PostForm onClickClose={handleClickCloseModal} list={list} />
         </DraggableModal>
       </div>
       <div className="flex flex-wrap mb-2">
-        <div className='mx-2'>Sort by</div>
+        <div className="mx-2">Sort by</div>
         <div>
           {/* <Select
             defaultValue="all"
@@ -146,8 +152,12 @@ function ListHeader({
               <Option value="old">Old</Option>
               <Option value="votes_desc">more votes</Option>
               <Option value="votes_asc">less votes</Option>
-              <Option value="fpfn">FP & FN</Option>
-              <Option value="tptn">TP & TN</Option>
+              <Option value="fpfn" disabled={!splitView}>
+                FP & FN
+              </Option>
+              <Option value="tptn" disabled={!splitView}>
+                TP & TN
+              </Option>
             </Select>
           ) : (
             <Select
@@ -165,8 +175,12 @@ function ListHeader({
                 <Option value="banned-new">New</Option>
                 <Option value="banned-old">Old</Option>
               </OptGroup> */}
-              <Option value="fpfn">FP & FN</Option>
-              <Option value="tptn">TP & TN</Option>
+              <Option value="fpfn" disabled={!splitView}>
+                FP & FN
+              </Option>
+              <Option value="tptn" disabled={!splitView}>
+                TP & TN
+              </Option>
             </Select>
           )}
         </div>
@@ -174,9 +188,12 @@ function ListHeader({
           {/* <Checkbox onChange={handleChangeUserImported} checked={userImported}>
             User Imported
           </Checkbox> */}
-          <Checkbox onChange={handleChangeSplitView} checked={splitView}>
-            Split into Filtered / not Filtered
-          </Checkbox>
+          {experiment !== 'baseline' && (
+            <Checkbox onChange={handleChangeSplitView} checked={splitView}>
+              Split into Filtered / not Filtered
+            </Checkbox>
+          )}
+
           {/* <Checkbox onChange={handleChangeSpanAll} checked={span}>
             Span All
           </Checkbox> */}

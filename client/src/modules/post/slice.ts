@@ -14,6 +14,7 @@ import {
 import {
   addPost,
   addSpam,
+  addTestPost,
   applySeeds,
   deletePosts,
   deleteSpams,
@@ -526,7 +527,17 @@ const postSlice = createSlice({
         state.spams.import.loading = false;
         state.posts.import.error = action.error;
         state.spams.import.error = action.error;
-      });
+      })
+      .addCase(addTestPost.pending, (state) => {
+        state.posts.add.loading = true;
+      })
+      .addCase(addTestPost.fulfilled, (state) => {
+        state.posts.add.loading = false;
+      })
+      .addCase(addTestPost.rejected, (state, action) => {
+        state.posts.add.loading = false;
+        state.posts.add.error = action.error;
+      })
   },
 });
 
