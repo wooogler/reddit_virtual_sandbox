@@ -14,7 +14,7 @@ export const wordVariation = createAsyncThunk<
 
 export const wordFrequency = createAsyncThunk<
   Frequency[],
-  string[],
+  number[],
   { state: RootState }
 >('stat/wordFrequency', async (ids, thunkAPI) => {
   const token = thunkAPI.getState().user.token;

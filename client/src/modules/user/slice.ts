@@ -34,13 +34,16 @@ const initialState: UserState = {
   me: {
     username: '',
   },
-  experiment: 'baseline',
+  experiment: 'modsandbox',
 };
 
 const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
+    changeExperiment: (state, action: PayloadAction<Experiment>) => {
+      state.experiment = action.payload;
+    },
     login: {
       reducer: (state) => {
         state.loading = true;
@@ -140,6 +143,7 @@ export const {
   signup,
   signupError,
   signupSuccess,
+  changeExperiment,
 } = actions;
 
 export default reducer;

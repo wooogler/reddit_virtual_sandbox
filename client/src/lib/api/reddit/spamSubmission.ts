@@ -1,4 +1,5 @@
 export interface SpamSubmission {
+  id: number;
   type: 'spam_submission';
   subreddit: string;
   body: string;

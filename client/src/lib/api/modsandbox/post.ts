@@ -5,9 +5,9 @@ import { Filtered, PostType, SortType } from '../../../modules/post/slice';
 //amazon ec2
 // axios.defaults.baseURL = 'http://3.34.192.145:8080';
 //kixlab2
-// axios.defaults.baseURL = 'http://143.248.48.96:8887';
+axios.defaults.baseURL = 'http://143.248.48.96:8887';
 //kixlab3
-axios.defaults.baseURL = 'http://143.248.48.96:9888';
+// axios.defaults.baseURL = 'http://143.248.48.96:9888';
 
 export async function getPostsAPI(
   token: string | null,
@@ -127,7 +127,7 @@ export async function importTestDataAPI(token: string) {
   return response.statusText;
 }
 
-export async function deletePostsAPI(token: string, ids: string[]) {
+export async function deletePostsAPI(token: string, ids: number[]) {
   const response = await axios.post(
     '/post/deletes/',
     { ids },
@@ -139,7 +139,7 @@ export async function deletePostsAPI(token: string, ids: string[]) {
   return response.status;
 }
 
-export async function deleteSpamsAPI(token: string, ids: string[]) {
+export async function deleteSpamsAPI(token: string, ids: number[]) {
   const response = await axios.post(
     '/spam/deletes/',
     { ids },
@@ -167,7 +167,7 @@ export async function deleteAllSpamsAPI(token: string) {
   return response.statusText;
 }
 
-export async function movePostsAPI(token: string, ids: string[]) {
+export async function movePostsAPI(token: string, ids: number[]) {
   const response = await axios.post(
     '/post/moves/',
     { ids },
@@ -179,7 +179,7 @@ export async function movePostsAPI(token: string, ids: string[]) {
   return response.status;
 }
 
-export async function moveSpamsAPI(token: string, ids: string[]) {
+export async function moveSpamsAPI(token: string, ids: number[]) {
   const response = await axios.post(
     '/spam/moves/',
     { ids },
@@ -227,7 +227,7 @@ export async function wordVariationAPI(token: string, keyword: string) {
   return response.data;
 }
 
-export async function wordFrequencyAPI(token: string, ids: string[]) {
+export async function wordFrequencyAPI(token: string, ids: number[]) {
   const response = await axios.post<Frequency[]>(
     '/spam/word_frequency/',
     { ids },
@@ -348,6 +348,7 @@ export interface PaginatedSpamResponse {
 }
 
 export type Post = {
+  id: number;
   _id: string;
   _type: 'comment' | 'submission';
   author: string;
@@ -382,6 +383,7 @@ export type NewSpam = {
 };
 
 export type Spam = {
+  id: number;
   _id: string;
   _type: SpamType;
   author: string;

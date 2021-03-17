@@ -1,4 +1,5 @@
 export interface SpamComment {
+  id: number;
   type: 'spam_comment'
   banned_by: string;
   _id: string;

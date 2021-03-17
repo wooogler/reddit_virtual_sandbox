@@ -20,8 +20,8 @@ interface SpamListProps {
   spamsAll: Spam[];
   spamsFiltered: Spam[];
   spamsUnfiltered: Spam[];
-  selectedPostId: string[];
-  selectedSpamId: string[];
+  selectedPostId: number[];
+  selectedSpamId: number[];
   splitView: boolean;
   loadingSpam: boolean;
   loadingRule: boolean;
@@ -102,7 +102,7 @@ function SpamList({
                     return (
                       <SpamItem
                         spam={spam}
-                        selected={selectedSpamId.includes(spam._id)}
+                        selected={selectedSpamId.includes(spam.id)}
                         isMatched={spam.matching_rules.length !== 0}
                         match={getMatch(code, spam)}
                         key={spam._id}
@@ -137,7 +137,7 @@ function SpamList({
                     return (
                       <SpamItem
                         spam={spam}
-                        selected={selectedSpamId.includes(spam._id)}
+                        selected={selectedSpamId.includes(spam.id)}
                         isMatched={spam.matching_rules.length !== 0}
                         match={getMatch(code, spam)}
                         key={spam._id}
@@ -171,7 +171,7 @@ function SpamList({
                   return (
                     <SpamItem
                       spam={spam}
-                      selected={selectedSpamId.includes(spam._id)}
+                      selected={selectedSpamId.includes(spam.id)}
                       isMatched={spam.matching_rules.length !== 0}
                       match={getMatch(code, spam)}
                       key={spam._id}

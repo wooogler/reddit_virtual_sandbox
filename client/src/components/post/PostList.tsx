@@ -20,8 +20,8 @@ interface PostListProps {
   postsAll: Post[];
   postsFiltered: Post[];
   postsUnfiltered: Post[];
-  selectedSpamPostId: string[];
-  selectedPostId: string[];
+  selectedSpamPostId: number[];
+  selectedPostId: number[];
   splitView: boolean;
   loadingPost: boolean;
   loadingRule: boolean;
@@ -102,7 +102,7 @@ function PostList({
                     return (
                       <PostItem
                         post={post}
-                        selected={selectedPostId.includes(post._id)}
+                        selected={selectedPostId.includes(post.id)}
                         isMatched={post.matching_rules.length !== 0}
                         match={getMatch(code, post)}
                         key={post._id}
@@ -137,7 +137,7 @@ function PostList({
                     return (
                       <PostItem
                         post={post}
-                        selected={selectedPostId.includes(post._id)}
+                        selected={selectedPostId.includes(post.id)}
                         isMatched={post.matching_rules.length !== 0}
                         match={getMatch(code, post)}
                         key={post._id}
@@ -171,7 +171,7 @@ function PostList({
                   return (
                     <PostItem
                       post={post}
-                      selected={selectedPostId.includes(post._id)}
+                      selected={selectedPostId.includes(post.id)}
                       isMatched={post.matching_rules.length !== 0}
                       match={getMatch(code, post)}
                       key={post._id}
