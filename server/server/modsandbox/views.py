@@ -112,6 +112,7 @@ def apply_rules(request):
     """
     try:
         yaml = request.data["yaml"]
+        multiple = request.data["multiple"]
         rule_set = Ruleset(yaml)
     except Exception as e:
         logger.error(e)
@@ -127,11 +128,12 @@ def apply_rules(request):
         )
         rule_object.save()
 
-    for post in profile.used_posts.all():
-        for rule in Rule.objects.filter(user=profile.user):
-            rule_target = RuleTarget("Link", json.loads(rule.content))
-            if rule_target.check_item(post, ""):
-                post.matching_rules.add(rule)
+    if multiple == True:
+        for post in profile.used_posts.all():
+            for rule in Rule.objects.filter(user=profile.user):
+                rule_target = RuleTarget("Link", json.loads(rule.content))
+                if rule_target.check_item(post, ""):
+                    post.matching_rules.add(rule)
 
     return Response(status=status.HTTP_202_ACCEPTED)
 
@@ -225,12 +227,37 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(matching_rules__in=profile.user.rules.all())
             if sort == "fpfn":
                 queryset = queryset.order_by("similarity")
+            elif sort == "tptn":
+                queryset = queryset.order_by("-similarity")
         elif filtered == "unfiltered":
             queryset = queryset.exclude(matching_rules__in=profile.user.rules.all())
             if sort == "fpfn":
                 queryset = queryset.order_by("-similarity")
+            elif sort == "tptn":
+                queryset = queryset.order_by("similarity")
 
         return queryset
+
+    @action(methods=["post"], detail=False)
+    def add_test(self, request):
+        try:
+            test_data = request.data
+        except Exception as e:
+            logger.error(e)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        if self.request.user.is_authenticated:
+            profile = Profile.objects.get(user=request.user.id)
+            test_post = Post.objects.create(**test_data)
+            profile.used_posts.add(test_post)
+            for rule in Rule.objects.filter(user=profile.user):
+                rule_target = RuleTarget("Link", json.loads(rule.content))
+                if rule_target.check_item(test_post, ""):
+                    test_post.matching_rules.add(rule)
+
+            return Response(status=status.HTTP_201_CREATED)
+
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
 
     @action(methods=["post"], detail=False)
     def import_test_data(self, request):
@@ -241,9 +268,13 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
                 os.path.join(script_dir, "test_data/politics/normal_comments.json")
             ) as json_file:
                 normal_comments = json.load(json_file)
-                normal_ids = [comment["id"] for comment in normal_comments]
+                normal_ids = [
+                    comment["id"]
+                    for comment in normal_comments
+                    if comment["author"] != "AutoModerator"
+                ]
                 random.seed(100)
-                normal_ids = random.sample(normal_ids, 100)
+                normal_ids = random.sample(normal_ids, 2000)
                 json_file.close()
 
             with open(
@@ -268,11 +299,24 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
         queryset = super().get_queryset()
         if self.request.user.is_authenticated:
             profile = Profile.objects.get(user=self.request.user.id)
-            queryset = queryset.filter(_id__in=profile.used_posts.all())
-            post_ids = [post._id for post in queryset]
-            return Response(post_ids)
+        else:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
 
-        return Response(status=status.HTTP_401_UNAUTHORIZED)
+        try:
+            select_type = request.query_params.get("type", "all")
+        except Exception as e:
+            logger.error(e)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        if select_type == "all":
+            queryset = queryset.filter(_id__in=profile.used_posts.all())
+        elif select_type == "filtered":
+            queryset = queryset.filter(matching_rules__in=profile.user.rules.all())
+        elif select_type == "unfiltered":
+            queryset = queryset.exclude(matching_rules__in=profile.user.rules.all())
+
+        post_ids = [post._id for post in queryset]
+        return Response(post_ids)
 
     @action(methods=["post"], detail=False, name="Bring Reddit Posts")
     def bring(self, request):
@@ -382,6 +426,36 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_401_UNAUTHORIZED)
 
     @action(methods=["post"], detail=False)
+    def apply_seed(self, request):
+        try:
+            seed = request.data["seed"]
+        except Exception as e:
+            logger.error(e)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        if request.user:
+            profile = Profile.objects.get(user=request.user.id)
+            used_posts = Post.objects.filter(_id__in=profile.used_posts.all())
+            seed_array = [{"_id": "seed", "body": seed}]
+            posts_array = [
+                {
+                    "_id": post._id,
+                    "body": post.body,
+                }
+                for post in used_posts
+            ]
+            # compute similarities between seed and filtered posts
+            similarities = compute_cosine_similarity(
+                seed_array, posts_array
+            )  # example of return: [1, 0.8, ..., 0.7]
+            for i, post in enumerate(used_posts):
+                post.similarity = similarities[i]
+                post.save()
+            return Response(status=status.HTTP_201_CREATED)
+
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+    @action(methods=["post"], detail=False)
     def apply_seeds(self, request):
         try:
             ids = request.data["ids"]
@@ -426,6 +500,7 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
             for i, post in enumerate(used_posts):
                 post.similarity = similarities[i]
                 post.save()
+            return Response(status=status.HTTP_201_CREATED)
             # assert len(similarities) == len(filtered_post_array)
             # return Response({'_id': post._id, 'similarity': similarities[i]} for i, post in enumerate(filtered_posts))
         return Response(status=status.HTTP_401_UNAUTHORIZED)
@@ -527,10 +602,14 @@ class SpamHandlerViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(matching_rules__in=profile.user.rules.all())
             if sort == "fpfn":
                 queryset = queryset.order_by("similarity")
+            elif sort == "tptn":
+                queryset = queryset.order_by("-similarity")
         elif filtered == "unfiltered":
             queryset = queryset.exclude(matching_rules__in=profile.user.rules.all())
             if sort == "fpfn":
                 queryset = queryset.order_by("-similarity")
+            elif sort == "tptn":
+                queryset = queryset.order_by("similarity")
 
         return queryset
 
@@ -542,9 +621,24 @@ class SpamHandlerViewSet(viewsets.ModelViewSet):
         queryset = super().get_queryset()
         if self.request.user.is_authenticated:
             profile = Profile.objects.get(user=self.request.user.id)
+        else:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+        try:
+            select_type = request.query_params.get("type", "all")
+        except Exception as e:
+            logger.error(e)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        if select_type == "all":
             queryset = queryset.filter(_id__in=profile.used_posts.all())
-            post_ids = [post._id for post in queryset]
-            return Response(post_ids)
+        elif select_type == "filtered":
+            queryset = queryset.filter(matching_rules__in=profile.user.rules.all())
+        elif select_type == "unfiltered":
+            queryset = queryset.exclude(matching_rules__in=profile.user.rules.all())
+
+        post_ids = [post._id for post in queryset]
+        return Response(post_ids)
 
     @action(methods=["post"], detail=False, name="Crawl Spams from PRAW")
     def crawl(self, request):
