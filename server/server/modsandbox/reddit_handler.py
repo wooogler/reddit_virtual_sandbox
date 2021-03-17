@@ -135,7 +135,8 @@ class RedditHandler:
             ) as f:
                 print("normal")
                 normal_comments = json.load(f)
-                for comment in normal_comments:
+                for i, comment in enumerate(normal_comments):
+                    print(i)
                     created_utc = datetime.fromtimestamp(
                         comment.pop("created_utc"), tz=timezone.utc
                     )
@@ -146,6 +147,7 @@ class RedditHandler:
             print("no normal_cache.json file")
             save_normal = []
             for i in range(0, len(ids), 100):
+                print(i)
                 batch = ids[i : i + 100]
                 params = {"ids": ",".join(batch)}
                 comments = self._get_reddit_posts(self.endpoint["comment"], params)
@@ -162,7 +164,6 @@ class RedditHandler:
             with open(
                 os.path.join(self.script_dir, "test_data/cached/normal_cache.json"), "w"
             ) as f:
-                print(save_normal)
                 json.dump(save_normal, f, indent=2)
 
     def test_removed(self, removed_comments, profile):
