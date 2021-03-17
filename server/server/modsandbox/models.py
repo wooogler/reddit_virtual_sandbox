@@ -23,8 +23,7 @@ class Post(models.Model):
     """
     Post Model
     """
-
-    _id = models.CharField(max_length=300, primary_key=True)
+    _id = models.CharField(max_length=300)
     author = models.CharField(max_length=300, default='FakeUser')
     title = models.CharField(max_length=300)  # Note that comment doesn't have title.
     body = models.TextField(default='')

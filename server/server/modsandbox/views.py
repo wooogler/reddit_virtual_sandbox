@@ -202,7 +202,7 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         if is_private == "true":
-            queryset = queryset.filter(_id__in=profile.used_posts.all())
+            queryset = queryset.filter(id__in=profile.used_posts.all())
         elif is_private == "false":
             queryset = queryset.filter(profile__isnull=True)
 
@@ -309,13 +309,13 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         if select_type == "all":
-            queryset = queryset.filter(_id__in=profile.used_posts.all())
+            queryset = queryset.filter(id__in=profile.used_posts.all())
         elif select_type == "filtered":
             queryset = queryset.filter(matching_rules__in=profile.user.rules.all())
         elif select_type == "unfiltered":
             queryset = queryset.exclude(matching_rules__in=profile.user.rules.all())
 
-        post_ids = [post._id for post in queryset]
+        post_ids = [post.id for post in queryset]
         return Response(post_ids)
 
     @action(methods=["post"], detail=False, name="Bring Reddit Posts")
@@ -331,7 +331,7 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
 
         queryset = super().get_queryset()
         profile = Profile.objects.get(user=request.user.id)
-        for post in queryset.filter(_id__in=post_ids):
+        for post in queryset.filter(id__in=post_ids):
             profile.used_posts.add(post)
 
         return Response()
@@ -386,7 +386,7 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
 
         queryset = super().get_queryset()
         if request.user:
-            queryset.filter(profile__pk=request.user.id).filter(_id__in=ids).delete()
+            queryset.filter(profile__pk=request.user.id).filter(id__in=ids).delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
 
         return Response(status=status.HTTP_401_UNAUTHORIZED)
@@ -412,7 +412,7 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
         queryset = super().get_queryset()
         if request.user:
             profile = Profile.objects.get(user=request.user.id)
-            posts = queryset.filter(profile__pk=request.user.id).filter(_id__in=ids)
+            posts = queryset.filter(profile__pk=request.user.id).filter(id__in=ids)
             for post in posts:
                 post.banned_by = profile.username
                 post.banned_at_utc = datetime.now()
@@ -435,7 +435,7 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
 
         if request.user:
             profile = Profile.objects.get(user=request.user.id)
-            used_posts = Post.objects.filter(_id__in=profile.used_posts.all())
+            used_posts = Post.objects.filter(id__in=profile.used_posts.all())
             seed_array = [{"_id": "seed", "body": seed}]
             posts_array = [
                 {
@@ -465,9 +465,9 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
 
         if request.user:
             profile = Profile.objects.get(user=request.user.id)
-            seeds = Post.objects.filter(_id__in=ids)  # Moderated에서 seed로 선택된 포스트들의 집합
+            seeds = Post.objects.filter(id__in=ids)  # Moderated에서 seed로 선택된 포스트들의 집합
             used_posts = Post.objects.filter(
-                _id__in=profile.used_posts.all()
+                id__in=profile.used_posts.all()
             )  # Posts에 불러온 모든 포스트
             # filtered_posts = queryset.filter(matching_rules__in=profile.user.rules.all()) # Posts에서 필터링된 포스트들의 집합
             # unfiltered_posts = queryset.exclude(matching_rules__in=profile.user.rules.all()) # 똑같은데 필터링 되지않은 포스트들
@@ -516,10 +516,10 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
         if request.user:
             profile = Profile.objects.get(user=request.user.id)
             used_posts = Post.objects.filter(
-                _id__in=profile.used_posts.all(), _type__in=["submission", "comment"]
+                id__in=profile.used_posts.all(), _type__in=["submission", "comment"]
             )
             used_spams = Post.objects.filter(
-                _id__in=profile.used_posts.all(),
+                id__in=profile.used_posts.all(),
                 _type__in=[
                     "spam_submission",
                     "spam_comment",
@@ -571,7 +571,7 @@ class SpamHandlerViewSet(viewsets.ModelViewSet):
         queryset = super().get_queryset()
         if self.request.user.is_authenticated:
             profile = Profile.objects.get(user=self.request.user.id)
-            queryset = queryset.filter(_id__in=profile.used_posts.all())
+            queryset = queryset.filter(id__in=profile.used_posts.all())
         else:
             queryset = queryset.filter(profile__isnull=True)
         post_type = self.request.query_params.get("post_type", "all")
@@ -631,13 +631,13 @@ class SpamHandlerViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         if select_type == "all":
-            queryset = queryset.filter(_id__in=profile.used_posts.all())
+            queryset = queryset.filter(id__in=profile.used_posts.all())
         elif select_type == "filtered":
             queryset = queryset.filter(matching_rules__in=profile.user.rules.all())
         elif select_type == "unfiltered":
             queryset = queryset.exclude(matching_rules__in=profile.user.rules.all())
 
-        post_ids = [post._id for post in queryset]
+        post_ids = [post.id for post in queryset]
         return Response(post_ids)
 
     @action(methods=["post"], detail=False, name="Crawl Spams from PRAW")
@@ -682,7 +682,7 @@ class SpamHandlerViewSet(viewsets.ModelViewSet):
 
         queryset = super().get_queryset()
         if request.user:
-            queryset.filter(profile__pk=request.user.id).filter(_id__in=ids).delete()
+            queryset.filter(profile__pk=request.user.id).filter(id__in=ids).delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
 
         return Response(status=status.HTTP_401_UNAUTHORIZED)
@@ -707,7 +707,7 @@ class SpamHandlerViewSet(viewsets.ModelViewSet):
         queryset = super().get_queryset()
         if request.user:
             profile = Profile.objects.get(user=request.user.id)
-            posts = queryset.filter(profile__pk=request.user.id).filter(_id__in=ids)
+            posts = queryset.filter(profile__pk=request.user.id).filter(id__in=ids)
             for post in posts:
                 post.banned_by = None
                 post.banned_at_utc = None
@@ -729,7 +729,7 @@ class SpamHandlerViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         if request.user:
-            selected_posts = Post.objects.filter(_id__in=ids)
+            selected_posts = Post.objects.filter(id__in=ids)
             posts_array = [
                 {"_id": post._id, "body": post.body} for post in selected_posts
             ]
