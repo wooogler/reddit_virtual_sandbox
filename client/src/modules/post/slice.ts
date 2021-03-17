@@ -77,7 +77,7 @@ export type PostState = {
     error: Error | null;
     type: PostType;
     sort: SortType;
-    selected: string[];
+    selected: number[];
     userImported: boolean;
     split: boolean;
     span: boolean;
@@ -122,7 +122,7 @@ export type PostState = {
     error: Error | null;
     type: PostType;
     sort: SpamSortType;
-    selected: string[];
+    selected: number[];
     split: boolean;
     userImported: boolean;
     span: boolean;
@@ -345,7 +345,7 @@ const postSlice = createSlice({
     changeSpamSortType: (state, action: PayloadAction<SpamSortType>) => {
       state.spams.sort = action.payload;
     },
-    togglePostSelect: (state, action: PayloadAction<string>) => {
+    togglePostSelect: (state, action: PayloadAction<number>) => {
       const idx = state.posts.selected.indexOf(action.payload);
       if (idx > -1) {
         state.posts.selected.splice(idx, 1);
@@ -353,7 +353,7 @@ const postSlice = createSlice({
         state.posts.selected.push(action.payload);
       }
     },
-    toggleSpamPostSelect: (state, action: PayloadAction<string>) => {
+    toggleSpamPostSelect: (state, action: PayloadAction<number>) => {
       const idx = state.spams.selected.indexOf(action.payload);
       if (idx > -1) {
         state.spams.selected.splice(idx, 1);
@@ -621,11 +621,11 @@ const selectSpamSort = createSelector<PostState, SpamSortType, SpamSortType>(
   (sort) => sort,
 );
 
-const selectSelectedPostId = createSelector<PostState, string[], string[]>(
+const selectSelectedPostId = createSelector<PostState, number[], number[]>(
   (state) => state.posts.selected,
   (selected) => selected,
 );
-const selectSelectedSpamId = createSelector<PostState, string[], string[]>(
+const selectSelectedSpamId = createSelector<PostState, number[], number[]>(
   (state) => state.spams.selected,
   (selected) => selected,
 );

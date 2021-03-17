@@ -49,7 +49,7 @@ export const getSpamsRefresh = (): ThunkAction<
 
 export const deletePosts = createAsyncThunk<
   void,
-  string[],
+  number[],
   { state: RootState }
 >('post/deletePosts', async (ids, thunkAPI) => {
   const token = thunkAPI.getState().user.token;
@@ -58,14 +58,14 @@ export const deletePosts = createAsyncThunk<
 
 export const deleteSpams = createAsyncThunk<
   void,
-  string[],
+  number[],
   { state: RootState }
 >('post/deleteSpams', async (ids, thunkAPI) => {
   const token = thunkAPI.getState().user.token;
   await deleteSpamsAPI(token, ids);
 });
 
-export const movePosts = createAsyncThunk<void, string[], { state: RootState }>(
+export const movePosts = createAsyncThunk<void, number[], { state: RootState }>(
   'post/movePosts',
   async (ids, thunkAPI) => {
     const token = thunkAPI.getState().user.token;
@@ -74,7 +74,7 @@ export const movePosts = createAsyncThunk<void, string[], { state: RootState }>(
 );
 
 export const selectPosts = createAsyncThunk<
-  string[],
+  number[],
   SelectType,
   { state: RootState }
 >('post/selectAllPosts', async (type, thunkAPI) => {
@@ -84,7 +84,7 @@ export const selectPosts = createAsyncThunk<
 });
 
 export const selectSpams = createAsyncThunk<
-  string[],
+  number[],
   SelectType,
   { state: RootState }
 >('post/selectAllSpams', async (type, thunkAPI) => {
@@ -110,7 +110,7 @@ export const applySeed = createAsyncThunk<void, string, { state: RootState }>(
   },
 );
 
-export const moveSpams = createAsyncThunk<void, string[], { state: RootState }>(
+export const moveSpams = createAsyncThunk<void, number[], { state: RootState }>(
   'post/moveSpams',
   async (ids, thunkAPI) => {
     const token = thunkAPI.getState().user.token;

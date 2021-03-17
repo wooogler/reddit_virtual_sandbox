@@ -73,7 +73,7 @@ function PostSelected(): ReactElement {
     <div className="flex items-center ml-1">
       <Checkbox
         onChange={onSelectAll}
-        checked={isSelectAll}
+        checked={!isSelectNone && isSelectAll}
         indeterminate={!isSelectAll && !isSelectNone}
       />
       {experiment === 'modsandbox' && (

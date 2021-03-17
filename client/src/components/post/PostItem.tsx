@@ -18,7 +18,7 @@ interface PostItemProps {
 function PostItem({ post, selected, isMatched, match }: PostItemProps) {
   const dispatch = useDispatch();
   const handleClickPost = () => {
-    dispatch(postActions.togglePostSelect(post._id));
+    dispatch(postActions.togglePostSelect(post.id));
   };
 
   return (

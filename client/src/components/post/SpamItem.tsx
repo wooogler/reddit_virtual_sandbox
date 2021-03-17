@@ -18,7 +18,7 @@ function SpamItem({ spam, isMatched, match, selected }: SpamItemProps) {
   const dispatch = useDispatch();
 
   const handleClickSpam = () => {
-    dispatch(postActions.toggleSpamPostSelect(spam._id));
+    dispatch(postActions.toggleSpamPostSelect(spam.id));
   };
 
   return (
