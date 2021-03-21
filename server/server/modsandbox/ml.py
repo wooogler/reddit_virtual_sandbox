@@ -100,7 +100,7 @@ def compute_word_frequency_similarity(posts, spams, keyword):
         spam_documents.append(spam_document)
 
     post_vector = CountVectorizer(
-        stop_words=stopwords.words("english"), min_df=5, ngram_range=(1, 2), binary=True
+        stop_words=stopwords.words("english"), min_df=3, ngram_range=(1, 2), binary=True
     )
 
     post_dtm = post_vector.fit_transform(post_documents).toarray()
@@ -108,7 +108,7 @@ def compute_word_frequency_similarity(posts, spams, keyword):
     post_vocab = post_vector.vocabulary_  # {'key1': 1, 'key2': 0}
 
     spam_vector = CountVectorizer(
-        stop_words=stopwords.words("english"), min_df=5, ngram_range=(1, 2), binary=True
+        stop_words=stopwords.words("english"), min_df=3, ngram_range=(1, 2), binary=True
     )
 
     spam_dtm = spam_vector.fit_transform(spam_documents).toarray()

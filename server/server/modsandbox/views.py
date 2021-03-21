@@ -265,26 +265,25 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
             profile = Profile.objects.get(user=request.user.id)
             script_dir = os.path.dirname(__file__)
             with open(
-                os.path.join(script_dir, "test_data/politics/normal_comments.json")
-            ) as json_file:
-                normal_comments = json.load(json_file)
-                normal_ids = [
-                    comment["id"]
-                    for comment in normal_comments
-                    if comment["author"] != "AutoModerator"
-                ]
-                random.seed(100)
-                normal_ids = random.sample(normal_ids, 2000)
-                json_file.close()
+                os.path.join(script_dir, "test_data/corona_virus/normal_comments.json")
+            ) as normal_json:
+                with open(os.path.join(script_dir, "test_data/corona_virus/removed_comments_no.json")) as removed_json:
+                    normal_comments = json.load(normal_json)
+                    removed_comments = json.load(removed_json)
+                    random.seed(100)
+                    comments = random.sample(normal_comments, 500)+random.sample(removed_comments, 50)
+                    removed_json.close()
+                    normal_json.close()
 
             with open(
-                os.path.join(script_dir, "test_data/politics/removed_comments.json")
+                os.path.join(script_dir, "test_data/corona_virus/removed_comments.json")
             ) as json_file:
                 removed_comments = json.load(json_file)
                 json_file.close()
+            
             try:
                 reddit = RedditHandler()
-                reddit.test_run(normal_ids, removed_comments, profile)
+                reddit.test_run(comments, removed_comments, profile)
                 return Response(status=status.HTTP_201_CREATED)
             except Exception as e:
                 logger.exception(e)
@@ -436,19 +435,26 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
         if request.user:
             profile = Profile.objects.get(user=request.user.id)
             used_posts = Post.objects.filter(id__in=profile.used_posts.all())
+            spam_posts = used_posts.filter(_type__in=[
+                "spam_submission",
+                "spam_comment",
+                "reports_submission",
+                "reports_comment",
+            ])
+
             seed_array = [{"_id": "seed", "body": seed}]
             posts_array = [
                 {
                     "_id": post._id,
                     "body": post.body,
                 }
-                for post in used_posts
+                for post in spam_posts
             ]
             # compute similarities between seed and filtered posts
             similarities = compute_cosine_similarity(
                 seed_array, posts_array
             )  # example of return: [1, 0.8, ..., 0.7]
-            for i, post in enumerate(used_posts):
+            for i, post in enumerate(spam_posts):
                 post.similarity = similarities[i]
                 post.save()
             return Response(status=status.HTTP_201_CREATED)
