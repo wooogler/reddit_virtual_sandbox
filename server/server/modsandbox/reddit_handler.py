@@ -126,20 +126,21 @@ class RedditHandler:
         }
 
     def test_removed(self, removed_comments, profile):
+        cache_folder_name = "cached_tutorial"
         try:
             with open(
-                os.path.join(self.script_dir, "test_data/cached/removed_cache.json"), "r"
+                os.path.join(self.script_dir, "test_data/"+cache_folder_name+"/removed_cache.json"), "r"
             ) as f:
                 print("removed")
                 removed_comments = json.load(f)
+                bulk_comments = []
                 for i, comment in enumerate(removed_comments):
-                    print(i)
                     created_utc = datetime.fromtimestamp(
                         comment.pop("created_utc"), tz=timezone.utc
                     )
-                    comment = {"created_utc": created_utc, **comment}
-                    obj, created = Post.objects.update_or_create(**comment)
-                    obj.profile_set.add(profile)
+                    comment['created_utc'] = created_utc
+                    bulk_comments.append(Post(user_id=profile.user.id, **comment))
+                Post.objects.bulk_create(bulk_comments)
         except IOError:
             save_removed = []
             for i in range(0, len(removed_comments), 100):
@@ -160,14 +161,14 @@ class RedditHandler:
                     }
                     save_removed.append(comment_item)
             with open(
-                os.path.join(self.script_dir, "test_data/cached/removed_cache.json"), "w"
+                os.path.join(self.script_dir, "test_data/"+cache_folder_name+"/removed_cache.json"), "w"
             ) as f:
                 json.dump(save_removed, f, indent=2)
 
     def test_normal(self, normal_comments, profile):
         try:
             with open(
-                os.path.join(self.script_dir, "test_data/cached/normal_cache.json"), "r"
+                os.path.join(self.script_dir, "test_data/"+cache_folder_name+"/normal_cache.json"), "r"
             ) as f:
                 print("normal")
                 normal_comments = json.load(f)
@@ -178,22 +179,9 @@ class RedditHandler:
                         comment.pop("created_utc"), tz=timezone.utc
                     )
                     comment['created_utc'] = created_utc
-                    bulk_comments.append(Post(**comment))
-                new_comments = Post.objects.bulk_create(bulk_comments)
-                #bulk_update 해결
-                post_ids = [comment.id for comment in new_comments]
-                links = []
-                for post_id in post_ids:
-                    links.append(Profile.used_posts.through(post_id=post_id, profile_id=profile.id))
-                Profile.used_posts.through.objects.bulk_create(links)
-                # for i, comment in enumerate(normal_comments):
-                #     print(i)
-                #     created_utc = datetime.fromtimestamp(
-                #         comment.pop("created_utc"), tz=timezone.utc
-                #     )
-                #     comment = {"created_utc": created_utc, **comment}
-                #     obj, created = Post.objects.update_or_create(**comment)
-                #     obj.profile_set.add(profile)
+                    bulk_comments.append(Post(user_id=profile.user.id, **comment))
+                Post.objects.bulk_create(bulk_comments)
+
         except IOError:
             save_normal = []
             for i in range(0, len(normal_comments), 100):
@@ -203,7 +191,7 @@ class RedditHandler:
                 for i, comment in enumerate(batch_comments):
                     comment_item={
                         "author": comment.author.name if comment.author is not None else batch[i]['author'],
-                        "body": comment.body if comment.body != '[removed]' else batch[i]['body'],
+                        "body": comment.body if comment.body != '[removed]' and comment.body != '[deleted]' else batch[i]['body'],
                         "created_utc": comment.created_utc,
                         "full_link": 'https://www.reddit.com'+comment.permalink,
                         "_id": comment.id,
@@ -214,7 +202,7 @@ class RedditHandler:
                     }
                     save_normal.append(comment_item)
             with open(
-                os.path.join(self.script_dir, "test_data/cached/normal_cache.json"), "w"
+                os.path.join(self.script_dir, "test_data/"+cache_folder_name+"/normal_cache.json"), "w"
             ) as f:
                 json.dump(save_normal, f, indent=2)     
 
@@ -272,7 +260,7 @@ class RedditHandler:
                     )
 
                     if profile is not None:
-                        obj.profile_set.add(profile)
+                        obj.user=profile.user
                     if created:
                         stat[post_type] += 1
                         stat["tot"] += 1

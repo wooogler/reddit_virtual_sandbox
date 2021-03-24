@@ -18,6 +18,16 @@ class Rule(models.Model):
     def __str__(self):
         return self.rule_index
 
+class Profile(models.Model):
+    """
+    Profile Model to extend User Model
+    """
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    username = models.CharField(max_length=300, default="default_username")
+    # used_posts = models.ManyToManyField(Post, blank=True)
+    reddit_token = models.CharField(max_length=300, default="")
+
 
 class Post(models.Model):
     """
@@ -27,7 +37,7 @@ class Post(models.Model):
     author = models.CharField(max_length=300, default='FakeUser')
     title = models.CharField(max_length=300)  # Note that comment doesn't have title.
     body = models.TextField(default='')
-    created_utc = models.DateTimeField(auto_now_add=True)
+    created_utc = models.DateTimeField()
     full_link = models.URLField(default='https://www.reddit.com/1')
     subreddit = models.CharField(max_length=300, default='FakeSubreddit')
     domain = models.CharField(max_length=300, default='')
@@ -45,6 +55,8 @@ class Post(models.Model):
     mod_reports = models.JSONField(null=True) # [['spam','mod_1'],['spam','mod_2'],['Can someone take a look at this?','mod_3']]
     # for post DB 
     is_private = models.BooleanField(default=True)
+    
+    user = models.ForeignKey(User, related_name="posts", on_delete=models.CASCADE, null=True)
 
     TYPE_CHOICES = [
         ("submission", "submission"),
@@ -58,17 +70,6 @@ class Post(models.Model):
 
     def __str__(self):
         return self.full_link
-
-
-class Profile(models.Model):
-    """
-    Profile Model to extend User Model
-    """
-
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    username = models.CharField(max_length=300, default="default_username")
-    used_posts = models.ManyToManyField(Post, blank=True)
-    reddit_token = models.CharField(max_length=300, default="")
 
 
 @receiver(post_save, sender=User)

@@ -128,12 +128,17 @@ def apply_rules(request):
         )
         rule_object.save()
 
+    post_to_rule_links = []
     if multiple == True:
-        for post in profile.used_posts.all():
+        for post in Post.objects.filter(user=profile.user):
             for rule in Rule.objects.filter(user=profile.user):
                 rule_target = RuleTarget("Link", json.loads(rule.content))
                 if rule_target.check_item(post, ""):
-                    post.matching_rules.add(rule)
+                    # post.matching_rules.add(rule)
+                    post_rule = Post.matching_rules.through(post_id=post.id, rule_id=rule.id)
+                    post_to_rule_links.append(post_rule)
+    
+        Post.matching_rules.through.objects.bulk_create(post_to_rule_links)
 
     return Response(status=status.HTTP_202_ACCEPTED)
 
@@ -202,9 +207,9 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         if is_private == "true":
-            queryset = queryset.filter(id__in=profile.used_posts.all())
+            queryset = queryset.filter(user=profile.user)
         elif is_private == "false":
-            queryset = queryset.filter(profile__isnull=True)
+            queryset = queryset.filter(user__isnull=True)
 
         if post_type == "all":
             queryset = queryset.all()
@@ -249,7 +254,7 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
         if self.request.user.is_authenticated:
             profile = Profile.objects.get(user=request.user.id)
             test_post = Post.objects.create(**test_data)
-            profile.used_posts.add(test_post)
+            test_post.user = profile.user
             for rule in Rule.objects.filter(user=profile.user):
                 rule_target = RuleTarget("Link", json.loads(rule.content))
                 if rule_target.check_item(test_post, ""):
@@ -261,22 +266,24 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
 
     @action(methods=["post"], detail=False)
     def import_test_data(self, request):
+        folder_name = 'corona_virus_tutorial'
         if self.request.user.is_authenticated:
             profile = Profile.objects.get(user=request.user.id)
             script_dir = os.path.dirname(__file__)
             with open(
-                os.path.join(script_dir, "test_data/corona_virus/normal_comments.json")
+                os.path.join(script_dir, "test_data/"+folder_name+"/normal_comments.json")
             ) as normal_json:
-                with open(os.path.join(script_dir, "test_data/corona_virus/removed_comments_no.json")) as removed_json:
+                with open(os.path.join(script_dir, "test_data/"+folder_name+"/removed_comments_no.json")) as removed_json:
                     normal_comments = json.load(normal_json)
                     removed_comments = json.load(removed_json)
                     random.seed(100)
-                    comments = random.sample(normal_comments, 500)+random.sample(removed_comments, 50)
+                    comments = random.sample(normal_comments, 950)+random.sample(removed_comments, 50)
+                    # comments=normal_comments+removed_comments
                     removed_json.close()
                     normal_json.close()
 
             with open(
-                os.path.join(script_dir, "test_data/corona_virus/removed_comments.json")
+                os.path.join(script_dir, "test_data/"+folder_name+"/removed_comments.json")
             ) as json_file:
                 removed_comments = json.load(json_file)
                 json_file.close()
@@ -308,7 +315,7 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         if select_type == "all":
-            queryset = queryset.filter(id__in=profile.used_posts.all())
+            queryset = queryset.filter(user=profile.user)
         elif select_type == "filtered":
             queryset = queryset.filter(matching_rules__in=profile.user.rules.all())
         elif select_type == "unfiltered":
@@ -331,7 +338,7 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
         queryset = super().get_queryset()
         profile = Profile.objects.get(user=request.user.id)
         for post in queryset.filter(id__in=post_ids):
-            profile.used_posts.add(post)
+            post.user=profile.user
 
         return Response()
 
@@ -385,7 +392,7 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
 
         queryset = super().get_queryset()
         if request.user:
-            queryset.filter(profile__pk=request.user.id).filter(id__in=ids).delete()
+            queryset.filter(user=request.user).filter(id__in=ids).delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
 
         return Response(status=status.HTTP_401_UNAUTHORIZED)
@@ -432,15 +439,16 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
             logger.error(e)
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
+        queryset = super().get_queryset()
         if request.user:
             profile = Profile.objects.get(user=request.user.id)
-            used_posts = Post.objects.filter(id__in=profile.used_posts.all())
-            spam_posts = used_posts.filter(_type__in=[
-                "spam_submission",
-                "spam_comment",
-                "reports_submission",
-                "reports_comment",
-            ])
+            used_posts = queryset.filter(user=profile.user)
+            # spam_posts = used_posts.filter(_type__in=[
+            #     "spam_submission",
+            #     "spam_comment",
+            #     "reports_submission",
+            #     "reports_comment",
+            # ])
 
             seed_array = [{"_id": "seed", "body": seed}]
             posts_array = [
@@ -448,15 +456,19 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
                     "_id": post._id,
                     "body": post.body,
                 }
-                for post in spam_posts
+                for post in used_posts
             ]
             # compute similarities between seed and filtered posts
+
             similarities = compute_cosine_similarity(
                 seed_array, posts_array
             )  # example of return: [1, 0.8, ..., 0.7]
-            for i, post in enumerate(spam_posts):
+        
+            for i, post in enumerate(used_posts):
                 post.similarity = similarities[i]
-                post.save()
+
+            Post.objects.bulk_update(used_posts, ['similarity'])
+            #     post.save()
             return Response(status=status.HTTP_201_CREATED)
 
         return Response(status=status.HTTP_401_UNAUTHORIZED)
@@ -473,7 +485,7 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
             profile = Profile.objects.get(user=request.user.id)
             seeds = Post.objects.filter(id__in=ids)  # Moderated에서 seed로 선택된 포스트들의 집합
             used_posts = Post.objects.filter(
-                id__in=profile.used_posts.all()
+                user=profile.user
             )  # Posts에 불러온 모든 포스트
             # filtered_posts = queryset.filter(matching_rules__in=profile.user.rules.all()) # Posts에서 필터링된 포스트들의 집합
             # unfiltered_posts = queryset.exclude(matching_rules__in=profile.user.rules.all()) # 똑같은데 필터링 되지않은 포스트들
@@ -522,10 +534,10 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
         if request.user:
             profile = Profile.objects.get(user=request.user.id)
             used_posts = Post.objects.filter(
-                id__in=profile.used_posts.all(), _type__in=["submission", "comment"]
+                user=profile.user, _type__in=["submission", "comment"]
             )
             used_spams = Post.objects.filter(
-                id__in=profile.used_posts.all(),
+                user=profile.user,
                 _type__in=[
                     "spam_submission",
                     "spam_comment",
@@ -577,7 +589,7 @@ class SpamHandlerViewSet(viewsets.ModelViewSet):
         queryset = super().get_queryset()
         if self.request.user.is_authenticated:
             profile = Profile.objects.get(user=self.request.user.id)
-            queryset = queryset.filter(id__in=profile.used_posts.all())
+            queryset = queryset.filter(user=profile.user)
         else:
             queryset = queryset.filter(profile__isnull=True)
         post_type = self.request.query_params.get("post_type", "all")
@@ -637,7 +649,7 @@ class SpamHandlerViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         if select_type == "all":
-            queryset = queryset.filter(id__in=profile.used_posts.all())
+            queryset = queryset.filter(user=profile.user)
         elif select_type == "filtered":
             queryset = queryset.filter(matching_rules__in=profile.user.rules.all())
         elif select_type == "unfiltered":
@@ -688,7 +700,7 @@ class SpamHandlerViewSet(viewsets.ModelViewSet):
 
         queryset = super().get_queryset()
         if request.user:
-            queryset.filter(profile__pk=request.user.id).filter(id__in=ids).delete()
+            queryset.filter(user=request.user).filter(id__in=ids).delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
 
         return Response(status=status.HTTP_401_UNAUTHORIZED)

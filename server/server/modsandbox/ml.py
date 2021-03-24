@@ -3,6 +3,7 @@ import unicodedata
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.feature_extraction.text import CountVectorizer
 import spacy
+import pickle
 
 from nltk.tokenize import sent_tokenize
 from nltk.corpus import stopwords
@@ -87,33 +88,44 @@ def word_similarity(word1, word2):
     return token1.similarity(token2)
 
 def compute_word_frequency_similarity(posts, spams, keyword):
-    post_documents = []
-    for post in posts:
-        processed_sentences = process_and_return_embedding(post["body"], False)
-        post_document = " ".join(processed_sentences)
-        post_documents.append(post_document)
 
-    spam_documents = []
-    for spam in spams:
-        processed_sentences = process_and_return_embedding(spam["body"], False)
-        spam_document = " ".join(processed_sentences)
-        spam_documents.append(spam_document)
+    post_doc_freq=[]
+    spam_doc_freq=[]
+    try: 
+        with open('vocab_1000.pickle', 'rb') as pfile:
+            print('read vocab.pickle')
+            (post_doc_freq, post_vocab, spam_doc_freq, spam_vocab) = pickle.load(pfile)
+    except IOError:
+        with open('vocab_1000.pickle', 'wb') as pfile:
+            print('vocab_1000.pickle')
+            post_documents = []
+            for post in posts:
+                processed_sentences = process_and_return_embedding(post["body"], False)
+                post_document = " ".join(processed_sentences)
+                post_documents.append(post_document)
 
-    post_vector = CountVectorizer(
-        stop_words=stopwords.words("english"), min_df=3, ngram_range=(1, 2), binary=True
-    )
+            spam_documents = []
+            for spam in spams:
+                processed_sentences = process_and_return_embedding(spam["body"], False)
+                spam_document = " ".join(processed_sentences)
+                spam_documents.append(spam_document)
 
-    post_dtm = post_vector.fit_transform(post_documents).toarray()
-    post_doc_freq = np.sum(post_dtm, axis=0)  # [0,1]
-    post_vocab = post_vector.vocabulary_  # {'key1': 1, 'key2': 0}
+            post_vector = CountVectorizer(
+                stop_words=stopwords.words("english"), ngram_range=(1, 2), min_df=3, binary=True
+            )
 
-    spam_vector = CountVectorizer(
-        stop_words=stopwords.words("english"), min_df=3, ngram_range=(1, 2), binary=True
-    )
+            post_dtm = post_vector.fit_transform(post_documents).toarray()
+            post_doc_freq = np.sum(post_dtm, axis=0)  # [0,1]
+            post_vocab = post_vector.vocabulary_  # {'key1': 1, 'key2': 0}
 
-    spam_dtm = spam_vector.fit_transform(spam_documents).toarray()
-    spam_doc_freq = np.sum(spam_dtm, axis=0)  # [0,1]
-    spam_vocab = spam_vector.vocabulary_  # {'key1': 1, 'key2': 0}
+            spam_vector = CountVectorizer(
+                stop_words=stopwords.words("english"), ngram_range=(1, 2), binary=True
+            )
+
+            spam_dtm = spam_vector.fit_transform(spam_documents).toarray()
+            spam_doc_freq = np.sum(spam_dtm, axis=0)  # [0,1]
+            spam_vocab = spam_vector.vocabulary_  # {'key1': 1, 'key2': 0}
+            pickle.dump((post_doc_freq, post_vocab, spam_doc_freq, spam_vocab), pfile, protocol=pickle.HIGHEST_PROTOCOL)
 
     vocab = defaultdict(lambda: [-1, -1])
 
@@ -123,15 +135,25 @@ def compute_word_frequency_similarity(posts, spams, keyword):
     for k, v in spam_vocab.items():
         vocab[k][1] = v
 
-    word_freq_sim = (
-        []
-    )  # [{'word': 'key1', 'freq': 1, 'sim': 0.1}, {'word': 'key2', 'freq': 0, 'sim': 0.3}]
+    try: 
+        with open('token_array_1000.pickle', 'rb') as pfile:
+            print('read token_array_5.pickle')
+            token_array=pickle.load(pfile)
+    except IOError:
+        print('no token_array_1000.pickle')
+        token_array = {i: nlp(i) for i in vocab.keys()}
+        with open('token_array_1000.pickle', 'wb') as pfile:
+            pickle.dump(token_array, pfile, protocol=pickle.HIGHEST_PROTOCOL) 
+    
+    word_freq_sim = [] # [{'word': 'key1', 'freq': 1, 'sim': 0.1}, {'word': 'key2', 'freq': 0, 'sim': 0.3}]
+    token_keyword = nlp(keyword)[0]
+
     for key, val in vocab.items():
         vocab_df = {}
         vocab_df["word"] = key
         vocab_df["post_freq"] = post_doc_freq[val[0]] if val[0] != -1 else 0
         vocab_df["spam_freq"] = spam_doc_freq[val[1]] if val[1] != -1 else 0
-        vocab_df["sim"] = word_similarity(key, keyword)
+        vocab_df["sim"] = token_array[key][0].similarity(token_keyword)
         word_freq_sim.append(vocab_df)
 
     return word_freq_sim
