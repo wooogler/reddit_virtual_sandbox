@@ -26,7 +26,8 @@ class RedditHandler:
             client_secret=os.environ.get("client_secret"),
             user_agent=os.environ.get("user_agent"),
         )
-        self.script_dir = os.path.dirname(__file__)        
+        self.script_dir = os.path.dirname(__file__)   
+        self.cache_folder_name = 'cached_tutorial'     
 
     def _get_reddit_posts(self, uri, params, max_retries=4, removed=False):
         """Send HTTP request to 'uri'
@@ -126,10 +127,10 @@ class RedditHandler:
         }
 
     def test_removed(self, removed_comments, profile):
-        cache_folder_name = "cached_tutorial"
+        
         try:
             with open(
-                os.path.join(self.script_dir, "test_data/"+cache_folder_name+"/removed_cache.json"), "r"
+                os.path.join(self.script_dir, "test_data/"+self.cache_folder_name+"/removed_cache.json"), "r"
             ) as f:
                 print("removed")
                 removed_comments = json.load(f)
@@ -161,14 +162,14 @@ class RedditHandler:
                     }
                     save_removed.append(comment_item)
             with open(
-                os.path.join(self.script_dir, "test_data/"+cache_folder_name+"/removed_cache.json"), "w"
+                os.path.join(self.script_dir, "test_data/"+self.cache_folder_name+"/removed_cache.json"), "w"
             ) as f:
                 json.dump(save_removed, f, indent=2)
 
     def test_normal(self, normal_comments, profile):
         try:
             with open(
-                os.path.join(self.script_dir, "test_data/"+cache_folder_name+"/normal_cache.json"), "r"
+                os.path.join(self.script_dir, "test_data/"+self.cache_folder_name+"/normal_cache.json"), "r"
             ) as f:
                 print("normal")
                 normal_comments = json.load(f)
@@ -202,7 +203,7 @@ class RedditHandler:
                     }
                     save_normal.append(comment_item)
             with open(
-                os.path.join(self.script_dir, "test_data/"+cache_folder_name+"/normal_cache.json"), "w"
+                os.path.join(self.script_dir, "test_data/"+self.cache_folder_name+"/normal_cache.json"), "w"
             ) as f:
                 json.dump(save_normal, f, indent=2)     
 
