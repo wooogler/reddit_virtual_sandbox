@@ -81,6 +81,7 @@ export type PostState = {
     userImported: boolean;
     split: boolean;
     span: boolean;
+    search: string;
   };
   spams: {
     all: {
@@ -170,6 +171,7 @@ export const initialState: PostState = {
     userImported: true,
     selected: [],
     span: true,
+    search: '',
   },
   spams: {
     all: {
@@ -222,6 +224,9 @@ const postSlice = createSlice({
   name: 'post',
   initialState,
   reducers: {
+    changePostSearch: (state, action: PayloadAction<string>) => {
+      state.posts.search = action.payload;
+    },
     getAllPosts: (state, action: PayloadAction<number>) => {
       state.posts.loading = true;
       state.posts.all.data = [];
@@ -437,8 +442,20 @@ const postSlice = createSlice({
     },
     splitList: (state) => {
       state.posts.split = true;
-      state.spams.split = true;
+      // state.spams.split = true;
     },
+    unSplitList: (state) => {
+      state.posts.split = false;
+      // state.spams.split = false;
+    },
+    clearFilteredPostCount: (state) => {
+      state.posts.filtered.count = 0;
+    },
+    clearSpamList: (state) => {
+      state.spams.all.data = [];
+      state.spams.filtered.data = [];
+      state.spams.unfiltered.data = [];
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -537,7 +554,7 @@ const postSlice = createSlice({
       .addCase(addTestPost.rejected, (state, action) => {
         state.posts.add.loading = false;
         state.posts.add.error = action.error;
-      })
+      });
   },
 });
 
@@ -700,6 +717,11 @@ const selectCount = createSelector(
   (posts, spams) => ({ posts, spams }),
 );
 
+const selectPostSearch = createSelector<PostState, string, string>(
+  (state) => state.posts.search,
+  (search) => search,
+);
+
 export const postSelector = {
   pageAll: (state: RootState) => selectPageAll(state.post),
   postsAll: (state: RootState) => selectPostsAll(state.post),
@@ -731,6 +753,7 @@ export const postSelector = {
   postUserImported: (state: RootState) => selectPostUserImported(state.post),
   spamUserImported: (state: RootState) => selectSpamUserImported(state.post),
   count: (state: RootState) => selectCount(state.post),
+  postSearch: (state: RootState) => selectPostSearch(state.post),
 };
 
 const { actions, reducer } = postSlice;

@@ -77,7 +77,9 @@ function DraggableModal({
       )}
       footer={null}
       onCancel={handleCancel}
-      mask={false}
+      mask={true}
+      maskClosable={false}
+      maskStyle={{display: 'none'}}
       width="36rem"
       bodyStyle={{ padding: '1rem' }}
       destroyOnClose

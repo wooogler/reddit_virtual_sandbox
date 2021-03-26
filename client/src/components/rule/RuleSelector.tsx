@@ -18,10 +18,7 @@ import {
   treeToKeyMaps,
 } from '../../lib/utils/tree';
 import { AppDispatch } from '../..';
-import {
-  getPostsRefresh,
-  getSpamsRefresh,
-} from '../../modules/post/actions';
+import { getPostsRefresh, getSpamsRefresh } from '../../modules/post/actions';
 import { RootState } from '../../modules';
 
 interface RuleSelectorProps {
@@ -54,7 +51,7 @@ function RuleSelector({ editables, loadingRule }: RuleSelectorProps) {
     ]);
     const code = treeToCode(tree);
     const keyMaps = treeToKeyMaps(tree);
-    dispatch(submitCode({code, multiple: true})).then(() => {
+    dispatch(submitCode({ code, multiple: true })).then(() => {
       dispatch(getPostsRefresh());
       dispatch(getSpamsRefresh());
     });
@@ -69,7 +66,7 @@ function RuleSelector({ editables, loadingRule }: RuleSelectorProps) {
 
   return (
     <RuleSelectorDiv className="flex flex-col">
-      {loadingRule && <OverlayLoading text="Apply Rules..." />}
+      {loadingRule && <OverlayLoading text="Applying Rules..." />}
       <Tree
         // checkable
         onCheck={onCheck}

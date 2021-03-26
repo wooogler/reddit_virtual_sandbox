@@ -1,6 +1,7 @@
-import { Table, Input } from 'antd';
+import { Table, Input, Slider, InputNumber } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
-import React, { ReactElement } from 'react';
+import _ from 'lodash';
+import React, { ReactElement, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Variation } from '../../lib/api/modsandbox/post';
 import { RootState } from '../../modules';
@@ -18,50 +19,79 @@ const columns: ColumnsType<any> = [
     dataIndex: 'word',
   },
   {
-    title: 'Post Frequency',
+    title: 'Frequency',
     dataIndex: 'post_freq',
-    sortDirections: ["ascend", "descend", "ascend"],
-    sorter: (a, b) => a.post_freq - b.post_freq,
-  },
-  {
-    title: 'Target Frequency',
-    dataIndex: 'spam_freq',
-    sortDirections: ["ascend", "descend", "ascend"],
-    sorter: (a, b) => a.spam_freq - b.spam_freq,
   },
   {
     title: 'Similarity',
     dataIndex: 'sim',
-    sortDirections: ["ascend", "descend", "ascend"],
-    defaultSortOrder: 'descend',
-    sorter: (a, b) => a.sim - b.sim,
   },
 ];
 
 function WordVariationTable({ wordVar }: Props): ReactElement {
   const dispatch = useDispatch();
+
   const loading = useSelector(
     (state: RootState) => state.stat.wordVariation.loading,
   );
 
-  const wordVariationWithKey = wordVar.map((item, index) => {
-    return { ...item, key: index, sim: item.sim.toFixed(2) };
-  });
+  const wordVariationWithKey = [...wordVar]
+    .sort((a, b) => b.sim - a.sim)
+    .map((item, index) => {
+      return { ...item, key: index, sim: item.sim.toFixed(2) };
+    });
 
   const onSearch = (value: string) => {
     dispatch(wordVariation(value));
   };
+
+  const [min, setMin] = useState(2);
+  const [max, setMax] = useState(100);
+
+  const tableData = () => {
+    if (max && min) {
+      return wordVariationWithKey
+        .filter((item) => item.post_freq <= max && item.post_freq >= min)
+        .slice(0, 100);
+    }
+    return [];
+  };
+
   return (
     <div className="flex flex-col">
-      <Search
-        placeholder="type a keyword"
-        onSearch={onSearch}
-        className="mb-3 w-60"
-      />
+      <div className="flex items-center mb-2">
+        <Search
+          placeholder="type a keyword"
+          onSearch={onSearch}
+          className="flex-1"
+          size="small"
+        />
+        <div className="flex-1 flex items-center">
+          {wordVar.length !== 0 && (
+            <div className='flex ml-auto'>
+              <div className="ml-5 mr-2">Frequency range:</div>
+              <InputNumber
+                className="w-10"
+                size="small"
+                value={min}
+                onChange={(value) => setMin(value as number)}
+              />
+              <div className="mx-2">-</div>
+              <InputNumber
+                className="w-10"
+                size="small"
+                value={max}
+                onChange={(value) => setMax(value as number)}
+              />
+            </div>
+          )}
+        </div>
+      </div>
+
       <Table
         pagination={{ pageSize: 5, showSizeChanger: false }}
         columns={columns}
-        dataSource={wordVariationWithKey}
+        dataSource={tableData()}
         size="small"
         loading={loading}
       />

@@ -34,7 +34,8 @@ function RuleEditor({ code }: RuleEditorProps) {
           fontSize: '18px',
         }}
         placeholder={
-          "---\ntitle: ['hi', 'hello']\nbody (includes): ['have']\n---"
+          // "---\ntitle: ['hi', 'hello']\nbody (includes): ['have']\n---"
+          "body: [ 'keyword 1' , 'keyword 2' ]"
         }
       />
       {parseError &&

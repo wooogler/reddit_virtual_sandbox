@@ -16,7 +16,7 @@ function LoginForm({error}: LoginFormProps) {
   const formik = useFormik({
     initialValues: {
       username: '',
-      password: '',
+      password: 'dltkd627',
     },
     onSubmit: (values) => {
       dispatch(login(values));
@@ -26,7 +26,7 @@ function LoginForm({error}: LoginFormProps) {
   return (
     <LoginFormDiv onSubmit={formik.handleSubmit}>
       <div className="title">Login</div>
-      <label htmlFor="username">USERNAME</label>
+      <label htmlFor="username">Worker ID</label>
       <Input
         name="username"
         type="text"
@@ -34,15 +34,15 @@ function LoginForm({error}: LoginFormProps) {
         value={formik.values.username}
         autoComplete="off"
       />
-      <label htmlFor="password">PASSWORD</label>
+      {/* <label htmlFor="password">PASSWORD</label>
       <Input
         name="password"
         type="password"
         onChange={formik.handleChange}
         value={formik.values.password}
         autoComplete="off"
-      />
-      <div>{error && 'Please check your username and password'}</div>
+      /> */}
+      <div>{error && error.message}</div>
       <div className="button-group">
         <Button size="large" type="primary" htmlType='submit'>
           LOG IN

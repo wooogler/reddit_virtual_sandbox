@@ -47,7 +47,7 @@ function WordFrequencyTable({ wordFreq }: Props): ReactElement {
 
   return (
     <div className="flex flex-col">
-      <div className="flex items-center mb-3">
+      <div className="flex items-center mb-3 justify-center">
         <div className="mr-4">
           {number <= 1
             ? `${number} comment selected`
@@ -59,7 +59,7 @@ function WordFrequencyTable({ wordFreq }: Props): ReactElement {
           onClick={handleClickFreq}
           disabled={!number}
         >
-          Analyze the frequency
+          Calculate the word frequency
         </Button>
       </div>
 

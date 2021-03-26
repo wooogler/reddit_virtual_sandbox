@@ -1,6 +1,9 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { Post, Spam } from '../../lib/api/modsandbox/post';
 import { Index, MatchIndex } from '../../lib/utils/match';
+import { RootState } from '../../modules';
+import { postSelector } from '../../modules/post/slice';
 import AuthorText from '../common/AuthorText';
 import BodyText from '../common/BodyText';
 import DatetimeText from '../common/DatetimeText';
@@ -14,6 +17,8 @@ export interface CommentItemProps {
 }
 
 function CommentItem({ comment, match }: CommentItemProps) {
+  const experiment = useSelector((state: RootState) => state.user.experiment);
+  const sort = useSelector(postSelector.postSort);
   const matchBody = match
     .filter((matchItem) => matchItem.target === 'body')
     .reduce<Index[]>((acc, item) => {
@@ -22,6 +27,7 @@ function CommentItem({ comment, match }: CommentItemProps) {
       }
       return acc;
     }, []);
+  const postSearch = useSelector(postSelector.postSearch);
 
   return (
     <div className="min-w-0 pl-3 ml-1 border-l-2 border-dotted border-gray-300">
@@ -31,9 +37,13 @@ function CommentItem({ comment, match }: CommentItemProps) {
         {/* <div className='mx-1 text-gray-300'>•</div> */}
         <AuthorText text={comment.author} />
         <DatetimeText datetime={comment.created_utc} url={comment.full_link} />
-        <div className="font-display text-xs text-gray-500">
-          similarity : {comment.similarity.toFixed(2)}
-        </div>
+        {comment._type === 'comment' &&
+          experiment === 'modsandbox' &&
+          sort === 'fpfn' && (
+            <div className="font-display text-xs text-gray-500">
+              similarity : {comment.similarity.toFixed(2)}
+            </div>
+          )}
       </div>
       <div>
         <BodyText
@@ -41,6 +51,7 @@ function CommentItem({ comment, match }: CommentItemProps) {
           text={comment.body}
           matchBody={matchBody}
           type={comment._type}
+          search={postSearch}
         />
       </div>
       <SpamFrame spam={comment as Spam} />

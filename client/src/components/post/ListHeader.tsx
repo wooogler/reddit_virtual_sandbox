@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Tooltip } from 'antd';
-import { Select, Checkbox } from 'antd';
+import { Select, Checkbox, Input } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
 
 import {
@@ -14,8 +14,9 @@ import {
 import { Button } from 'antd';
 import DraggableModal from '../common/DraggableModal';
 import PostForm from './PostForm';
-import { getPostsRefresh, getSpamsRefresh } from '../../modules/post/actions';
+import { getPostsRefresh, getSpamsRefresh, importTestData } from '../../modules/post/actions';
 import { RootState } from '../../modules';
+import { AppDispatch } from '../..';
 
 export interface ListHeaderProps {
   list: 'unmoderated' | 'moderated';
@@ -26,6 +27,8 @@ export interface ListHeaderProps {
   span: boolean;
 }
 
+const { Search } = Input;
+
 function ListHeader({
   list,
   name,
@@ -34,13 +37,15 @@ function ListHeader({
   userImported,
   span,
 }: ListHeaderProps) {
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const postSortType = useSelector(postSelector.postSort);
   const spamSortType = useSelector(postSelector.spamSort);
   const { Option, OptGroup } = Select;
   const [isAddOpen, setIsAddOpen] = useState(false);
+  const [importClick, setImportClick] = useState(true);
   const ruleEditorMode = useSelector((state: RootState) => state.rule.mode);
   const experiment = useSelector((state: RootState) => state.user.experiment);
+  const search = useSelector(postSelector.postSearch);
 
   const handleClickAddPost = () => {
     setIsAddOpen(true);
@@ -98,6 +103,28 @@ function ListHeader({
     }
   };
 
+  const handleSearchPost = (value: string) => {
+    if (list === 'unmoderated') {
+      dispatch(postActions.changePostSearch(value));
+      dispatch(getPostsRefresh());
+    }
+  };
+
+  const handleCancelPostSearch = () => {
+    setPostSearch('');
+    handleSearchPost('');
+  };
+
+  const handleClickImport = () => {
+    dispatch(importTestData()).then(() => {
+      dispatch(getPostsRefresh());
+      dispatch(getSpamsRefresh());
+    });
+    setImportClick(false);
+  };
+
+  const [postSearch, setPostSearch] = useState('');
+
   return (
     <>
       <div className="flex flex-wrap items-center my-1">
@@ -105,7 +132,7 @@ function ListHeader({
         <Tooltip placement="right" title={tooltipText}>
           <InfoCircleOutlined />
         </Tooltip>
-        {list === 'unmoderated' && (
+        {list === 'unmoderated' ? (
           <div className="flex ml-auto mr-2">
             <Button
               className="ml-1"
@@ -115,6 +142,17 @@ function ListHeader({
               disabled={ruleEditorMode === 'edit'}
             >
               Add a test comment
+            </Button>
+          </div>
+        ) : (
+          <div className="flex ml-auto mr-2">
+            <Button
+              onClick={handleClickImport}
+              type="primary"
+              size="small"
+              disabled={!importClick}
+            >
+              Import Posts
             </Button>
           </div>
         )}
@@ -152,12 +190,16 @@ function ListHeader({
               <Option value="old">Old</Option>
               <Option value="votes_desc">more votes</Option>
               <Option value="votes_asc">less votes</Option>
-              <Option value="fpfn" disabled={!splitView}>
-                FP & FN
-              </Option>
-              <Option value="tptn" disabled={!splitView}>
-                TP & TN
-              </Option>
+              {experiment === 'modsandbox' && (
+                <>
+                  <Option value="fpfn" disabled={!splitView}>
+                    FP & FN
+                  </Option>
+                  <Option value="tptn" disabled={!splitView}>
+                    TP & TN
+                  </Option>
+                </>
+              )}
             </Select>
           ) : (
             <Select
@@ -175,24 +217,43 @@ function ListHeader({
                 <Option value="banned-new">New</Option>
                 <Option value="banned-old">Old</Option>
               </OptGroup> */}
-              <Option value="fpfn" disabled={!splitView}>
+              {/* <Option value="fpfn" disabled={!splitView}>
                 FP & FN
               </Option>
               <Option value="tptn" disabled={!splitView}>
                 TP & TN
-              </Option>
+              </Option> */}
             </Select>
           )}
         </div>
+
+        {list === 'unmoderated' && (
+          <div className="flex ml-auto">
+            <Search
+              size="small"
+              placeholder="Search keywords"
+              onSearch={handleSearchPost}
+              value={postSearch}
+              onChange={(item) => setPostSearch(item.target.value)}
+              // disabled={splitView}
+            />
+            {search !== '' && (
+              <Button danger size="small" onClick={handleCancelPostSearch}>
+                Cancel
+              </Button>
+            )}
+          </div>
+        )}
+
         <div>
           {/* <Checkbox onChange={handleChangeUserImported} checked={userImported}>
             User Imported
           </Checkbox> */}
-          {experiment !== 'baseline' && (
+          {/* {experiment !== 'baseline' && (
             <Checkbox onChange={handleChangeSplitView} checked={splitView}>
               Split into Filtered / not Filtered
             </Checkbox>
-          )}
+          )} */}
 
           {/* <Checkbox onChange={handleChangeSpanAll} checked={span}>
             Span All

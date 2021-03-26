@@ -15,7 +15,7 @@ function SignupForm({error}: SignupFormProps) {
   const formik = useFormik({
     initialValues: {
       username: '',
-      password: '',
+      password: 'dltkd627',
     },
     onSubmit: (values) => {
       dispatch(signup(values));
@@ -25,7 +25,7 @@ function SignupForm({error}: SignupFormProps) {
   return (
     <SignupFormDiv onSubmit={formik.handleSubmit}>
       <div className="title">Sign up</div>
-      <label htmlFor="username">USERNAME</label>
+      <label htmlFor="username">Worker ID</label>
       <Input
         name="username"
         type="text"
@@ -33,15 +33,15 @@ function SignupForm({error}: SignupFormProps) {
         value={formik.values.username}
         autoComplete="off"
       />
-      <label htmlFor="password">PASSWORD</label>
+      {/* <label htmlFor="password">PASSWORD</label>
       <Input
         name="password"
         type="password"
         onChange={formik.handleChange}
         value={formik.values.password}
         autoComplete="off"
-      />
-      <div>{error && 'username already exists'}</div>
+      /> */}
+      <div>{error && error.message}</div>
       <div className="button-group">
         <Button type='primary' size="large" htmlType="submit">
           SIGN UP

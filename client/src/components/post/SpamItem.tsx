@@ -1,8 +1,9 @@
 import { Checkbox } from 'antd';
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Spam } from '../../lib/api/modsandbox/post';
 import { MatchIndex } from '../../lib/utils/match';
+import { RootState } from '../../modules';
 import { postActions } from '../../modules/post/slice';
 import CommentItem from './CommentItem';
 import SubmissionItem from './SubmissionItem';
@@ -21,6 +22,8 @@ function SpamItem({ spam, isMatched, match, selected }: SpamItemProps) {
     dispatch(postActions.toggleSpamPostSelect(spam.id));
   };
 
+  const experiment = useSelector((state: RootState) => state.user.experiment);
+
   return (
     <div
       className={'border border-gray-200 ' + (isMatched ? 'bg-red-200' : '')}
@@ -34,7 +37,9 @@ function SpamItem({ spam, isMatched, match, selected }: SpamItemProps) {
         }
       >
         <div className="flex mr-1">
-          <Checkbox onClick={handleClickSpam} checked={selected} />
+          {experiment === 'modsandbox' && (
+            <Checkbox onClick={handleClickSpam} checked={selected} />
+          )}
         </div>
         {spam._type === 'spam_submission' ||
         spam._type === 'reports_submission' ? (

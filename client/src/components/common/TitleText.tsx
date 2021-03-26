@@ -13,7 +13,7 @@ function TitleText({ text, matchTitle }: TitleTextProps) {
     <div className='flex items-center'>
       <div className="text-base font-medium  text-gray-900 font-display">
         {matchTitle ? (
-          <InteractionText text={text} match={matchTitle} />
+          <InteractionText text={text} match={matchTitle} search=''/>
         ) : (
           <>{text}</>
         )}

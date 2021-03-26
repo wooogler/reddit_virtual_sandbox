@@ -64,26 +64,26 @@ function PostList({
   return (
     <div className="relative flex flex-col h-full mx-2">
       {loadingPost && <OverlayLoading text="Loading Posts..." />}
-      {loadingRule && <OverlayLoading text="Applying Rules..." />}
+      {/* {loadingRule && <OverlayLoading text="Applying Rules..." />} */}
       {loadingApplySeeds && <OverlayLoading text="Finding FP & FN..." />}
       <ListHeader
         list="unmoderated"
-        name="Subreddit Comments"
+        name="Comments in r/CoronaVirus"
         splitView={splitPostList}
-        tooltipText="Comments imported from a specific subreddit"
+        tooltipText="Comments submitted from 3/1 to 3/7"
         userImported={postUserImported}
         span={postSpan}
       />
       {experiment !== 'baseline' && (
         <div
-          onClick={handleClickBar}
-          className="cursor-pointer hover:opacity-70"
+          // onClick={handleClickBar}
+          // className="cursor-pointer hover:opacity-70"
         >
           <BarRate total={count.posts.all} part={count.posts.filtered} />
         </div>
       )}
 
-      <PostSelected />
+      {experiment==='modsandbox' && <PostSelected />}
       <SplitPaneDiv className="flex-1 overflow-y-auto">
         {splitView ? (
           <SplitPane
@@ -94,7 +94,7 @@ function PostList({
           >
             <div className="w-full h-full flex flex-col">
               <div className="flex justify-center sticky bg-white top-0 z-10">
-                ▼ Filtered by Automod
+                ▼ Filtered comments
               </div>
               <div className="flex-1 overflow-auto">
                 {postsFiltered.length !== 0 ? (
@@ -129,7 +129,7 @@ function PostList({
             </div>
             <div className="w-full h-full flex flex-col">
               <div className="flex justify-center sticky bg-white top-0 z-10">
-                ▼ Not Filtered by Automod
+                ▼ Not filtered comments
               </div>
               <div className="flex-1 overflow-auto">
                 {postsUnfiltered.length !== 0 ? (

@@ -138,8 +138,9 @@ const ruleSlice = createSlice({
     clearMatched: (state) => {
       state.clickedRuleIndex = '';
     },
-    createEditable: (state) => {
-      const code = state.files[state.selectedTab].code;
+    createEditable: (state, action: PayloadAction<string>) => {
+      // const code = state.files[state.selectedTab].code;
+      const code = action.payload;
       const parsedCode = YAML.parseAllDocuments(code, { prettyErrors: true });
 
       if (parsedCode.find((item) => item.errors.length !== 0)) {

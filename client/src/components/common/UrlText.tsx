@@ -24,7 +24,7 @@ function UrlText({
     <>
       <div className="text-sm font-body text-blue-600">
         {matchUrl ? (
-          <InteractionText text={text} match={matchUrl} />
+          <InteractionText text={text} match={matchUrl} search=''/>
         ) : (
           <>{text}</>
         )}

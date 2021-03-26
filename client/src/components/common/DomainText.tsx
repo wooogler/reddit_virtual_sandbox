@@ -11,7 +11,7 @@ function DomainText({ text, matchDomain }: Props): ReactElement {
   return (
     <div className={text.startsWith('/r/') ? 'text-xs':'text-sm'}>
       {matchDomain ? (
-        <InteractionText text={text} match={matchDomain} />
+        <InteractionText text={text} match={matchDomain} search=''/>
       ) : (
         <>{text}</>
       )}

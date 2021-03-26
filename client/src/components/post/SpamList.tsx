@@ -64,26 +64,26 @@ function SpamList({
   return (
     <div className="relative flex flex-col h-full mx-2">
       {loadingSpam && <OverlayLoading text="Loading Posts..." />}
-      {loadingRule && <OverlayLoading text="Applying Rules..." />}
-      {loadingApplySeeds && <OverlayLoading text="Finding FP & FN..." />}
+      {/* {loadingRule && <OverlayLoading text="Applying Rules..." />} */}
+      {/* {loadingApplySeeds && <OverlayLoading text="Finding FP & FN..." />} */}
       <ListHeader
         list="moderated"
-        name="Spam-filtered Comments"
+        name="Comments removed by moderators"
         splitView={splitSpamList}
-        tooltipText="Comments moderated by AutoModerator and human moderators"
+        tooltipText="Comments removed by human moderators in r/CoronaVirus"
         userImported={spamUserImported}
         span={spamSpan}
       />
       {experiment !== 'baseline' && (
         <div
-          onClick={handleClickBar}
-          className="cursor-pointer hover:opacity-70"
+        // onClick={handleClickBar}
+        // className="cursor-pointer hover:opacity-70"
         >
           <BarRate total={count.spams.all} part={count.spams.filtered} />
         </div>
       )}
 
-      <SpamSelected />
+      {experiment === 'modsandbox' && <SpamSelected />}
       <SplitPaneDiv className="flex-1 overflow-y-auto">
         {splitView ? (
           <SplitPane
@@ -94,7 +94,7 @@ function SpamList({
           >
             <div className="w-full h-full flex flex-col">
               <div className="flex justify-center sticky bg-white top-0 z-10">
-                ▼ Filtered by Automod
+                ▼ Filtered comments
               </div>
               <div className="flex-1 overflow-auto">
                 {spamsFiltered.length !== 0 ? (
@@ -129,7 +129,7 @@ function SpamList({
             </div>
             <div className="w-full h-full flex flex-col">
               <div className="flex justify-center sticky bg-white top-0 z-10">
-                ▼ Not Filtered by Automod
+                ▼ Not filtered comments
               </div>
               <div className="flex-1 overflow-auto">
                 {spamsUnfiltered.length !== 0 ? (

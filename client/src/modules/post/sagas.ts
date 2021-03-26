@@ -19,6 +19,7 @@ function* getAllPostsSaga() {
     const sort: SortType = yield select(postSelector.postSort);
     let token: string | null = yield select(userSelector.token);
     const userImported: boolean = yield select(postSelector.postUserImported);
+    const search: string = yield select(postSelector.postSearch);
 
     const response: PaginatedPostResponse = yield call(
       getPostsAPI,
@@ -28,6 +29,7 @@ function* getAllPostsSaga() {
       'all',
       page,
       userImported,
+      search,
     );
     yield put(
       postActions.getAllPostsSuccess({
@@ -49,6 +51,7 @@ function* getFilteredPostsSaga() {
     const sort: SortType = yield select(postSelector.postSort);
     let token: string | null = yield select(userSelector.token);
     const userImported: boolean = yield select(postSelector.postUserImported);
+    const search: string = yield select(postSelector.postSearch);
 
     const response: PaginatedPostResponse = yield call(
       getPostsAPI,
@@ -58,6 +61,7 @@ function* getFilteredPostsSaga() {
       'filtered',
       page,
       userImported,
+      search
     );
     yield put(
       postActions.getFilteredPostsSuccess({
@@ -79,6 +83,7 @@ function* getUnfilteredPostsSaga() {
     const sort: SortType = yield select(postSelector.postSort);
     let token: string | null = yield select(userSelector.token);
     const userImported: boolean = yield select(postSelector.postUserImported);
+    const search: string = yield select(postSelector.postSearch);
 
     const response: PaginatedPostResponse = yield call(
       getPostsAPI,
@@ -88,6 +93,7 @@ function* getUnfilteredPostsSaga() {
       'unfiltered',
       page,
       userImported,
+      search
     );
     yield put(
       postActions.getUnfilteredPostsSuccess({

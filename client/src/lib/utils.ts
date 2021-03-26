@@ -14,6 +14,14 @@ function isPayloadAction<P>(action: any): action is PayloadAction<string, P> {
   return action.payload !== undefined;
 }
 
+export function nthHighest(numbers:number[], n: number) {
+  var sorted = numbers.sort(function (a, b) {
+      return a - b;
+  });
+  return sorted[sorted.length - n];
+}
+
+
 export function createAsyncSaga<T1, P1, T2, P2, T3, P3>(
   asyncActionCreator: AsyncActionCreatorBuilder<
     [T1, [P1, undefined]],

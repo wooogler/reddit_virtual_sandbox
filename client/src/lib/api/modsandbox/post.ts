@@ -16,6 +16,7 @@ export async function getPostsAPI(
   filtered: Filtered,
   page: number,
   userImported: boolean,
+  search: string,
 ) {
   const response = await axios
     .get<PaginatedPostResponse>('/post/', {
@@ -25,6 +26,7 @@ export async function getPostsAPI(
         filtered,
         page,
         is_private: userImported,
+        search,
       },
       headers: { Authorization: `Token ${token}` },
     })
@@ -324,7 +326,7 @@ export async function selectSpamsAPI(token: string, type: SelectType) {
 export interface Variation {
   word: string;
   post_freq: number;
-  spam_freq: number;
+  // spam_freq: number;
   sim: number;
 }
 

@@ -27,11 +27,11 @@ export const getPostsRefresh = (): ThunkAction<
   unknown,
   Action<string>
 > => (dispatch, getState) => {
-  dispatch(postActions.getAllPosts(getState().post.posts.all.page));
   dispatch(postActions.getFilteredPosts(getState().post.posts.filtered.page));
   dispatch(
     postActions.getUnfilteredPosts(getState().post.posts.unfiltered.page),
   );
+  dispatch(postActions.getAllPosts(getState().post.posts.all.page));
 };
 
 export const getSpamsRefresh = (): ThunkAction<
@@ -40,11 +40,11 @@ export const getSpamsRefresh = (): ThunkAction<
   unknown,
   Action<string>
 > => (dispatch, getState) => {
-  dispatch(postActions.getAllSpams(getState().post.spams.all.page));
   dispatch(postActions.getFilteredSpams(getState().post.spams.filtered.page));
   dispatch(
     postActions.getUnfilteredSpams(getState().post.spams.unfiltered.page),
   );
+  dispatch(postActions.getAllSpams(getState().post.spams.all.page));
 };
 
 export const deletePosts = createAsyncThunk<

@@ -25,7 +25,6 @@ function FindFPFN(): ReactElement {
       .then(() => {
         dispatch(postActions.splitList());
         dispatch(postActions.changeSortType('fpfn'));
-        dispatch(postActions.changeSpamSortType('fpfn'));
       })
       .then(() => {
         dispatch(getPostsRefresh());
@@ -36,8 +35,15 @@ function FindFPFN(): ReactElement {
   };
   return (
     <div className="flex flex-col">
+      <div className="ml-2">
+        Copy and paste the <b className="text-base">sentences</b> or type your
+        own <b className="text-base">sentences</b>
+      </div>
+      <div className="ml-2 mb-2">
+        that represent the comments you want to filter below
+      </div>
       <TextArea
-        placeholder="type a sentence to calculate similarity"
+        placeholder="Copy and paste the sentences"
         rows={4}
         onChange={(e) => setSeed(e.target.value)}
         value={seed}
@@ -51,8 +57,9 @@ function FindFPFN(): ReactElement {
           size="small"
           onClick={handleClickSeed}
           // disabled={!number}
+          className="mt-2 ml-auto"
         >
-          Calculate Similarity
+          Find FP / FN
         </Button>
       </div>
     </div>

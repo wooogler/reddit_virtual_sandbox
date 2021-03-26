@@ -6,6 +6,7 @@ import { SpamType } from '../../lib/api/modsandbox/post';
 import { RootState } from '../../modules';
 import { useSelector } from 'react-redux';
 import ReactMarkdown from 'react-markdown';
+import Highlighter from 'react-highlight-words';
 import { LinkOutlined } from '@ant-design/icons';
 import { CollapseIcon, ExpandIcon } from '../../static/svg';
 import styled from 'styled-components';
@@ -17,6 +18,7 @@ export interface BodyTextProps {
   matchBody?: Index[];
   type: PostType | SpamType;
   url: string;
+  search: string;
 }
 
 function LinkRenderer(props: { href: string; children: any }) {
@@ -35,7 +37,7 @@ function LinkRenderer(props: { href: string; children: any }) {
   );
 }
 
-function BodyText({ text, matchBody, type, url }: BodyTextProps) {
+function BodyText({ text, matchBody, type, url, search }: BodyTextProps) {
   const span = useSelector((state: RootState) => {
     if (type === 'submission' || type === 'comment') {
       return state.post.posts.span;
@@ -66,8 +68,8 @@ function BodyText({ text, matchBody, type, url }: BodyTextProps) {
     <>
       <BodyTextDiv className={'text-sm font-body ' + (ellipsis && 'truncate')}>
         {matchBody && matchBody.length !== 0 && experiment === 'modsandbox' ? (
-          <InteractionText text={text} match={matchBody} />
-        ) : (
+          <InteractionText text={text} match={matchBody} search={search}/>
+        ) : search === '' ? (
           <ReactMarkdown
             source={text}
             renderers={{
@@ -78,6 +80,12 @@ function BodyText({ text, matchBody, type, url }: BodyTextProps) {
                 </Linkify>
               ),
             }}
+          />
+        ) : (
+          <Highlighter
+            searchWords={[search]}
+            textToHighlight={text}
+            highlightStyle={{ fontWeight: 'bolder' }}
           />
         )}
       </BodyTextDiv>
