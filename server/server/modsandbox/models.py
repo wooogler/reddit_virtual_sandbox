@@ -5,6 +5,22 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
+class Log(models.Model):
+    user = models.ForeignKey(User, related_name='logs', on_delete=models.CASCADE)
+    LOG_TYPES = [
+        ("AR", "Apply Rules"),
+        ("CS", "Change Sort"),
+        ("WF", "Word Frequency"),
+        ("SM", "Similar Words"),
+        ("FP", "Find FP & FN"),
+        ("EE", "End Experiment"),
+    ]
+    log_type = models.CharField(max_length=300, choices=LOG_TYPES)
+    log_content = models.TextField(null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.log_type+'-'+self.log_content
 
 class Rule(models.Model):
     """

@@ -88,8 +88,8 @@ def word_similarity(word1, word2):
     return token1.similarity(token2)
 
 def compute_word_frequency_similarity(posts, spams, keyword):
-    vocab_name = 'vocab_tutorial'
-    token_name = 'token_tutorial'
+    vocab_name = 'vocab'
+    token_name = 'token'
 
     post_doc_freq=[]
     spam_doc_freq=[]
@@ -114,7 +114,7 @@ def compute_word_frequency_similarity(posts, spams, keyword):
             #     spam_documents.append(spam_document)
 
             post_vector = CountVectorizer(
-                stop_words=stopwords.words("english"), ngram_range=(1, 3), min_df=2, max_df=0.05, binary=True
+                stop_words=stopwords.words("english"), min_df=1, max_df=0.01, binary=True
             )
 
             post_dtm = post_vector.fit_transform(post_documents).toarray()
@@ -161,6 +161,8 @@ def compute_word_frequency_similarity(posts, spams, keyword):
         # vocab_df["spam_freq"] = spam_doc_freq[val[1]] if val[1] != -1 else 0
         vocab_df["sim"] = token_array[key][0].similarity(token_keyword)
         word_freq_sim.append(vocab_df)
+    
+    word_freq_sim = filter(lambda item: item['sim']>0.2, word_freq_sim)
 
     return word_freq_sim
 
@@ -213,14 +215,18 @@ def compute_cosine_similarity(seeds, filtered_posts):
         # print(np.array(seed_emb).shape) # number of sentences, 768
         seed_embs.append(np.mean(seed_emb, axis=0))  # 768
 
-    # get ML embeddings for filtered posts
     filtered_embs = []
-    for filtered_post in filtered_posts:
-        filtered_emb = process_and_return_embedding(filtered_post["body"], True)
-        filtered_embs.append(np.mean(filtered_emb, axis=0))
-        # print(filtered_embs[-1].shape) # 768
+    try: 
+        filtered_embs = np.load('filtered_emb_save.npy')
+    except IOError:
+        # get ML embeddings for filtered posts
+        for filtered_post in filtered_posts:
+            filtered_emb = process_and_return_embedding(filtered_post["body"], True)
+            filtered_embs.append(np.mean(filtered_emb, axis=0))
+            # print(filtered_embs[-1].shape) # 768
 
-    filtered_embs = np.array(filtered_embs)  # [# of filtered posts, dim]
+        filtered_embs = np.array(filtered_embs)  # [# of filtered posts, dim]
+        np.save('filtered_emb_save', filtered_embs)
 
     # get average ML embedding
     seed_avg_emb = np.mean(np.array(seed_embs), axis=0).reshape(1, -1)  # [1, dim]
