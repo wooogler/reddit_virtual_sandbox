@@ -27,7 +27,7 @@ class RedditHandler:
             user_agent=os.environ.get("user_agent"),
         )
         self.script_dir = os.path.dirname(__file__)   
-        self.cache_folder_name = 'cached_tutorial'     
+        self.cache_folder_name = 'cached'     
 
     def _get_reddit_posts(self, uri, params, max_retries=4, removed=False):
         """Send HTTP request to 'uri'

@@ -23,10 +23,9 @@ from .ml import (
     compute_word_frequency_similarity,
     compute_word_frequency,
 )
-
+from .usage_log import log
 
 logger = logging.getLogger(__name__)
-
 
 @api_view(["GET"])
 def save_files(request):
@@ -104,7 +103,6 @@ def reddit_logout(request):
 
     return Response(status=status.HTTP_200_OK)
 
-
 @api_view(["POST"])
 def apply_rules(request):
     """
@@ -113,6 +111,7 @@ def apply_rules(request):
     try:
         yaml = request.data["yaml"]
         multiple = request.data["multiple"]
+        delete = request.data['no_code']
         rule_set = Ruleset(yaml)
     except Exception as e:
         logger.error(e)
@@ -120,6 +119,8 @@ def apply_rules(request):
 
     profile = Profile.objects.get(user=request.user.id)
     profile.user.rules.all().delete()
+    if delete == True:
+        return Response(status=status.HTTP_202_ACCEPTED)
     rules = rule_set.rules
 
     for index, rule in enumerate(rules):
@@ -130,15 +131,19 @@ def apply_rules(request):
 
     post_to_rule_links = []
     if multiple == True:
-        for post in Post.objects.filter(user=profile.user):
-            for rule in Rule.objects.filter(user=profile.user):
-                rule_target = RuleTarget("Link", json.loads(rule.content))
-                if rule_target.check_item(post, ""):
-                    # post.matching_rules.add(rule)
-                    post_rule = Post.matching_rules.through(post_id=post.id, rule_id=rule.id)
-                    post_to_rule_links.append(post_rule)
+        for rule in Rule.objects.filter(user=profile.user):
+            rule_target = RuleTarget("Link", json.loads(rule.content))
+            post_to_rule_links = [Post.matching_rules.through(post_id=post.id, rule_id=rule.id) for post in Post.objects.filter(user=profile.user) if rule_target.check_item(post, "")]
+            # for post in Post.objects.filter(user=profile.user):
+                
+                # if rule_target.check_item(post, ""):
+                #     # post.matching_rules.add(rule)
+                #     post_rule = Post.matching_rules.through(post_id=post.id, rule_id=rule.id)
+                #     post_to_rule_links.append(post_rule)
     
         Post.matching_rules.through.objects.bulk_create(post_to_rule_links)
+    
+    log(request.user, "AR", rule.content)
 
     return Response(status=status.HTTP_202_ACCEPTED)
 
@@ -202,6 +207,7 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
             sort = self.request.query_params.get("sort", "new")
             filtered = self.request.query_params.get("filtered", "all")
             is_private = self.request.query_params.get("is_private", "true")
+            search = self.request.query_params.get('search', '')
         except Exception as e:
             logger.error(e)
             return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -215,6 +221,10 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
             queryset = queryset.all()
         else:
             queryset = queryset.filter(_type=post_type)
+
+        if search:
+            regex = r"(?:^|\W|\b)%s(?:$|\W|\b)" % search
+            queryset = queryset.filter(body__iregex=regex)
 
         if sort == "new":
             queryset = queryset.order_by("-created_utc")
@@ -266,7 +276,7 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
 
     @action(methods=["post"], detail=False)
     def import_test_data(self, request):
-        folder_name = 'corona_virus_tutorial'
+        folder_name = 'corona_virus'
         if self.request.user.is_authenticated:
             profile = Profile.objects.get(user=request.user.id)
             script_dir = os.path.dirname(__file__)
@@ -275,10 +285,10 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
             ) as normal_json:
                 with open(os.path.join(script_dir, "test_data/"+folder_name+"/removed_comments_no.json")) as removed_json:
                     normal_comments = json.load(normal_json)
-                    removed_comments = json.load(removed_json)
+                    removed_comments_no = json.load(removed_json)
                     random.seed(100)
-                    comments = random.sample(normal_comments, 950)+random.sample(removed_comments, 50)
-                    # comments=normal_comments+removed_comments
+                    # comments = random.sample(normal_comments, 950)+random.sample(removed_comments, 50)
+                    comments=normal_comments+removed_comments_no
                     removed_json.close()
                     normal_json.close()
 
@@ -468,7 +478,7 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
                 post.similarity = similarities[i]
 
             Post.objects.bulk_update(used_posts, ['similarity'])
-            #     post.save()
+            log(request.user, 'FP', seed)
             return Response(status=status.HTTP_201_CREATED)
 
         return Response(status=status.HTTP_401_UNAUTHORIZED)
@@ -518,6 +528,7 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
             for i, post in enumerate(used_posts):
                 post.similarity = similarities[i]
                 post.save()
+            
             return Response(status=status.HTTP_201_CREATED)
             # assert len(similarities) == len(filtered_post_array)
             # return Response({'_id': post._id, 'similarity': similarities[i]} for i, post in enumerate(filtered_posts))
@@ -567,6 +578,7 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
             word_freq_sim = compute_word_frequency_similarity(
                 posts_array, spams_array, keyword
             )
+            log(request.user, 'SM', keyword)
             return Response(word_freq_sim)
 
         return Response(status=status.HTTP_401_UNAUTHORIZED)
@@ -752,6 +764,8 @@ class SpamHandlerViewSet(viewsets.ModelViewSet):
                 {"_id": post._id, "body": post.body} for post in selected_posts
             ]
             word_freq = compute_word_frequency(posts_array)
+            log(request.user, 'WF', ','.join(map(str, ids)))
             return Response(word_freq)
-
+        
         return Response(status=status.HTTP_401_UNAUTHORIZED)
+
