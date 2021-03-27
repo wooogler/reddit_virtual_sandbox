@@ -50,11 +50,18 @@ class RedditHandler:
                     if uri == self.endpoint["submission"]
                     else self.project_comment
                 )
-                project_meta = (
-                    self.project_removed_comment if removed == True else project_meta
+
+                project_removed = (
+                    self.project_removed_submission
+                    if uri == self.endpoint["submission"]
+                    else self.project_removed_comment
+                )
+
+                project = (
+                    self.project_removed if removed == True else project_meta
                 )
                 posts = list(
-                    map(project_meta, posts)
+                    map(project, posts)
                 )  # List of dicts, where each dict = info for each post.
                 posts = self._update_votes(posts)
                 return posts
@@ -112,9 +119,23 @@ class RedditHandler:
         }
 
     @staticmethod
-    def project_removed_comment(post):
+    def project_removed_submission(post):
         return {
             "author": post["author"],
+            "body": post.get("selftext", ""),
+            "created_utc": datetime.fromtimestamp(post["created_utc"], tz=timezone.utc),
+            "full_link": post["full_link"],
+            "_id": post["id"],
+            "subreddit": post["subreddit"],
+            "title": post["title"],
+            "_type": "spam_submission",
+            "domain": post["domain"],
+            "url": post["url"],
+        }
+
+    @staticmethod
+    def project_removed_comment(post):
+        return {
             "author": post["author"],
             "body": post.get("body", ""),
             "created_utc": datetime.fromtimestamp(post["created_utc"], tz=timezone.utc),
@@ -126,92 +147,94 @@ class RedditHandler:
             "_type": "spam_comment",
         }
 
-    def test_removed(self, removed_comments, profile):
+    # def test_removed(self, removed, profile):
         
-        try:
-            with open(
-                os.path.join(self.script_dir, "test_data/"+self.cache_folder_name+"/removed_cache.json"), "r"
-            ) as f:
-                print("removed")
-                removed_comments = json.load(f)
-                bulk_comments = []
-                for i, comment in enumerate(removed_comments):
-                    created_utc = datetime.fromtimestamp(
-                        comment.pop("created_utc"), tz=timezone.utc
-                    )
-                    comment['created_utc'] = created_utc
-                    bulk_comments.append(Post(user_id=profile.user.id, **comment))
-                Post.objects.bulk_create(bulk_comments)
-        except IOError:
-            save_removed = []
-            for i in range(0, len(removed_comments), 100):
-                batch = removed_comments[i:i+100]
-                batch_fullname= list(map(lambda comment: 't1_'+comment['id'], batch))
-                batch_comments = self.reddit.info(batch_fullname)
-                for i, comment in enumerate(batch_comments):
-                    comment_item={
-                        "author": comment.author.name if comment.author is not None else batch[i]['author'],
-                        "body": comment.body if comment.body != '[removed]' else batch[i]['body'],
-                        "created_utc": comment.created_utc,
-                        "full_link": 'https://www.reddit.com'+comment.permalink,
-                        "_id": comment.id,
-                        "subreddit": comment.subreddit.display_name,
-                        "title" :"",
-                        "_type": "spam_comment",
-                        "votes": comment.score
-                    }
-                    save_removed.append(comment_item)
-            with open(
-                os.path.join(self.script_dir, "test_data/"+self.cache_folder_name+"/removed_cache.json"), "w"
-            ) as f:
-                json.dump(save_removed, f, indent=2)
+    #     try:
+    #         with open(
+    #             os.path.join(self.script_dir, "test_data/"+self.cache_folder_name+"/removed_cache.json"), "r"
+    #         ) as f:
+    #             print("removed")
+    #             removed_comments = json.load(f)
+    #             bulk_comments = []
+    #             for i, comment in enumerate(removed_comments):
+    #                 created_utc = datetime.fromtimestamp(
+    #                     comment.pop("created_utc"), tz=timezone.utc
+    #                 )
+    #                 comment['created_utc'] = created_utc
+    #                 bulk_comments.append(Post(user_id=profile.user.id, **comment))
+    #             Post.objects.bulk_create(bulk_comments)
+    #     except IOError:
+    #         save_removed = []
+    #         for i in range(0, len(removed_comments), 100):
+    #             batch = removed[i:i+100]
+    #             batch_fullname= list(map(lambda post: 't1_'+comment['id'], batch))
+    #             batch_comments = self.reddit.info(batch_fullname)
+    #             for i, comment in enumerate(batch_comments):
+    #                 comment_item={
+    #                     "author": comment.author.name if comment.author is not None else batch[i]['author'],
+    #                     "body": comment.body if comment.body != '[removed]' else batch[i]['body'],
+    #                     "created_utc": comment.created_utc,
+    #                     "full_link": 'https://www.reddit.com'+comment.permalink,
+    #                     "_id": comment.id,
+    #                     "subreddit": comment.subreddit.display_name,
+    #                     "title" :"",
+    #                     "_type": "spam_comment",
+    #                     "votes": comment.score
+    #                 }
+    #                 save_removed.append(comment_item)
+    #         with open(
+    #             os.path.join(self.script_dir, "test_data/"+self.cache_folder_name+"/removed_cache.json"), "w"
+    #         ) as f:
+    #             json.dump(save_removed, f, indent=2)
 
-    def test_normal(self, normal_comments, profile):
-        try:
-            with open(
-                os.path.join(self.script_dir, "test_data/"+self.cache_folder_name+"/normal_cache.json"), "r"
-            ) as f:
-                print("normal")
-                normal_comments = json.load(f)
-                bulk_comments = []
+    # def test_normal(self, normal_comments, profile):
+    #     try:
+    #         with open(
+    #             os.path.join(self.script_dir, "test_data/"+self.cache_folder_name+"/normal_cache.json"), "r"
+    #         ) as f:
+    #             print("normal")
+    #             normal_comments = json.load(f)
+    #             bulk_comments = []
 
-                for comment in normal_comments:
-                    created_utc = datetime.fromtimestamp(
-                        comment.pop("created_utc"), tz=timezone.utc
-                    )
-                    comment['created_utc'] = created_utc
-                    bulk_comments.append(Post(user_id=profile.user.id, **comment))
-                Post.objects.bulk_create(bulk_comments)
+    #             for comment in normal_comments:
+    #                 created_utc = datetime.fromtimestamp(
+    #                     comment.pop("created_utc"), tz=timezone.utc
+    #                 )
+    #                 comment['created_utc'] = created_utc
+    #                 bulk_comments.append(Post(user_id=profile.user.id, **comment))
+    #             Post.objects.bulk_create(bulk_comments)
 
-        except IOError:
-            save_normal = []
-            for i in range(0, len(normal_comments), 100):
-                batch = normal_comments[i:i+100]
-                batch_fullname= list(map(lambda comment: 't1_'+comment['id'], batch))
-                batch_comments = self.reddit.info(batch_fullname)
-                for i, comment in enumerate(batch_comments):
-                    comment_item={
-                        "author": comment.author.name if comment.author is not None else batch[i]['author'],
-                        "body": comment.body if comment.body != '[removed]' and comment.body != '[deleted]' else batch[i]['body'],
-                        "created_utc": comment.created_utc,
-                        "full_link": 'https://www.reddit.com'+comment.permalink,
-                        "_id": comment.id,
-                        "subreddit": comment.subreddit.display_name,
-                        "title" :"",
-                        "_type": "comment",
-                        "votes": comment.score
-                    }
-                    save_normal.append(comment_item)
-            with open(
-                os.path.join(self.script_dir, "test_data/"+self.cache_folder_name+"/normal_cache.json"), "w"
-            ) as f:
-                json.dump(save_normal, f, indent=2)     
+    #     except IOError:
+    #         save_normal = []
+    #         for i in range(0, len(normal_comments), 100):
+    #             batch = normal_comments[i:i+100]
+    #             batch_fullname= list(map(lambda comment: 't1_'+comment['id'], batch))
+    #             batch_comments = self.reddit.info(batch_fullname)
+    #             for i, comment in enumerate(batch_comments):
+    #                 comment_item={
+    #                     "author": comment.author.name if comment.author is not None else batch[i]['author'],
+    #                     "body": comment.body if comment.body != '[removed]' and comment.body != '[deleted]' else batch[i]['body'],
+    #                     "created_utc": comment.created_utc,
+    #                     "full_link": 'https://www.reddit.com'+comment.permalink,
+    #                     "_id": comment.id,
+    #                     "subreddit": comment.subreddit.display_name,
+    #                     "title" :"",
+    #                     "_type": "comment",
+    #                     "votes": comment.score
+    #                 }
+    #                 save_normal.append(comment_item)
+    #         with open(
+    #             os.path.join(self.script_dir, "test_data/"+self.cache_folder_name+"/normal_cache.json"), "w"
+    #         ) as f:
+    #             json.dump(save_normal, f, indent=2)     
 
     
+    
 
-    def test_run(self, normal_comments, removed_comments, profile):
-        self.test_normal(normal_comments, profile)
-        self.test_removed(removed_comments, profile)
+    # def test_run(self, normal, removed, profile):
+
+    #     self.test_normal(normal_comments, profile)
+    #     self.test_removed(removed_comments, profile)
 
     def run(self, **kwargs):
         """Get posts (submissions, comments) from Reddit using pushshift

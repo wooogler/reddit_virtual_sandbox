@@ -27,6 +27,7 @@ from .usage_log import log
 
 logger = logging.getLogger(__name__)
 
+
 @api_view(["GET"])
 def save_files(request):
     file_handler = FileHandler("../../reddit_archived/RS_2020-04.zst")
@@ -103,6 +104,7 @@ def reddit_logout(request):
 
     return Response(status=status.HTTP_200_OK)
 
+
 @api_view(["POST"])
 def apply_rules(request):
     """
@@ -111,7 +113,7 @@ def apply_rules(request):
     try:
         yaml = request.data["yaml"]
         multiple = request.data["multiple"]
-        delete = request.data['no_code']
+        delete = request.data["no_code"]
         rule_set = Ruleset(yaml)
     except Exception as e:
         logger.error(e)
@@ -133,16 +135,14 @@ def apply_rules(request):
     if multiple == True:
         for rule in Rule.objects.filter(user=profile.user):
             rule_target = RuleTarget("Link", json.loads(rule.content))
-            post_to_rule_links = [Post.matching_rules.through(post_id=post.id, rule_id=rule.id) for post in Post.objects.filter(user=profile.user) if rule_target.check_item(post, "")]
-            # for post in Post.objects.filter(user=profile.user):
-                
-                # if rule_target.check_item(post, ""):
-                #     # post.matching_rules.add(rule)
-                #     post_rule = Post.matching_rules.through(post_id=post.id, rule_id=rule.id)
-                #     post_to_rule_links.append(post_rule)
-    
+            post_to_rule_links = [
+                Post.matching_rules.through(post_id=post.id, rule_id=rule.id)
+                for post in Post.objects.filter(user=profile.user)
+                if rule_target.check_item(post, "")
+            ]
+
         Post.matching_rules.through.objects.bulk_create(post_to_rule_links)
-    
+
     log(request.user, "AR", rule.content)
 
     return Response(status=status.HTTP_202_ACCEPTED)
@@ -207,7 +207,7 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
             sort = self.request.query_params.get("sort", "new")
             filtered = self.request.query_params.get("filtered", "all")
             is_private = self.request.query_params.get("is_private", "true")
-            search = self.request.query_params.get('search', '')
+            search = self.request.query_params.get("search", "")
         except Exception as e:
             logger.error(e)
             return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -276,31 +276,44 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
 
     @action(methods=["post"], detail=False)
     def import_test_data(self, request):
-        folder_name = 'corona_virus'
+        folder_name = "cmv"
         if self.request.user.is_authenticated:
             profile = Profile.objects.get(user=request.user.id)
             script_dir = os.path.dirname(__file__)
             with open(
-                os.path.join(script_dir, "test_data/"+folder_name+"/normal_comments.json")
+                os.path.join(script_dir, "test_data/" + folder_name + "/normal.json")
             ) as normal_json:
-                with open(os.path.join(script_dir, "test_data/"+folder_name+"/removed_comments_no.json")) as removed_json:
-                    normal_comments = json.load(normal_json)
-                    removed_comments_no = json.load(removed_json)
-                    random.seed(100)
-                    # comments = random.sample(normal_comments, 950)+random.sample(removed_comments, 50)
-                    comments=normal_comments+removed_comments_no
-                    removed_json.close()
-                    normal_json.close()
+                normal = json.load(normal_json)
+                normal_json.close()
 
             with open(
-                os.path.join(script_dir, "test_data/"+folder_name+"/removed_comments.json")
-            ) as json_file:
-                removed_comments = json.load(json_file)
-                json_file.close()
-            
+                os.path.join(script_dir, "test_data/" + folder_name + "/removed.json")
+            ) as removed_json:
+                removed = json.load(removed_json)
+                removed_json.close()
+
             try:
-                reddit = RedditHandler()
-                reddit.test_run(comments, removed_comments, profile)
+                # reddit = RedditHandler()
+                # reddit.test_run(normal, removed, profile)
+                bulk_posts = []
+                for post in normal:
+                    project_normal = (
+                        RedditHandler.project_submission
+                        if post["title"] != ""
+                        else RedditHandler.project_comment
+                    )
+                    post = project_normal(post)
+                    bulk_posts.append(Post(user_id=profile.user.id, **post))
+                for post in removed:
+                    project_removed = (
+                        RedditHandler.project_removed_submission
+                        if post["title"] != ""
+                        else RedditHandler.project_removed_comment
+                    )
+                    post = project_removed(post)
+                    bulk_posts.append(Post(user_id=profile.user.id, **post))
+                Post.objects.bulk_create(bulk_posts)
+
                 return Response(status=status.HTTP_201_CREATED)
             except Exception as e:
                 logger.exception(e)
@@ -348,7 +361,7 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
         queryset = super().get_queryset()
         profile = Profile.objects.get(user=request.user.id)
         for post in queryset.filter(id__in=post_ids):
-            post.user=profile.user
+            post.user = profile.user
 
         return Response()
 
@@ -473,12 +486,12 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
             similarities = compute_cosine_similarity(
                 seed_array, posts_array
             )  # example of return: [1, 0.8, ..., 0.7]
-        
+
             for i, post in enumerate(used_posts):
                 post.similarity = similarities[i]
 
-            Post.objects.bulk_update(used_posts, ['similarity'])
-            log(request.user, 'FP', seed)
+            Post.objects.bulk_update(used_posts, ["similarity"])
+            log(request.user, "FP", seed)
             return Response(status=status.HTTP_201_CREATED)
 
         return Response(status=status.HTTP_401_UNAUTHORIZED)
@@ -494,9 +507,7 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
         if request.user:
             profile = Profile.objects.get(user=request.user.id)
             seeds = Post.objects.filter(id__in=ids)  # Moderated에서 seed로 선택된 포스트들의 집합
-            used_posts = Post.objects.filter(
-                user=profile.user
-            )  # Posts에 불러온 모든 포스트
+            used_posts = Post.objects.filter(user=profile.user)  # Posts에 불러온 모든 포스트
             # filtered_posts = queryset.filter(matching_rules__in=profile.user.rules.all()) # Posts에서 필터링된 포스트들의 집합
             # unfiltered_posts = queryset.exclude(matching_rules__in=profile.user.rules.all()) # 똑같은데 필터링 되지않은 포스트들
             seeds_array = [
@@ -528,7 +539,7 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
             for i, post in enumerate(used_posts):
                 post.similarity = similarities[i]
                 post.save()
-            
+
             return Response(status=status.HTTP_201_CREATED)
             # assert len(similarities) == len(filtered_post_array)
             # return Response({'_id': post._id, 'similarity': similarities[i]} for i, post in enumerate(filtered_posts))
@@ -578,7 +589,7 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
             word_freq_sim = compute_word_frequency_similarity(
                 posts_array, spams_array, keyword
             )
-            log(request.user, 'SM', keyword)
+            log(request.user, "SW", keyword)
             return Response(word_freq_sim)
 
         return Response(status=status.HTTP_401_UNAUTHORIZED)
@@ -764,8 +775,7 @@ class SpamHandlerViewSet(viewsets.ModelViewSet):
                 {"_id": post._id, "body": post.body} for post in selected_posts
             ]
             word_freq = compute_word_frequency(posts_array)
-            log(request.user, 'WF', ','.join(map(str, ids)))
+            log(request.user, "WF", ",".join(map(str, ids)))
             return Response(word_freq)
-        
-        return Response(status=status.HTTP_401_UNAUTHORIZED)
 
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
