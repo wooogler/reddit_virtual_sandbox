@@ -12,10 +12,12 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 import logging
 from pathlib import Path
+from dotenv import load_dotenv
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+load_dotenv(dotenv_path=os.path.join(BASE_DIR, '.env'), encoding='utf-8')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -96,21 +98,27 @@ WSGI_APPLICATION = 'server.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'OPTIONS': {
-#             'read_default_file': '~/reddit_virtual_sandbox/server/my.cnf',
-#         },
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
+
+DATABASES = {
+	'default' : {
+		'ENGINE': 'django.db.backends.postgresql',
+		'NAME': os.getenv('DB_NAME', ''),
+		'USER': os.getenv('DB_USER', ''),
+		'PASSWORD': os.getenv('DB_PASSWORD', ''),
+		'HOST': os.getenv('DB_HOST', ''),
+		'PORT': '5432',
+		'TEST': {
+			'NAME': os.getenv('DB_TEST', ''),
+		},
+	}
+}
+
 
 ##CORS
 CORS_ORIGIN_ALLOW_ALL = True
