@@ -98,8 +98,8 @@ function SpamSelected(): ReactElement {
         </Tooltip> */}
         <div className="ml-2">
           {selectedSpamId.length <= 1
-            ? `${selectedSpamId.length} comment selected`
-            : `${selectedSpamId.length} comments selected`}
+            ? `${selectedSpamId.length} post selected`
+            : `${selectedSpamId.length} posts selected`}
         </div>
         <Popconfirm
           placement="bottom"

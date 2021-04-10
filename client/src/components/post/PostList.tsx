@@ -68,14 +68,15 @@ function PostList({
       {loadingApplySeeds && <OverlayLoading text="Finding FP & FN..." />}
       <ListHeader
         list="unmoderated"
-        name="Comments in r/CoronaVirus"
+        name="Posts in a Subreddit"
         splitView={splitPostList}
-        tooltipText="Comments submitted from 3/1 to 3/7"
+        tooltipText="Posts in a Subreddit"
         userImported={postUserImported}
         span={postSpan}
       />
       {experiment !== 'baseline' && (
         <div
+          data-tour="step-bar"
           // onClick={handleClickBar}
           // className="cursor-pointer hover:opacity-70"
         >
@@ -83,7 +84,7 @@ function PostList({
         </div>
       )}
 
-      {experiment==='modsandbox' && <PostSelected />}
+      {experiment === 'modsandbox' && <PostSelected />}
       <SplitPaneDiv className="flex-1 overflow-y-auto">
         {splitView ? (
           <SplitPane
@@ -92,9 +93,12 @@ function PostList({
             style={{ position: 'relative' }}
             paneStyle={{ overflow: 'auto' }}
           >
-            <div className="w-full h-full flex flex-col">
+            <div
+              className="w-full h-full flex flex-col"
+              data-tour="step-filtered"
+            >
               <div className="flex justify-center sticky bg-white top-0 z-10">
-                ▼ Filtered comments
+                ▼ Filtered posts
               </div>
               <div className="flex-1 overflow-auto">
                 {postsFiltered.length !== 0 ? (
@@ -127,9 +131,12 @@ function PostList({
                 />
               </div>
             </div>
-            <div className="w-full h-full flex flex-col">
+            <div
+              className="w-full h-full flex flex-col"
+              data-tour="step-unfiltered"
+            >
               <div className="flex justify-center sticky bg-white top-0 z-10">
-                ▼ Not filtered comments
+                ▼ Not filtered posts
               </div>
               <div className="flex-1 overflow-auto">
                 {postsUnfiltered.length !== 0 ? (
@@ -191,7 +198,7 @@ function PostList({
                 onChange={(page) => {
                   dispatch(postActions.getAllPosts(page));
                 }}
-                pageSize={20}
+                pageSize={10}
                 simple
               />
             </div>

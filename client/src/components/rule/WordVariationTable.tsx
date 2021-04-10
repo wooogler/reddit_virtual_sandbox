@@ -89,11 +89,12 @@ function WordVariationTable({ wordVar }: Props): ReactElement {
       </div>
 
       <Table
-        pagination={{ pageSize: 5, showSizeChanger: false }}
+        pagination={{ pageSize: 20, showSizeChanger: false }}
         columns={columns}
         dataSource={tableData()}
         size="small"
         loading={loading}
+        scroll={{y: 200}}
       />
     </div>
   );

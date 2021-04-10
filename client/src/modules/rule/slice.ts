@@ -39,7 +39,7 @@ export type RuleState = {
   // error: SerializedError | null;
   error?: string;
   parseError?: YAMLError[][];
-  files: File[];
+  code: string;
   mode: 'edit' | 'select';
   selectedTab: number;
   editables: Rule[];
@@ -54,13 +54,7 @@ export const initialState: RuleState = {
   error: undefined,
   parseError: undefined,
   mode: 'edit',
-  files: [
-    {
-      title: 'rule.yml',
-      code: '',
-      tab: 0,
-    },
-  ],
+  code: '',
   selectedTab: 0,
   editables: [],
   submittedCode: '',
@@ -106,23 +100,8 @@ const ruleSlice = createSlice({
   name: 'rule',
   initialState,
   reducers: {
-    addFile: (state, action: PayloadAction<File>) => {
-      state.files.push(action.payload);
-    },
-    closeFile: (state, action: PayloadAction<number>) => {
-      const index = state.files.findIndex(
-        (rule) => rule.tab === action.payload,
-      );
-      state.files.splice(index, 1);
-    },
-    updateFileCode: (state, action: PayloadAction<string>) => {
-      state.files[state.selectedTab].code = action.payload;
-    },
-    updateFilename: (state, action: PayloadAction<string>) => {
-      state.files[state.selectedTab].title = action.payload;
-    },
-    changeFile: (state, action: PayloadAction<number>) => {
-      state.selectedTab = action.payload;
+    updateCode: (state, action: PayloadAction<string>) => {
+      state.code = action.payload;
     },
     toggleEditorMode: (state) => {
       const mode = state.mode;
@@ -139,7 +118,6 @@ const ruleSlice = createSlice({
       state.clickedRuleIndex = '';
     },
     createEditable: (state, action: PayloadAction<string>) => {
-      // const code = state.files[state.selectedTab].code;
       const code = action.payload;
       const parsedCode = YAML.parseAllDocuments(code, { prettyErrors: true });
 
@@ -213,26 +191,16 @@ const selectClickedRuleIndex = createSelector<RuleState, string, string>(
   (index) => index,
 );
 
-const selectNumberOfTabs = createSelector<RuleState, File[], number>(
-  (state) => state.files,
-  (files) => files.length,
-);
-
 export const ruleSelector = {
   loading: (state: RootState) => selectLoading(state.rule),
   submittedCode: (state: RootState) => selectSubmittedCode(state.rule),
   clickedRuleIndex: (state: RootState) => selectClickedRuleIndex(state.rule),
-  numberOfTabs: (state: RootState) => selectNumberOfTabs(state.rule),
 };
 
 const { actions, reducer } = ruleSlice;
 
 export const {
-  addFile,
-  closeFile,
-  updateFileCode,
-  updateFilename,
-  changeFile,
+  updateCode,
   toggleEditorMode,
   createEditable,
   clearMatched,

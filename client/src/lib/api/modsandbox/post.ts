@@ -368,7 +368,7 @@ export type Post = {
 
 export type NewPost = {
   _id: string;
-  _type: 'comment' | 'submission';
+  _type: 'comment' | 'submission' | 'spam_submission' | 'spam_comment';
   author: string | undefined;
   body: string;
   title: string;

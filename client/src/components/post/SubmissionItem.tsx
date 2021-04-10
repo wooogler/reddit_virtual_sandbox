@@ -1,6 +1,9 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { Post, Spam } from '../../lib/api/modsandbox/post';
 import { Index, MatchIndex } from '../../lib/utils/match';
+import { RootState } from '../../modules';
+import { postSelector } from '../../modules/post/slice';
 import AuthorText from '../common/AuthorText';
 import BodyText from '../common/BodyText';
 import DatetimeText from '../common/DatetimeText';
@@ -16,6 +19,10 @@ export interface SubmissionItemProps {
 }
 
 function SubmissionItem({ submission, match, spam }: SubmissionItemProps) {
+  const experiment = useSelector((state: RootState) => state.user.experiment);
+  const sort = useSelector(postSelector.postSort);
+  const postSearch = useSelector(postSelector.postSearch);
+  
   const matchTitle = match
     .filter((matchItem) => matchItem.target === 'title')
     .reduce<Index[]>((acc, item) => {
@@ -59,7 +66,7 @@ function SubmissionItem({ submission, match, spam }: SubmissionItemProps) {
         matchTitle={matchTitle}
         url={submission.full_link}
       />
-      <div className="flex flex-wrap">
+      <div className="flex flex-wrap items-center">
         {/* {submission.link_flair_text && (
           <FlairText
             text={submission.link_flair_text}
@@ -73,6 +80,13 @@ function SubmissionItem({ submission, match, spam }: SubmissionItemProps) {
         <AuthorText text={submission.author} />
         <DatetimeText datetime={submission.created_utc} url={submission.url} />
         {/* <DomainText text={submission.domain} matchDomain={matchDomain} /> */}
+        {submission._type === 'submission' &&
+          experiment === 'modsandbox' &&
+          sort === 'fpfn' && (
+            <div className="font-display text-xs text-gray-500">
+              similarity : {submission.similarity.toFixed(2)}
+            </div>
+          )}
       </div>
       <div className="pt-2">
         {submission.domain && submission.domain.startsWith('self.') ? (
@@ -81,7 +95,7 @@ function SubmissionItem({ submission, match, spam }: SubmissionItemProps) {
             matchBody={matchBody}
             type={submission._type}
             url={submission.full_link}
-            search=""
+            search={postSearch}
           />
         ) : (
           <UrlText

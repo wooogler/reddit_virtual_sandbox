@@ -141,26 +141,26 @@ function ListHeader({
               onClick={handleClickAddPost}
               disabled={ruleEditorMode === 'edit'}
             >
-              Add a test comment
+              Add a test post
             </Button>
           </div>
         ) : (
           <div className="flex ml-auto mr-2">
-            <Button
+            {/* <Button
               onClick={handleClickImport}
               type="primary"
               size="small"
               disabled={!importClick}
             >
               Import Posts
-            </Button>
+            </Button> */}
           </div>
         )}
 
         <DraggableModal
           visible={isAddOpen}
           setVisible={setIsAddOpen}
-          title={'Add a test comment'}
+          title={'Add a test post'}
         >
           <PostForm onClickClose={handleClickCloseModal} list={list} />
         </DraggableModal>
@@ -188,8 +188,8 @@ function ListHeader({
             >
               <Option value="new">New</Option>
               <Option value="old">Old</Option>
-              <Option value="votes_desc">more votes</Option>
-              <Option value="votes_asc">less votes</Option>
+              {/* <Option value="votes_desc">more votes</Option>
+              <Option value="votes_asc">less votes</Option> */}
               {experiment === 'modsandbox' && (
                 <>
                   <Option value="fpfn" disabled={!splitView}>

@@ -15,15 +15,21 @@ function ConfigurationGuide({}: Props): ReactElement {
           <div className="text">
             If you want to filter comments <strong>with</strong> "keyword"
           </div>
+          <div className="code">
+            <strong>body: ['</strong>keyword<strong>']</strong>
+          </div>
           <Alert
             message="Keyword filters are case-insensitive by default"
             type="warning"
             showIcon
             className='my-1'
           />
-          <div className="code">
-            <strong>body: ['</strong>keyword<strong>']</strong>
-          </div>
+          <Alert
+            message="Don't omit a space after colon!"
+            type="warning"
+            showIcon
+            className='my-1'
+          />
           <div className="text">
             If you want to filter comments with “keyword1” <strong>OR</strong>{' '}
             “keyword2”
