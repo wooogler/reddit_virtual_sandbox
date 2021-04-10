@@ -54,6 +54,9 @@ function AnalysisTools({}: Props): ReactElement {
           <TabPane tab="Similar Words" key="wv">
             <WordVariationTable wordVar={wordFreqSim} />
           </TabPane>
+          <TabPane tab='OR filter' key='or'>
+            
+          </TabPane>
           <TabPane
             tab={
               mode === 'edit' ? (

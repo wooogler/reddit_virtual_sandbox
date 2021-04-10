@@ -15,7 +15,9 @@ function SubredditText({ text }: SubredditTextProps) {
       target="_blank"
       rel="noopener noreferrer"
     >
-      <SubredditDiv className='font-display font-bold text-sm hover:underline text-gray-900'>r/{text}</SubredditDiv>
+      <SubredditDiv className="font-display font-bold text-sm hover:underline text-gray-900">
+        r/{text}
+      </SubredditDiv>
     </a>
   );
 }

@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import SplitPane from 'react-split-pane';
 import Tour, { ReactourStep } from 'reactour';
+import styled from 'styled-components';
 import { AppDispatch } from '..';
-import HomeLayout from '../components/home/HomeLayout';
+import PostLayout from '../components/post/PostLayout';
+import RuleLayout from '../components/rule/RuleLayout';
 import {
   getPostsRefresh,
   getSpamsRefresh,
@@ -78,7 +81,6 @@ function HomePage() {
   }, [dispatch, countPostAll]);
   useEffect(() => {
     dispatch(submitCode({ code: '', multiple: false })).then(() => {
-      console.log('???');
       dispatch(getPostsRefresh());
       dispatch(getSpamsRefresh());
     });
@@ -86,7 +88,19 @@ function HomePage() {
 
   return (
     <>
-      <HomeLayout />
+      <HomeSplitPane
+      split="vertical"
+    >
+      <div className="h-full" data-tour="step-spamlist">
+        <PostLayout moderated />
+      </div>
+      <div className="h-full">
+        <RuleLayout />
+      </div>
+      <div className="h-full" data-tour="step-postlist">
+        <PostLayout />
+      </div>
+    </HomeSplitPane>
       {/* <Tour
         steps={steps}
         isOpen={isTourOpen}
@@ -96,5 +110,9 @@ function HomePage() {
     </>
   );
 }
+
+const HomeSplitPane = styled(SplitPane)`
+  height: 100vh;
+`;
 
 export default HomePage;
