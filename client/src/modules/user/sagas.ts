@@ -5,6 +5,7 @@ import {
   logoutAPI,
   signupAPI,
 } from '../../lib/api/modsandbox/user';
+import { importTestData } from '../post/actions';
 import { getPostsRefreshSaga, getSpamsRefreshSaga } from '../post/sagas';
 import {
   getUserInfo,

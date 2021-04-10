@@ -1,4 +1,4 @@
-import { Alert, Button, Select } from 'antd';
+import { Alert, Button, Popconfirm, Select } from 'antd';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import FindFPFN from '../../components/rule/FindFPFN';
@@ -8,7 +8,7 @@ import WordFrequencyTable from '../../components/rule/WordFrequencyTable';
 import WordVariationTable from '../../components/rule/WordVariationTable';
 import { RootState } from '../../modules';
 import { ruleSelector } from '../../modules/rule/slice';
-import { changeExperiment } from '../../modules/user/slice';
+import { changeExperiment, logout } from '../../modules/user/slice';
 import RuleActionsContainer from './RuleActionsContainer';
 import AceEditor from 'react-ace';
 import 'ace-builds/src-noconflict/mode-yaml';
@@ -16,8 +16,10 @@ import 'ace-builds/src-noconflict/theme-tomorrow';
 import RuleActions from '../../components/rule/RuleActions';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import DraggableModal from '../../components/common/DraggableModalOld';
+import AntDraggableModal from '../../components/common/DraggableModal';
 import styled from 'styled-components';
 import ConfigurationGuide from '../../components/rule/ConfigurationGuide';
+import Goal from '../../components/rule/Goal';
 
 function RuleEditorContainer() {
   const ruleState = useSelector((state: RootState) => state.rule);
@@ -25,50 +27,92 @@ function RuleEditorContainer() {
   //   (file) => file.tab === ruleState.selectedTab,
   // );
   const loadingRule = useSelector(ruleSelector.loading);
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const [code, setCode] = useState('');
+  const [isOpenGoal, setIsOpenGoal] = useState(false);
   const parseError = useSelector((state: RootState) => state.rule.parseError);
 
   const { Option } = Select;
 
   const [isOpenGuide, setIsOpenGuide] = useState(false);
 
+  const handleClickLogout = () => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      dispatch(logout(token));
+      localStorage.removeItem('token');
+    }
+  };
+  const handleClickGoal = () => {
+    setIsOpenGoal(true);
+  };
+
   return (
-    <div className="flex flex-col h-full p-2">
-      <div className="flex items-center">
-        <div className="text-xl mx-2 font-display my-1">
-          Keyword Filter Configuration
+    <div className="flex flex-col h-full" data-tour="step-rule">
+      <div className="flex flex-col">
+        <div className="bg-gray-200 p-2 flex">
+          <Button
+            size="small"
+            onClick={handleClickGoal}
+            icon={<InfoCircleOutlined />}
+            className="ml-3"
+            type="primary"
+          >
+            Task Goal
+          </Button>
+          <AntDraggableModal
+            visible={isOpenGoal}
+            setVisible={setIsOpenGoal}
+            title="Configuration Goal"
+          >
+            <Goal />
+          </AntDraggableModal>
+          <Select
+            size="small"
+            defaultValue="modsandbox"
+            onChange={(value) => dispatch(changeExperiment(value))}
+            className="w-40 ml-2"
+          >
+            <Option value="baseline">baseline</Option>
+            <Option value="sandbox">sandbox</Option>
+            <Option value="modsandbox">ModSandbox</Option>
+          </Select>
+          <Popconfirm
+            placement="bottom"
+            title="Are you sure? Time is left."
+            onConfirm={handleClickLogout}
+            className="ml-auto"
+          >
+            <Button danger type="primary" className="mr-2" size="small">
+              End Experiment
+            </Button>
+          </Popconfirm>
         </div>
-        <Button
-          size="small"
-          className="ml-auto"
-          icon={<InfoCircleOutlined />}
-          onClick={() => {
-            setIsOpenGuide(true);
-          }}
-        >
-          Configuration Guide
-        </Button>
-        <DraggableModal
-          visible={isOpenGuide}
-          title="Configuration Guide"
-          setVisible={setIsOpenGuide}
-        >
-          <ConfigurationGuide />
-        </DraggableModal>
-        {/* <Select
-          size="small"
-          defaultValue="modsandbox"
-          onChange={(value) => dispatch(changeExperiment(value))}
-          className="w-40 ml-auto mr-2"
-        >
-          <Option value="baseline">baseline</Option>
-          <Option value="sandbox">sandbox</Option>
-          <Option value="modsandbox">ModSandbox</Option>
-        </Select> */}
+        <div className="flex items-center">
+          <div className="text-xl mx-2 font-display my-1">
+            Keyword Filter Configuration
+          </div>
+          <Button
+            size="small"
+            className="ml-auto mr-1"
+            icon={<InfoCircleOutlined />}
+            onClick={() => {
+              setIsOpenGuide(true);
+            }}
+          >
+            Configuration Guide
+          </Button>
+          <DraggableModal
+            visible={isOpenGuide}
+            title="Configuration Guide"
+            setVisible={setIsOpenGuide}
+          >
+            <ConfigurationGuide />
+          </DraggableModal>
+        </div>
       </div>
-      <div className="flex-1">
+      <div className="flex-1" data-tour="step-editor">
         {ruleState.mode === 'edit' ? (
           <>
             <AceEditor
@@ -113,6 +157,5 @@ function RuleEditorContainer() {
     </div>
   );
 }
-
 
 export default RuleEditorContainer;

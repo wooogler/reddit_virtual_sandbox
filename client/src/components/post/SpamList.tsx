@@ -68,9 +68,9 @@ function SpamList({
       {/* {loadingApplySeeds && <OverlayLoading text="Finding FP & FN..." />} */}
       <ListHeader
         list="moderated"
-        name="Comments removed by moderators"
+        name="Human-moderated posts"
         splitView={splitSpamList}
-        tooltipText="Comments removed by human moderators in r/CoronaVirus"
+        tooltipText="Posts removed by human moderators"
         userImported={spamUserImported}
         span={spamSpan}
       />
@@ -94,7 +94,7 @@ function SpamList({
           >
             <div className="w-full h-full flex flex-col">
               <div className="flex justify-center sticky bg-white top-0 z-10">
-                ▼ Filtered comments
+                ▼ Filtered posts
               </div>
               <div className="flex-1 overflow-auto">
                 {spamsFiltered.length !== 0 ? (
@@ -129,7 +129,7 @@ function SpamList({
             </div>
             <div className="w-full h-full flex flex-col">
               <div className="flex justify-center sticky bg-white top-0 z-10">
-                ▼ Not filtered comments
+                ▼ Not filtered posts
               </div>
               <div className="flex-1 overflow-auto">
                 {spamsUnfiltered.length !== 0 ? (
@@ -191,7 +191,7 @@ function SpamList({
                 onChange={(page) => {
                   dispatch(postActions.getAllSpams(page));
                 }}
-                pageSize={20}
+                pageSize={10}
                 simple
               />
             </div>

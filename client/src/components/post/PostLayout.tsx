@@ -10,7 +10,7 @@ interface Props {
 
 function PostLayout({ moderated }: Props) {
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full" >
       {/* <div className='h-12'>
         <PostHeaderContainer />
       </div> */}

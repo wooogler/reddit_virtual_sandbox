@@ -90,8 +90,8 @@ function PostSelected(): ReactElement {
       <div className="flex flex-1 justify-center items-center">
         <div className="mr-2">
           {selectedPostId.length <= 1
-            ? `${selectedPostId.length} comment selected`
-            : `${selectedPostId.length} comments selected`}
+            ? `${selectedPostId.length} post selected`
+            : `${selectedPostId.length} posts selected`}
         </div>
         <Popconfirm
           placement="bottom"

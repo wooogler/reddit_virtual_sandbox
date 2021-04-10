@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import SplitPane from 'react-split-pane';
 import styled from 'styled-components';
@@ -10,7 +10,6 @@ import PostLayout from '../post/PostLayout';
 import RuleLayout from '../rule/RuleLayout';
 
 function HomeLayout() {
-
   return (
     <HomeSplitPane
       split="vertical"
@@ -21,14 +20,14 @@ function HomeLayout() {
       // }
       // onChange={(size) => localStorage.setItem('postRulePos', String(size))}
     >
-      <div className="h-full">
-        <PostLayout moderated/>
+      <div className="h-full" data-tour="step-spamlist">
+        <PostLayout moderated />
       </div>
       <div className="h-full">
         <RuleLayout />
       </div>
-      <div className="h-full">
-        <PostLayout/>
+      <div className="h-full" data-tour="step-postlist">
+        <PostLayout />
       </div>
     </HomeSplitPane>
   );

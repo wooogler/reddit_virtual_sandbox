@@ -34,9 +34,9 @@ function PostItem({ post, selected, isMatched, match }: PostItemProps) {
           {experiment === 'modsandbox' && (
             <Checkbox onClick={handleClickPost} checked={selected} />
           )}
-          <UpArrowIcon className="mt-2 opacity-30 w-3" />
+          {/* <UpArrowIcon className="mt-2 opacity-30 w-3" />
           <div className="font-display font-bold">{post.votes}</div>
-          <DownArrowIcon className="opacity-30 w-3" />
+          <DownArrowIcon className="opacity-30 w-3" /> */}
         </div>
         {post._type === 'submission' ? (
           <SubmissionItem match={isMatched ? match : []} submission={post} />

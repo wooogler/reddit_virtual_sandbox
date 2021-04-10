@@ -28,7 +28,7 @@ function PostForm({ onClickClose, list }: PostFormProps) {
   const formik = useFormik<NewPost>({
     initialValues: {
       _id: Math.random().toString(36).substr(2, 7),
-      _type: 'comment',
+      _type: 'submission',
       title: '',
       body: '',
       author: username,
@@ -40,7 +40,7 @@ function PostForm({ onClickClose, list }: PostFormProps) {
         await dispatch(getPostsRefresh());
       } else if (list === 'moderated') {
         await dispatch(
-          addSpam({
+          addTestPost({
             ...values,
             _type:
               values._type === 'submission'
@@ -55,20 +55,20 @@ function PostForm({ onClickClose, list }: PostFormProps) {
   });
   return (
     <form onSubmit={formik.handleSubmit} className="flex flex-col">
-      {/* <label htmlFor="type" className="text-lg mr-2">
-          Type
-        </label>
-        <Select
-          className="select-type"
-          onChange={(value) => {
-            formik.setFieldValue('_type', value);
-          }}
-          defaultValue="submission"
-          style={{ fontSize: '1rem' }}
-        >
-          <Option value="submission">submission</Option>
-          <Option value="comment">comment</Option>
-        </Select> */}
+      <label htmlFor="type" className="text-lg mr-2">
+        Type
+      </label>
+      <Select
+        className="select-type"
+        onChange={(value) => {
+          formik.setFieldValue('_type', value);
+        }}
+        defaultValue="submission"
+        style={{ fontSize: '1rem' }}
+      >
+        <Option value="submission">submission</Option>
+        <Option value="comment">comment</Option>
+      </Select>
       <div>
         <label htmlFor="_id" className="text-lg mr-2">
           Comment ID
@@ -82,7 +82,7 @@ function PostForm({ onClickClose, list }: PostFormProps) {
         />
       </div>
 
-      {/* {formik.values._type === 'submission' && (
+      {formik.values._type === 'submission' && (
         <>
           <label htmlFor="title">Title</label>
           <Input
@@ -92,16 +92,20 @@ function PostForm({ onClickClose, list }: PostFormProps) {
             value={formik.values.title}
           />
         </>
-      )} */}
+      )}
 
-      <label htmlFor="author" className='text-base my-1'>Author</label>
+      <label htmlFor="author" className="text-base my-1">
+        Author
+      </label>
       <Input
         name="author"
         type="text"
         onChange={formik.handleChange}
         value={formik.values.author}
       />
-      <label htmlFor="body" className='text-base my-1'>Body</label>
+      <label htmlFor="body" className="text-base my-1">
+        Body
+      </label>
       <TextArea
         name="body"
         onChange={formik.handleChange}
@@ -116,7 +120,9 @@ function PostForm({ onClickClose, list }: PostFormProps) {
         value={formik.values.domain}
       /> */}
       <div className="flex mt-4">
-        <Button onClick={onClickClose} className='mr-2 ml-auto'>Close</Button>
+        <Button onClick={onClickClose} className="mr-2 ml-auto">
+          Close
+        </Button>
         <Button type="primary" htmlType="submit">
           Save
         </Button>
