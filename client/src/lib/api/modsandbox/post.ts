@@ -241,6 +241,18 @@ export async function wordFrequencyAPI(token: string, ids: number[]) {
   return response.data;
 }
 
+export async function orFilterAPI(token: string) {
+  const response = await axios.post<Recommend[]>(
+    '/spam/or_filter/',
+    {},
+    {
+      headers: { Authorization: `Token ${token}` },
+    }
+  );
+
+  return response.data;
+}
+
 export async function addPostAPI(token: string, newPost: NewPost) {
   const response = await axios.post<Post>(
     '/post/',
@@ -333,6 +345,12 @@ export interface Variation {
 export interface Frequency {
   word: string;
   freq: number;
+}
+
+export interface Recommend {
+  word: string;
+  target_freq: number;
+  non_target_freq: number;
 }
 
 export interface PaginatedPostResponse {

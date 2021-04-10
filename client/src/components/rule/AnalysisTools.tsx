@@ -6,6 +6,7 @@ import Tour, { ReactourStep } from 'reactour';
 import { RootState } from '../../modules';
 import { ruleSelector } from '../../modules/rule/slice';
 import FindFPFN from './FindFPFN';
+import OrFilter from './OrFilter';
 import WordFrequencyTable from './WordFrequencyTable';
 import WordVariationTable from './WordVariationTable';
 
@@ -55,7 +56,7 @@ function AnalysisTools({}: Props): ReactElement {
             <WordVariationTable wordVar={wordFreqSim} />
           </TabPane>
           <TabPane tab='OR filter' key='or'>
-            
+            <OrFilter/>
           </TabPane>
           <TabPane
             tab={
