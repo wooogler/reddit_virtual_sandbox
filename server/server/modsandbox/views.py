@@ -23,6 +23,7 @@ from .ml import (
     compute_word_frequency_similarity,
     compute_word_frequency,
 )
+from .recommend import compute_recommendation
 from .usage_log import log
 
 logger = logging.getLogger(__name__)
@@ -143,7 +144,7 @@ def apply_rules(request):
 
         Post.matching_rules.through.objects.bulk_create(post_to_rule_links)
 
-    log(request.user, "AR", rule.content)
+    log(request.user, "AR", yaml)
 
     return Response(status=status.HTTP_202_ACCEPTED)
 
@@ -263,8 +264,9 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
 
         if self.request.user.is_authenticated:
             profile = Profile.objects.get(user=request.user.id)
-            test_post = Post.objects.create(**test_data)
+            test_post = Post(**test_data)
             test_post.user = profile.user
+            test_post.save()
             for rule in Rule.objects.filter(user=profile.user):
                 rule_target = RuleTarget("Link", json.loads(rule.content))
                 if rule_target.check_item(test_post, ""):
@@ -779,3 +781,29 @@ class SpamHandlerViewSet(viewsets.ModelViewSet):
             return Response(word_freq)
 
         return Response(status=status.HTTP_401_UNAUTHORIZED)
+    
+    @action(methods=['post'], detail=False)
+    def or_filter(self, request):
+        if request.user:
+            profile = Profile.objects.get(user=request.user.id)
+            unfiltered_spams = Post.objects.filter(
+                user=profile.user, 
+                _type__in=[
+                    "spam_submission",
+                    "spam_comment",
+                    "reports_submission",
+                    "reports_comment"
+                ],
+            ).exclude(matching_rules__in=profile.user.rules.all())
+            unfiltered_posts = Post.objects.filter(
+                user=profile.user, 
+                _type__in=[
+                    "submission",
+                    "comment",
+                ],
+            ).exclude(matching_rules__in=profile.user.rules.all())
+            recommendation = compute_recommendation(unfiltered_spams, unfiltered_posts)
+            return Response(recommendation)
+        
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+
