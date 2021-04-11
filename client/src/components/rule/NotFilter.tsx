@@ -1,12 +1,14 @@
 import { Button, InputNumber, Table } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../..';
 import { RootState } from '../../modules';
-import { orFilter } from '../../modules/stat/actions';
+import { notFilter } from '../../modules/stat/actions';
 
-interface Props {}
+interface Props {
+  
+}
 
 const columns: ColumnsType<any> = [
   {
@@ -29,16 +31,16 @@ const columns: ColumnsType<any> = [
   },
 ];
 
-function OrFilter({}: Props): ReactElement {
+function NotFilter({}: Props): ReactElement {
   const dispatch: AppDispatch = useDispatch();
   const loading = useSelector(
-    (state: RootState) => state.stat.orFilter.loading,
+    (state: RootState) => state.stat.notFilter.loading,
   );
 
   const [min, setMin] = useState(0);
   const [max, setMax] = useState(10);
 
-  const recommends = useSelector((state: RootState) => state.stat.orFilter.data)
+  const recommends = useSelector((state: RootState) => state.stat.notFilter.data)
     .map((item, index) => {
       return { ...item, key: index };
     })
@@ -47,14 +49,14 @@ function OrFilter({}: Props): ReactElement {
     );
 
   const handleClickRecommend = () => {
-    dispatch(orFilter());
+    dispatch(notFilter());
   };
 
   return (
     <div className="flex flex-col">
       <div className="flex items-center mb-3 justify-center">
         <Button type="primary" size="small" onClick={handleClickRecommend}>
-          Recommend keywords for OR filter
+          Recommend keywords for NOT filter
         </Button>
         <div className="flex">
           <div className="ml-5 mr-2">range:</div>
@@ -86,4 +88,4 @@ function OrFilter({}: Props): ReactElement {
   );
 }
 
-export default OrFilter;
+export default NotFilter

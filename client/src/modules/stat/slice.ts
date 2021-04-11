@@ -1,6 +1,6 @@
 import { createSlice, SerializedError } from '@reduxjs/toolkit';
 import { Frequency, Recommend, Variation } from '../../lib/api/modsandbox/post';
-import { andFilter, orFilter, wordFrequency, wordVariation } from './actions';
+import { andFilter, notFilter, orFilter, wordFrequency, wordVariation } from './actions';
 
 export type StatState = {
   wordVariation: {
@@ -19,6 +19,11 @@ export type StatState = {
     data: Recommend[];
   };
   andFilter: {
+    loading: boolean;
+    error: SerializedError | null;
+    data: Recommend[];
+  };
+  notFilter: {
     loading: boolean;
     error: SerializedError | null;
     data: Recommend[];
@@ -42,6 +47,11 @@ const initialState: StatState = {
     data: [],
   },
   andFilter: {
+    loading: false,
+    error: null,
+    data: [],
+  },
+  notFilter: {
     loading: false,
     error: null,
     data: [],
@@ -101,6 +111,18 @@ const statSlice = createSlice({
       .addCase(andFilter.rejected, (state, action) => {
         state.andFilter.error = action.error;
         state.andFilter.loading = false;
+      })
+      .addCase(notFilter.pending, (state) => {
+        state.notFilter.loading = true;
+        state.notFilter.data = [];
+      })
+      .addCase(notFilter.fulfilled, (state, action) => {
+        state.notFilter.data = action.payload;
+        state.notFilter.loading = false;
+      })
+      .addCase(notFilter.rejected, (state, action) => {
+        state.notFilter.error = action.error;
+        state.notFilter.loading = false;
       });
   },
 });

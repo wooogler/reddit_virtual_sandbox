@@ -7,6 +7,7 @@ import { RootState } from '../../modules';
 import { ruleSelector } from '../../modules/rule/slice';
 import AndFilter from './AndFilter';
 import FindFPFN from './FindFPFN';
+import NotFilter from './NotFilter';
 import OrFilter from './OrFilter';
 import WordFrequencyTable from './WordFrequencyTable';
 import WordVariationTable from './WordVariationTable';
@@ -62,7 +63,10 @@ function AnalysisTools({}: Props): ReactElement {
           <TabPane tab='AND filter' key='and'>
             <AndFilter/>
           </TabPane>
-          <TabPane
+          <TabPane tab='NOT filter' key='not'>
+            <NotFilter/>
+          </TabPane>
+          {/* <TabPane
             tab={
               mode === 'edit' ? (
                 <Tooltip title="Please apply your configuration first">
@@ -76,7 +80,7 @@ function AnalysisTools({}: Props): ReactElement {
             disabled={mode === 'edit'}
           >
             <FindFPFN />
-          </TabPane>
+          </TabPane> */}
         </Tabs>
       </div>
       <Tour

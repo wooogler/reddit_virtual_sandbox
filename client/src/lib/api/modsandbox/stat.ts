@@ -48,3 +48,15 @@ export async function andFilterAPI(token: string) {
 
   return response.data;
 }
+
+export async function notFilterAPI(token: string) {
+  const response = await axios.post<Recommend[]>(
+    '/spam/not_filter/',
+    {},
+    {
+      headers: { Authorization: `Token ${token}` },
+    }
+  );
+
+  return response.data;
+}

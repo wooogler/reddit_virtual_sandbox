@@ -3,6 +3,7 @@ import { RootState } from '..';
 import { Frequency, Recommend, Variation } from '../../lib/api/modsandbox/post';
 import {
   andFilterAPI,
+  notFilterAPI,
   orFilterAPI,
   wordFrequencyAPI,
   wordVariationAPI,
@@ -45,5 +46,15 @@ export const andFilter = createAsyncThunk<
 >('stat/andFilter', async (ids, thunkAPI) => {
   const token = thunkAPI.getState().user.token;
   const data = await andFilterAPI(token);
+  return data;
+});
+
+export const notFilter = createAsyncThunk<
+  Recommend[],
+  undefined,
+  { state: RootState }
+>('stat/notFilter', async (ids, thunkAPI) => {
+  const token = thunkAPI.getState().user.token;
+  const data = await notFilterAPI(token);
   return data;
 });
