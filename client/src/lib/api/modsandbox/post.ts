@@ -217,42 +217,6 @@ export async function applySeedAPI(token: string, seed: string) {
   return response.status;
 }
 
-export async function wordVariationAPI(token: string, keyword: string) {
-  const response = await axios.post<Variation[]>(
-    '/post/word_variation/',
-    { keyword },
-    {
-      headers: { Authorization: `Token ${token}` },
-    },
-  );
-
-  return response.data;
-}
-
-export async function wordFrequencyAPI(token: string, ids: number[]) {
-  const response = await axios.post<Frequency[]>(
-    '/spam/word_frequency/',
-    { ids },
-    {
-      headers: { Authorization: `Token ${token}` },
-    },
-  );
-
-  return response.data;
-}
-
-export async function orFilterAPI(token: string) {
-  const response = await axios.post<Recommend[]>(
-    '/spam/or_filter/',
-    {},
-    {
-      headers: { Authorization: `Token ${token}` },
-    }
-  );
-
-  return response.data;
-}
-
 export async function addPostAPI(token: string, newPost: NewPost) {
   const response = await axios.post<Post>(
     '/post/',

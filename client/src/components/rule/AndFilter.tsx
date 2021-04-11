@@ -1,12 +1,14 @@
-import { Button, Table } from 'antd';
+import { Button, Table } from 'antd'
 import { ColumnsType } from 'antd/lib/table';
-import React, { ReactElement } from 'react';
+import React, { ReactElement } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch } from '../..';
 import { RootState } from '../../modules';
-import { orFilter } from '../../modules/stat/actions';
+import { andFilter } from '../../modules/stat/actions';
 
-interface Props {}
+interface Props {
+  
+}
 
 const columns: ColumnsType<any> = [
   {
@@ -26,36 +28,30 @@ const columns: ColumnsType<any> = [
     sortDirections: ['ascend', 'descend', 'ascend'],
     defaultSortOrder: 'descend',
     sorter: (a, b) => a.non_target_freq - b.non_target_freq,
-    filters: [
-      {
-        text: '0',
-        value: 0,
-      },
-    ],
-    onFilter: (value, record) => record.non_target_freq === value,
   },
 ];
 
-function OrFilter({}: Props): ReactElement {
+function AndFilter({}: Props): ReactElement {
+
   const dispatch: AppDispatch = useDispatch();
   const loading = useSelector(
-    (state: RootState) => state.stat.orFilter.loading,
+    (state: RootState) => state.stat.andFilter.loading,
   );
   const recommends = useSelector(
-    (state: RootState) => state.stat.orFilter.data,
+    (state: RootState) => state.stat.andFilter.data,
   ).map((item, index) => {
     return { ...item, key: index };
   });
 
   const handleClickRecommend = () => {
-    dispatch(orFilter());
-  };
-
+    dispatch(andFilter());
+  }
+  
   return (
     <div className="flex flex-col">
       <div className="flex items-center mb-3 justify-center">
         <Button type="primary" size="small" onClick={handleClickRecommend}>
-          Recommend keywords for OR filter
+          Recommend keywords for AND filter
         </Button>
       </div>
 
@@ -68,7 +64,7 @@ function OrFilter({}: Props): ReactElement {
         scroll={{ y: 200 }}
       />
     </div>
-  );
+  )
 }
 
-export default OrFilter;
+export default AndFilter

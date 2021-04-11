@@ -1,6 +1,12 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
-import { RootState } from "..";
-import { Frequency, orFilterAPI, Recommend, Variation, wordFrequencyAPI, wordVariationAPI } from "../../lib/api/modsandbox/post";
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import { RootState } from '..';
+import { Frequency, Recommend, Variation } from '../../lib/api/modsandbox/post';
+import {
+  andFilterAPI,
+  orFilterAPI,
+  wordFrequencyAPI,
+  wordVariationAPI,
+} from '../../lib/api/modsandbox/stat';
 
 export const wordVariation = createAsyncThunk<
   Variation[],
@@ -22,8 +28,22 @@ export const wordFrequency = createAsyncThunk<
   return data;
 });
 
-export const orFilter = createAsyncThunk<Recommend[], undefined, {state: RootState}>('stat/orFilter', async (ids, thunkAPI) => {
+export const orFilter = createAsyncThunk<
+  Recommend[],
+  undefined,
+  { state: RootState }
+>('stat/orFilter', async (ids, thunkAPI) => {
   const token = thunkAPI.getState().user.token;
   const data = await orFilterAPI(token);
   return data;
-})
+});
+
+export const andFilter = createAsyncThunk<
+  Recommend[],
+  undefined,
+  { state: RootState }
+>('stat/andFilter', async (ids, thunkAPI) => {
+  const token = thunkAPI.getState().user.token;
+  const data = await andFilterAPI(token);
+  return data;
+});

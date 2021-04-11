@@ -213,7 +213,7 @@ export const initialState: PostState = {
     error: null,
     type: 'all',
     sort: 'created-new',
-    split: false,
+    split: true,
     selected: [],
     userImported: true,
     span: true,
@@ -455,7 +455,7 @@ const postSlice = createSlice({
       state.spams.all.data = [];
       state.spams.filtered.data = [];
       state.spams.unfiltered.data = [];
-    }
+    },
   },
   extraReducers: (builder) => {
     builder

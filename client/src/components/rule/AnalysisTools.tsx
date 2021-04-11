@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux';
 import Tour, { ReactourStep } from 'reactour';
 import { RootState } from '../../modules';
 import { ruleSelector } from '../../modules/rule/slice';
+import AndFilter from './AndFilter';
 import FindFPFN from './FindFPFN';
 import OrFilter from './OrFilter';
 import WordFrequencyTable from './WordFrequencyTable';
@@ -49,14 +50,17 @@ function AnalysisTools({}: Props): ReactElement {
           </Button>
         </div>
         <Tabs defaultActiveKey="wf" centered size="small">
-          <TabPane tab="Word Frequency" key="wf" data-tour="step-tabs">
+          {/* <TabPane tab="Word Frequency" key="wf" data-tour="step-tabs">
             <WordFrequencyTable wordFreq={wordFreq} />
           </TabPane>
           <TabPane tab="Similar Words" key="wv">
             <WordVariationTable wordVar={wordFreqSim} />
-          </TabPane>
+          </TabPane> */}
           <TabPane tab='OR filter' key='or'>
             <OrFilter/>
+          </TabPane>
+          <TabPane tab='AND filter' key='and'>
+            <AndFilter/>
           </TabPane>
           <TabPane
             tab={
