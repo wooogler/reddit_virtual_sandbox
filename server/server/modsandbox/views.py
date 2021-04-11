@@ -807,3 +807,57 @@ class SpamHandlerViewSet(viewsets.ModelViewSet):
         
         return Response(status=status.HTTP_401_UNAUTHORIZED)
 
+    @action(methods=['post'], detail=False)
+    def and_filter(self, request):
+        if request.user:
+            profile = Profile.objects.get(user=request.user.id)
+            filtered_spams = Post.objects.filter(
+                user=profile.user, 
+                _type__in=[
+                    "spam_submission",
+                    "spam_comment",
+                    "reports_submission",
+                    "reports_comment"
+                ],
+                matching_rules__in=profile.user.rules.all()
+            )
+            filtered_posts = Post.objects.filter(
+                user=profile.user, 
+                _type__in=[
+                    "submission",
+                    "comment",
+                ],
+                matching_rules__in=profile.user.rules.all()
+            )
+            recommendation = compute_recommendation(filtered_spams, filtered_posts)
+            return Response(recommendation)
+        
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+    @action(methods=['post'], detail=False)
+    def not_filter(self, request):
+        if request.user:
+            profile = Profile.objects.get(user=request.user.id)
+            filtered_spams = Post.objects.filter(
+                user=profile.user, 
+                _type__in=[
+                    "spam_submission",
+                    "spam_comment",
+                    "reports_submission",
+                    "reports_comment"
+                ],
+                matching_rules__in=profile.user.rules.all()
+            )
+            filtered_posts = Post.objects.filter(
+                user=profile.user, 
+                _type__in=[
+                    "submission",
+                    "comment",
+                ],
+                matching_rules__in=profile.user.rules.all()
+            )
+            recommendation = compute_recommendation(filtered_posts, filtered_spams)
+            return Response(recommendation)
+        
+        return Response(status=status.HTTP_401_UNAUTHORIZED)
+

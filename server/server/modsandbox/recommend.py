@@ -74,12 +74,13 @@ def compute_recommendation(targets, non_targets):
     )
     non_target_dtm = non_target_vector.fit_transform(processed_non_targets).toarray()
     np_non_target_dtm = np.sum(non_target_dtm, axis=0)
+    non_target_vocab = non_target_vector.vocabulary_
 
     word_freq = [
         {
             "word": key, 
             "target_freq": np_target_dtm[val], 
-            "non_target_freq": np_non_target_dtm[val]
+            "non_target_freq": np_non_target_dtm[non_target_vocab[key]]
         } for key, val in target_vocab.items()]
 
     return word_freq
