@@ -17,3 +17,4 @@ export interface IRule {
   modifiers: string[];
   value: string;
 }
+

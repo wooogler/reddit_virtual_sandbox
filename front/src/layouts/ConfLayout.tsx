@@ -9,9 +9,9 @@ import PanelName from '@components/PanelName';
 function ConfLayout(): ReactElement {
   const [code, setCode] = useState('');
   return (
-    <div className='h-screen p-2'>
+    <div className='h-screen'>
       <SplitPane split='horizontal' className='h-full'>
-        <div className='h-full flex flex-col'>
+        <div className='h-full flex flex-col p-2'>
           <PanelName>AutoMod Configuration</PanelName>
           <div className='flex-1'>
             <AceEditor
@@ -40,7 +40,7 @@ function ConfLayout(): ReactElement {
             </Button>
           </div>
         </div>
-        <div className='p-2'>
+        <div className='h-full flex flex-col p-2'>
           <div className='text-xl font-bold'>Statistics</div>
         </div>
       </SplitPane>

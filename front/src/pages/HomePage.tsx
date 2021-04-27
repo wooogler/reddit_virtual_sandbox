@@ -8,10 +8,10 @@ function HomePage(): ReactElement {
   return (
     <SplitPane split='vertical' className='h-screen'>
       <div>
-        <TestLayout />
+        <ConfLayout />
       </div>
       <div>
-        <ConfLayout />
+        <TestLayout />
       </div>
       <div>
         <FindLayout />
