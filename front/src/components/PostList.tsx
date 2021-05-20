@@ -8,7 +8,7 @@ import { Progress } from 'antd';
 interface Props {
   label: string;
   stat?: AutoModStat;
-  posts: IPost[];
+  posts?: IPost[];
 }
 
 function PostList({ label, stat, posts }: Props): ReactElement {
@@ -23,15 +23,14 @@ function PostList({ label, stat, posts }: Props): ReactElement {
               showInfo={false}
             />
             <div className='text-xs ml-2 text-gray-400 w-48'>
-              {((stat.part / stat.total) * 100).toFixed(2)} % ({stat.part}/{stat.total})
+              {((stat.part / stat.total) * 100).toFixed(2)} % ({stat.part}/
+              {stat.total})
             </div>
           </div>
         )}
       </div>
       <div className='overflow-auto post-scroll'>
-        {posts.map((post, i) => (
-          <PostItem key={i} post={post} />
-        ))}
+        {posts && posts.map((post, i) => <PostItem key={i} post={post} />)}
       </div>
     </div>
   );

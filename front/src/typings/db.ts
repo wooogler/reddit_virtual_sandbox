@@ -1,5 +1,6 @@
 export interface IUser {
-  nickname: string;
+  username: string;
+  reddit_token: string;
 }
 
 export interface IPost {
@@ -18,3 +19,9 @@ export interface IRule {
   value: string;
 }
 
+export interface PaginatedPosts {
+  count: number;
+  next: any;
+  previous: any;
+  results: IPost[];
+}

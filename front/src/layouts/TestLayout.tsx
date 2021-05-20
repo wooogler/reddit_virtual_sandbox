@@ -2,8 +2,10 @@ import React, { ReactElement } from 'react';
 import SplitPane from 'react-split-pane';
 
 import PostList from '@components/PostList';
-import { IPost } from '@typings/db';
+import { IPost, PaginatedPosts } from '@typings/db';
 import { AutoModStat } from '@typings/types';
+import request from '@utils/request';
+import { useQuery } from 'react-query';
 
 export const mockPosts: IPost[] = [
   {
@@ -51,16 +53,30 @@ export const mockPosts: IPost[] = [
 export const mockStat: AutoModStat = {
   part: 10,
   total: 100,
-}
+};
 
 function TestLayout(): ReactElement {
+  const { data: targetData } = useQuery('target', async () => {
+    const { data } = await request<PaginatedPosts>({ url: '/posts/target/' });
+    return data;
+  });
+  const { data: exceptData } = useQuery('except', async () => {
+    const { data } = await request<PaginatedPosts>({ url: '/posts/except/' });
+    return data;
+  });
   return (
     <div className='h-screen'>
-      <SplitPane
-        split='horizontal'
-      >
-        <PostList label='Targets' posts={mockPosts} stat={mockStat}/>
-        <PostList label='Non-Targets' posts={mockPosts} stat={mockStat}/>
+      <SplitPane split='horizontal'>
+        <PostList
+          label='Targets'
+          posts={targetData?.results}
+          stat={mockStat}
+        />
+        <PostList
+          label='Non-Targets'
+          posts={exceptData?.results}
+          stat={mockStat}
+        />
       </SplitPane>
     </div>
   );

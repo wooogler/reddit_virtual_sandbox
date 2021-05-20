@@ -14,7 +14,7 @@ ReactDOM.render(
     <BrowserRouter>
       <App />
     </BrowserRouter>
-    <ReactQueryDevtools initialIsOpen={true}/>
+    <ReactQueryDevtools initialIsOpen={true} />
   </QueryClientProvider>,
   document.getElementById('root')
 );

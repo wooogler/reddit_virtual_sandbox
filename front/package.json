@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@craco/craco": "^6.1.1",
+    "@loadable/component": "^5.14.1",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
@@ -13,8 +14,10 @@
     "@types/react-dom": "^17.0.0",
     "@types/react-router-dom": "^5.1.7",
     "antd": "^4.15.3",
+    "axios": "^0.21.1",
     "clsx": "^1.1.1",
     "dayjs": "^1.10.4",
+    "lodash": "^4.17.21",
     "react": "^17.0.2",
     "react-ace": "^9.4.0",
     "react-dom": "^17.0.2",
@@ -27,6 +30,8 @@
     "zustand": "^3.4.2"
   },
   "devDependencies": {
+    "@types/loadable__component": "^5.13.3",
+    "@types/lodash": "^4.14.168",
     "autoprefixer": "^9",
     "craco-alias": "^2.2.0",
     "postcss": "^7",

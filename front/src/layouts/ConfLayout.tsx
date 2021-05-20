@@ -1,13 +1,38 @@
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement, useCallback, useState } from 'react';
 import AceEditor from 'react-ace';
 import 'ace-builds/src-noconflict/mode-yaml';
 import 'ace-builds/src-noconflict/theme-tomorrow';
 import SplitPane from 'react-split-pane';
 import { Button } from 'antd';
 import PanelName from '@components/PanelName';
+import { useQuery } from 'react-query';
+import { IUser } from '@typings/db';
+import { Redirect } from 'react-router-dom';
+import request from '@utils/request';
 
 function ConfLayout(): ReactElement {
   const [code, setCode] = useState('');
+
+  const { data, refetch } = useQuery('me', async () => {
+    const { data } = await request<IUser | false>({ url: '/rest-auth/user/' });
+    return data;
+  });
+
+  const onLogOut = useCallback(() => {
+    request({ url: '/rest-auth/logout/', method: 'POST' })
+      .then(() => {
+        localStorage.clear();
+        refetch();
+      })
+      .catch((error) => {
+        console.dir(error);
+      });
+  }, [refetch]);
+
+  if (data === false) {
+    return <Redirect to='/login' />;
+  }
+
   return (
     <div className='h-screen'>
       <SplitPane split='horizontal' className='h-full'>
@@ -35,9 +60,14 @@ function ConfLayout(): ReactElement {
 
           <div className='flex py-2'>
             <Button type='primary'>Rule Suggestions</Button>
-            <Button type='primary' className='ml-auto'>
-              Apply Rules
-            </Button>
+            <div className='flex ml-auto'>
+              <Button type='primary' danger onClick={onLogOut}>
+                Log Out
+              </Button>
+              <Button type='primary' className='ml-2'>
+                Apply Rules
+              </Button>
+            </div>
           </div>
         </div>
         <div className='h-full flex flex-col p-2'>
