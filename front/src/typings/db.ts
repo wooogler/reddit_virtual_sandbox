@@ -5,23 +5,23 @@ export interface IUser {
 
 export interface IPost {
   id: string;
-  from: 'Subreddit' | 'Spam' | 'report';
+  source: 'Subreddit' | 'Spam' | 'Report';
+  place: 'normal' | 'target' | 'except';
   title: string;
   body: string;
   author: string;
-  createdAt: Date;
+  created_utc: Date;
   isFiltered: boolean;
 }
 
 export interface IRule {
-  field: string;
-  modifiers: string[];
-  value: string;
+  id: number;
+  code: string;
+  created_at: string;
 }
 
 export interface PaginatedPosts {
   count: number;
-  next: any;
-  previous: any;
+  nextPage: number;
   results: IPost[];
 }

@@ -3,20 +3,34 @@ import AceEditor from 'react-ace';
 import 'ace-builds/src-noconflict/mode-yaml';
 import 'ace-builds/src-noconflict/theme-tomorrow';
 import SplitPane from 'react-split-pane';
-import { Button } from 'antd';
+import { Button, Table } from 'antd';
 import PanelName from '@components/PanelName';
 import { useQuery } from 'react-query';
-import { IUser } from '@typings/db';
+import { IRule, IUser } from '@typings/db';
 import { Redirect } from 'react-router-dom';
 import request from '@utils/request';
+import { DeleteOutlined } from '@ant-design/icons';
+import { ColumnsType } from 'antd/lib/table';
 
 function ConfLayout(): ReactElement {
-  const [code, setCode] = useState('');
+  const [code, setCode] = useState(
+    "---\ntitle: ['hi', 'hello']\nbody (includes): ['have']\n---"
+  );
+
+  const [loading, setLoading] = useState(false);
 
   const { data, refetch } = useQuery('me', async () => {
     const { data } = await request<IUser | false>({ url: '/rest-auth/user/' });
     return data;
   });
+
+  const { data: ruleData, refetch: ruleRefetch } = useQuery(
+    'rules',
+    async () => {
+      const { data } = await request<IRule[]>({ url: '/rules/' });
+      return data.map((item) => ({ key: item.id, ...item }));
+    }
+  );
 
   const onLogOut = useCallback(() => {
     request({ url: '/rest-auth/logout/', method: 'POST' })
@@ -28,6 +42,53 @@ function ConfLayout(): ReactElement {
         console.dir(error);
       });
   }, [refetch]);
+
+  const onClickApply = useCallback(() => {
+    setLoading(true);
+    request({ url: '/rules/', method: 'POST', data: { code } })
+      .then(() => {
+        setLoading(false);
+        ruleRefetch();
+      })
+      .catch((error) => {
+        console.dir(error);
+      });
+  }, [code, ruleRefetch]);
+
+  const onClickDeleteRule = useCallback(
+    (id: number) => {
+      request({ url: `/rules/${id}/`, method: 'DELETE' })
+        .then(() => {
+          ruleRefetch();
+        })
+        .catch((error) => {
+          console.dir(error);
+        });
+    },
+    [ruleRefetch]
+  );
+
+  const ruleColumns: ColumnsType<IRule> = [
+    {
+      title: 'ID',
+      dataIndex: 'id',
+    },
+    { title: 'Code', dataIndex: 'code' },
+    {
+      title: 'Action',
+      render: (text, record) => (
+        <div className='flex'>
+          <Button
+            type='link'
+            icon={<DeleteOutlined />}
+            onClick={() => onClickDeleteRule(record.id)}
+            danger
+          />
+          <Button type='link'>Apply</Button>
+        </div>
+      ),
+    },
+  ];
 
   if (data === false) {
     return <Redirect to='/login' />;
@@ -64,7 +125,12 @@ function ConfLayout(): ReactElement {
               <Button type='primary' danger onClick={onLogOut}>
                 Log Out
               </Button>
-              <Button type='primary' className='ml-2'>
+              <Button
+                type='primary'
+                className='ml-2'
+                onClick={onClickApply}
+                loading={loading}
+              >
                 Apply Rules
               </Button>
             </div>
@@ -72,6 +138,7 @@ function ConfLayout(): ReactElement {
         </div>
         <div className='h-full flex flex-col p-2'>
           <div className='text-xl font-bold'>Statistics</div>
+          <Table columns={ruleColumns} dataSource={ruleData} size='small' />
         </div>
       </SplitPane>
     </div>

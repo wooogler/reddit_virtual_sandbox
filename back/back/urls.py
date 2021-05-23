@@ -18,13 +18,14 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
 
-from modsandbox.views import TargetHandlerViewSet, ExceptHandlerViewSet, PostHandlerViewSet, RedditViewSet
+from modsandbox.views import TargetViewSet, ExceptViewSet, PostViewSet, RedditViewSet, RuleViewSet
 
 router = routers.DefaultRouter()
-router.register(r'posts/target', TargetHandlerViewSet)
-router.register(r'posts/except', ExceptHandlerViewSet)
-router.register(r'posts', PostHandlerViewSet)
+router.register(r'posts/target', TargetViewSet)
+router.register(r'posts/except', ExceptViewSet)
+router.register(r'posts', PostViewSet)
 router.register(r'reddit', RedditViewSet)
+router.register(r'rules', RuleViewSet)
 urlpatterns = [
     path('', include(router.urls)),
     path('admin/', admin.site.urls),

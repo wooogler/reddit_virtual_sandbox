@@ -20,14 +20,17 @@ class RedditHandler:
         self.user = user
         self.api = PushshiftAPI(self.reddit)
 
-    @staticmethod
-    def is_sub(name: str):
-        return name.startswith('t3')
-
     def get_mod_subreddits(self):
         return [subreddit.display_name for subreddit in self.reddit.user.contributor_subreddits()]
 
-    def crawl(self, subreddit, after, type):
+    def get_post_with_id(self, full_name: str):
+        post_id = full_name[3:]
+        if full_name.startswith('t3_'):
+            return self.reddit.submission(id=post_id)
+        elif full_name.startswith('t1_'):
+            return self.reddit.comment(id=post_id)
+
+    def get_posts_from_pushshift(self, subreddit, after, type):
         now = datetime.now()
         after_dict = {
             '3months': int((now + relativedelta.relativedelta(months=-3)).timestamp()),
@@ -44,21 +47,10 @@ class RedditHandler:
         comments = self.api.search_comments(after=after_dict[after],
                                             subreddit=subreddit,
                                             filter=['id'])
-        if type == 'all':
-            posts = chain(submissions, comments)
-        elif type == 'sub':
-            posts = submissions
-        elif type == 'com':
-            posts = comments
 
-        for post in posts:
-            Post.objects.create(
-                user=self.user,
-                post_id=post.id,
-                author='None' if post.author is None else post.author.name,
-                title=post.title if self.is_sub(post.name) else '',
-                body=post.selftext if self.is_sub(post.name) else post.body,
-                created_utc=datetime.fromtimestamp(post.created_utc, tz=timezone.utc),
-                source='Subreddit',
-                place='normal',
-            )
+        if type == 'all':
+            return chain(submissions, comments)
+        elif type == 'sub':
+            return submissions
+        elif type == 'com':
+            return comments

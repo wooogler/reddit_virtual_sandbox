@@ -6,14 +6,16 @@ from rest_framework import viewsets
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, filters
 from rest_framework.decorators import action
+from django_filters.rest_framework import DjangoFilterBackend
 import praw
 
-from modsandbox.models import Post, User
+from modsandbox.db_handler import create_posts
+from modsandbox.models import Post, User, Rule
 from modsandbox.paginations import PostPagination
 from modsandbox.reddit_handler import RedditHandler
-from modsandbox.serializers import PostSerializer
+from modsandbox.serializers import PostSerializer, RuleSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -67,11 +69,14 @@ class RedditViewSet(viewsets.ViewSet):
         return Response(r.get_mod_subreddits())
 
 
-class PostHandlerViewSet(viewsets.ModelViewSet):
+class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     pagination_class = PostPagination
     permission_classes = [IsAuthenticatedOrReadOnly]
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
+    ordering_fields = ['created_utc', 'sim']
+    ordering = ['created_utc']
 
     def get_queryset(self):
         return self.queryset.filter(user=self.request.user)
@@ -85,7 +90,8 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         r = RedditHandler(request.user)
-        r.crawl(subreddit, after, type)
+        pushshift_posts = r.get_posts_from_pushshift(subreddit, after, type)
+        create_posts(pushshift_posts, request.user, "normal")
         return Response(status=status.HTTP_200_OK)
 
     @action(methods=['delete'], detail=False)
@@ -94,21 +100,45 @@ class PostHandlerViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class TargetHandlerViewSet(viewsets.ModelViewSet):
+class TargetViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.filter(place='target')
     serializer_class = PostSerializer
     pagination_class = PostPagination
     permission_classes = [IsAuthenticatedOrReadOnly]
+    ordering = ['created_utc']
 
     def get_queryset(self):
         return self.queryset.filter(user=self.request.user)
 
+    def create(self, request, *args, **kwargs):
+        full_name = request.data.get('full_name')
+        r = RedditHandler(request.user)
+        target_post = r.get_post_with_id(full_name)
+        create_posts([target_post], request.user, "target")
+        return Response(status=status.HTTP_200_OK)
 
-class ExceptHandlerViewSet(viewsets.ModelViewSet):
+
+class ExceptViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.filter(place='except')
     serializer_class = PostSerializer
     pagination_class = PostPagination
     permission_classes = [IsAuthenticatedOrReadOnly]
+    ordering = ['created_utc']
+
+    def get_queryset(self):
+        return self.queryset.filter(user=self.request.user)
+
+    def create(self, request, *args, **kwargs):
+        full_name = request.data.get('full_name')
+        r = RedditHandler(request.user)
+        except_post = r.get_post_with_id(full_name)
+        create_posts([except_post], request.user, "except")
+        return Response(status=status.HTTP_200_OK)
+
+
+class RuleViewSet(viewsets.ModelViewSet):
+    queryset = Rule.objects.all()
+    serializer_class = RuleSerializer
 
     def get_queryset(self):
         return self.queryset.filter(user=self.request.user)

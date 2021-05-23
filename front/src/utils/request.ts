@@ -5,7 +5,6 @@ const request = <T>({
 }: AxiosRequestConfig): Promise<AxiosResponse<T>> => {
   const client = axios.create({ baseURL: 'http://localhost:8000/' });
   const token = localStorage.getItem('token');
-  console.log('request', token);
   if (token) {
     client.defaults.headers.common.Authorization = `Token ${token}`;
   }

@@ -11,12 +11,11 @@ class Rule(models.Model):
     Rule Model
     """
     user = models.ForeignKey(User, related_name='rules', on_delete=models.CASCADE)
-    field = models.CharField(max_length=30)  # 'body'
-    modifiers = models.CharField(max_length=100)  # '(includes, regex)'
-    value = models.CharField(max_length=30)  # 'keyword'
+    code = models.TextField(default='')
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.value
+        return self.code
 
 
 class Post(models.Model):
@@ -28,6 +27,9 @@ class Post(models.Model):
     title = models.CharField(max_length=300)
     body = models.TextField(default='')
     created_utc = models.DateTimeField()
+
+    # for FP, FN
+    sim = models.FloatField(default=0)
 
     SOURCE_CHOICES = [('Subreddit', 'Subreddit'), ('Spam', 'Spam'), ('Report', 'Report')]
     source = models.CharField(max_length=10, choices=SOURCE_CHOICES)

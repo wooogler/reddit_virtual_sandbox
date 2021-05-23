@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from rest_auth.serializers import UserDetailsSerializer
-from .models import Post, User
+from .models import Post, User, Rule
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
@@ -19,3 +19,14 @@ class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = "__all__"
+
+
+class RuleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Rule
+        fields = ['id', 'code', 'created_at']
+
+    def create(self, validated_data):
+        rule = Rule(user=self.context['request'].user, code=validated_data['code'])
+        rule.save()
+        return rule

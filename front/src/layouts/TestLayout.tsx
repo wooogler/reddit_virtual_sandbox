@@ -1,54 +1,12 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useCallback, useState } from 'react';
+import { useInfiniteQuery, useQuery } from 'react-query';
 import SplitPane from 'react-split-pane';
 
 import PostList from '@components/PostList';
-import { IPost, PaginatedPosts } from '@typings/db';
+import { PaginatedPosts } from '@typings/db';
 import { AutoModStat } from '@typings/types';
 import request from '@utils/request';
-import { useQuery } from 'react-query';
-
-export const mockPosts: IPost[] = [
-  {
-    id: 'hwoi21',
-    from: 'Subreddit',
-    title: "CMV: I really don't agree with hatred towards the cops",
-    body:
-      'When i hopped on the disease pool that is Twitter today, i suddenly realized that overnight "AsianLivesMatter" has become a new thing, and along side it, ',
-    author: 'TW1312',
-    createdAt: new Date(),
-    isFiltered: false,
-  },
-  {
-    id: 'hwoi21',
-    from: 'Subreddit',
-    title: "CMV: I really don't agree with hatred towards the cops",
-    body:
-      'When i hopped on the disease pool that is Twitter today, i suddenly realized that overnight "AsianLivesMatter" has become a new thing, and along side it, ',
-    author: 'TW1312',
-    createdAt: new Date(),
-    isFiltered: false,
-  },
-  {
-    id: 'hwoi21',
-    from: 'Spam',
-    title: "CMV: I really don't agree with hatred towards the cops",
-    body:
-      'When i hopped on the disease pool that is Twitter today, i suddenly realized that overnight "AsianLivesMatter" has become a new thing, and along side it, ',
-    author: 'TW1312',
-    createdAt: new Date(),
-    isFiltered: false,
-  },
-  {
-    id: 'hwoi21',
-    from: 'Subreddit',
-    title: "CMV: I really don't agree with hatred towards the cops",
-    body:
-      'When i hopped on the disease pool that is Twitter today, i suddenly realized that overnight "AsianLivesMatter" has become a new thing, and along side it, ',
-    author: 'TW1312',
-    createdAt: new Date(),
-    isFiltered: true,
-  },
-];
+import { AxiosError } from 'axios';
 
 export const mockStat: AutoModStat = {
   part: 10,
@@ -56,29 +14,88 @@ export const mockStat: AutoModStat = {
 };
 
 function TestLayout(): ReactElement {
-  const { data: targetData } = useQuery('target', async () => {
-    const { data } = await request<PaginatedPosts>({ url: '/posts/target/' });
-    return data;
-  });
-  const { data: exceptData } = useQuery('except', async () => {
-    const { data } = await request<PaginatedPosts>({ url: '/posts/except/' });
-    return data;
-  });
+  const [targetLoading, setTargetLoading] = useState(false);
+  const [exceptLoading, setExceptLoading] = useState(false);
+  const targetQuery = useInfiniteQuery<PaginatedPosts, AxiosError>(
+    'target',
+    async ({ pageParam = 1 }) => {
+      const { data } = await request<PaginatedPosts>({
+        url: '/posts/target/',
+        params: { page: pageParam },
+      });
+      return data;
+    },
+    {
+      getNextPageParam: (lastPage) => lastPage.nextPage ?? false,
+    }
+  );
+
+  const exceptQuery = useInfiniteQuery<PaginatedPosts, AxiosError>(
+    'except',
+    async ({ pageParam = 1 }) => {
+      const { data } = await request<PaginatedPosts>({
+        url: '/posts/except/',
+        params: { page: pageParam },
+      });
+      return data;
+    },
+    {
+      getNextPageParam: (lastPage) => lastPage.nextPage ?? false,
+    }
+  );
+
+  const { refetch: targetRefetch } = targetQuery;
+  const { refetch: exceptRefetch } = exceptQuery;
+
+  const onAddPost = useCallback(
+    (postId: string, place: string) => {
+      if (place === 'target') {
+        setTargetLoading(true);
+      } else if (place === 'except') {
+        setExceptLoading(true);
+      }
+      request({
+        url: `posts/${place}/`,
+        method: 'POST',
+        data: { full_name: postId },
+      })
+        .then((response) => {
+          if (place === 'target') {
+            targetRefetch();
+            setTargetLoading(false);
+          } else if (place === 'except') {
+            exceptRefetch();
+            setExceptLoading(false);
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    },
+    [targetRefetch, exceptRefetch]
+  );
+
   return (
-    <div className='h-screen'>
-      <SplitPane split='horizontal'>
-        <PostList
-          label='Targets'
-          posts={targetData?.results}
-          stat={mockStat}
-        />
-        <PostList
-          label='Non-Targets'
-          posts={exceptData?.results}
-          stat={mockStat}
-        />
-      </SplitPane>
-    </div>
+    <>
+      <div className='h-screen'>
+        <SplitPane split='horizontal'>
+          <PostList
+            label='Targets'
+            query={targetQuery}
+            stat={mockStat}
+            onSubmit={(postId) => onAddPost(postId, 'target')}
+            isLoading={targetLoading}
+          />
+          <PostList
+            label='Non-Targets'
+            query={exceptQuery}
+            stat={mockStat}
+            onSubmit={(postId) => onAddPost(postId, 'except')}
+            isLoading={exceptLoading}
+          />
+        </SplitPane>
+      </div>
+    </>
   );
 }
 
