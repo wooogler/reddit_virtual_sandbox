@@ -13,9 +13,7 @@ import { DeleteOutlined } from '@ant-design/icons';
 import { ColumnsType } from 'antd/lib/table';
 
 function ConfLayout(): ReactElement {
-  const [code, setCode] = useState(
-    "---\ntitle: ['hi', 'hello']\nbody (includes): ['have']\n---"
-  );
+  const [code, setCode] = useState("body#1: ['is']\nbody#2: ['to']");
 
   const [loading, setLoading] = useState(false);
 
@@ -24,13 +22,13 @@ function ConfLayout(): ReactElement {
     return data;
   });
 
-  const { data: ruleData, refetch: ruleRefetch } = useQuery(
-    'rules',
-    async () => {
-      const { data } = await request<IRule[]>({ url: '/rules/' });
-      return data.map((item) => ({ key: item.id, ...item }));
-    }
-  );
+  // const { data: ruleData, refetch: ruleRefetch } = useQuery(
+  //   'rules',
+  //   async () => {
+  //     const { data } = await request<IRule[]>({ url: '/rules/' });
+  //     return data.map((item) => ({ key: item.id, ...item }));
+  //   }
+  // );
 
   const onLogOut = useCallback(() => {
     request({ url: '/rest-auth/logout/', method: 'POST' })
@@ -48,25 +46,24 @@ function ConfLayout(): ReactElement {
     request({ url: '/rules/', method: 'POST', data: { code } })
       .then(() => {
         setLoading(false);
-        ruleRefetch();
       })
       .catch((error) => {
         console.dir(error);
       });
-  }, [code, ruleRefetch]);
+  }, [code]);
 
-  const onClickDeleteRule = useCallback(
-    (id: number) => {
-      request({ url: `/rules/${id}/`, method: 'DELETE' })
-        .then(() => {
-          ruleRefetch();
-        })
-        .catch((error) => {
-          console.dir(error);
-        });
-    },
-    [ruleRefetch]
-  );
+  // const onClickDeleteRule = useCallback(
+  //   (id: number) => {
+  //     request({ url: `/rules/${id}/`, method: 'DELETE' })
+  //       .then(() => {
+  //         ruleRefetch();
+  //       })
+  //       .catch((error) => {
+  //         console.dir(error);
+  //       });
+  //   },
+  //   [ruleRefetch]
+  // );
 
   const ruleColumns: ColumnsType<IRule> = [
     {
@@ -81,7 +78,7 @@ function ConfLayout(): ReactElement {
           <Button
             type='link'
             icon={<DeleteOutlined />}
-            onClick={() => onClickDeleteRule(record.id)}
+            // onClick={() => onClickDeleteRule(record.id)}
             danger
           />
           <Button type='link'>Apply</Button>
@@ -89,10 +86,6 @@ function ConfLayout(): ReactElement {
       ),
     },
   ];
-
-  if (data === false) {
-    return <Redirect to='/login' />;
-  }
 
   return (
     <div className='h-screen'>
@@ -138,7 +131,7 @@ function ConfLayout(): ReactElement {
         </div>
         <div className='h-full flex flex-col p-2'>
           <div className='text-xl font-bold'>Statistics</div>
-          <Table columns={ruleColumns} dataSource={ruleData} size='small' />
+          {/* <Table columns={ruleColumns} dataSource={ruleData} size='small' /> */}
         </div>
       </SplitPane>
     </div>

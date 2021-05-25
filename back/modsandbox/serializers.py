@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from rest_auth.serializers import UserDetailsSerializer
 from .models import Post, User, Rule
+from .rule_handler import create_rule
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
@@ -27,6 +28,7 @@ class RuleSerializer(serializers.ModelSerializer):
         fields = ['id', 'code', 'created_at']
 
     def create(self, validated_data):
-        rule = Rule(user=self.context['request'].user, code=validated_data['code'])
-        rule.save()
+        # rule = Rule(user=self.context['request'].user, code=validated_data['code'])
+        # rule.save()
+        rule = create_rule(validated_data['code'], self.context['request'].user)
         return rule

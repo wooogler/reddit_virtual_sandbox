@@ -1,16 +1,12 @@
-import praw
-import os
-from psaw import PushshiftAPI
+from itertools import groupby, accumulate, product
 
-reddit = praw.Reddit(
-    client_id="BSuv858saoRX6Q",
-    client_secret="si5WWPBCyfnfdknA7qRR7bTKFD7Z6g",
-    refresh_token="43646009674-kHjXdw-_rtmw4Yv2tOaCYfLt8Phq1w",
-    user_agent="modsandbox by /u/leesang627"
-)
+array = [1, 2, 3, 4, 5]
+labels = ['a', 'a', 'b', 'b', 'c']
 
-api = PushshiftAPI(reddit)
+lengths = [len(list(grp)) for k, grp in groupby(labels)]
 
-submissions = api.search_submissions(subreddit='animemes', id='i2mn3g', filter=['id', 'created_utc'])
-for x in submissions:
-    print(x.upvote_ratio)
+new_array = [array[end - length:end] for length, end in zip(lengths, accumulate(lengths))]
+
+combination = list(product(*new_array))
+
+print(combination)

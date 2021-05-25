@@ -18,6 +18,21 @@ class Rule(models.Model):
         return self.code
 
 
+class Check(models.Model):
+    """
+    Check Model
+    """
+    rule = models.ForeignKey(Rule, related_name='checks', on_delete=models.CASCADE)
+    key = models.CharField(max_length=50)
+    pattern = models.TextField()
+
+
+class CheckCombination(models.Model):
+    rule = models.ForeignKey(Rule, related_name='check_combinations', on_delete=models.CASCADE)
+    checks = models.ManyToManyField(Check, blank=True)
+    combination = models.TextField(default='')
+
+
 class Post(models.Model):
     """
     Post Model
@@ -39,6 +54,8 @@ class Post(models.Model):
 
     user = models.ForeignKey(User, related_name='posts', on_delete=models.CASCADE)
     matching_rules = models.ManyToManyField(Rule, blank=True)
+    matching_checks = models.ManyToManyField(Check, blank=True)
+    matching_check_combinations = models.ManyToManyField(CheckCombination, blank=True)
 
     def __str__(self):
         return self.post_id

@@ -11,7 +11,7 @@ from rest_framework.decorators import action
 from django_filters.rest_framework import DjangoFilterBackend
 import praw
 
-from modsandbox.db_handler import create_posts
+from modsandbox.post_handler import create_posts
 from modsandbox.models import Post, User, Rule
 from modsandbox.paginations import PostPagination
 from modsandbox.reddit_handler import RedditHandler
@@ -142,3 +142,4 @@ class RuleViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return self.queryset.filter(user=self.request.user)
+   
