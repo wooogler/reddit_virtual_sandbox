@@ -1,12 +1,13 @@
-from itertools import groupby, accumulate, product
+import praw
+import os
 
-array = [1, 2, 3, 4, 5]
-labels = ['a', 'a', 'b', 'b', 'c']
+reddit = praw.Reddit(
+    client_id="BSuv858saoRX6Q",
+    client_secret="si5WWPBCyfnfdknA7qRR7bTKFD7Z6g",
+    user_agent="modsandbox by /u/leesang627",
+)
 
-lengths = [len(list(grp)) for k, grp in groupby(labels)]
-
-new_array = [array[end - length:end] for length, end in zip(lengths, accumulate(lengths))]
-
-combination = list(product(*new_array))
-
-print(combination)
+url = "https://www.reddit.com/r/funny/comments/3g1jfi/buttons/"
+submission = reddit.submission(url=url)
+for comment in submission.comments:
+    print(vars(comment))

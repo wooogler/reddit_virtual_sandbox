@@ -1,12 +1,29 @@
 import os
-from datetime import datetime, timezone
+from datetime import datetime
+
+from django.utils import timezone
 from itertools import chain
 
 import praw
 from psaw import PushshiftAPI
 from dateutil import relativedelta
 
-from modsandbox.models import Post
+
+def is_sub(name: str):
+    return name.startswith('t3')
+
+
+def after_to_timestamp(after):
+    now = timezone.now()
+    now_day_start = now.replace(hour=0, minute=0, second=0, microsecond=0)
+    after_dict = {
+        '3months': int((now_day_start + relativedelta.relativedelta(months=-3)).timestamp()),
+        'month': int((now_day_start + relativedelta.relativedelta(months=-1)).timestamp()),
+        '2weeks': int((now_day_start + relativedelta.relativedelta(weeks=-2)).timestamp()),
+        'week': int((now_day_start + relativedelta.relativedelta(weeks=-1)).timestamp()),
+    }
+
+    return after_dict[after]
 
 
 class RedditHandler:
@@ -19,9 +36,11 @@ class RedditHandler:
         )
         self.user = user
         self.api = PushshiftAPI(self.reddit)
+        self.mod_subreddits = []
 
     def get_mod_subreddits(self):
-        return [subreddit.display_name for subreddit in self.reddit.user.contributor_subreddits()]
+        self.mod_subreddits = [subreddit.display_name for subreddit in self.reddit.user.contributor_subreddits()]
+        return self.mod_subreddits
 
     def get_post_with_id(self, full_name: str):
         post_id = full_name[3:]
@@ -31,26 +50,22 @@ class RedditHandler:
             return self.reddit.comment(id=post_id)
 
     def get_posts_from_pushshift(self, subreddit, after, type):
-        now = datetime.now()
-        after_dict = {
-            '3months': int((now + relativedelta.relativedelta(months=-3)).timestamp()),
-            'month': int((now + relativedelta.relativedelta(months=-1)).timestamp()),
-            '2weeks': int((now + relativedelta.relativedelta(weeks=-2)).timestamp()),
-            'week': int((now + relativedelta.relativedelta(weeks=-1)).timestamp()),
-            'day': int((now + relativedelta.relativedelta(weeks=-1)).timestamp()),
-        }
+        if type == 'sub':
+            return self.api.search_submissions(after=after_to_timestamp(after),
+                                               subreddit=subreddit)
 
-        submissions = self.api.search_submissions(after=after_dict[after],
-                                                  subreddit=subreddit,
-                                                  filter=['id'])
-
-        comments = self.api.search_comments(after=after_dict[after],
-                                            subreddit=subreddit,
-                                            filter=['id'])
-
-        if type == 'all':
-            return chain(submissions, comments)
-        elif type == 'sub':
-            return submissions
         elif type == 'com':
-            return comments
+            return self.api.search_comments(after=after_to_timestamp(after),
+                                            subreddit=subreddit)
+
+    def get_spams_from_praw(self, subreddit, after):
+        if subreddit in self.mod_subreddits:
+            spams = self.reddit.subreddit(subreddit).mod.spam(limit=None)
+            reports = self.reddit.subreddit(subreddit).mod.reports(limit=None)
+            spams_after = [spam for spam in spams if spam.created_utc > after_to_timestamp(after)]
+            reports_after = [report for report in reports if report.created_utc > after_to_timestamp(after)]
+            print(spams_after, reports_after)
+
+            return chain(spams_after, reports_after)
+
+        return []

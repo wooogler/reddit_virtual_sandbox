@@ -42,8 +42,8 @@ function FindLayout(): ReactElement {
   return (
     <div className='h-screen'>
       <SplitPane split='horizontal'>
-        <PostList label='FN' query={fnQuery} />
-        <PostList label='FP' query={fpQuery} />
+        <PostList label='FN' query={fnQuery} target={false} />
+        <PostList label='FP' query={fpQuery} target={false} />
       </SplitPane>
     </div>
   );

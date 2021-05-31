@@ -40,7 +40,7 @@ function SignUpPage(): ReactElement {
   );
 
   if (data) {
-    return <Redirect to='/settings' />;
+    return <Redirect to='/' />;
   }
 
   return (

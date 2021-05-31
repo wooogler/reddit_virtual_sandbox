@@ -6,7 +6,6 @@ import './App.css';
 const HomePage = loadable(() => import('@pages/HomePage'));
 const LogInPage = loadable(() => import('@pages/LogInPage'));
 const SignUpPage = loadable(() => import('@pages/SignUpPage'));
-const SettingsPage = loadable(() => import('@pages/SettingsPage'));
 
 function App() {
   return (
@@ -14,7 +13,6 @@ function App() {
       <Route exact path='/' component={HomePage} />
       <Route path='/login' component={LogInPage} />
       <Route path='/signup' component={SignUpPage} />
-      <Route path='/settings' component={SettingsPage} />
     </Switch>
   );
 }

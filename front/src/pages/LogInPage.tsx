@@ -41,7 +41,7 @@ function LogInPage(): ReactElement {
 
   if (data) {
     console.log('logged in', data);
-    return <Redirect to='/settings' />;
+    return <Redirect to='/' />;
   }
 
   return (

@@ -1,4 +1,3 @@
-import { IRule } from '@typings/db';
 import _ from 'lodash';
 import YAML from 'yaml';
 

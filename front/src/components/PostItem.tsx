@@ -2,18 +2,21 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import React, { ReactElement, useCallback } from 'react';
 import clsx from 'clsx';
-import { IPost, PaginatedPosts } from '@typings/db';
-import { Button } from 'antd';
+import { IPost } from '@typings/db';
+import { Button, Tooltip } from 'antd';
 import request from '@utils/request';
-import { useInfiniteQuery, useQuery } from 'react-query';
+import { useQuery } from 'react-query';
+import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(relativeTime);
+dayjs.extend(utc);
 
 interface Props {
   post: IPost;
+  isFiltered?: boolean;
 }
 
-function PostItem({ post }: Props): ReactElement {
+function PostItem({ post, isFiltered }: Props): ReactElement {
   const { refetch: targetRefetch } = useQuery('target');
   const { refetch: exceptRefetch } = useQuery('except');
 
@@ -39,8 +42,8 @@ function PostItem({ post }: Props): ReactElement {
   return (
     <div
       className={clsx(
-        post.isFiltered && 'bg-blue-100',
-        'p-2 border-gray-200 border flex'
+        isFiltered && 'bg-blue-100',
+        'p-2 border-gray-200 border flex flex-1'
       )}
       style={{
         borderLeft:
@@ -52,23 +55,40 @@ function PostItem({ post }: Props): ReactElement {
       }}
     >
       {!post.title && (
-        <div className='border-gray-300 w-6 border-l-2 border-dotted'></div>
+        <div className='border-gray-300 border-l-2 border-dotted'></div>
       )}
-      <div className='flex flex-col'>
+      <div className={clsx('flex flex-col', !post.title && 'ml-3')}>
         <div className='text-base'>{post.title}</div>
         <div className='flex mt-1 items-center'>
-          <div
-            className={clsx(
-              post.source === 'Spam'
-                ? 'text-red-600'
-                : post.source === 'Report' && 'text-yellow-500',
-              'text-xs font-bold'
-            )}
+          <a
+            href={post.url}
+            onClick={(e) => {
+              e.stopPropagation();
+            }}
+            target='_blank'
+            rel='noopener noreferrer'
           >
-            {post.source}
-          </div>
+            <div
+              className={clsx(
+                post.source === 'Spam'
+                  ? 'text-red-600'
+                  : post.source === 'Report' && 'text-yellow-500',
+                'text-xs font-bold'
+              )}
+            >
+              {post.source}
+            </div>
+          </a>
           <div className='text-xs ml-2'>{post.author}</div>
-          <div className='text-xs ml-2'>{dayjs().to(post.created_utc)}</div>
+          <Tooltip
+            placement='top'
+            title={dayjs(post.created_utc)
+              .local()
+              .format('ddd MMM D YYYY hh:mm:ss')}
+          >
+            <div className='text-xs ml-2'>{dayjs().to(post.created_utc)}</div>
+          </Tooltip>
+
           {post.place !== 'normal' && (
             <Button danger type='link' size='small' onClick={onClickDelete}>
               <div className='text-xs underline'>delete</div>

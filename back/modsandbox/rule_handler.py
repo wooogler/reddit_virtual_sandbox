@@ -58,6 +58,14 @@ _match_modifiers = set(_match_regexes.keys()) | {
 
 
 def create_rule(code, user):
+    rule = Rule.objects.create(user=user, code=code)
+    posts = Post.objects.filter(user=user)
+    return apply_rule(rule, posts, True)
+
+
+def apply_rule(rule, posts, check_create):
+    code = rule.code
+
     try:
         rules = yaml.safe_load(code)
     except Exception as e:
@@ -69,12 +77,8 @@ def create_rule(code, user):
     match_patterns = 
     {
         '~body+title#1 (includes, regex)': [
-            re.compile('(hello)', re.IGNORECASE|re.DOTALL), 
-            re.compile('(world)', re.IGNORECASE|re.DOTALL)
+            {"regex": re.compile('(hello)', re.IGNORECASE|re.DOTALL), "word": "hello"}, 
         ], 
-        '~body#2': [
-            re.compile('(?:^|\\W|\\b)(hi)(?:$|\\W|\\b)', re.IGNORECASE|re.DOTALL)
-        ]
     }
     """
     match_patterns = get_match_patterns(rules)
@@ -83,32 +87,36 @@ def create_rule(code, user):
         for match_pattern in match_patterns:
             checks.append({
                 "key": key,
-                "pattern": match_pattern
+                "regex": match_pattern["regex"],
+                "word": match_pattern["word"]
             })
 
     """
     checks = 
     [
-        {'key': '~body+title#1 (includes, regex)', 'pattern': re.compile('(hello)', re.IGNORECASE|re.DOTALL)}, 
-        {'key': '~body+title#1 (includes, regex)', 'pattern': re.compile('(world)', re.IGNORECASE|re.DOTALL)}, 
-        {'key': 'body#2', 'pattern': re.compile('(?:^|\\W|\\b)(hi)(?:$|\\W|\\b)', re.IGNORECASE|re.DOTALL)}
+        {'key': '~body+title#1 (includes, regex)', 'pattern': {"regex": re.compile('(hello)', re.IGNORECASE|re.DOTALL), "word": hello}}, 
     ]
     """
-    rule = Rule.objects.create(user=user, code=code)
-    posts = Post.objects.filter(user=user)
-    post_to_check_links = []
 
     keys = [check["key"] for check in checks]
     check_ids = []
+    post_to_check_links = []
 
     # assign check ids to each posts
     for check in checks:
         parsed_key = parse_fields_key(check["key"])
-        check_object = Check.objects.create(
-            rule=rule,
-            key=check["key"],
-            pattern=str(check["pattern"]),
-        )
+        if check_create:
+            check_object = Check.objects.create(
+                rule=rule,
+                fields=check["key"],
+                word=check["word"],
+            )
+        else:
+            check_object = Check.objects.get(
+                rule=rule,
+                fields=check["key"],
+                word=check["word"]
+            )
         check_ids.append(check_object.id)
         """
         parsed_key
@@ -119,7 +127,7 @@ def create_rule(code, user):
         for field in parsed_key["fields"]:
             for post in posts:
                 post_value = get_field_value_from_post(post, field)
-                match = check["pattern"].search(post_value)
+                match = check["regex"].search(post_value)
                 if bool(match) != parsed_key["not"]:
                     post_to_check_links.append(Post.matching_checks.through(post_id=post.id, check_id=check_object.id))
 
@@ -130,15 +138,21 @@ def create_rule(code, user):
     check_ids_array = [check_ids[end - length:end] for length, end in zip(lengths, accumulate(lengths))]
     check_combinations = list(product(*check_ids_array))
 
-    posts = Post.objects.filter(user=user).exclude(matching_checks=None)
+    # posts = Post.objects.filter(user=user).exclude(matching_checks=None)
     post_to_check_combination_links = []
-    for check_combination in check_combinations:
+    post_to_rule_links = []
+    for i, check_combination in enumerate(check_combinations):
         checks_in_combination = Check.objects.filter(id__in=list(check_combination))
-        check_combination_object = CheckCombination.objects.create(
-            rule=rule,
-            combination=json.dumps(list(check_combination))
-        )
-        check_combination_object.checks.add(*checks_in_combination)
+        if check_create:
+            check_combination_object = CheckCombination.objects.create(
+                rule=rule,
+            )
+            check_combination_object.checks.add(*checks_in_combination)
+        else:
+            check_combination_object = CheckCombination.objects.get(
+                rule=rule,
+                checks__in=checks_in_combination
+            )
 
         for post in posts:
             if set(check_combination).issubset(set(post.matching_checks.values_list('id', flat=True))):
@@ -148,15 +162,21 @@ def create_rule(code, user):
                         checkcombination_id=check_combination_object.id
                     )
                 )
+                if i == 0:
+                    post_to_rule_links.append(
+                        Post.matching_rules.through(
+                            post_id=post.id,
+                            rule_id=rule.id,
+                        )
+                    )
 
     Post.matching_check_combinations.through.objects.bulk_create(post_to_check_combination_links)
-
-    posts = Post.objects.filter(user=user).exclude(matching_check_combinations=None)
-    post_to_rule_links = []
-    for post in posts:
-        post_to_rule_links.append(Post.matching_rules.through(post_id=post.id, rule_id=rule.id))
-
     Post.matching_rules.through.objects.bulk_create(post_to_rule_links)
+
+    # for post in posts:
+    #     print(post.matching_check_combinations)
+    #     if post.matching_check_combinations in list(check_combinations[0]):
+    #         post_to_rule_links.append(Post.matching_rules.through(post_id=post.id, rule_id=rule.id))
 
     return rule
 
@@ -179,6 +199,7 @@ def get_match_patterns(rules):
     for key in rules:
         parsed_key = parse_fields_key(key)
         match_fields |= parsed_key['fields']
+        words = rules[key]
         match_values = rules[key]
 
         if not match_values:
@@ -208,7 +229,10 @@ def get_match_patterns(rules):
             flags |= re.IGNORECASE
 
         try:
-            match_patterns[key] = [re.compile(pattern, flags) for pattern in patterns]
+            match_patterns[key] = [
+                {"regex": re.compile(pattern, flags), "word": words[i]}
+                for i, pattern in enumerate(patterns)
+            ]
         except Exception as e:
             raise exceptions.ParseError("Generated an invalid regex for '%s': %s" % (key, e))
 

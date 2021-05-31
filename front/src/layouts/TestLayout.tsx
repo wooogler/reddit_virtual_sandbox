@@ -83,14 +83,12 @@ function TestLayout(): ReactElement {
             label='Targets'
             query={targetQuery}
             stat={mockStat}
-            onSubmit={(postId) => onAddPost(postId, 'target')}
             isLoading={targetLoading}
           />
           <PostList
             label='Non-Targets'
             query={exceptQuery}
             stat={mockStat}
-            onSubmit={(postId) => onAddPost(postId, 'except')}
             isLoading={exceptLoading}
           />
         </SplitPane>

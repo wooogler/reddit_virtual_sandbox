@@ -11,17 +11,46 @@ export interface IPost {
   body: string;
   author: string;
   created_utc: Date;
+  url: string;
   isFiltered: boolean;
-}
-
-export interface IRule {
-  id: number;
-  code: string;
-  created_at: string;
+  matching_rules: number[];
+  matching_check_combinations: number[];
+  matching_checks: number[];
 }
 
 export interface PaginatedPosts {
   count: number;
   nextPage: number;
   results: IPost[];
+}
+
+export interface Rule {
+  id: number;
+  code: string;
+  created_at: Date;
+  checks: Check[];
+  check_combinations: CheckCombination[];
+  subreddit_count: number;
+  spam_count: number;
+}
+
+export interface CheckCombination {
+  id: number;
+  checks: Check[];
+  subreddit_count: number;
+  spam_count: number;
+  code: string;
+}
+
+export interface Check {
+  id: number;
+  fields: string;
+  word: string;
+  subreddit_count: number;
+  spam_count: number;
+  code: string;
+}
+
+export interface Stat {
+  created_utc: string;
 }

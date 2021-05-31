@@ -6,7 +6,7 @@ import SplitPane from 'react-split-pane';
 import { Button, Table } from 'antd';
 import PanelName from '@components/PanelName';
 import { useQuery } from 'react-query';
-import { IRule, IUser } from '@typings/db';
+import { IUser } from '@typings/db';
 import { Redirect } from 'react-router-dom';
 import request from '@utils/request';
 import { DeleteOutlined } from '@ant-design/icons';
@@ -65,27 +65,27 @@ function ConfLayout(): ReactElement {
   //   [ruleRefetch]
   // );
 
-  const ruleColumns: ColumnsType<IRule> = [
-    {
-      title: 'ID',
-      dataIndex: 'id',
-    },
-    { title: 'Code', dataIndex: 'code' },
-    {
-      title: 'Action',
-      render: (text, record) => (
-        <div className='flex'>
-          <Button
-            type='link'
-            icon={<DeleteOutlined />}
-            // onClick={() => onClickDeleteRule(record.id)}
-            danger
-          />
-          <Button type='link'>Apply</Button>
-        </div>
-      ),
-    },
-  ];
+  // const ruleColumns: ColumnsType<Rule> = [
+  //   {
+  //     title: 'ID',
+  //     dataIndex: 'id',
+  //   },
+  //   { title: 'Code', dataIndex: 'code' },
+  //   {
+  //     title: 'Action',
+  //     render: (text, record) => (
+  //       <div className='flex'>
+  //         <Button
+  //           type='link'
+  //           icon={<DeleteOutlined />}
+  //           // onClick={() => onClickDeleteRule(record.id)}
+  //           danger
+  //         />
+  //         <Button type='link'>Apply</Button>
+  //       </div>
+  //     ),
+  //   },
+  // ];
 
   return (
     <div className='h-screen'>
