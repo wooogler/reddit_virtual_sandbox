@@ -1,0 +1,27 @@
+body: ['violin', 'guys']
+title: ['violin']
+
+[(0, 'body'), (1, 'body'), (2, 'title')]
+
+body+title: ['violin', 'guys']
+title: ['violin']
+
+[(0, 'body', 178), (0, 'title', 179), (1, 'body', 180), (1, 'title', 181), (2, 'title', 182)]
+
+[178, 182] [179,182]
+
+body: ['violin', 'guys']
+title: ['violin', 'guys']
+
+[(0, 0, 'body', 187), (1, 0, 'body', 188), (2, 0, 'title', 189), (3, 0, 'title', 190)]
+
+body+title: ['violin', 'guys']
+title: ['violin']
+[(0, 0, 'title', 191), (0, 1, 'body', 192), (1, 0, 'title', 193), (1, 1, 'body', 194), (2, 0, 'title', 195)]
+
+body+title: ['violin', 'guys']
+title: ['violin', 'guys']
+[(0, 0, 'title', 196), (0, 1, 'body', 197), (1, 0, 'title', 198), (1, 1, 'body', 199), (2, 0, 'title', 200), (3, 0, 'title', 201)]
+
+
+[(0, 0, 'title', 202, 'A'), (0, 1, 'body', 203, 'A'), (1, 0, 'title', 204, 'B'), (1, 1, 'body', 205, 'B'), (2, 0, 'title', 206, 'C'), (3, 0, 'title', 207, 'D')]
