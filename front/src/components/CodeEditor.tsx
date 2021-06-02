@@ -1,4 +1,4 @@
-import React, { ReactElement, useCallback, useState } from 'react';
+import React, { ReactElement, useCallback } from 'react';
 import AceEditor from 'react-ace';
 import 'ace-builds/src-noconflict/mode-yaml';
 import 'ace-builds/src-noconflict/theme-tomorrow';
@@ -9,11 +9,22 @@ import request from '@utils/request';
 interface Props {
   placeholder: string;
   ruleRefetch: () => void;
+  onClose: () => void;
+  loading: boolean;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  code: string;
+  setCode: React.Dispatch<React.SetStateAction<string>>;
 }
 
-function CodeEditor({ placeholder, ruleRefetch }: Props): ReactElement {
-  const [code, setCode] = useState('');
-  const [loading, setLoading] = useState(false);
+function CodeEditor({
+  placeholder,
+  ruleRefetch,
+  onClose,
+  loading,
+  setLoading,
+  code,
+  setCode,
+}: Props): ReactElement {
   const onClickApply = useCallback(() => {
     setLoading(true);
     request({ url: '/rules/', method: 'POST', data: { code } })
@@ -24,20 +35,20 @@ function CodeEditor({ placeholder, ruleRefetch }: Props): ReactElement {
       .catch((error) => {
         console.dir(error);
       });
-  }, [code, ruleRefetch]);
+  }, [code, ruleRefetch, setLoading]);
 
   return (
     <>
-      <div className='flex'>
+      <div className='flex mb-2 items-center'>
         <PanelName>AutoMod Rule</PanelName>
-        <Button
-          type='primary'
-          className='ml-auto'
-          onClick={onClickApply}
-          loading={loading}
-        >
-          Add a Rule
-        </Button>
+        <div className='flex ml-auto'>
+          <Button type='primary' onClick={onClickApply} loading={loading}>
+            Save
+          </Button>
+          <Button type='primary' danger onClick={onClose} className='ml-2'>
+            Close
+          </Button>
+        </div>
       </div>
       <div className='flex-1'>
         <AceEditor

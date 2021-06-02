@@ -1,13 +1,11 @@
 import React, { ReactElement } from 'react';
-import SplitPane from 'react-split-pane';
 import { IUser } from '@typings/db';
 import { useQuery } from 'react-query';
 import { Redirect } from 'react-router-dom';
 import request from '@utils/request';
 import PostViewerLayout from '@layouts/PostViewerLayout';
 import AnalysisLayout from '@layouts/AnalysisLayout';
-
-const Pane = require('react-split-pane/lib/Pane');
+import ChartLayout from '@layouts/ChartLayout';
 
 function HomePage(): ReactElement {
   const { data } = useQuery('me', async () => {
@@ -20,14 +18,15 @@ function HomePage(): ReactElement {
   }
 
   return (
-    <SplitPane split='vertical' className='h-screen'>
-      <Pane initialSize='66%'>
+    <div className='h-screen w-screen flex'>
+      <div className='w-2/3 h-full'>
         <PostViewerLayout />
-      </Pane>
-      <Pane>
+      </div>
+      <div className='w-1/3 h-full flex flex-col'>
         <AnalysisLayout />
-      </Pane>
-    </SplitPane>
+        <ChartLayout />
+      </div>
+    </div>
   );
 }
 

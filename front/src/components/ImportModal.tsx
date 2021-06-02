@@ -19,8 +19,6 @@ interface Props {
 
 function ImportModal({ visible, postRefetch, onCancel }: Props): ReactElement {
   const [importLoading, setImportLoading] = useState(false);
-  const [deleteLoading, setDeleteLoading] = useState(false);
-  const [needImport, setNeedImport] = useState(false);
   const [completeSub, setCompleteSub] = useState(false);
   const [completeCom, setCompleteCom] = useState(false);
   const { after, changeAfter, changeRefetching } = useStore();
@@ -86,7 +84,6 @@ function ImportModal({ visible, postRefetch, onCancel }: Props): ReactElement {
                 settingRefetch();
                 setCompleteCom(true);
                 setImportLoading(false);
-                setNeedImport(false);
                 changeRefetching(false);
               })
               .catch((error) => {
@@ -108,7 +105,6 @@ function ImportModal({ visible, postRefetch, onCancel }: Props): ReactElement {
             } else {
               setCompleteCom(true);
             }
-            setNeedImport(false);
             changeRefetching(false);
           })
           .catch((error) => {
@@ -145,28 +141,6 @@ function ImportModal({ visible, postRefetch, onCancel }: Props): ReactElement {
       });
   }, [refetch]);
 
-  const onClickDeleteAll = useCallback(() => {
-    setDeleteLoading(true);
-    setNeedImport(true);
-    changeRefetching(true);
-    request<string>({
-      url: '/posts/all/',
-      method: 'DELETE',
-    })
-      .then((response) => {
-        setDeleteLoading(false);
-        settingRefetch();
-        postRefetch();
-        setCompleteCom(false);
-        setCompleteSub(false);
-        changeRefetching(false);
-      })
-      .catch((error) => {
-        setDeleteLoading(false);
-        console.error(error);
-        changeRefetching(false);
-      });
-  }, [settingRefetch, postRefetch, changeRefetching]);
   const nowDayStart = dayjs().startOf('day');
 
   return (
@@ -192,19 +166,10 @@ function ImportModal({ visible, postRefetch, onCancel }: Props): ReactElement {
             </Button>
             <div className='ml-auto'>
               <Button
-                onClick={onClickDeleteAll}
-                loading={deleteLoading}
-                danger
-                disabled={needImport}
-              >
-                Delete all
-              </Button>
-              <Button
                 type='primary'
                 loading={importLoading}
                 htmlType='submit'
                 onClick={() => formik.handleSubmit()}
-                disabled={!needImport}
               >
                 Import
               </Button>
@@ -230,6 +195,7 @@ function ImportModal({ visible, postRefetch, onCancel }: Props): ReactElement {
               changeAfter(value);
             }}
             defaultValue='week'
+            value={after}
           >
             <Option value='3months'>last three months</Option>
             <Option value='month'>last month</Option>

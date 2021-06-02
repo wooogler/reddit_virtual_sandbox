@@ -6,7 +6,7 @@ export interface IUser {
 export interface IPost {
   id: string;
   source: 'Subreddit' | 'Spam' | 'Report';
-  place: 'normal' | 'target' | 'except';
+  place: 'normal' | 'target' | 'except' | 'normal-target' | 'normal-except';
   title: string;
   body: string;
   author: string;
@@ -15,7 +15,12 @@ export interface IPost {
   isFiltered: boolean;
   matching_rules: number[];
   matching_check_combinations: number[];
-  matching_checks: number[];
+  matching_checks: {
+    id: number;
+    field: string;
+    start: number;
+    end: number;
+  }[];
 }
 
 export interface PaginatedPosts {

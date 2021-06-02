@@ -5,29 +5,29 @@ import { AutoModStat } from '@typings/types';
 import PanelName from './PanelName';
 import PostItem from './PostItem';
 
-
 import OverlayLoading from './OverlayLoading';
 import { UseInfiniteQueryResult } from 'react-query';
 import { AxiosError } from 'axios';
 import { useInView } from 'react-intersection-observer';
+import { useStore } from '@utils/store';
+import { isFiltered } from '@utils/util';
 
 interface Props {
   label: string;
   stat?: AutoModStat;
   query: UseInfiniteQueryResult<PaginatedPosts, AxiosError<any>>;
-  onSubmit?: (postId: string) => void;
   isLoading?: boolean;
-  target?: boolean;
+  refetch: () => void;
 }
 
 function PostList({
   label,
   query,
-  onSubmit,
   isLoading,
-  target,
+  refetch,
 }: Props): ReactElement {
   const [ref, inView] = useInView({ threshold: 0 });
+  const { rule_id, check_combination_id, check_id } = useStore();
 
   const { fetchNextPage } = query;
   useEffect(() => {
@@ -47,7 +47,18 @@ function PostList({
         {query.data?.pages.map((page, id) => (
           <React.Fragment key={id}>
             {page.results.map((post) => (
-              <PostItem key={post.id} post={post} />
+              <PostItem
+                key={post.id}
+                post={post}
+                isFiltered={isFiltered(
+                  post,
+                  rule_id,
+                  check_combination_id,
+                  check_id
+                )}
+                isTested={false}
+                refetch={refetch}
+              />
             ))}
           </React.Fragment>
         ))}

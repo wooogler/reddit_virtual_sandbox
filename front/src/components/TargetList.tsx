@@ -16,6 +16,7 @@ interface Props {
   onSubmit: (postId: string) => void;
   isLoading?: boolean;
   posts?: IPost[];
+  refetch: () => void;
 }
 
 function TargetList({
@@ -23,6 +24,7 @@ function TargetList({
   onSubmit,
   isLoading,
   posts,
+  refetch,
 }: Props): ReactElement {
   const [urlStatus, setUrlStatus] = useState<any>('');
   const [urlHelp, setUrlHelp] = useState<any>('');
@@ -74,8 +76,7 @@ function TargetList({
         <div className='w-60 ml-auto flex items-center'>
           <Progress percent={rate * 100} showInfo={false} />
           <div className='text-xs ml-2 text-gray-400 w-48'>
-            {(rate * 100).toFixed(2)} % ({stat.part}/
-            {stat.total})
+            {(rate * 100).toFixed(2)} % ({stat.part}/{stat.total})
           </div>
           <Popover
             placement='bottom'
@@ -114,6 +115,8 @@ function TargetList({
                 check_combination_id,
                 check_id
               )}
+              isTested={true}
+              refetch={refetch}
             />
           ))}
       </div>

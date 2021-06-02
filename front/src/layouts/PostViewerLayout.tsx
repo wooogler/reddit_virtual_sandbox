@@ -29,25 +29,33 @@ function PostViewerLayout(): ReactElement {
     changePostType,
     changeSource,
     changeOrder,
+    changeRefetching,
   } = useStore();
   const { refetch } = useQuery('me');
 
   const [targetLoading, setTargetLoading] = useState(false);
   const [exceptLoading, setExceptLoading] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const targetQuery = useQuery<IPost[], AxiosError>('target', async () => {
-    const { data } = await request<IPost[]>({
-      url: '/posts/target/',
-    });
-    return data;
-  });
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const targetQuery = useQuery<IPost[], AxiosError>(
+    ['target', { refetching }],
+    async () => {
+      const { data } = await request<IPost[]>({
+        url: '/posts/target/',
+      });
+      return data;
+    }
+  );
 
-  const exceptQuery = useQuery<IPost[], AxiosError>('except', async () => {
-    const { data } = await request<IPost[]>({
-      url: '/posts/except/',
-    });
-    return data;
-  });
+  const exceptQuery = useQuery<IPost[], AxiosError>(
+    ['except', { refetching }],
+    async () => {
+      const { data } = await request<IPost[]>({
+        url: '/posts/except/',
+      });
+      return data;
+    }
+  );
 
   const { refetch: targetRefetch } = targetQuery;
   const { refetch: exceptRefetch } = exceptQuery;
@@ -92,7 +100,7 @@ function PostViewerLayout(): ReactElement {
         post_type,
         order,
         source,
-        refetching
+        refetching,
       },
     ],
     async ({ pageParam = 1 }) => {
@@ -107,8 +115,8 @@ function PostViewerLayout(): ReactElement {
           start_date: start_date.toDate(),
           end_date: end_date.toDate(),
           filtered: true,
-          post_type,
-          source,
+          post_type: post_type === 'all' ? undefined : post_type,
+          source: source === 'all' ? undefined : source,
         },
       });
       return data;
@@ -145,9 +153,9 @@ function PostViewerLayout(): ReactElement {
           page: pageParam,
           start_date: start_date.toDate(),
           end_date: end_date.toDate(),
-          post_type,
+          post_type: post_type === 'all' ? undefined : post_type,
           filtered: false,
-          source,
+          source: source === 'all' ? undefined : source,
         },
       });
       return data;
@@ -171,31 +179,59 @@ function PostViewerLayout(): ReactElement {
 
   const onChangePostType = useCallback(
     (value: 'all' | 'Submission' | 'Comment') => {
-      if (value === 'all') {
-        return changePostType(undefined);
-      }
       return changePostType(value);
     },
     [changePostType]
   );
   const onChangeSource = useCallback(
     (value: 'all' | 'Subreddit' | 'Spam') => {
-      if (value === 'all') {
-        return changeSource(undefined);
-      }
       return changeSource(value);
     },
     [changeSource]
   );
 
+  const onClickDeleteAll = useCallback(() => {
+    setDeleteLoading(true);
+    changeRefetching(true);
+    request<string>({
+      url: '/posts/all/',
+      method: 'DELETE',
+    })
+      .then((response) => {
+        request({
+          url: 'rules/all/',
+          method: 'DELETE',
+        })
+          .then((response) => {
+            setDeleteLoading(false);
+            changeRefetching(false);
+          })
+          .catch((error) => {
+            setDeleteLoading(false);
+            console.error(error);
+            changeRefetching(false);
+          });
+      })
+      .catch((error) => {
+        setDeleteLoading(false);
+        console.error(error);
+        changeRefetching(false);
+      });
+  }, [changeRefetching]);
+
   const onClickImport = useCallback(() => {
     setIsModalVisible(true);
   }, []);
 
+  const { refetch: filteredRefetch } = filteredQuery;
+  const { refetch: notFilteredRefetch } = notFilteredQuery;
+
   const postRefetch = useCallback(() => {
-    filteredQuery.refetch();
-    notFilteredQuery.refetch();
-  }, [filteredQuery, notFilteredQuery]);
+    targetRefetch();
+    exceptRefetch();
+    filteredRefetch();
+    notFilteredRefetch();
+  }, [exceptRefetch, filteredRefetch, notFilteredRefetch, targetRefetch]);
 
   const onCancel = useCallback(() => {
     setIsModalVisible(false);
@@ -203,7 +239,7 @@ function PostViewerLayout(): ReactElement {
   }, [postRefetch]);
 
   return (
-    <div className='h-screen flex flex-col'>
+    <div className='h-full w-full flex flex-col'>
       <div className='h-12 w-full flex items-center'>
         <div className='text-3xl font-bold ml-2'>Test Cases</div>
       </div>
@@ -213,37 +249,58 @@ function PostViewerLayout(): ReactElement {
           posts={targetQuery.data}
           isLoading={targetLoading}
           onSubmit={(postId) => onAddPost(postId, 'target')}
+          refetch={postRefetch}
         />
         <TargetList
           label='Posts to avoid being filtered'
           posts={exceptQuery.data}
           isLoading={exceptLoading}
           onSubmit={(postId) => onAddPost(postId, 'except')}
+          refetch={postRefetch}
         />
       </div>
       <div className='h-12 w-full flex items-center'>
         <div className='text-3xl font-bold ml-2'>Post Viewer</div>
         <div className='flex ml-auto items-center'>
           <div className='mx-2'>Post Type:</div>
-          <Select defaultValue='all' onChange={onChangePostType}>
+          <Select
+            defaultValue='all'
+            onChange={onChangePostType}
+            value={post_type}
+          >
             <Select.Option value='all'>Submissions & Comments</Select.Option>
             <Select.Option value='Submission'>Only Submissions</Select.Option>
             <Select.Option value='Comment'>Only Comments</Select.Option>
           </Select>
           <div className='mx-2'>Post location:</div>
-          <Select defaultValue='all' onChange={onChangeSource}>
+          <Select defaultValue='all' onChange={onChangeSource} value={source}>
             <Select.Option value='all'>Subreddits & Spam/Reports</Select.Option>
             <Select.Option value='Subreddit'>Only Subreddits</Select.Option>
             <Select.Option value='Spam'>Only Spam/Reports</Select.Option>
           </Select>
           <div className='mx-2'>Order:</div>
-          <Select defaultValue='-created_utc' onChange={changeOrder}>
+          <Select
+            defaultValue='-created_utc'
+            onChange={changeOrder}
+            value={order}
+          >
             <Select.Option value='-created_utc'>New</Select.Option>
             <Select.Option value='+created_utc'>Old</Select.Option>
           </Select>
-          <Button type='primary' className='ml-2' onClick={onClickImport}>
-            Import
-          </Button>
+          {notFilteredQuery.data?.pages[0].count !== 0 ? (
+            <Button
+              onClick={onClickDeleteAll}
+              loading={deleteLoading}
+              danger
+              className='ml-2'
+            >
+              Delete all
+            </Button>
+          ) : (
+            <Button type='primary' className='ml-2' onClick={onClickImport}>
+              Import
+            </Button>
+          )}
           <Button danger className='mx-2' onClick={onLogOut}>
             Log out
           </Button>
@@ -259,11 +316,13 @@ function PostViewerLayout(): ReactElement {
           label='Possible false alarm'
           query={filteredQuery}
           isLoading={filteredQuery.isLoading}
+          refetch={postRefetch}
         />
         <PostList
           label='Possible Miss'
           query={notFilteredQuery}
           isLoading={notFilteredQuery.isLoading}
+          refetch={postRefetch}
         />
       </div>
     </div>

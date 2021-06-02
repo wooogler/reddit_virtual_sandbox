@@ -1,7 +1,7 @@
 from collections import defaultdict
 from rest_framework import serializers
 from rest_auth.serializers import UserDetailsSerializer
-from .models import Post, User, Rule, Check, CheckCombination
+from .models import Post, User, Rule, Check, CheckCombination, Match
 from .rule_handler import create_rule
 
 
@@ -11,12 +11,19 @@ class CustomUserSerializer(serializers.ModelSerializer):
         fields = ('username', 'reddit_token')
 
 
+class MatchSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Match
+        fields = ('id', 'field', 'start', 'end')
+
+
 class PostSerializer(serializers.ModelSerializer):
     # matching_rules = serializers.SerializerMethodField()
     #
     # def get_matching_rules(self, obj):
     #     rules = obj.matching_rules.filter(user=self.context['request'].user)
     #     return [rule.pk for rule in rules]
+    matching_checks = MatchSerializer(source='match_set', many=True, read_only=True)
 
     class Meta:
         model = Post
@@ -50,6 +57,7 @@ class CheckSerializer(serializers.ModelSerializer):
             'subreddit_count',
             'spam_count',
             'code',
+            'line',
         ]
 
 
@@ -71,12 +79,9 @@ class CheckCombinationSerializer(serializers.ModelSerializer):
 
     def get_code(self, obj):
         checks = obj.checks.all()
-        code_checks = defaultdict(list)
         codes = []
         for check in checks:
-            code_checks[check.fields].append(check.word)
-        for key in code_checks:
-            codes.append(key + ': [ ' + ', '.join([("'" + word + "'") for word in code_checks[key]]) + ' ]')
+            codes.append(check.fields + ': ' + "[ '" + check.word + "' ]")
         return "\n".join(codes)
 
     class Meta:
@@ -99,7 +104,6 @@ class RuleSerializer(serializers.ModelSerializer):
     def get_subreddit_count(self, obj):
         start_date = self.context['request'].query_params.get('start_date')
         end_date = self.context['request'].query_params.get('end_date')
-        print(obj)
         return obj.post_set.filter(source='Subreddit', created_utc__range=(start_date, end_date)).count()
 
     def get_spam_count(self, obj):

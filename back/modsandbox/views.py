@@ -73,7 +73,7 @@ class RedditViewSet(viewsets.ViewSet):
 
 
 class PostViewSet(viewsets.ModelViewSet):
-    queryset = Post.objects.filter(place='normal')
+    queryset = Post.objects.filter(place__startswith='normal')
     serializer_class = PostSerializer
     pagination_class = PostPagination
     permission_classes = [IsAuthenticatedOrReadOnly]
@@ -139,7 +139,7 @@ class PostViewSet(viewsets.ModelViewSet):
 
 
 class TargetViewSet(viewsets.ModelViewSet):
-    queryset = Post.objects.filter(place='target')
+    queryset = Post.objects.filter(place__in=['target', 'normal-target'])
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
     ordering = ['created_utc']
@@ -157,9 +157,18 @@ class TargetViewSet(viewsets.ModelViewSet):
             apply_rule(rule, posts, False)
         return Response(status=status.HTTP_200_OK)
 
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if instance.place == 'target':
+            self.perform_destroy(instance)
+        elif instance.place == 'normal-target':
+            instance.place = 'normal'
+            instance.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 class ExceptViewSet(viewsets.ModelViewSet):
-    queryset = Post.objects.filter(place='except')
+    queryset = Post.objects.filter(place__in=['except', 'normal-except'])
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
     ordering = ['created_utc']
@@ -187,6 +196,11 @@ class RuleViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return self.queryset.filter(user=self.request.user)
+
+    @action(methods=['delete'], detail=False)
+    def all(self, request):
+        super().get_queryset().all().delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class StatViewSet(PostViewSet):
