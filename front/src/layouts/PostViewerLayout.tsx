@@ -8,7 +8,12 @@ import { useStore } from '@utils/store';
 import { Button, Select } from 'antd';
 import { AxiosError } from 'axios';
 import { ReactElement, useCallback, useState } from 'react';
-import { useInfiniteQuery, useQuery } from 'react-query';
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from 'react-query';
 
 export const mockStat: AutoModStat = {
   part: 10,
@@ -16,6 +21,8 @@ export const mockStat: AutoModStat = {
 };
 
 function PostViewerLayout(): ReactElement {
+  const queryClient = useQueryClient();
+
   const {
     rule_id,
     check_combination_id,
@@ -26,17 +33,15 @@ function PostViewerLayout(): ReactElement {
     source,
     order,
     refetching,
+    imported,
     changePostType,
     changeSource,
     changeOrder,
-    changeRefetching,
+    changeImported,
   } = useStore();
   const { refetch } = useQuery('me');
 
-  const [targetLoading, setTargetLoading] = useState(false);
-  const [exceptLoading, setExceptLoading] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [deleteLoading, setDeleteLoading] = useState(false);
   const targetQuery = useQuery<IPost[], AxiosError>(
     ['target', { refetching }],
     async () => {
@@ -57,36 +62,22 @@ function PostViewerLayout(): ReactElement {
     }
   );
 
-  const { refetch: targetRefetch } = targetQuery;
-  const { refetch: exceptRefetch } = exceptQuery;
+  const addTestCase = ({ postId, place }: { postId: string; place: string }) =>
+    request({
+      url: `posts/${place}/`,
+      method: 'POST',
+      data: { full_name: postId },
+    });
 
-  const onAddPost = useCallback(
-    (postId: string, place: string) => {
+  const addTestCaseMutation = useMutation(addTestCase, {
+    onSuccess: (_, { place }) => {
       if (place === 'target') {
-        setTargetLoading(true);
-      } else if (place === 'except') {
-        setExceptLoading(true);
+        queryClient.invalidateQueries('target');
+      } else {
+        queryClient.invalidateQueries('except');
       }
-      request({
-        url: `posts/${place}/`,
-        method: 'POST',
-        data: { full_name: postId },
-      })
-        .then((response) => {
-          if (place === 'target') {
-            targetRefetch();
-            setTargetLoading(false);
-          } else if (place === 'except') {
-            exceptRefetch();
-            setExceptLoading(false);
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-        });
     },
-    [targetRefetch, exceptRefetch]
-  );
+  });
 
   const filteredQuery = useInfiniteQuery<PaginatedPosts, AxiosError>(
     [
@@ -100,7 +91,6 @@ function PostViewerLayout(): ReactElement {
         post_type,
         order,
         source,
-        refetching,
       },
     ],
     async ({ pageParam = 1 }) => {
@@ -139,7 +129,6 @@ function PostViewerLayout(): ReactElement {
         post_type,
         order,
         source,
-        refetching,
       },
     ],
     async ({ pageParam = 1 }) => {
@@ -190,53 +179,46 @@ function PostViewerLayout(): ReactElement {
     [changeSource]
   );
 
-  const onClickDeleteAll = useCallback(() => {
-    setDeleteLoading(true);
-    changeRefetching(true);
-    request<string>({
-      url: '/posts/all/',
-      method: 'DELETE',
-    })
-      .then((response) => {
-        request({
-          url: 'rules/all/',
-          method: 'DELETE',
-        })
-          .then((response) => {
-            setDeleteLoading(false);
-            changeRefetching(false);
-          })
-          .catch((error) => {
-            setDeleteLoading(false);
-            console.error(error);
-            changeRefetching(false);
-          });
-      })
-      .catch((error) => {
-        setDeleteLoading(false);
-        console.error(error);
-        changeRefetching(false);
-      });
-  }, [changeRefetching]);
+  const deleteAllPostsMutation = useMutation(
+    () =>
+      request({
+        url: 'posts/all/',
+        method: 'DELETE',
+      }),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('target');
+        queryClient.invalidateQueries('except');
+        queryClient.invalidateQueries('filtered');
+        queryClient.invalidateQueries('not filtered');
+        queryClient.invalidateQueries('stats/filtered');
+        queryClient.invalidateQueries('stats/not_filtered');
+        changeImported(false);
+      },
+    }
+  );
+
+  const deleteAllRulesMutation = useMutation(
+    () =>
+      request({
+        url: 'rules/all/',
+        method: 'DELETE',
+      }),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('rules');
+      },
+    }
+  );
 
   const onClickImport = useCallback(() => {
     setIsModalVisible(true);
-  }, []);
-
-  const { refetch: filteredRefetch } = filteredQuery;
-  const { refetch: notFilteredRefetch } = notFilteredQuery;
-
-  const postRefetch = useCallback(() => {
-    targetRefetch();
-    exceptRefetch();
-    filteredRefetch();
-    notFilteredRefetch();
-  }, [exceptRefetch, filteredRefetch, notFilteredRefetch, targetRefetch]);
+    queryClient.invalidateQueries('setting');
+  }, [queryClient]);
 
   const onCancel = useCallback(() => {
     setIsModalVisible(false);
-    postRefetch();
-  }, [postRefetch]);
+  }, []);
 
   return (
     <div className='h-full w-full flex flex-col'>
@@ -247,16 +229,20 @@ function PostViewerLayout(): ReactElement {
         <TargetList
           label='Posts that should be filtered'
           posts={targetQuery.data}
-          isLoading={targetLoading}
-          onSubmit={(postId) => onAddPost(postId, 'target')}
-          refetch={postRefetch}
+          isLoading={addTestCaseMutation.isLoading}
+          onSubmit={(postId) =>
+            addTestCaseMutation.mutate({ postId, place: 'target' })
+          }
+          refetch={() => {}}
         />
         <TargetList
           label='Posts to avoid being filtered'
           posts={exceptQuery.data}
-          isLoading={exceptLoading}
-          onSubmit={(postId) => onAddPost(postId, 'except')}
-          refetch={postRefetch}
+          isLoading={addTestCaseMutation.isLoading}
+          onSubmit={(postId) =>
+            addTestCaseMutation.mutate({ postId, place: 'except' })
+          }
+          refetch={() => {}}
         />
       </div>
       <div className='h-12 w-full flex items-center'>
@@ -287,14 +273,20 @@ function PostViewerLayout(): ReactElement {
             <Select.Option value='-created_utc'>New</Select.Option>
             <Select.Option value='+created_utc'>Old</Select.Option>
           </Select>
-          {notFilteredQuery.data?.pages[0].count !== 0 ? (
+          {imported ? (
             <Button
-              onClick={onClickDeleteAll}
-              loading={deleteLoading}
+              onClick={() => {
+                deleteAllPostsMutation.mutate();
+                deleteAllRulesMutation.mutate();
+              }}
+              loading={
+                deleteAllPostsMutation.isLoading ||
+                deleteAllRulesMutation.isLoading
+              }
               danger
               className='ml-2'
             >
-              Delete all
+              Reset
             </Button>
           ) : (
             <Button type='primary' className='ml-2' onClick={onClickImport}>
@@ -306,23 +298,17 @@ function PostViewerLayout(): ReactElement {
           </Button>
         </div>
       </div>
-      <ImportModal
-        visible={isModalVisible}
-        postRefetch={postRefetch}
-        onCancel={onCancel}
-      />
+      <ImportModal visible={isModalVisible} onCancel={onCancel} />
       <div className='flex' style={{ height: 'calc(70vh - 3rem)' }}>
         <PostList
           label='Possible false alarm'
           query={filteredQuery}
           isLoading={filteredQuery.isLoading}
-          refetch={postRefetch}
         />
         <PostList
           label='Possible Miss'
           query={notFilteredQuery}
           isLoading={notFilteredQuery.isLoading}
-          refetch={postRefetch}
         />
       </div>
     </div>

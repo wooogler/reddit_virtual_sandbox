@@ -115,21 +115,26 @@ class PostViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         subreddit = request.data.get('subreddit')
         after = request.data.get('after')
+        where = request.data.get('where')
         type = request.data.get('type')
 
         if subreddit == '':
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         r = RedditHandler(request.user)
-        pushshift_posts = r.get_posts_from_pushshift(subreddit, after, type)
-        posts = create_posts(pushshift_posts, request.user, "normal")
         r.get_mod_subreddits()
-        praw_spams = r.get_spams_from_praw(subreddit, after)
-        spams = create_posts(praw_spams, request.user, "normal")
+        if where == 'live':
+            pushshift_posts = r.get_posts_from_pushshift(subreddit, after, type)
+            posts = create_posts(pushshift_posts, request.user, "normal")
+
+        elif where == 'spam':
+            praw_spams = r.get_spams_from_praw(subreddit, after, type)
+            posts = create_posts(praw_spams, request.user, "normal")
+
         rules = Rule.objects.filter(user=request.user)
         for rule in rules:
             apply_rule(rule, posts, False)
-            apply_rule(rule, spams, False)
+
         return Response(status=status.HTTP_200_OK)
 
     @action(methods=['delete'], detail=False)
@@ -210,20 +215,34 @@ class StatViewSet(PostViewSet):
     @action(detail=False, methods=['get'])
     def setting(self, request):
         queryset = self.queryset.filter(user=request.user)
-        submissions = queryset.exclude(title='')
-        comments = queryset.filter(title='')
+        live_submissions = queryset.filter(post_type='Submission', source='Subreddit')
+        live_comments = queryset.filter(post_type='Comment', source='Subreddit')
+        spam_submissions = queryset.filter(post_type='Submission', source__in=['Spam', 'Report'])
+        spam_comments = queryset.filter(post_type='Comment', source__in=['Spam', 'Report'])
         try:
-            recent_sub_utc = submissions.latest('-created_utc').created_utc
+            recent_live_sub_utc = live_submissions.latest('-created_utc').created_utc
         except Post.DoesNotExist:
-            recent_sub_utc = None
+            recent_live_sub_utc = None
         try:
-            recent_com_utc = comments.latest('-created_utc').created_utc
+            recent_live_com_utc = live_comments.latest('-created_utc').created_utc
         except Post.DoesNotExist:
-            recent_com_utc = None
+            recent_live_com_utc = None
+        try:
+            recent_spam_sub_utc = spam_submissions.latest('-created_utc').created_utc
+        except Post.DoesNotExist:
+            recent_spam_sub_utc = None
+        try:
+            recent_spam_com_utc = spam_comments.latest('-created_utc').created_utc
+        except Post.DoesNotExist:
+            recent_spam_com_utc = None
 
         return Response({
-            "sub_recent": recent_sub_utc,
-            "com_recent": recent_com_utc,
-            "sub_count": submissions.count(),
-            "com_count": comments.count(),
+            "live_sub_recent": recent_live_sub_utc,
+            "live_com_recent": recent_live_com_utc,
+            "live_sub_count": live_submissions.count(),
+            "live_com_count": live_comments.count(),
+            "spam_sub_recent": recent_spam_sub_utc,
+            "spam_com_recent": recent_spam_com_utc,
+            "spam_sub_count": spam_submissions.count(),
+            "spam_com_count": spam_comments.count(),
         })

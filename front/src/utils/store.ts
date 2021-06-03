@@ -1,4 +1,4 @@
-import { importSetting } from '@typings/types';
+import { ImportSetting } from '@typings/types';
 import dayjs, { Dayjs } from 'dayjs';
 import create from 'zustand';
 import { devtools } from 'zustand/middleware';
@@ -18,9 +18,10 @@ type State = {
   post_type: PostType;
   source: Source;
   order: Order;
-  after: importSetting['after'];
+  after: ImportSetting['after'];
   refetching: boolean;
   code: string;
+  imported: boolean;
   changeRuleId: (ruleId: number) => void;
   changeCheckId: (checkId: number) => void;
   changeCheckCombinationId: (checkCombinationId: number) => void;
@@ -29,9 +30,10 @@ type State = {
   changeSource: (source: Source) => void;
   changePostType: (post_type: PostType) => void;
   changeOrder: (order: Order) => void;
-  changeAfter: (after: importSetting['after']) => void;
+  changeAfter: (after: ImportSetting['after']) => void;
   changeRefetching: (refetching: boolean) => void;
   changeCode: (code: string) => void;
+  changeImported: (imported: boolean) => void;
 };
 
 const nowDayStart = dayjs().startOf('day');
@@ -51,6 +53,7 @@ export const useStore = create<State>(
         after: 'week',
         refetching: false,
         code: '',
+        imported: false,
         changeRuleId: (id: number) =>
           set((state) => ({
             rule_id: id,
@@ -82,13 +85,20 @@ export const useStore = create<State>(
         changePostType: (post_type: PostType) =>
           set((state) => ({ post_type })),
         changeOrder: (order: Order) => set((state) => ({ order })),
-        changeAfter: (after: importSetting['after']) =>
-          set((state) => ({ after })),
+        changeAfter: (after: ImportSetting['after']) =>
+          set((state) => ({
+            start_date: afterToDate(after, nowDayStart),
+            after,
+          })),
         changeRefetching: (refetching: boolean) =>
           set((state) => ({
             refetching,
           })),
         changeCode: (code: string) => set((state) => ({ code })),
+        changeImported: (imported: boolean) =>
+          set((state) => ({
+            imported,
+          })),
       }),
       {
         name: 'modsandbox-storage',

@@ -116,7 +116,6 @@ function TargetList({
                 check_id
               )}
               isTested={true}
-              refetch={refetch}
             />
           ))}
       </div>

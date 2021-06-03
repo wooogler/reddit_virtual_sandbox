@@ -1,12 +1,13 @@
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import React, { ReactElement, useCallback } from 'react';
+import React, { ReactElement } from 'react';
 import clsx from 'clsx';
 import { IPost } from '@typings/db';
 import { Button, Dropdown, Menu, Tooltip } from 'antd';
 import request from '@utils/request';
 import utc from 'dayjs/plugin/utc';
 import HighlightText from './HighlightText';
+import { useMutation, useQueryClient } from 'react-query';
 
 dayjs.extend(relativeTime);
 dayjs.extend(utc);
@@ -15,33 +16,53 @@ interface Props {
   post: IPost;
   isFiltered?: boolean;
   isTested: boolean;
-  refetch: () => void;
 }
 
-function PostItem({
-  post,
-  isFiltered,
-  isTested,
-  refetch,
-}: Props): ReactElement {
-  const onClickDelete = useCallback(() => {
-    const { place, id } = post;
+function PostItem({ post, isFiltered, isTested }: Props): ReactElement {
+  const queryClient = useQueryClient();
+
+  const invalidatePostQueries = (place: IPost['place']) => {
+    if (place.includes('normal')) {
+      if (isFiltered) {
+        queryClient.invalidateQueries('filtered');
+      } else {
+        queryClient.invalidateQueries('not filtered');
+      }
+    }
+    if (place.includes('target')) {
+      return queryClient.invalidateQueries('target');
+    }
+    if (place.includes('except')) {
+      return queryClient.invalidateQueries('except');
+    }
+  };
+
+  const deletePostFromTestCase = ({ id, place }: Pick<IPost, 'id' | 'place'>) =>
     request({
-      url:
-        (place === 'target' || place === 'normal-target'
-          ? '/posts/target/'
-          : '/posts/except/') +
-        id +
-        '/',
+      url: `/posts/${place.includes('target') ? 'target' : 'except'}/${id}/`,
       method: 'DELETE',
-    })
-      .then((response) => {
-        refetch();
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, [post, refetch]);
+    });
+
+  const deletePostFromTestCaseMutation = useMutation(deletePostFromTestCase, {
+    onSuccess: (_, { place }) => {
+      invalidatePostQueries(place);
+    },
+  });
+
+  const movePostToTestCase = ({ id, place }: Pick<IPost, 'id' | 'place'>) =>
+    request({
+      url: `/posts/${post.id}/`,
+      method: 'PATCH',
+      data: {
+        place,
+      },
+    });
+
+  const movePostToTestCaseMutation = useMutation(movePostToTestCase, {
+    onSuccess: (_, { place }) => {
+      invalidatePostQueries(place);
+    },
+  });
 
   const matchBody = post.matching_checks
     .filter((check) => check.field === 'body')
@@ -51,27 +72,15 @@ function PostItem({
     .filter((check) => check.field === 'title')
     .map((check) => ({ start: check.start, end: check.end }));
 
-  const onClickMove = useCallback(
-    (value) => {
-      request({
-        url: `/posts/${post.id}/`,
-        method: 'PATCH',
-        data: {
-          place: value.key,
-        },
-      })
-        .then((response) => {
-          refetch();
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    },
-    [post.id, refetch]
-  );
-
   const moveMenu = (
-    <Menu onClick={onClickMove}>
+    <Menu
+      onClick={({ key }) =>
+        movePostToTestCaseMutation.mutate({
+          id: post.id,
+          place: key as 'normal-target' | 'normal-except',
+        })
+      }
+    >
       <Menu.Item key='normal-target'>Posts that should be filtered</Menu.Item>
       <Menu.Item key='normal-except'>Posts to avoid being filtered</Menu.Item>
     </Menu>
@@ -144,7 +153,12 @@ function PostItem({
               danger
               type='link'
               size='small'
-              onClick={onClickDelete}
+              onClick={() =>
+                deletePostFromTestCaseMutation.mutate({
+                  id: post.id,
+                  place: post.place,
+                })
+              }
               disabled={!isTested}
             >
               <div className='text-xs underline'>

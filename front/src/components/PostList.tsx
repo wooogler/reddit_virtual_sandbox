@@ -17,15 +17,9 @@ interface Props {
   stat?: AutoModStat;
   query: UseInfiniteQueryResult<PaginatedPosts, AxiosError<any>>;
   isLoading?: boolean;
-  refetch: () => void;
 }
 
-function PostList({
-  label,
-  query,
-  isLoading,
-  refetch,
-}: Props): ReactElement {
+function PostList({ label, query, isLoading }: Props): ReactElement {
   const [ref, inView] = useInView({ threshold: 0 });
   const { rule_id, check_combination_id, check_id } = useStore();
 
@@ -57,7 +51,6 @@ function PostList({
                   check_id
                 )}
                 isTested={false}
-                refetch={refetch}
               />
             ))}
           </React.Fragment>

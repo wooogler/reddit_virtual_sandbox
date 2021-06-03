@@ -1,6 +1,6 @@
 import { IPost } from '@typings/db';
-import { importSetting } from '@typings/types';
-import dayjs, { Dayjs } from 'dayjs';
+import { ImportSetting } from '@typings/types';
+import { Dayjs } from 'dayjs';
 
 export const isFiltered = (
   post: IPost,
@@ -25,41 +25,27 @@ export const isFiltered = (
   //   }
   // }
   if (rule_id) {
-    if(post.matching_rules.includes(rule_id)) {
-      return true
-    }
-    return false
-  }
-  if (check_combination_id) {
-    if(post.matching_check_combinations.includes(check_combination_id)) {
-      return true
-    }
-    return false
-  }
-  if (check_id) {
-    if(post.matching_checks.map((check) => check.id).includes(check_id)) {
+    if (post.matching_rules.includes(rule_id)) {
       return true;
     }
-    return false
+    return false;
   }
-  return false
+  if (check_combination_id) {
+    if (post.matching_check_combinations.includes(check_combination_id)) {
+      return true;
+    }
+    return false;
+  }
+  if (check_id) {
+    if (post.matching_checks.map((check) => check.id).includes(check_id)) {
+      return true;
+    }
+    return false;
+  }
+  return false;
 };
 
-export const percentImport = (
-  now: Dayjs,
-  after: importSetting['after'],
-  current: string | undefined
-) => {
-  if (!current) {
-    return 0;
-  }
-  const nowUnix = now.unix();
-  const part = nowUnix - dayjs(current).unix();
-  const total = nowUnix - afterToDate(after, now).unix();
-  return parseInt(String((part / total) * 100));
-};
-
-export const afterToDate = (after: importSetting['after'], now: Dayjs) => {
+export const afterToDate = (after: ImportSetting['after'], now: Dayjs) => {
   switch (after) {
     case '3months':
       return now.subtract(3, 'month');

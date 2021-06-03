@@ -50,18 +50,18 @@ class RedditHandler:
             return self.reddit.comment(id=post_id)
 
     def get_posts_from_pushshift(self, subreddit, after, type):
-        if type == 'sub':
+        if type == 'submissions':
             return self.api.search_submissions(after=after_to_timestamp(after),
                                                subreddit=subreddit)
 
-        elif type == 'com':
+        elif type == 'comments':
             return self.api.search_comments(after=after_to_timestamp(after),
                                             subreddit=subreddit)
 
-    def get_spams_from_praw(self, subreddit, after):
+    def get_spams_from_praw(self, subreddit, after, type):
         if subreddit in self.mod_subreddits:
-            spams = self.reddit.subreddit(subreddit).mod.spam(limit=None)
-            reports = self.reddit.subreddit(subreddit).mod.reports(limit=None)
+            spams = self.reddit.subreddit(subreddit).mod.spam(limit=None, only=type)
+            reports = self.reddit.subreddit(subreddit).mod.reports(limit=None, only=type)
             spams_after = [spam for spam in spams if spam.created_utc > after_to_timestamp(after)]
             reports_after = [report for report in reports if report.created_utc > after_to_timestamp(after)]
             print(spams_after, reports_after)
