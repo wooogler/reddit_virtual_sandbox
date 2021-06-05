@@ -135,6 +135,7 @@ def apply_rule(rule, posts, check_create):
         """
         for field in parsed_key["fields"]:
             key = compose_key(field, parsed_key["match"], parsed_key["other"], parsed_key["not"])
+    
             if check_create:
                 check_object = Check.objects.create(
                     rule=rule,

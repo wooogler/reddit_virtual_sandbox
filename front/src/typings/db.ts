@@ -5,13 +5,16 @@ export interface IUser {
 
 export interface IPost {
   id: string;
+  post_id: string;
   source: 'Subreddit' | 'Spam' | 'Report';
   place: 'normal' | 'target' | 'except' | 'normal-target' | 'normal-except';
+  post_type: 'Submission' | 'Comment';
   title: string;
   body: string;
   author: string;
   created_utc: Date;
   url: string;
+  banned_by: string;
   isFiltered: boolean;
   matching_rules: number[];
   matching_check_combinations: number[];

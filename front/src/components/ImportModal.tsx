@@ -26,16 +26,22 @@ function ImportModal({ visible, onCancel }: Props): ReactElement {
   const { after, imported, changeAfter, changeRefetching, changeImported } =
     useStore();
 
-  const { data, refetch } = useQuery('me', async () => {
+  const { data: userData, refetch } = useQuery('me', async () => {
     const { data } = await request<IUser | false>({ url: '/rest-auth/user/' });
     return data;
   });
-  const { data: modSubreddits } = useQuery('modSubreddits', async () => {
-    const { data } = await request<string[]>({
-      url: '/reddit/mod_subreddits/',
-    });
-    return data;
-  });
+  const { data: modSubreddits } = useQuery(
+    'modSubreddits',
+    async () => {
+      const { data } = await request<string[]>({
+        url: '/reddit/mod_subreddits/',
+      });
+      return data;
+    },
+    {
+      enabled: userData && userData.reddit_token !== '',
+    }
+  );
 
   const importPosts = ({ type, where, subreddit, after }: ImportSetting) =>
     request({
@@ -190,7 +196,7 @@ function ImportModal({ visible, onCancel }: Props): ReactElement {
       destroyOnClose
       footer={
         <div className='flex flex-row'>
-          {data && data.reddit_token === '' ? (
+          {userData && userData.reddit_token === '' ? (
             <div className='flex mb-2' onClick={onClickRedditLogin}>
               <Button type='primary'>Reddit Login</Button>
             </div>
@@ -268,10 +274,16 @@ function ImportModal({ visible, onCancel }: Props): ReactElement {
         >
           <Select onChange={(value) => formik.setFieldValue('where', value)}>
             <Option value='live'>Current Subreddit</Option>
-            <Option value='spam' disabled={data && data.reddit_token === ''}>
+            <Option
+              value='spam'
+              disabled={userData && userData.reddit_token === ''}
+            >
               Spam/Reports in Mod Tools
             </Option>
-            <Option value='all' disabled={data && data.reddit_token === ''}>
+            <Option
+              value='all'
+              disabled={userData && userData.reddit_token === ''}
+            >
               Subreddit & Spam/Reports
             </Option>
           </Select>

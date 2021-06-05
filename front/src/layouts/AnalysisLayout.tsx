@@ -1,9 +1,9 @@
 import PanelName from '@components/PanelName';
-import { Key, ReactElement, useCallback, useState } from 'react';
-import { Button, Table } from 'antd';
+import React, { Key, ReactElement, useCallback, useState } from 'react';
+import { Button, Empty, Table } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import request from '@utils/request';
-import { useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { Check, CheckCombination, Rule } from '@typings/db';
 import { useStore } from '@utils/store';
 import {
@@ -47,6 +47,8 @@ function AnalysisLayout(): ReactElement {
     end_date,
   } = useStore();
 
+  const queryClient = useQueryClient();
+
   const [code, setCode] = useState('');
 
   const [isOpenEditor, setIsOpenEditor] = useState(false);
@@ -86,21 +88,17 @@ function AnalysisLayout(): ReactElement {
     [changeCheckId]
   );
 
-  const onClickDeleteRule = useCallback(
-    (id: number) => {
-      request({ url: `/rules/${id}/`, method: 'DELETE' })
-        .then(() => {
-          ruleRefetch();
-        })
-        .catch((error) => {
-          console.dir(error);
-        });
-      if (id === rule_id) {
+  const deleteRule = ({ ruleId }: { ruleId: number }) =>
+    request({ url: `/rules/${ruleId}/`, method: 'DELETE' });
+
+  const deleteRuleMutation = useMutation(deleteRule, {
+    onSuccess: (_, { ruleId }) => {
+      queryClient.invalidateQueries('rules');
+      if (ruleId === rule_id) {
         clearRuleId();
       }
     },
-    [ruleRefetch, clearRuleId, rule_id]
-  );
+  });
 
   const onClickForm = useCallback((code: string) => {
     setCode(code);
@@ -131,7 +129,7 @@ function AnalysisLayout(): ReactElement {
           <Button
             type='link'
             icon={<DeleteOutlined />}
-            onClick={() => onClickDeleteRule(record.id)}
+            onClick={() => deleteRuleMutation.mutate({ ruleId: record.id })}
             danger
           />
           <Button
@@ -176,7 +174,15 @@ function AnalysisLayout(): ReactElement {
             dataSource={ruleData?.map((item) => ({ key: item.id, ...item }))}
             size='small'
             pagination={false}
-            loading={ruleLoading || saveLoading}
+            locale={{
+              emptyText: (
+                <Empty
+                  image={Empty.PRESENTED_IMAGE_SIMPLE}
+                  description='Add a new rule'
+                />
+              ),
+            }}
+            loading={ruleLoading || saveLoading || deleteRuleMutation.isLoading}
             expandable={{
               expandedRowRender: (rule) => (
                 <div className='ml-20'>

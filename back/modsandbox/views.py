@@ -183,8 +183,14 @@ class ExceptViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         full_name = request.data.get('full_name')
-        r = RedditHandler(request.user)
-        except_post = r.get_post_with_id(full_name)
+        if full_name:
+            r = RedditHandler(request.user)
+            except_post = r.get_post_with_id(full_name)
+        else:
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            self.perform_create(serializer)
+            except_post = serializer.instance
         posts = create_posts([except_post], request.user, "except")
         rules = Rule.objects.filter(user=request.user)
         for rule in rules:

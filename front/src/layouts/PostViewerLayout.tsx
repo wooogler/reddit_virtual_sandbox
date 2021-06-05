@@ -233,7 +233,7 @@ function PostViewerLayout(): ReactElement {
           onSubmit={(postId) =>
             addTestCaseMutation.mutate({ postId, place: 'target' })
           }
-          refetch={() => {}}
+          place='target'
         />
         <TargetList
           label='Posts to avoid being filtered'
@@ -242,7 +242,7 @@ function PostViewerLayout(): ReactElement {
           onSubmit={(postId) =>
             addTestCaseMutation.mutate({ postId, place: 'except' })
           }
-          refetch={() => {}}
+          place='except'
         />
       </div>
       <div className='h-12 w-full flex items-center'>

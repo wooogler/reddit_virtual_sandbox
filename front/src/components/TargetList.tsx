@@ -2,11 +2,12 @@ import { IPost } from '@typings/db';
 import { AutoModStat } from '@typings/types';
 import { useStore } from '@utils/store';
 import { isFiltered } from '@utils/util';
-import { Button, Form, Input, Popover, Progress } from 'antd';
+import { Button, Empty, Form, Input, Popover, Progress } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
 import React, { ReactElement, useCallback, useState } from 'react';
 import Url from 'url-parse';
 import isUrl from 'validator/es/lib/isURL';
+import AddPostModal from './AddPostModal';
 import OverlayLoading from './OverlayLoading';
 import PanelName from './PanelName';
 import PostItem from './PostItem';
@@ -16,7 +17,7 @@ interface Props {
   onSubmit: (postId: string) => void;
   isLoading?: boolean;
   posts?: IPost[];
-  refetch: () => void;
+  place: 'target' | 'except';
 }
 
 function TargetList({
@@ -24,11 +25,12 @@ function TargetList({
   onSubmit,
   isLoading,
   posts,
-  refetch,
+  place
 }: Props): ReactElement {
   const [urlStatus, setUrlStatus] = useState<any>('');
   const [urlHelp, setUrlHelp] = useState<any>('');
   const [visible, setVisible] = useState(false);
+  const [openAddModal, setOpenAddModal] = useState(false);
   const { rule_id, check_combination_id, check_id } = useStore();
   const [form] = useForm();
   const onClickAdd = useCallback(() => {
@@ -58,6 +60,10 @@ function TargetList({
     setVisible(false);
   };
 
+  const onCancel = () => {
+    setOpenAddModal(false);
+  }
+
   const stat: AutoModStat = {
     part: posts
       ? posts?.filter((post) =>
@@ -83,16 +89,19 @@ function TargetList({
             title='Add Posts with URL'
             trigger='click'
             content={
-              <Form form={form}>
-                <Form.Item
-                  name='url'
-                  label='URL'
-                  validateStatus={urlStatus}
-                  help={urlHelp}
-                >
-                  <Input.Search enterButton='Add' onSearch={onSearch} />
-                </Form.Item>
-              </Form>
+              <div className='flex flex-col items-center'>
+                <Form form={form}>
+                  <Form.Item
+                    name='url'
+                    label='URL'
+                    validateStatus={urlStatus}
+                    help={urlHelp}
+                  >
+                    <Input.Search enterButton='Add' onSearch={onSearch} />
+                  </Form.Item>
+                </Form>
+                <Button onClick={() => setOpenAddModal(true)}>Add a custom post</Button>
+              </div>
             }
             visible={visible}
             onVisibleChange={(visible) => setVisible(visible)}
@@ -102,23 +111,33 @@ function TargetList({
             </Button>
           </Popover>
         </div>
+        <AddPostModal visible={openAddModal} onCancel={onCancel} place={place}/>
       </div>
-      <div className='overflow-auto post-scroll'>
-        {posts &&
-          posts.map((post) => (
-            <PostItem
-              key={post.id}
-              post={post}
-              isFiltered={isFiltered(
-                post,
-                rule_id,
-                check_combination_id,
-                check_id
-              )}
-              isTested={true}
-            />
-          ))}
-      </div>
+      {posts?.length !== 0 ? (
+        <div className='overflow-auto post-scroll'>
+          {posts &&
+            posts.map((post) => (
+              <PostItem
+                key={post.id}
+                post={post}
+                isFiltered={isFiltered(
+                  post,
+                  rule_id,
+                  check_combination_id,
+                  check_id
+                )}
+                isTested={true}
+              />
+            ))}
+        </div>
+      ) : (
+        <div className='flex flex-1 justify-center items-center'>
+          <Empty
+            image={Empty.PRESENTED_IMAGE_SIMPLE}
+            description='Add a post in Test cases'
+          />
+        </div>
+      )}
     </div>
   );
 }

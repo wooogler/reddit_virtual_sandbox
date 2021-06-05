@@ -112,7 +112,7 @@ function PostItem({ post, isFiltered, isTested }: Props): ReactElement {
             post.title
           )}
         </div>
-        <div className='flex mt-1 items-center'>
+        <div className='flex items-center'>
           <a
             href={post.url}
             onClick={(e) => {
@@ -141,6 +141,7 @@ function PostItem({ post, isFiltered, isTested }: Props): ReactElement {
           >
             <div className='text-xs ml-2'>{dayjs().to(post.created_utc)}</div>
           </Tooltip>
+          
 
           {post.place === 'normal' ? (
             <Dropdown overlay={moveMenu}>
@@ -167,7 +168,12 @@ function PostItem({ post, isFiltered, isTested }: Props): ReactElement {
             </Button>
           )}
         </div>
-        <div className='text-sm mt-1'>
+        {post.source === 'Spam' && (
+            <div className='text-red-600 text-xs'>
+              Removed by {post.banned_by}
+            </div>
+          )}
+        <div className='text-sm'>
           {isFiltered ? (
             <HighlightText text={post.body} match={matchBody} />
           ) : (
