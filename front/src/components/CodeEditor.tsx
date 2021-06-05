@@ -5,6 +5,9 @@ import 'ace-builds/src-noconflict/theme-tomorrow';
 import PanelName from './PanelName';
 import { Button } from 'antd';
 import request from '@utils/request';
+import { useMutation, useQueryClient } from 'react-query';
+import { Rule } from '@typings/db';
+import { useStore } from '@utils/store';
 
 interface Props {
   placeholder: string;
@@ -25,25 +28,28 @@ function CodeEditor({
   code,
   setCode,
 }: Props): ReactElement {
-  const onClickApply = useCallback(() => {
-    setLoading(true);
-    request({ url: '/rules/', method: 'POST', data: { code } })
-      .then(() => {
-        setLoading(false);
-        ruleRefetch();
-      })
-      .catch((error) => {
-        console.dir(error);
-      });
-  }, [code, ruleRefetch, setLoading]);
+  const queryClient = useQueryClient();
+  const { changeRuleId } = useStore();
+  const applyRule = ({ code }: { code: string }) =>
+    request<Rule>({ url: '/rules/', method: 'POST', data: { code } });
+  const applyRuleMutation = useMutation(applyRule, {
+    onSuccess: (res, { code }) => {
+      queryClient.invalidateQueries('rules');
+      changeRuleId(res.data.id);
+    },
+  });
 
   return (
     <>
       <div className='flex mb-2 items-center'>
         <PanelName>AutoMod Rule</PanelName>
         <div className='flex ml-auto'>
-          <Button type='primary' onClick={onClickApply} loading={loading}>
-            Save
+          <Button
+            type='primary'
+            onClick={() => applyRuleMutation.mutate({ code })}
+            loading={applyRuleMutation.isLoading}
+          >
+            Apply
           </Button>
           <Button type='primary' danger onClick={onClose} className='ml-2'>
             Close
