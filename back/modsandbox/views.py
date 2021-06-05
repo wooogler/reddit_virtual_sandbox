@@ -100,8 +100,7 @@ class PostViewSet(viewsets.ModelViewSet):
                 queryset = queryset.filter(matching_check_combinations__id=check_combination_id)
             elif check_id is not None:
                 queryset = queryset.filter(matching_checks__id=check_id)
-            else:
-                queryset = queryset.none()
+
         else:
             if rule_id is not None:
                 queryset = queryset.exclude(matching_rules__id=rule_id)
@@ -116,7 +115,7 @@ class PostViewSet(viewsets.ModelViewSet):
         subreddit = request.data.get('subreddit')
         after = request.data.get('after')
         where = request.data.get('where')
-        type = request.data.get('type')
+        type = request.data.get('type')   
 
         if subreddit == '':
             return Response(status=status.HTTP_400_BAD_REQUEST)
