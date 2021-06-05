@@ -28,12 +28,19 @@ def after_to_timestamp(after):
 
 class RedditHandler:
     def __init__(self, user):
-        self.reddit = praw.Reddit(
-            client_id=os.environ.get("client_id"),
-            client_secret=os.environ.get("client_secret"),
-            refresh_token=user.reddit_token,
-            user_agent=os.environ.get("user_agent"),
-        )
+        if user.reddit_token != '':
+            self.reddit = praw.Reddit(
+                client_id=os.environ.get("client_id"),
+                client_secret=os.environ.get("client_secret"),
+                refresh_token=user.reddit_token,
+                user_agent=os.environ.get("user_agent"),
+            )
+        else:
+            self.reddit = praw.Reddit(
+                client_id=os.environ.get("client_id"),
+                client_secret=os.environ.get("client_secret"),
+                user_agent=os.environ.get("user_agent"),
+            )
         self.user = user
         self.api = PushshiftAPI(self.reddit)
         self.mod_subreddits = []

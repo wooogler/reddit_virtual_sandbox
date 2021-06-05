@@ -57,7 +57,7 @@ class RedditViewSet(viewsets.ViewSet):
         user.reddit_token = token
         user.save()
 
-        return redirect('http://localhost:3000/')
+        return redirect('http://modsandbox.s3-website.ap-northeast-2.amazonaws.com/')
 
     @action(methods=['get'], detail=False)
     def logout(self, request):
@@ -122,12 +122,13 @@ class PostViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         r = RedditHandler(request.user)
-        r.get_mod_subreddits()
+        
         if where == 'live':
             pushshift_posts = r.get_posts_from_pushshift(subreddit, after, type)
             posts = create_posts(pushshift_posts, request.user, "normal")
 
         elif where == 'spam':
+            r.get_mod_subreddits()
             praw_spams = r.get_spams_from_praw(subreddit, after, type)
             posts = create_posts(praw_spams, request.user, "normal")
 
@@ -154,9 +155,15 @@ class TargetViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         full_name = request.data.get('full_name')
-        r = RedditHandler(request.user)
-        target_post = r.get_post_with_id(full_name)
-        posts = create_posts([target_post], request.user, "target")
+        if full_name:
+            r = RedditHandler(request.user)
+            target_post = r.get_post_with_id(full_name)
+            posts = create_posts([target_post], request.user, "target")
+        else:
+            post = Post(user=request.user)
+            serializer = PostSerializer(post, data=request.data)
+            if serializer.is_valid(raise_exception=True):
+                posts = [serializer.save()]
         rules = Rule.objects.filter(user=request.user)
         for rule in rules:
             apply_rule(rule, posts, False)
@@ -192,10 +199,25 @@ class ExceptViewSet(viewsets.ModelViewSet):
             self.perform_create(serializer)
             except_post = serializer.instance
         posts = create_posts([except_post], request.user, "except")
+            posts = create_posts([except_post], request.user, "target")
+        else:
+            post = Post(user=request.user)
+            serializer = PostSerializer(post, data=request.data)
+            if serializer.is_valid(raise_exception=True):
+                posts = [serializer.save()]
         rules = Rule.objects.filter(user=request.user)
         for rule in rules:
             apply_rule(rule, posts, False)
         return Response(status=status.HTTP_200_OK)
+
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if instance.place == 'except':
+            self.perform_destroy(instance)
+        elif instance.place == 'normal-except':
+            instance.place = 'normal'
+            instance.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class RuleViewSet(viewsets.ModelViewSet):
