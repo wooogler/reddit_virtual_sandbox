@@ -21,6 +21,7 @@ def after_to_timestamp(after):
         'month': int((now_day_start + relativedelta.relativedelta(months=-1)).timestamp()),
         '2weeks': int((now_day_start + relativedelta.relativedelta(weeks=-2)).timestamp()),
         'week': int((now_day_start + relativedelta.relativedelta(weeks=-1)).timestamp()),
+        '3days': int((now_day_start + relativedelta.relativedelta(days=-3)).timestamp()),
     }
 
     return after_dict[after]
