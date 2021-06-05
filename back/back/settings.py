@@ -24,7 +24,8 @@ SECRET_KEY = 'django-insecure-&8rc@iy&3+qbyvhq$pi(0oun6rqkrmm^&z$n29s-951z6g5#s!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost']
+ALLOWED_HOSTS = ['*']
+# CORS_ORIGIN_WHITELIST=['http://localhost:3000']
 
 # Application definition
 
@@ -55,7 +56,7 @@ AUTH_USER_MODEL = 'modsandbox.User'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.SessionAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication'
     ],
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']

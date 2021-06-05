@@ -45,6 +45,7 @@ class Post(models.Model):
     created_utc = models.DateTimeField()
     created_at = models.DateTimeField(auto_now_add=True)
     url = models.TextField(default='')
+    banned_by = models.CharField(max_length=300, null=True)
 
     # for FP, FN
     sim = models.FloatField(default=0)

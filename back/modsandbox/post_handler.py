@@ -21,6 +21,7 @@ def create_posts(posts, user, place):
                                 body=post.selftext if is_sub_post else post.body,
                                 created_utc=datetime.fromtimestamp(post.created_utc, tz=timezone.utc),
                                 source='Spam' if post.banned_by is not None else 'Report' if post.num_reports is not None else 'Subreddit',
+                                banned_by=post.banned_by if post.banned_by is not None else None,
                                 place=place,
                                 url=post.url if hasattr(post, 'url') else 'https://www.reddit.com' + post.permalink,
                                 post_type='Submission' if is_sub_post else 'Comment')

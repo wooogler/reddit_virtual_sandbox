@@ -8,11 +8,6 @@ import yaml
 
 from modsandbox.models import Rule, Check, Post, CheckCombination
 
-"""
-버그 고치기
-~body 버그 발생
-"""
-
 _match_fields_by_type = {
     "Link": {
         "id",
@@ -123,7 +118,6 @@ def apply_rule(rule, posts, check_create):
     # assign check ids to each posts
     for check in checks:
         parsed_key = parse_fields_key(check["key"])
-        print(parsed_key["not"])
         # check: {'key': 'body+title', 'regex': re.compile('(?:^|\\W|\\b)(violin)(?:$|\\W|\\b)', re.IGNORECASE|re.DOTALL), 'word': 'violin'}
         # parsed_key : {'fields': {'title', 'body'}, 'match': None, 'other': None, 'not': False}
 
@@ -265,6 +259,11 @@ def get_match_patterns(rules):
         match_fields |= parsed_key['fields']
         words = rules[key]
         match_values = rules[key]
+
+        if not words:
+            continue
+        if not isinstance(words, list):
+            words = list((words,))
 
         if not match_values:
             continue
