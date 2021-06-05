@@ -16,7 +16,7 @@ export interface Setting {
 
 export interface ImportSetting {
   subreddit: string;
-  where: 'all' | 'live' | 'spam'
-  after: '3months' | 'month' | '2weeks' | 'week';
+  where: 'all' | 'live' | 'spam';
+  after: '3months' | 'month' | '2weeks' | 'week' | '3days';
   type: 'all' | 'submissions' | 'comments';
 }

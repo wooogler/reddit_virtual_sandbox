@@ -252,6 +252,7 @@ function ImportModal({ visible, onCancel }: Props): ReactElement {
             <Option value='month'>last month</Option>
             <Option value='2weeks'>last two weeks</Option>
             <Option value='week'>last week</Option>
+            <Option value='3days'>last three days</Option>
           </Select>
         </Form.Item>
         <Form.Item

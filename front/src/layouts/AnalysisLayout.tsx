@@ -52,22 +52,20 @@ function AnalysisLayout(): ReactElement {
   const [code, setCode] = useState('');
 
   const [isOpenEditor, setIsOpenEditor] = useState(false);
-  const [saveLoading, setSaveLoading] = useState(false);
 
-  const {
-    data: ruleData,
-    refetch: ruleRefetch,
-    isLoading: ruleLoading,
-  } = useQuery(['rules', { start_date, end_date, rule_id }], async () => {
-    const { data } = await request<Rule[]>({
-      url: '/rules/',
-      params: {
-        start_date: start_date.toDate(),
-        end_date: end_date.toDate(),
-      },
-    });
-    return data;
-  });
+  const { data: ruleData, isLoading: ruleLoading } = useQuery(
+    ['rules', { start_date, end_date, rule_id }],
+    async () => {
+      const { data } = await request<Rule[]>({
+        url: '/rules/',
+        params: {
+          start_date: start_date.toDate(),
+          end_date: end_date.toDate(),
+        },
+      });
+      return data;
+    }
+  );
 
   const onSelectRule = useCallback(
     (rule: Rule & { key: Key }) => {
@@ -182,7 +180,7 @@ function AnalysisLayout(): ReactElement {
                 />
               ),
             }}
-            loading={ruleLoading || saveLoading || deleteRuleMutation.isLoading}
+            loading={ruleLoading || deleteRuleMutation.isLoading}
             expandable={{
               expandedRowRender: (rule) => (
                 <div className='ml-20'>
@@ -246,10 +244,7 @@ function AnalysisLayout(): ReactElement {
         <div className='flex-1 flex flex-col p-2'>
           <CodeEditor
             placeholder=''
-            ruleRefetch={ruleRefetch}
             onClose={onCloseEditor}
-            loading={saveLoading}
-            setLoading={setSaveLoading}
             code={code}
             setCode={setCode}
           />

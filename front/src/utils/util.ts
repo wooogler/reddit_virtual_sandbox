@@ -55,5 +55,7 @@ export const afterToDate = (after: ImportSetting['after'], now: Dayjs) => {
       return now.subtract(2, 'week');
     case 'week':
       return now.subtract(1, 'week');
+    case '3days':
+      return now.subtract(3, 'day');
   }
 };

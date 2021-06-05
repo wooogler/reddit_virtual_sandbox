@@ -11,20 +11,14 @@ import { useStore } from '@utils/store';
 
 interface Props {
   placeholder: string;
-  ruleRefetch: () => void;
   onClose: () => void;
-  loading: boolean;
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   code: string;
   setCode: React.Dispatch<React.SetStateAction<string>>;
 }
 
 function CodeEditor({
   placeholder,
-  ruleRefetch,
   onClose,
-  loading,
-  setLoading,
   code,
   setCode,
 }: Props): ReactElement {
