@@ -1,6 +1,6 @@
 import PanelName from '@components/PanelName';
 import React, { Key, ReactElement, useCallback, useState } from 'react';
-import { Button, Empty, Table } from 'antd';
+import { Button, Empty, Table, Tooltip } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import request from '@utils/request';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
@@ -16,13 +16,48 @@ import CodeEditor from '@components/CodeEditor';
 import './table.css';
 
 const checkColumns: ColumnsType<any> = [
-  // {
-  //   title: 'id',
-  //   dataIndex: 'id',
-  // },
   {
-    title: 'Code',
+    title: 'Snippet',
     dataIndex: 'code',
+    ellipsis: {
+      showTitle: false,
+    },
+    render: (code) => (
+      <Tooltip
+        title={code}
+        placement='bottom'
+        overlayStyle={{ whiteSpace: 'pre' }}
+      >
+        {code}
+      </Tooltip>
+    ),
+  },
+  {
+    title: 'Subreddit',
+    dataIndex: 'subreddit_count',
+  },
+  {
+    title: 'Spam/Report',
+    dataIndex: 'spam_count',
+  },
+];
+
+const checkCombinationColumns: ColumnsType<any> = [
+  {
+    title: 'Mechanics',
+    dataIndex: 'code',
+    ellipsis: {
+      showTitle: false,
+    },
+    render: (code) => (
+      <Tooltip
+        title={code}
+        placement='bottom'
+        overlayStyle={{ whiteSpace: 'pre' }}
+      >
+        {code}
+      </Tooltip>
+    ),
   },
   {
     title: 'Subreddit',
@@ -92,6 +127,10 @@ function AnalysisLayout(): ReactElement {
   const deleteRuleMutation = useMutation(deleteRule, {
     onSuccess: (_, { ruleId }) => {
       queryClient.invalidateQueries('rules');
+      queryClient.invalidateQueries('filtered');
+      queryClient.invalidateQueries('not filtered');
+      queryClient.invalidateQueries('stats/filtered');
+      queryClient.invalidateQueries('stats/not_filtered');
       if (ruleId === rule_id) {
         clearRuleId();
       }
@@ -111,6 +150,18 @@ function AnalysisLayout(): ReactElement {
     {
       title: 'Code',
       dataIndex: 'code',
+      ellipsis: {
+        showTitle: false,
+      },
+      render: (code) => (
+        <Tooltip
+          title={code}
+          placement='bottom'
+          overlayStyle={{ whiteSpace: 'pre' }}
+        >
+          {code}
+        </Tooltip>
+      ),
     },
     {
       title: 'Subreddit',
@@ -151,7 +202,7 @@ function AnalysisLayout(): ReactElement {
   return (
     <div className='h-2/3 flex flex-col'>
       <div className='flex-1 flex flex-col p-2'>
-        <div className='flex items-center'>
+        <div className='flex items-center mb-2'>
           <PanelName>Rule History</PanelName>
           {!isOpenEditor && (
             <div className='ml-auto flex'>
@@ -166,7 +217,7 @@ function AnalysisLayout(): ReactElement {
               onSelect: onSelectRule,
               selectedRowKeys: rule_id ? [rule_id] : [],
             }}
-            style={{ whiteSpace: 'pre' }}
+            style={{ whiteSpace: 'pre', content: undefined }}
             scroll={{ y: isOpenEditor ? '25vh' : '55vh' }}
             columns={ruleHistoryColumns}
             dataSource={ruleData?.map((item) => ({ key: item.id, ...item }))}
@@ -183,8 +234,7 @@ function AnalysisLayout(): ReactElement {
             loading={ruleLoading || deleteRuleMutation.isLoading}
             expandable={{
               expandedRowRender: (rule) => (
-                <div className='ml-20'>
-                  <div>What part affects posts</div>
+                <div className='ml-10'>
                   <Table
                     rowSelection={{
                       type: 'radio',
@@ -194,7 +244,7 @@ function AnalysisLayout(): ReactElement {
                         : [],
                     }}
                     style={{ whiteSpace: 'pre' }}
-                    columns={checkColumns}
+                    columns={checkCombinationColumns}
                     dataSource={rule?.check_combinations.map((item) => ({
                       key: item.id,
                       ...item,
@@ -203,7 +253,6 @@ function AnalysisLayout(): ReactElement {
                     loading={ruleLoading}
                     pagination={false}
                   />
-                  <div>Which checks affects posts</div>
                   <Table
                     rowSelection={{
                       type: 'radio',

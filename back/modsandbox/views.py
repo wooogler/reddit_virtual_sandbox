@@ -19,6 +19,7 @@ from modsandbox.paginations import PostPagination
 from modsandbox.reddit_handler import RedditHandler
 from modsandbox.rule_handler import apply_rule
 from modsandbox.serializers import PostSerializer, RuleSerializer, StatSerializer
+from modsandbox.stat_handler import after_to_time_interval
 
 logger = logging.getLogger(__name__)
 
@@ -100,6 +101,8 @@ class PostViewSet(viewsets.ModelViewSet):
                 queryset = queryset.filter(matching_check_combinations__id=check_combination_id)
             elif check_id is not None:
                 queryset = queryset.filter(matching_checks__id=check_id)
+            else:
+                queryset = queryset.none()
 
         else:
             if rule_id is not None:
@@ -115,13 +118,13 @@ class PostViewSet(viewsets.ModelViewSet):
         subreddit = request.data.get('subreddit')
         after = request.data.get('after')
         where = request.data.get('where')
-        type = request.data.get('type')   
+        type = request.data.get('type')
 
         if subreddit == '':
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         r = RedditHandler(request.user)
-        
+
         if where == 'live':
             pushshift_posts = r.get_posts_from_pushshift(subreddit, after, type)
             posts = create_posts(pushshift_posts, request.user, "normal")
@@ -192,6 +195,7 @@ class ExceptViewSet(viewsets.ModelViewSet):
         if full_name:
             r = RedditHandler(request.user)
             except_post = r.get_post_with_id(full_name)
+            posts = create_posts([except_post], request.user, "target")
         else:
             post = Post(user=request.user)
             serializer = PostSerializer(post, data=request.data)
@@ -231,6 +235,26 @@ class RuleViewSet(viewsets.ModelViewSet):
 class StatViewSet(PostViewSet):
     serializer_class = StatSerializer
     pagination_class = None
+
+    @action(detail=False, methods=['get'])
+    def graph(self, request):
+        after = self.request.query_params.get("after")
+        post_type = self.request.query_params.get("post_type")
+        source = self.request.query_params.get("source")
+        queryset = self.get_queryset()
+        if post_type:
+            queryset = queryset.filter(post_type=post_type)
+        if source:
+            if source == 'Spam':
+                queryset = queryset.filter(source__in=['Spam', 'Report'])
+            else:
+                queryset = queryset.filter(source=source)
+        datetime_interval = after_to_time_interval(after, 30)
+        data_array = []
+        for interval in datetime_interval:
+            y = queryset.filter(created_utc__range=interval).count()
+            data_array.append({'x0': interval[0], 'x1': interval[1], 'y': y})
+        return Response(data_array)
 
     @action(detail=False, methods=['get'])
     def setting(self, request):

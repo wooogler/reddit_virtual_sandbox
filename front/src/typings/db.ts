@@ -59,6 +59,8 @@ export interface Check {
   code: string;
 }
 
-export interface Stat {
-  created_utc: string;
+export interface IStat {
+  x0: string;
+  x1: string;
+  y: number;
 }

@@ -7,6 +7,7 @@ from rest_framework import exceptions
 import yaml
 
 from modsandbox.models import Rule, Check, Post, CheckCombination
+from time import time
 
 _match_fields_by_type = {
     "Link": {
@@ -129,7 +130,7 @@ def apply_rule(rule, posts, check_create):
         """
         for field in parsed_key["fields"]:
             key = compose_key(field, parsed_key["match"], parsed_key["other"], parsed_key["not"])
-    
+
             if check_create:
                 check_object = Check.objects.create(
                     rule=rule,
@@ -185,10 +186,12 @@ def apply_rule(rule, posts, check_create):
 
         CheckCombination.checks.through.objects.bulk_create(check_to_check_combination_link)
 
+    posts = posts.exclude(matching_checks=None)
     for check_combination in CheckCombination.objects.filter(rule=rule):
+        check_combination_set = set(check_combination.checks.values_list('id', flat=True))
         for i, post in enumerate(posts):
-            if set(check_combination.checks.values_list('id', flat=True)).issubset(
-                    set(post.matching_checks.values_list('id', flat=True))):
+            post_set = set(post.matching_checks.values_list('id', flat=True))
+            if check_combination_set.issubset(post_set):
                 post_rule_array[i] = True
                 post_to_check_combination_links.append(
                     Post.matching_check_combinations.through(post_id=post.id, checkcombination_id=check_combination.id))
@@ -205,37 +208,6 @@ def apply_rule(rule, posts, check_create):
             )
 
     Post.matching_rules.through.objects.bulk_create(post_to_rule_links)
-
-    # if check_create:
-    #     check_combination_object = CheckCombination.objects.create(
-    #         rule=rule,
-    #         code='\n'.join(code_line)
-    #     )
-    #     check_combination_object.checks.add(*checks_in_combination)
-    #     check_combination_object_ids.append(check_combination_object.id)
-    # else:
-    #     check_combination_objects = CheckCombination.objects.filter(
-    #         rule=rule,
-    #         checks__in=checks_in_combination,
-    #         code='\n'.join(code_line)
-    #     )
-    #     check_combination_object_ids = [check_combination.id for check_combination in check_combination_objects]
-    #
-    # for i, post in enumerate(posts):
-    #     if set(check_combination).issubset(set(post.matching_checks.values_list('id', flat=True))):
-    #         for check_combination_object_id in check_combination_object_ids:
-    #             post_to_check_combination_links.append(
-    #                 Post.matching_check_combinations.through(
-    #                     post_id=post.id,
-    #                     checkcombination_id=check_combination_object_id
-    #                 )
-    #             )
-    #         post_rule_array[i] = True
-
-    # for post in posts:
-    #     print(post.matching_check_combinations)
-    #     if post.matching_check_combinations in list(check_combinations[0]):
-    #         post_to_rule_links.append(Post.matching_rules.through(post_id=post.id, rule_id=rule.id))
 
     return rule
 

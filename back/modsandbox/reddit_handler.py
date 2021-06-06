@@ -13,18 +13,21 @@ def is_sub(name: str):
     return name.startswith('t3')
 
 
-def after_to_timestamp(after):
+def after_to_datetime(after):
     now = timezone.now()
     now_day_start = now.replace(hour=0, minute=0, second=0, microsecond=0)
     after_dict = {
-        '3months': int((now_day_start + relativedelta.relativedelta(months=-3)).timestamp()),
-        'month': int((now_day_start + relativedelta.relativedelta(months=-1)).timestamp()),
-        '2weeks': int((now_day_start + relativedelta.relativedelta(weeks=-2)).timestamp()),
-        'week': int((now_day_start + relativedelta.relativedelta(weeks=-1)).timestamp()),
-        '3days': int((now_day_start + relativedelta.relativedelta(days=-3)).timestamp()),
+        '3months': now_day_start + relativedelta.relativedelta(months=-3),
+        'month': now_day_start + relativedelta.relativedelta(months=-1),
+        '2weeks': now_day_start + relativedelta.relativedelta(weeks=-2),
+        'week': now_day_start + relativedelta.relativedelta(weeks=-1),
+        '3days': now_day_start + relativedelta.relativedelta(days=-3)
     }
-
     return after_dict[after]
+
+
+def after_to_timestamp(after):
+    return int(after_to_datetime(after).timestamp())
 
 
 class RedditHandler:

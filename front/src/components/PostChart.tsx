@@ -1,19 +1,21 @@
-import { Stat } from '@typings/db';
+import { IStat } from '@typings/db';
 import request from '@utils/request';
 import { useStore } from '@utils/store';
-import { afterToDate } from '@utils/util';
 import { AxiosError } from 'axios';
 import dayjs from 'dayjs';
+import localizedFormat from 'dayjs/plugin/localizedFormat';
 import React, { ReactElement, useCallback } from 'react';
 import { useQuery } from 'react-query';
 import {
   createContainer,
+  VictoryBar,
   VictoryBrushContainerProps,
   VictoryChart,
-  VictoryHistogram,
   VictoryStack,
   VictoryVoronoiContainerProps,
 } from 'victory';
+
+dayjs.extend(localizedFormat);
 
 const VictoryBrushVoronoiContainer = createContainer<
   VictoryVoronoiContainerProps,
@@ -31,9 +33,8 @@ function PostChart(): ReactElement {
     source,
     changeDateRange,
   } = useStore();
-  const nowDayStart = dayjs().startOf('day');
 
-  const { data: filteredStat } = useQuery<Date[], AxiosError>(
+  const { data: filteredStat } = useQuery<IStat[], AxiosError>(
     [
       'stats/filtered',
       {
@@ -41,30 +42,32 @@ function PostChart(): ReactElement {
         check_combination_id,
         check_id,
         post_type,
+        after,
         refetching,
         source,
       },
     ],
     async () => {
-      const { data } = await request<Stat[]>({
-        url: '/stats/',
+      const { data } = await request<IStat[]>({
+        url: '/stats/graph',
         params: {
           rule_id,
           check_id,
           check_combination_id,
           post_type: post_type === 'all' ? undefined : post_type,
+          after,
           filtered: true,
           source: source === 'all' ? undefined : source,
         },
       });
-      return data.map((item) => new Date(item.created_utc));
+      return data;
     },
     {
       refetchInterval: refetching ? 2000 : false,
     }
   );
 
-  const { data: notFilteredStat } = useQuery<Date[], AxiosError>(
+  const { data: notFilteredStat } = useQuery<IStat[], AxiosError>(
     [
       'stats/not_filtered',
       {
@@ -72,28 +75,31 @@ function PostChart(): ReactElement {
         check_combination_id,
         check_id,
         post_type,
+        after,
         refetching,
         source,
       },
     ],
     async () => {
-      const { data } = await request<Stat[]>({
-        url: '/stats/',
+      const { data } = await request<IStat[]>({
+        url: '/stats/graph',
         params: {
           rule_id,
           check_id,
           check_combination_id,
           post_type: post_type === 'all' ? undefined : post_type,
+          after,
           filtered: false,
           source: source === 'all' ? undefined : source,
         },
       });
-      return data.map((item) => new Date(item.created_utc));
+      return data;
     },
     {
       refetchInterval: refetching ? 2000 : false,
     }
   );
+
   const onBrush = useCallback(
     (domain: any) => {
       changeDateRange(dayjs(domain.x[0]), dayjs(domain.x[1]));
@@ -101,31 +107,46 @@ function PostChart(): ReactElement {
     [changeDateRange]
   );
 
+  const filteredData = filteredStat?.map((datum) => ({
+    x0: dayjs(datum.x0).toDate(),
+    x1: dayjs(datum.x1).toDate(),
+    x: dayjs
+      .unix((dayjs(datum.x0).unix() + dayjs(datum.x1).unix()) / 2)
+      .toDate(),
+    y: datum.y,
+  }));
+  const notFilteredData = notFilteredStat?.map((datum) => ({
+    x0: dayjs(datum.x0).toDate(),
+    x1: dayjs(datum.x1).toDate(),
+    x: dayjs
+      .unix((dayjs(datum.x0).unix() + dayjs(datum.x1).unix()) / 2)
+      .toDate(),
+    y: datum.y,
+  }));
+
   return (
     <VictoryChart
       containerComponent={
         <VictoryBrushVoronoiContainer
           brushDimension='x'
           onBrushDomainChangeEnd={onBrush}
-          labels={({ datum }) => datum.y}
+          labels={({ datum }) =>
+            `${dayjs(datum.x0).format('lll')} - ${dayjs(datum.x1).format(
+              'lll'
+            )}\nNumber of Posts: ${datum.y}`
+          }
         />
       }
-      padding={{ top: 10, left: 20, right: 20, bottom: 40 }}
-      domain={{
-        x: [afterToDate(after, nowDayStart).toDate(), nowDayStart.toDate()],
-      }}
+      padding={{ top: 10, left: 20, right: 0, bottom: 40 }}
+      domainPadding={{ y: [0, 50] }}
       scale={{ x: 'time' }}
     >
-      <VictoryStack colorScale={['#1790FF', '#EEEFEE']}>
-        <VictoryHistogram
-          data={filteredStat?.map((date) => ({ x: date }))}
-          bins={30}
-        />
-        <VictoryHistogram
-          data={notFilteredStat?.map((date) => ({ x: date }))}
-          bins={30}
-        />
-      </VictoryStack>
+      {filteredData && notFilteredData && (
+        <VictoryStack colorScale={['#1790FF', '#EEEFEE']}>
+          <VictoryBar data={filteredData} barRatio={1.1} />
+          <VictoryBar data={notFilteredData} barRatio={1.1} />
+        </VictoryStack>
+      )}
     </VictoryChart>
   );
 }

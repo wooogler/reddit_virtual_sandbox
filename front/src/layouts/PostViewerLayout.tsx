@@ -222,10 +222,10 @@ function PostViewerLayout(): ReactElement {
 
   return (
     <div className='h-full w-full flex flex-col'>
-      <div className='h-12 w-full flex items-center'>
+      <div className='w-full flex items-center'>
         <div className='text-3xl font-bold ml-2'>Test Cases</div>
       </div>
-      <div className='flex' style={{ height: 'calc(30vh - 3rem)' }}>
+      <div className='flex overflow-y-auto' style={{'flex': 2}}>
         <TargetList
           label='Posts that should be filtered'
           posts={targetQuery.data}
@@ -245,10 +245,10 @@ function PostViewerLayout(): ReactElement {
           place='except'
         />
       </div>
-      <div className='h-12 w-full flex items-center'>
+      <div className='w-full flex items-center flex-wrap'>
         <div className='text-3xl font-bold ml-2'>Post Viewer</div>
         <div className='flex ml-auto items-center'>
-          <div className='mx-2'>Post Type:</div>
+          <div className='mx-2'>Type:</div>
           <Select
             defaultValue='all'
             onChange={onChangePostType}
@@ -258,7 +258,7 @@ function PostViewerLayout(): ReactElement {
             <Select.Option value='Submission'>Only Submissions</Select.Option>
             <Select.Option value='Comment'>Only Comments</Select.Option>
           </Select>
-          <div className='mx-2'>Post location:</div>
+          <div className='mx-2'>location:</div>
           <Select defaultValue='all' onChange={onChangeSource} value={source}>
             <Select.Option value='all'>Subreddits & Spam/Reports</Select.Option>
             <Select.Option value='Subreddit'>Only Subreddits</Select.Option>
@@ -299,7 +299,7 @@ function PostViewerLayout(): ReactElement {
         </div>
       </div>
       <ImportModal visible={isModalVisible} onCancel={onCancel} />
-      <div className='flex' style={{ height: 'calc(70vh - 3rem)' }}>
+      <div className='flex overflow-y-auto' style={{'flex': 5}}>
         <PostList
           label='Possible false alarm'
           query={filteredQuery}

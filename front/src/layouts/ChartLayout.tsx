@@ -10,7 +10,7 @@ function ChartLayout(): ReactElement {
   return (
     <div className='h-1/3 flex flex-col p-2 items-center'>
       <div className='flex items-center'>
-        <PanelName>The number of posts</PanelName>
+        <PanelName>Distribution</PanelName>
         <div className='ml-2 text-xs'>
           {`(${dayjs(start_date).format('YYYY/MM/DD HH:mm:ss')}
             - ${dayjs(end_date).format('YYYY/MM/DD HH:mm:ss')})`}
@@ -32,7 +32,7 @@ function ChartLayout(): ReactElement {
           : 'Only Spam/Reports'}
         )
       </div>
-      <div className='w-full h-4/5'>
+      <div className='w-full h-3/4'>
         <PostChart />
       </div>
     </div>

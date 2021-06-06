@@ -75,7 +75,7 @@ function TargetList({
   const rate = stat.total === 0 ? 0 : stat.part / stat.total;
 
   return (
-    <div className='relative flex flex-col h-full p-2 w-1/2'>
+    <div className='relative flex flex-col h-full p-2 w-1/2 overflow-y-auto'>
       <OverlayLoading isLoading={isLoading} description='loading...' />
       <div className='flex items-center'>
         <PanelName>{label}</PanelName>
