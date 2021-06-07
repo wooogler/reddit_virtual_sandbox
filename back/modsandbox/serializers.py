@@ -14,7 +14,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
 class MatchSerializer(serializers.ModelSerializer):
     class Meta:
         model = Match
-        fields = ('id', 'field', 'start', 'end')
+        fields = ('id', 'field', 'start', 'end', '_check_id')
 
 
 class PostSerializer(serializers.ModelSerializer):

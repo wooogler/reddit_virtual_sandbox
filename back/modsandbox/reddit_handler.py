@@ -33,7 +33,8 @@ def after_to_timestamp(after):
 
 class RedditHandler:
     def __init__(self, user):
-        if not isinstance(user, AnonymousUser):
+        print (user.reddit_token)
+        if user.reddit_token != '':
             self.reddit = praw.Reddit(
                 client_id=os.environ.get("client_id"),
                 client_secret=os.environ.get("client_secret"),
@@ -41,6 +42,7 @@ class RedditHandler:
                 user_agent=os.environ.get("user_agent"),
             )
         else:
+            print('anonymous')
             self.reddit = praw.Reddit(
                 client_id=os.environ.get("client_id"),
                 client_secret=os.environ.get("client_secret"),

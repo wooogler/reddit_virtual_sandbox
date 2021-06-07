@@ -157,7 +157,7 @@ def apply_rule(rule, posts, check_create):
                                                          start=match.start(), end=match.end()))
                     else:
                         post_to_check_links.append(
-                            Post.matching_checks.through(post_id=post.id, _check_id=check_object.id))
+                            Post.matching_checks.through(post_id=post.id, check_id=check_object.id))
 
     Post.matching_checks.through.objects.bulk_create(post_to_check_links)
 
