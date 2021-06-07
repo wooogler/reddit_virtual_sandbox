@@ -38,7 +38,7 @@ def create_posts(posts, user, place):
                                     banned_by=post.banned_by if post.banned_by is not None else None,
                                     place=place,
                                     url=post.url if hasattr(post, 'url') else 'https://www.reddit.com' + post.permalink,
-                                    post_type='Submission')
+                                    post_type='Comment')
 
     posts = Post.objects.filter(created_at__gte=now)
     return posts

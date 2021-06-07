@@ -16,9 +16,8 @@ import CodeEditor from '@components/CodeEditor';
 import './table.css';
 
 const checkColumns: ColumnsType<any> = [
-
   {
-    title: 'Snippet',
+    title: 'Keyword',
     dataIndex: 'code',
     ellipsis: {
       showTitle: false,
@@ -45,7 +44,7 @@ const checkColumns: ColumnsType<any> = [
 
 const checkCombinationColumns: ColumnsType<any> = [
   {
-    title: 'Mechanics',
+    title: 'Sub-Rule',
     dataIndex: 'code',
     ellipsis: {
       showTitle: false,
@@ -144,12 +143,8 @@ function AnalysisLayout(): ReactElement {
   }, []);
 
   const ruleHistoryColumns: ColumnsType<any> = [
-    // {
-    //   title: 'id',
-    //   dataIndex: 'id',
-    // },
     {
-      title: 'Code',
+      title: 'Rule',
       dataIndex: 'code',
       ellipsis: {
         showTitle: false,

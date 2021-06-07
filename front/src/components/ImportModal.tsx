@@ -7,6 +7,7 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useFormik } from 'formik';
 import { useStore } from '@utils/store';
 import ImportProgress from './ImportProgress';
+import { CheckCircleTwoTone } from '@ant-design/icons';
 
 const { Option } = Select;
 
@@ -212,14 +213,16 @@ function ImportModal({ visible, onCancel }: Props): ReactElement {
           )}
           {!imported && (
             <div className='ml-auto'>
-              <Button
-                type='primary'
-                loading={importPostsMutation.isLoading}
-                htmlType='submit'
-                onClick={() => formik.handleSubmit()}
-              >
-                Import
-              </Button>
+              {!imported && (
+                <Button
+                  type='primary'
+                  loading={importPostsMutation.isLoading}
+                  htmlType='submit'
+                  onClick={() => formik.handleSubmit()}
+                >
+                  Import
+                </Button>
+              )}
             </div>
           )}
         </div>
@@ -334,6 +337,12 @@ function ImportModal({ visible, onCancel }: Props): ReactElement {
                   />
                 </div>
               </div>
+              {imported && (
+                <div className='flex items-center mt-2 text-lg'>
+                  <CheckCircleTwoTone twoToneColor='#52c41a' />
+                  <div className='ml-2'>It's Done, please close.</div>
+                </div>
+              )}
             </>
           )}
         </div>
