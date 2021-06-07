@@ -16,6 +16,7 @@ import CodeEditor from '@components/CodeEditor';
 import './table.css';
 
 const checkColumns: ColumnsType<any> = [
+
   {
     title: 'Snippet',
     dataIndex: 'code',

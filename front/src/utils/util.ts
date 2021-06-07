@@ -37,7 +37,7 @@ export const isFiltered = (
     return false;
   }
   if (check_id) {
-    if (post.matching_checks.map((check) => check.id).includes(check_id)) {
+    if (post.matching_checks.map((check) => check._check_id).includes(check_id)) {
       return true;
     }
     return false;

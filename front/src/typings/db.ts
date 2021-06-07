@@ -23,6 +23,7 @@ export interface IPost {
     field: string;
     start: number;
     end: number;
+    _check_id: number;
   }[];
 }
 
