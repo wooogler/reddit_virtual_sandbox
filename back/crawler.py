@@ -16,11 +16,15 @@ def main(subreddit: str, after: datetime, before: datetime = typer.Argument(date
     api = PushshiftAPI(reddit)
     if type == 'submission':
         submissions = api.search_submissions(subreddit=subreddit, after=after, before=before)
-        file_name.write(json.dumps(submission_to_list(submissions)))
+        submissions_list = submission_to_list(submissions)
+        file_name.write(json.dumps(submissions_list, indent=4))
+        typer.echo(f'Submissions saved! total: {len(submissions_list)}')
 
     elif type == 'comment':
         comments = api.search_comments(subreddit=subreddit, after=after, before=before)
-        file_name.write(json.dumps(comment_to_list(comments)))
+        comments_list = comment_to_list(comments)
+        file_name.write(json.dumps(comments_list, indent=4))
+        typer.echo(f'Comments saved! total: {len(comments_list)}')
 
 
 def submission_to_list(submissions):
