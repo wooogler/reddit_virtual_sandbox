@@ -1,6 +1,7 @@
 import os
 from datetime import datetime
 
+from django.contrib.auth.models import AnonymousUser
 from django.utils import timezone
 from itertools import chain
 
@@ -32,7 +33,7 @@ def after_to_timestamp(after):
 
 class RedditHandler:
     def __init__(self, user):
-        if user.reddit_token != '':
+        if not isinstance(user, AnonymousUser):
             self.reddit = praw.Reddit(
                 client_id=os.environ.get("client_id"),
                 client_secret=os.environ.get("client_secret"),
