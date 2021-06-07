@@ -162,7 +162,7 @@ function PostChart(): ReactElement {
             }
           />
         }
-        padding={{ top: 30, left: 40, right: 0, bottom: 50 }}
+        padding={{ top: 30, left: 50, right: 0, bottom: 50 }}
         domainPadding={{ y: [0, 50], x: 8 }}
         scale={{ x: 'time' }}
       >
@@ -176,7 +176,7 @@ function PostChart(): ReactElement {
         <VictoryAxis
           dependentAxis
           label='# of posts'
-          style={{ axisLabel: { padding: 36, fontSize: 16 } }}
+          style={{ axisLabel: { padding: 30, fontSize: 16 } }}
           tickFormat={(t) => `${t < 1 ? '' : t}`}
         />
         <VictoryAxis

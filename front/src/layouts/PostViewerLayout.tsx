@@ -114,7 +114,7 @@ function PostViewerLayout(): ReactElement {
       return data;
     },
     {
-      getNextPageParam: (lastPage) => lastPage.nextPage ?? false,
+      getNextPageParam: (lastPage) => lastPage.nextPage ?? 1,
       refetchInterval: refetching ? 2000 : false,
     }
   );
@@ -152,7 +152,7 @@ function PostViewerLayout(): ReactElement {
       return data;
     },
     {
-      getNextPageParam: (lastPage) => lastPage.nextPage ?? false,
+      getNextPageParam: (lastPage) => lastPage.nextPage ?? 1,
       refetchInterval: refetching ? 2000 : false,
     }
   );
@@ -278,7 +278,7 @@ function PostViewerLayout(): ReactElement {
             <Select.Option value='Subreddit'>Only Subreddits</Select.Option>
             <Select.Option value='Spam'>Only Spam/Reports</Select.Option>
           </Select>
-          <div className='mx-2'>Order:</div>
+          <div className='mx-2'>Sort by:</div>
           <Select
             defaultValue='-created_utc'
             onChange={changeOrder}

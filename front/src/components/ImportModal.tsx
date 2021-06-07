@@ -7,7 +7,7 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useFormik } from 'formik';
 import { useStore } from '@utils/store';
 import ImportProgress from './ImportProgress';
-import { CheckCircleTwoTone } from '@ant-design/icons';
+import { CheckCircleTwoTone, SyncOutlined } from '@ant-design/icons';
 
 const { Option } = Select;
 
@@ -86,6 +86,7 @@ function ImportModal({ visible, onCancel }: Props): ReactElement {
     onMutate: ({ type, where }) => {
       setComplete(false, { type, where });
       changeRefetching(true);
+      changeImported(false);
     },
     onSuccess: (_, { type, where }) => {
       setComplete(true, { type, where });
@@ -184,6 +185,7 @@ function ImportModal({ visible, onCancel }: Props): ReactElement {
       });
   }, [refetch]);
 
+
   return (
     <Modal
       title='Import Posts in Subreddit and Modlog'
@@ -214,14 +216,14 @@ function ImportModal({ visible, onCancel }: Props): ReactElement {
           {!imported && (
             <div className='ml-auto'>
               {!imported && (
-                <Button
-                  type='primary'
-                  loading={importPostsMutation.isLoading}
-                  htmlType='submit'
-                  onClick={() => formik.handleSubmit()}
-                >
-                  Import
-                </Button>
+                  <Button
+                    type='primary'
+                    loading={importPostsMutation.isLoading}
+                    htmlType='submit'
+                    onClick={() => formik.handleSubmit()}
+                  >
+                    Import
+                  </Button>
               )}
             </div>
           )}
@@ -337,14 +339,24 @@ function ImportModal({ visible, onCancel }: Props): ReactElement {
                   />
                 </div>
               </div>
-              {imported && (
-                <div className='flex items-center mt-2 text-lg'>
-                  <CheckCircleTwoTone twoToneColor='#52c41a' />
-                  <div className='ml-2'>It's Done, please close.</div>
-                </div>
-              )}
             </>
           )}
+
+          <div className='flex items-center mt-2 text-lg'>
+            {imported ? (
+              <>
+                <CheckCircleTwoTone twoToneColor='#52c41a' />
+                <div className='ml-2'>It's Done, please close the window.</div>
+              </>
+            ) : (
+              importPostsMutation.isLoading && (
+                <>
+                  <SyncOutlined spin style={{ color: '#1790FF' }} />
+                  <div className='ml-2'>Importing the posts, please wait.</div>
+                </>
+              )
+            )}
+          </div>
         </div>
       </Form>
     </Modal>

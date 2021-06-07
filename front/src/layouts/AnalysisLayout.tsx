@@ -15,60 +15,6 @@ import {
 import CodeEditor from '@components/CodeEditor';
 import './table.css';
 
-const checkColumns: ColumnsType<any> = [
-  {
-    title: 'Keyword',
-    dataIndex: 'code',
-    ellipsis: {
-      showTitle: false,
-    },
-    render: (code) => (
-      <Tooltip
-        title={code}
-        placement='bottom'
-        overlayStyle={{ whiteSpace: 'pre' }}
-      >
-        {code}
-      </Tooltip>
-    ),
-  },
-  {
-    title: 'Subreddit',
-    dataIndex: 'subreddit_count',
-  },
-  {
-    title: 'Spam/Report',
-    dataIndex: 'spam_count',
-  },
-];
-
-const checkCombinationColumns: ColumnsType<any> = [
-  {
-    title: 'Sub-Rule',
-    dataIndex: 'code',
-    ellipsis: {
-      showTitle: false,
-    },
-    render: (code) => (
-      <Tooltip
-        title={code}
-        placement='bottom'
-        overlayStyle={{ whiteSpace: 'pre' }}
-      >
-        {code}
-      </Tooltip>
-    ),
-  },
-  {
-    title: 'Subreddit',
-    dataIndex: 'subreddit_count',
-  },
-  {
-    title: 'Spam/Report',
-    dataIndex: 'spam_count',
-  },
-];
-
 function AnalysisLayout(): ReactElement {
   const {
     changeRuleId,
@@ -146,6 +92,7 @@ function AnalysisLayout(): ReactElement {
     {
       title: 'Rule',
       dataIndex: 'code',
+      width: '45%',
       ellipsis: {
         showTitle: false,
       },
@@ -169,6 +116,7 @@ function AnalysisLayout(): ReactElement {
     },
     {
       title: 'Action',
+      width: '10%',
       render: (text, record) => (
         <div className='flex'>
           <Button
@@ -184,6 +132,62 @@ function AnalysisLayout(): ReactElement {
           />
         </div>
       ),
+    },
+  ];
+
+  const checkColumns: ColumnsType<any> = [
+    {
+      title: 'Keyword',
+      dataIndex: 'code',
+      ellipsis: {
+        showTitle: false,
+      },
+      render: (code) => (
+        <Tooltip
+          title={code}
+          placement='bottom'
+          overlayStyle={{ whiteSpace: 'pre' }}
+        >
+          {code}
+        </Tooltip>
+      ),
+      width: '50%'
+    },
+    {
+      title: 'Subreddit',
+      dataIndex: 'subreddit_count',
+    },
+    {
+      title: 'Spam/Report',
+      dataIndex: 'spam_count',
+    },
+  ];
+
+  const checkCombinationColumns: ColumnsType<any> = [
+    {
+      title: 'Sub-Rule',
+      dataIndex: 'code',
+      ellipsis: {
+        showTitle: false,
+      },
+      render: (code) => (
+        <Tooltip
+          title={code}
+          placement='bottom'
+          overlayStyle={{ whiteSpace: 'pre' }}
+        >
+          {code}
+        </Tooltip>
+      ),
+      width: '50%'
+    },
+    {
+      title: 'Subreddit',
+      dataIndex: 'subreddit_count',
+    },
+    {
+      title: 'Spam/Report',
+      dataIndex: 'spam_count',
     },
   ];
 
