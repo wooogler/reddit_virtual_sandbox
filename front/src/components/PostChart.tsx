@@ -6,12 +6,16 @@ import dayjs from 'dayjs';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import React, { ReactElement, useCallback } from 'react';
 import { useQuery } from 'react-query';
+
 import {
   createContainer,
+  VictoryAxis,
   VictoryBar,
   VictoryBrushContainerProps,
   VictoryChart,
+  VictoryLabel,
   VictoryStack,
+  VictoryTooltip,
   VictoryVoronoiContainerProps,
 } from 'victory';
 
@@ -124,30 +128,69 @@ function PostChart(): ReactElement {
     y: datum.y,
   }));
 
+  const chartLabel = `Number of ${
+    post_type === 'all'
+      ? 'Submissions & Comments'
+      : post_type === 'Submission'
+      ? 'Only Submissions'
+      : 'Only Comments'
+  } in ${
+    source === 'all'
+      ? 'Subreddits & Spam/Reports'
+      : source === 'Subreddit'
+      ? 'Only Subreddits'
+      : 'Only Spam/Reports'
+  }`;
+
   return (
-    <VictoryChart
-      containerComponent={
-        <VictoryBrushVoronoiContainer
-          brushDimension='x'
-          onBrushDomainChangeEnd={onBrush}
-          labels={({ datum }) =>
-            `${dayjs(datum.x0).format('lll')} - ${dayjs(datum.x1).format(
-              'lll'
-            )}\nNumber of Posts: ${datum.y}`
-          }
+    <div className='h-1/3'>
+      <VictoryChart
+        containerComponent={
+          <VictoryBrushVoronoiContainer
+            brushDimension='x'
+            onBrushDomainChangeEnd={onBrush}
+            labels={({ datum }) =>
+              `${dayjs(datum.x0).format('lll')} - ${dayjs(datum.x1).format(
+                'lll'
+              )}\nNumber of Posts: ${datum.y}`
+            }
+            labelComponent={
+              <VictoryTooltip
+                style={{ fontSize: '15px', zIndex: 100 }}
+                constrainToVisibleArea
+              />
+            }
+          />
+        }
+        padding={{ top: 30, left: 40, right: 0, bottom: 50 }}
+        domainPadding={{ y: [0, 50], x: 8 }}
+        scale={{ x: 'time' }}
+      >
+        <VictoryLabel
+          text={chartLabel}
+          textAnchor='middle'
+          y={10}
+          x={225}
+          style={{ fontSize: 16 }}
         />
-      }
-      padding={{ top: 10, left: 20, right: 0, bottom: 40 }}
-      domainPadding={{ y: [0, 50] }}
-      scale={{ x: 'time' }}
-    >
-      {filteredData && notFilteredData && (
-        <VictoryStack colorScale={['#1790FF', '#EEEFEE']}>
-          <VictoryBar data={filteredData} barRatio={1.1} />
-          <VictoryBar data={notFilteredData} barRatio={1.1} />
-        </VictoryStack>
-      )}
-    </VictoryChart>
+        <VictoryAxis
+          dependentAxis
+          label='# of posts'
+          style={{ axisLabel: { padding: 36, fontSize: 16 } }}
+          tickFormat={(t) => `${t < 1 ? '' : t}`}
+        />
+        <VictoryAxis
+          label='Uploaded time'
+          style={{ axisLabel: { padding: 28, fontSize: 16 } }}
+        />
+        {filteredData && notFilteredData && (
+          <VictoryStack colorScale={['#1790FF', '#EEEFEE']}>
+            <VictoryBar data={filteredData} barRatio={1.1} />
+            <VictoryBar data={notFilteredData} barRatio={1.1} />
+          </VictoryStack>
+        )}
+      </VictoryChart>
+    </div>
   );
 }
 

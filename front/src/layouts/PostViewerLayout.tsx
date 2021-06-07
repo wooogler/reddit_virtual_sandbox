@@ -1,3 +1,4 @@
+import { ArrowsAltOutlined, ShrinkOutlined } from '@ant-design/icons';
 import ImportModal from '@components/ImportModal';
 import PostList from '@components/PostList';
 import TargetList from '@components/TargetList';
@@ -7,7 +8,7 @@ import request from '@utils/request';
 import { useStore } from '@utils/store';
 import { Button, Select } from 'antd';
 import { AxiosError } from 'axios';
-import { ReactElement, useCallback, useState } from 'react';
+import React, { ReactElement, useCallback, useState } from 'react';
 import {
   useInfiniteQuery,
   useMutation,
@@ -22,6 +23,7 @@ export const mockStat: AutoModStat = {
 
 function PostViewerLayout(): ReactElement {
   const queryClient = useQueryClient();
+  const [expand, setExpand] = useState(false);
 
   const {
     rule_id,
@@ -220,12 +222,24 @@ function PostViewerLayout(): ReactElement {
     setIsModalVisible(false);
   }, []);
 
+  const onExpand = useCallback(() => {
+    setExpand((state) => !state);
+  }, []);
+
   return (
     <div className='h-full w-full flex flex-col'>
       <div className='w-full flex items-center'>
         <div className='text-3xl font-bold ml-2'>Test Cases</div>
+        <Button
+          className='ml-auto'
+          icon={expand ? <ShrinkOutlined /> : <ArrowsAltOutlined />}
+          type='text'
+          onClick={onExpand}
+        >
+          {!expand ? 'Expand' : 'Collapse'}
+        </Button>
       </div>
-      <div className='flex overflow-y-auto' style={{'flex': 2}}>
+      <div className='flex overflow-y-auto' style={{ flex: 2 }}>
         <TargetList
           label='Posts that should be filtered'
           posts={targetQuery.data}
@@ -299,18 +313,20 @@ function PostViewerLayout(): ReactElement {
         </div>
       </div>
       <ImportModal visible={isModalVisible} onCancel={onCancel} />
-      <div className='flex overflow-y-auto' style={{'flex': 5}}>
-        <PostList
-          label='Possible false alarm'
-          query={filteredQuery}
-          isLoading={filteredQuery.isLoading}
-        />
-        <PostList
-          label='Possible Miss'
-          query={notFilteredQuery}
-          isLoading={notFilteredQuery.isLoading}
-        />
-      </div>
+      {!expand && (
+        <div className='flex overflow-y-auto' style={{ flex: 5 }}>
+          <PostList
+            label='Possible false alarm'
+            query={filteredQuery}
+            isLoading={filteredQuery.isLoading}
+          />
+          <PostList
+            label='Possible Miss'
+            query={notFilteredQuery}
+            isLoading={notFilteredQuery.isLoading}
+          />
+        </div>
+      )}
     </div>
   );
 }
