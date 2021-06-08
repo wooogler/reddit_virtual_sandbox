@@ -20,3 +20,5 @@ export interface ImportSetting {
   after: '3months' | 'month' | '2weeks' | 'week' | '3days';
   type: 'all' | 'submissions' | 'comments';
 }
+
+export type EditorState = 'add' | 'edit' | false;

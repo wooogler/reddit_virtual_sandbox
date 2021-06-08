@@ -25,13 +25,13 @@ function TargetList({
   onSubmit,
   isLoading,
   posts,
-  place
+  place,
 }: Props): ReactElement {
   const [urlStatus, setUrlStatus] = useState<any>('');
   const [urlHelp, setUrlHelp] = useState<any>('');
   const [visible, setVisible] = useState(false);
   const [openAddModal, setOpenAddModal] = useState(false);
-  const { rule_id, check_combination_id, check_id } = useStore();
+  const { rule_id, check_combination_id, check_id, config_id } = useStore();
   const [form] = useForm();
   const onClickAdd = useCallback(() => {
     setVisible((prev) => !prev);
@@ -62,12 +62,12 @@ function TargetList({
 
   const onCancel = () => {
     setOpenAddModal(false);
-  }
+  };
 
   const stat: AutoModStat = {
     part: posts
       ? posts?.filter((post) =>
-          isFiltered(post, rule_id, check_combination_id, check_id)
+          isFiltered(post, config_id, rule_id, check_combination_id, check_id)
         ).length
       : 0,
     total: posts ? posts.length : 0,
@@ -100,7 +100,9 @@ function TargetList({
                     <Input.Search enterButton='Add' onSearch={onSearch} />
                   </Form.Item>
                 </Form>
-                <Button onClick={() => setOpenAddModal(true)}>Add a custom post</Button>
+                <Button onClick={() => setOpenAddModal(true)}>
+                  Add a custom post
+                </Button>
               </div>
             }
             visible={visible}
@@ -111,7 +113,11 @@ function TargetList({
             </Button>
           </Popover>
         </div>
-        <AddPostModal visible={openAddModal} onCancel={onCancel} place={place}/>
+        <AddPostModal
+          visible={openAddModal}
+          onCancel={onCancel}
+          place={place}
+        />
       </div>
       {posts?.length !== 0 ? (
         <div className='overflow-auto post-scroll'>
@@ -122,6 +128,7 @@ function TargetList({
                 post={post}
                 isFiltered={isFiltered(
                   post,
+                  config_id,
                   rule_id,
                   check_combination_id,
                   check_id

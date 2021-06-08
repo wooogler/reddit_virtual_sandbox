@@ -33,7 +33,7 @@ def after_to_timestamp(after):
 
 class RedditHandler:
     def __init__(self, user):
-        print (user.reddit_token)
+        print(user.reddit_token)
         if user.reddit_token != '':
             self.reddit = praw.Reddit(
                 client_id=os.environ.get("client_id"),
@@ -78,7 +78,6 @@ class RedditHandler:
             reports = self.reddit.subreddit(subreddit).mod.reports(limit=None, only=type)
             spams_after = [spam for spam in spams if spam.created_utc > after_to_timestamp(after)]
             reports_after = [report for report in reports if report.created_utc > after_to_timestamp(after)]
-            print(spams_after, reports_after)
 
             return chain(spams_after, reports_after)
 

@@ -1,8 +1,8 @@
 from collections import defaultdict
 from rest_framework import serializers
 from rest_auth.serializers import UserDetailsSerializer
-from .models import Post, User, Rule, Check, CheckCombination, Match
-from .rule_handler import create_rule
+from .models import Post, User, Rule, Check, CheckCombination, Match, Config
+from .rule_handler import create_config
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
@@ -12,17 +12,25 @@ class CustomUserSerializer(serializers.ModelSerializer):
 
 
 class MatchSerializer(serializers.ModelSerializer):
+    rule_id = serializers.SerializerMethodField()
+    check_combination_ids = serializers.SerializerMethodField()
+    config_id = serializers.SerializerMethodField()
+
+    def get_config_id(self, obj):
+        return obj._check.rule.config.id
+
+    def get_rule_id(self, obj):
+        return obj._check.rule.id
+
+    def get_check_combination_ids(self, obj):
+        return obj._check.checkcombination_set.values_list('id', flat=True)
+
     class Meta:
         model = Match
-        fields = ('id', 'field', 'start', 'end', '_check_id')
+        fields = ('id', 'field', 'start', 'end', '_check_id', 'rule_id', 'check_combination_ids', 'config_id')
 
 
 class PostSerializer(serializers.ModelSerializer):
-    # matching_rules = serializers.SerializerMethodField()
-    #
-    # def get_matching_rules(self, obj):
-    #     rules = obj.matching_rules.filter(user=self.context['request'].user)
-    #     return [rule.pk for rule in rules]
     matching_checks = MatchSerializer(source='match_set', many=True, read_only=True)
 
     class Meta:
@@ -117,16 +125,42 @@ class RuleSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'code',
-            'created_at',
             'checks',
             'check_combinations',
             'subreddit_count',
             'spam_count',
         ]
 
+
+class ConfigSerializer(serializers.ModelSerializer):
+    rules = RuleSerializer(many=True, read_only=True)
+    subreddit_count = serializers.SerializerMethodField()
+    spam_count = serializers.SerializerMethodField()
+
+    def get_subreddit_count(self, obj):
+        start_date = self.context['request'].query_params.get('start_date')
+        end_date = self.context['request'].query_params.get('end_date')
+        return obj.post_set.filter(source='Subreddit', created_utc__range=(start_date, end_date)).count()
+
+    def get_spam_count(self, obj):
+        start_date = self.context['request'].query_params.get('start_date')
+        end_date = self.context['request'].query_params.get('end_date')
+        return obj.post_set.filter(source=['Spam', 'Report'], created_utc__range=(start_date, end_date)).count()
+
+    class Meta:
+        model = Config
+        fields = [
+            'id',
+            'code',
+            'created_at',
+            'rules',
+            'subreddit_count',
+            'spam_count',
+        ]
+
     def create(self, validated_data):
-        rule = create_rule(validated_data['code'], self.context['request'].user)
-        return rule
+        config = create_config(validated_data['code'], self.context['request'].user)
+        return config
 
 
 class StatSerializer(serializers.ModelSerializer):

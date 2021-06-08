@@ -16,21 +16,34 @@ export interface IPost {
   url: string;
   banned_by: string;
   isFiltered: boolean;
+  matching_configs: number[];
   matching_rules: number[];
   matching_check_combinations: number[];
-  matching_checks: {
-    id: number;
-    field: string;
-    start: number;
-    end: number;
-    _check_id: number;
-  }[];
+  matching_checks: MatchingCheck[];
+}
+
+export interface MatchingCheck {
+  id: number;
+  field: string;
+  start: number;
+  end: number;
+  _check_id: number;
+  check_combination_ids: number[];
+  rule_id: number;
+  config_id: number;
 }
 
 export interface PaginatedPosts {
   count: number;
   nextPage: number;
   results: IPost[];
+}
+
+export interface Config {
+  id: number;
+  code: string;
+  created_at: Date;
+  rules: Rule[];
 }
 
 export interface Rule {

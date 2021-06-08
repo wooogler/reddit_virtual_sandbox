@@ -14,11 +14,11 @@ from rest_framework.views import APIView
 
 from modsandbox.filters import PostFilter
 from modsandbox.post_handler import create_posts
-from modsandbox.models import Post, User, Rule
+from modsandbox.models import Post, User, Rule, Config
 from modsandbox.paginations import PostPagination
 from modsandbox.reddit_handler import RedditHandler
-from modsandbox.rule_handler import apply_rule
-from modsandbox.serializers import PostSerializer, RuleSerializer, StatSerializer
+from modsandbox.rule_handler import apply_config
+from modsandbox.serializers import PostSerializer, RuleSerializer, StatSerializer, ConfigSerializer
 from modsandbox.stat_handler import after_to_time_interval
 
 logger = logging.getLogger(__name__)
@@ -88,6 +88,7 @@ class PostViewSet(viewsets.ModelViewSet):
         try:
             rule_id = self.request.query_params.get("rule_id")
             check_id = self.request.query_params.get("check_id")
+            config_id = self.request.query_params.get("config_id")
             check_combination_id = self.request.query_params.get("check_combination_id")
             filtered = self.request.query_params.get("filtered")
         except Exception as e:
@@ -95,7 +96,9 @@ class PostViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         if filtered == 'true':
-            if rule_id is not None:
+            if config_id is not None:
+                queryset = queryset.filter(matching_configs__id=config_id)
+            elif rule_id is not None:
                 queryset = queryset.filter(matching_rules__id=rule_id)
             elif check_combination_id is not None:
                 queryset = queryset.filter(matching_check_combinations__id=check_combination_id)
@@ -105,7 +108,9 @@ class PostViewSet(viewsets.ModelViewSet):
                 queryset = queryset.none()
 
         else:
-            if rule_id is not None:
+            if config_id is not None:
+                queryset = queryset.exclude(matching_configs__id=config_id)
+            elif rule_id is not None:
                 queryset = queryset.exclude(matching_rules__id=rule_id)
             elif check_combination_id is not None:
                 queryset = queryset.exclude(matching_check_combinations__id=check_combination_id)
@@ -134,9 +139,9 @@ class PostViewSet(viewsets.ModelViewSet):
             praw_spams = r.get_spams_from_praw(subreddit, after, type)
             posts = create_posts(praw_spams, request.user, "normal")
 
-        rules = Rule.objects.filter(user=request.user)
-        for rule in rules:
-            apply_rule(rule, posts, False)
+        configs = Config.objects.filter(user=request.user)
+        for config in configs:
+            apply_config(config, posts, False)
 
         return Response(status=status.HTTP_200_OK)
 
@@ -165,10 +170,11 @@ class TargetViewSet(viewsets.ModelViewSet):
             post = Post(user=request.user)
             serializer = PostSerializer(post, data=request.data)
             if serializer.is_valid(raise_exception=True):
-                posts = [serializer.save()]
-        rules = Rule.objects.filter(user=request.user)
-        for rule in rules:
-            apply_rule(rule, posts, False)
+                new_post = serializer.save()
+                posts = Post.objects.filter(id=new_post.id)
+        configs = Config.objects.filter(user=request.user)
+        for config in configs:
+            apply_config(config, posts, False)
         return Response(status=status.HTTP_200_OK)
 
     def destroy(self, request, *args, **kwargs):
@@ -200,10 +206,11 @@ class ExceptViewSet(viewsets.ModelViewSet):
             post = Post(user=request.user)
             serializer = PostSerializer(post, data=request.data)
             if serializer.is_valid(raise_exception=True):
-                posts = [serializer.save()]
-        rules = Rule.objects.filter(user=request.user)
-        for rule in rules:
-            apply_rule(rule, posts, False)
+                new_post = serializer.save()
+                posts = Post.objects.filter(id=new_post.id)
+        configs = Config.objects.filter(user=request.user)
+        for config in configs:
+            apply_config(config, posts, False)
         return Response(status=status.HTTP_200_OK)
 
     def destroy(self, request, *args, **kwargs):
@@ -216,15 +223,27 @@ class ExceptViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class RuleViewSet(viewsets.ModelViewSet):
-    queryset = Rule.objects.all()
-    serializer_class = RuleSerializer
+class ConfigViewSet(viewsets.ModelViewSet):
+    queryset = Config.objects.all()
+    serializer_class = ConfigSerializer
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
     ordering_fields = ['created_at']
     ordering = ['-created_at']
 
     def get_queryset(self):
         return self.queryset.filter(user=self.request.user)
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.code = request.data.get('code')
+        instance.rules.all().delete()
+        instance.save()
+        posts = Post.objects.filter(user=self.request.user)
+        apply_config(instance, posts, True)
+        serializer = self.get_serializer(instance)
+        self.perform_update(serializer)
+
+        return Response(serializer.data)
 
     @action(methods=['delete'], detail=False)
     def all(self, request):

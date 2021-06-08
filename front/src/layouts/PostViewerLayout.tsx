@@ -26,6 +26,7 @@ function PostViewerLayout(): ReactElement {
   const [expand, setExpand] = useState(false);
 
   const {
+    config_id,
     rule_id,
     check_combination_id,
     check_id,
@@ -85,6 +86,7 @@ function PostViewerLayout(): ReactElement {
     [
       'filtered',
       {
+        config_id,
         rule_id,
         check_combination_id,
         check_id,
@@ -101,6 +103,7 @@ function PostViewerLayout(): ReactElement {
         params: {
           ordering: order,
           page: pageParam,
+          config_id,
           rule_id,
           check_combination_id,
           check_id,
@@ -114,7 +117,7 @@ function PostViewerLayout(): ReactElement {
       return data;
     },
     {
-      getNextPageParam: (lastPage) => lastPage.nextPage ?? 1,
+      getNextPageParam: (lastPage) => lastPage.nextPage ?? undefined,
       refetchInterval: refetching ? 2000 : false,
     }
   );
@@ -123,6 +126,7 @@ function PostViewerLayout(): ReactElement {
     [
       'not filtered',
       {
+        config_id,
         rule_id,
         check_combination_id,
         check_id,
@@ -138,6 +142,7 @@ function PostViewerLayout(): ReactElement {
         url: '/posts/',
         params: {
           ordering: order,
+          config_id,
           rule_id,
           check_combination_id,
           check_id,
@@ -152,7 +157,7 @@ function PostViewerLayout(): ReactElement {
       return data;
     },
     {
-      getNextPageParam: (lastPage) => lastPage.nextPage ?? 1,
+      getNextPageParam: (lastPage) => lastPage.nextPage ?? undefined,
       refetchInterval: refetching ? 2000 : false,
     }
   );

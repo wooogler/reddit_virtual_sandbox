@@ -22,7 +22,7 @@ interface Props {
 
 function PostList({ label, query, isLoading }: Props): ReactElement {
   const [ref, inView] = useInView({ threshold: 0 });
-  const { rule_id, check_combination_id, check_id } = useStore();
+  const { config_id, rule_id, check_combination_id, check_id } = useStore();
 
   const { fetchNextPage } = query;
   useEffect(() => {
@@ -48,6 +48,7 @@ function PostList({ label, query, isLoading }: Props): ReactElement {
                   post={post}
                   isFiltered={isFiltered(
                     post,
+                    config_id,
                     rule_id,
                     check_combination_id,
                     check_id
@@ -61,10 +62,7 @@ function PostList({ label, query, isLoading }: Props): ReactElement {
         </div>
       ) : (
         <div className='flex flex-1 justify-center items-center'>
-          <Empty
-            image={Empty.PRESENTED_IMAGE_SIMPLE}
-            description='No Posts'
-          />
+          <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='No Posts' />
         </div>
       )}
     </div>

@@ -4,7 +4,7 @@ import { Button, Empty, Table, Tooltip } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import request from '@utils/request';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
-import { Check, CheckCombination, Rule } from '@typings/db';
+import { Check, CheckCombination, Config, Rule } from '@typings/db';
 import { useStore } from '@utils/store';
 import {
   DeleteOutlined,
@@ -14,13 +14,16 @@ import {
 } from '@ant-design/icons';
 import CodeEditor from '@components/CodeEditor';
 import './table.css';
+import { EditorState } from '@typings/types';
 
 function AnalysisLayout(): ReactElement {
   const {
+    changeConfigId,
     changeRuleId,
     changeCheckId,
     changeCheckCombinationId,
-    clearRuleId,
+    clearConfigId,
+    config_id,
     rule_id,
     check_id,
     check_combination_id,
@@ -31,14 +34,15 @@ function AnalysisLayout(): ReactElement {
   const queryClient = useQueryClient();
 
   const [code, setCode] = useState('');
+  const [configId, setConfigId] = useState<number | undefined>(undefined);
 
-  const [isOpenEditor, setIsOpenEditor] = useState(false);
+  const [isOpenEditor, setIsOpenEditor] = useState<EditorState>(false);
 
-  const { data: ruleData, isLoading: ruleLoading } = useQuery(
-    ['rules', { start_date, end_date, rule_id }],
+  const { data: configData, isLoading: configLoading } = useQuery(
+    ['configs', { start_date, end_date, config_id }],
     async () => {
-      const { data } = await request<Rule[]>({
-        url: '/rules/',
+      const { data } = await request<Config[]>({
+        url: '/configs/',
         params: {
           start_date: start_date.toDate(),
           end_date: end_date.toDate(),
@@ -48,6 +52,12 @@ function AnalysisLayout(): ReactElement {
     }
   );
 
+  const onSelectConfig = useCallback(
+    (config: Config & { key: Key }) => {
+      changeConfigId(config.id);
+    },
+    [changeConfigId]
+  );
   const onSelectRule = useCallback(
     (rule: Rule & { key: Key }) => {
       changeRuleId(rule.id);
@@ -67,32 +77,32 @@ function AnalysisLayout(): ReactElement {
     [changeCheckId]
   );
 
-  const deleteRule = ({ ruleId }: { ruleId: number }) =>
-    request({ url: `/rules/${ruleId}/`, method: 'DELETE' });
+  const deleteConfig = ({ configId }: { configId: number }) =>
+    request({ url: `/configs/${configId}/`, method: 'DELETE' });
 
-  const deleteRuleMutation = useMutation(deleteRule, {
-    onSuccess: (_, { ruleId }) => {
-      queryClient.invalidateQueries('rules');
+  const deleteConfigMutation = useMutation(deleteConfig, {
+    onSuccess: (_, { configId }) => {
+      queryClient.invalidateQueries('configs');
       queryClient.invalidateQueries('filtered');
       queryClient.invalidateQueries('not filtered');
       queryClient.invalidateQueries('stats/filtered');
       queryClient.invalidateQueries('stats/not_filtered');
-      if (ruleId === rule_id) {
-        clearRuleId();
+      if (configId === config_id) {
+        clearConfigId();
       }
     },
   });
 
-  const onClickForm = useCallback((code: string) => {
+  const onClickEditConfig = useCallback((code: string, configId: number) => {
     setCode(code);
-    setIsOpenEditor(true);
+    setIsOpenEditor('edit');
+    setConfigId(configId);
   }, []);
 
-  const ruleHistoryColumns: ColumnsType<any> = [
+  const configHistoryColumns: ColumnsType<any> = [
     {
-      title: 'Rule',
+      title: 'Configuation',
       dataIndex: 'code',
-      width: '45%',
       ellipsis: {
         showTitle: false,
       },
@@ -116,19 +126,20 @@ function AnalysisLayout(): ReactElement {
     },
     {
       title: 'Action',
-      width: '10%',
+      width: 60,
+      fixed: 'right',
       render: (text, record) => (
         <div className='flex'>
           <Button
             type='link'
             icon={<DeleteOutlined />}
-            onClick={() => deleteRuleMutation.mutate({ ruleId: record.id })}
+            onClick={() => deleteConfigMutation.mutate({ configId: record.id })}
             danger
           />
           <Button
             type='link'
             icon={<FormOutlined />}
-            onClick={() => onClickForm(record.code)}
+            onClick={() => onClickEditConfig(record.code, record.id)}
           />
         </div>
       ),
@@ -151,7 +162,6 @@ function AnalysisLayout(): ReactElement {
           {code}
         </Tooltip>
       ),
-      width: '50%'
     },
     {
       title: 'Subreddit',
@@ -179,7 +189,6 @@ function AnalysisLayout(): ReactElement {
           {code}
         </Tooltip>
       ),
-      width: '50%'
     },
     {
       title: 'Subreddit',
@@ -191,8 +200,35 @@ function AnalysisLayout(): ReactElement {
     },
   ];
 
-  const onClickAddNewRule = useCallback(() => {
-    setIsOpenEditor(true);
+  const ruleColumns: ColumnsType<any> = [
+    {
+      title: 'Rule',
+      dataIndex: 'code',
+      ellipsis: {
+        showTitle: false,
+      },
+      render: (code) => (
+        <Tooltip
+          title={code}
+          placement='bottom'
+          overlayStyle={{ whiteSpace: 'pre' }}
+        >
+          {code}
+        </Tooltip>
+      ),
+    },
+    {
+      title: 'Subreddit',
+      dataIndex: 'subreddit_count',
+    },
+    {
+      title: 'Spam/Report',
+      dataIndex: 'spam_count',
+    },
+  ];
+
+  const onClickAddNewConfig = useCallback(() => {
+    setIsOpenEditor('add');
   }, []);
 
   const onCloseEditor = useCallback(() => {
@@ -203,10 +239,12 @@ function AnalysisLayout(): ReactElement {
     <div className='h-2/3 flex flex-col'>
       <div className='flex-1 flex flex-col p-2'>
         <div className='flex items-center mb-2'>
-          <PanelName>Rule History</PanelName>
+          <PanelName>AutoMod Configurations</PanelName>
           {!isOpenEditor && (
             <div className='ml-auto flex'>
-              <Button onClick={onClickAddNewRule}>Add a new rule</Button>
+              <Button onClick={onClickAddNewConfig}>
+                Write a new configuration
+              </Button>
             </div>
           )}
         </div>
@@ -214,63 +252,103 @@ function AnalysisLayout(): ReactElement {
           <Table
             rowSelection={{
               type: 'radio',
-              onSelect: onSelectRule,
-              selectedRowKeys: rule_id ? [rule_id] : [],
+              onSelect: onSelectConfig,
+              selectedRowKeys: config_id ? [config_id] : [],
             }}
             style={{ whiteSpace: 'pre', content: undefined }}
             scroll={{ y: isOpenEditor ? '25vh' : '55vh' }}
-            columns={ruleHistoryColumns}
-            dataSource={ruleData?.map((item) => ({ key: item.id, ...item }))}
+            columns={configHistoryColumns}
+            dataSource={configData?.map((item) => ({ key: item.id, ...item }))}
             size='small'
             pagination={false}
             locale={{
               emptyText: (
                 <Empty
                   image={Empty.PRESENTED_IMAGE_SIMPLE}
-                  description='Add a new rule'
+                  description='Add a new configuration'
                 />
               ),
             }}
-            loading={ruleLoading || deleteRuleMutation.isLoading}
+            loading={configLoading || deleteConfigMutation.isLoading}
             expandable={{
-              expandedRowRender: (rule) => (
-                <div className='ml-10'>
+              expandedRowRender: (config) => (
+                <div>
                   <Table
                     rowSelection={{
                       type: 'radio',
-                      onSelect: onSelectPart,
-                      selectedRowKeys: check_combination_id
-                        ? [check_combination_id]
-                        : [],
+                      onSelect: onSelectRule,
+                      selectedRowKeys: rule_id ? [rule_id] : [],
                     }}
                     style={{ whiteSpace: 'pre' }}
-                    columns={checkCombinationColumns}
-                    dataSource={rule?.check_combinations.map((item) => ({
+                    columns={ruleColumns}
+                    dataSource={config.rules.map((item) => ({
                       key: item.id,
                       ...item,
                     }))}
                     size='small'
-                    loading={ruleLoading}
+                    loading={configLoading}
                     pagination={false}
-                  />
-                  <Table
-                    rowSelection={{
-                      type: 'radio',
-                      onSelect: onSelectCheck,
-                      selectedRowKeys: check_id ? [check_id] : [],
+                    expandable={{
+                      expandedRowRender: (rule) => (
+                        <div className='ml-5'>
+                          <Table
+                            rowSelection={{
+                              type: 'radio',
+                              onSelect: onSelectPart,
+                              selectedRowKeys: check_combination_id
+                                ? [check_combination_id]
+                                : [],
+                            }}
+                            style={{ whiteSpace: 'pre' }}
+                            columns={checkCombinationColumns}
+                            dataSource={rule?.check_combinations.map(
+                              (item) => ({
+                                key: item.id,
+                                ...item,
+                              })
+                            )}
+                            size='small'
+                            loading={configLoading}
+                            pagination={false}
+                          />
+                          <Table
+                            rowSelection={{
+                              type: 'radio',
+                              onSelect: onSelectCheck,
+                              selectedRowKeys: check_id ? [check_id] : [],
+                            }}
+                            columns={checkColumns}
+                            style={{ whiteSpace: 'pre' }}
+                            dataSource={rule?.checks.map((item) => ({
+                              key: item.id,
+                              ...item,
+                            }))}
+                            size='small'
+                            pagination={false}
+                            loading={configLoading}
+                          />
+                        </div>
+                      ),
+                      columnWidth: '2.5rem',
+                      expandIcon: ({ expanded, onExpand, record }) =>
+                        expanded ? (
+                          <Button
+                            type='link'
+                            onClick={(e) => onExpand(record, e)}
+                            icon={<UpSquareOutlined />}
+                          />
+                        ) : (
+                          <Button
+                            type='link'
+                            onClick={(e) => onExpand(record, e)}
+                            icon={<DownSquareOutlined />}
+                          />
+                        ),
                     }}
-                    columns={checkColumns}
-                    style={{ whiteSpace: 'pre' }}
-                    dataSource={rule?.checks.map((item) => ({
-                      key: item.id,
-                      ...item,
-                    }))}
-                    size='small'
-                    pagination={false}
-                    loading={ruleLoading}
                   />
                 </div>
               ),
+              columnWidth: '2.5rem',
               expandIcon: ({ expanded, onExpand, record }) =>
                 expanded ? (
                   <Button
@@ -292,6 +370,8 @@ function AnalysisLayout(): ReactElement {
       {isOpenEditor && (
         <div className='flex-1 flex flex-col p-2'>
           <CodeEditor
+            configId={configId}
+            editorState={isOpenEditor}
             placeholder=''
             onClose={onCloseEditor}
             code={code}

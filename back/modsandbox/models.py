@@ -6,13 +6,25 @@ class User(AbstractUser):
     reddit_token = models.CharField(max_length=100)
 
 
+class Config(models.Model):
+    """
+    Config Model
+    """
+    user = models.ForeignKey(User, related_name='configs', on_delete=models.CASCADE)
+    code = models.TextField(default='')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.code
+
+
 class Rule(models.Model):
     """
     Rule Model
     """
+    config = models.ForeignKey(Config, related_name='rules', on_delete=models.CASCADE)
     user = models.ForeignKey(User, related_name='rules', on_delete=models.CASCADE)
     code = models.TextField(default='')
-    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.code
@@ -61,6 +73,7 @@ class Post(models.Model):
     place = models.CharField(max_length=14, choices=PLACE_CHOICES)
 
     user = models.ForeignKey(User, related_name='posts', on_delete=models.CASCADE)
+    matching_configs = models.ManyToManyField(Config, blank=True)
     matching_rules = models.ManyToManyField(Rule, blank=True)
     matching_checks = models.ManyToManyField(Check, blank=True, through='Match')
     matching_check_combinations = models.ManyToManyField(CheckCombination, blank=True)

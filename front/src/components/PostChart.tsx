@@ -29,12 +29,15 @@ const VictoryBrushVoronoiContainer = createContainer<
 function PostChart(): ReactElement {
   const {
     after,
+    config_id,
     rule_id,
     check_combination_id,
     check_id,
     post_type,
     refetching,
     source,
+    start_date,
+    end_date,
     changeDateRange,
   } = useStore();
 
@@ -42,6 +45,7 @@ function PostChart(): ReactElement {
     [
       'stats/filtered',
       {
+        config_id,
         rule_id,
         check_combination_id,
         check_id,
@@ -55,6 +59,7 @@ function PostChart(): ReactElement {
       const { data } = await request<IStat[]>({
         url: '/stats/graph',
         params: {
+          config_id,
           rule_id,
           check_id,
           check_combination_id,
@@ -149,6 +154,7 @@ function PostChart(): ReactElement {
           <VictoryBrushVoronoiContainer
             brushDimension='x'
             onBrushDomainChangeEnd={onBrush}
+            brushDomain={{x: [start_date.toDate(), end_date.toDate()]}}
             labels={({ datum }) =>
               `${dayjs(datum.x0).format('lll')} - ${dayjs(datum.x1).format(
                 'lll'
@@ -162,7 +168,7 @@ function PostChart(): ReactElement {
             }
           />
         }
-        padding={{ top: 30, left: 50, right: 0, bottom: 50 }}
+        padding={{ top: 30, left: 50, right: 10, bottom: 50 }}
         domainPadding={{ y: [0, 50], x: 8 }}
         scale={{ x: 'time' }}
       >

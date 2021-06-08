@@ -21,6 +21,7 @@ type NewPost = Omit<
   | 'id'
   | 'banned_by'
   | 'isFiltered'
+  | 'matching_configs'
 >;
 
 function AddPostModal({ visible, onCancel, place }: Props): ReactElement {
@@ -93,7 +94,7 @@ function AddPostModal({ visible, onCancel, place }: Props): ReactElement {
       onOk={() => {
         formik.handleSubmit();
       }}
-      okButtonProps={{loading: addCustomPostMutation.isLoading}}
+      okButtonProps={{ loading: addCustomPostMutation.isLoading }}
     >
       <Form labelCol={{ span: 4 }}>
         <Form.Item

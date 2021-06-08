@@ -4,6 +4,7 @@ import { Dayjs } from 'dayjs';
 
 export const isFiltered = (
   post: IPost,
+  config_id?: number,
   rule_id?: number,
   check_combination_id?: number,
   check_id?: number
@@ -24,6 +25,12 @@ export const isFiltered = (
   //     return false;
   //   }
   // }
+  if (config_id) {
+    if (post.matching_configs.includes(config_id)) {
+      return true;
+    }
+    return false;
+  }
   if (rule_id) {
     if (post.matching_rules.includes(rule_id)) {
       return true;
@@ -37,7 +44,9 @@ export const isFiltered = (
     return false;
   }
   if (check_id) {
-    if (post.matching_checks.map((check) => check._check_id).includes(check_id)) {
+    if (
+      post.matching_checks.map((check) => check._check_id).includes(check_id)
+    ) {
       return true;
     }
     return false;

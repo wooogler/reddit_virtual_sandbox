@@ -10,6 +10,7 @@ type PostType = 'Submission' | 'Comment' | 'all';
 type Source = 'Subreddit' | 'Spam' | 'all';
 
 type State = {
+  config_id: number | undefined;
   rule_id: number | undefined;
   check_id: number | undefined;
   check_combination_id: number | undefined;
@@ -22,10 +23,11 @@ type State = {
   refetching: boolean;
   code: string;
   imported: boolean;
+  changeConfigId: (configId: number) => void;
   changeRuleId: (ruleId: number) => void;
   changeCheckId: (checkId: number) => void;
   changeCheckCombinationId: (checkCombinationId: number) => void;
-  clearRuleId: () => void;
+  clearConfigId: () => void;
   changeDateRange: (start_date: Dayjs, end_date: Dayjs) => void;
   changeSource: (source: Source) => void;
   changePostType: (post_type: PostType) => void;
@@ -42,6 +44,7 @@ export const useStore = create<State>(
   devtools(
     persist(
       (set, get) => ({
+        config_id: undefined,
         rule_id: undefined,
         check_id: undefined,
         check_combination_id: undefined,
@@ -54,27 +57,37 @@ export const useStore = create<State>(
         refetching: false,
         code: '',
         imported: false,
+        changeConfigId: (id: number) =>
+          set((state) => ({
+            config_id: id,
+            rule_id: undefined,
+            check_id: undefined,
+            check_combination_id: undefined,
+          })),
         changeRuleId: (id: number) =>
           set((state) => ({
+            config_id: undefined,
             rule_id: id,
             check_id: undefined,
             check_combination_id: undefined,
           })),
         changeCheckId: (id: number) =>
           set((state) => ({
+            config_id: undefined,
             rule_id: undefined,
             check_id: id,
             check_combination_id: undefined,
           })),
         changeCheckCombinationId: (id: number) =>
           set((state) => ({
+            config_id: undefined,
             rule_id: undefined,
             check_id: undefined,
             check_combination_id: id,
           })),
-        clearRuleId: () =>
+        clearConfigId: () =>
           set((state) => ({
-            rule_id: undefined,
+            config_id: undefined,
           })),
         changeDateRange: (start_date: Dayjs, end_date: Dayjs) =>
           set((state) => ({

@@ -2,12 +2,14 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import React, { ReactElement } from 'react';
 import clsx from 'clsx';
-import { IPost } from '@typings/db';
+import { IPost, MatchingCheck } from '@typings/db';
 import { Button, Dropdown, Menu, Tooltip } from 'antd';
 import request from '@utils/request';
 import utc from 'dayjs/plugin/utc';
 import HighlightText from './HighlightText';
 import { useMutation, useQueryClient } from 'react-query';
+import { useStore } from '@utils/store';
+import _ from 'lodash';
 
 dayjs.extend(relativeTime);
 dayjs.extend(utc);
@@ -20,6 +22,7 @@ interface Props {
 
 function PostItem({ post, isFiltered, isTested }: Props): ReactElement {
   const queryClient = useQueryClient();
+  const { config_id, rule_id, check_combination_id, check_id } = useStore();
 
   const invalidatePostQueries = (place: IPost['place']) => {
     if (place.includes('normal')) {
@@ -64,13 +67,26 @@ function PostItem({ post, isFiltered, isTested }: Props): ReactElement {
     },
   });
 
-  const matchBody = post.matching_checks
-    .filter((check) => check.field === 'body')
-    .map((check) => ({ start: check.start, end: check.end }));
+  const matchingChecksBody = post.matching_checks.filter(
+    (check) => check.field === 'body'
+  );
+  const matchingChecksTitle = post.matching_checks.filter(
+    (check) => check.field === 'title'
+  );
 
-  const matchTitle = post.matching_checks
-    .filter((check) => check.field === 'title')
-    .map((check) => ({ start: check.start, end: check.end }));
+  const makeMatch = (matchingChecks: MatchingCheck[]) => {
+    const matchingCheck = matchingChecks.find(
+      (check) =>
+        check.config_id === config_id ||
+        check.rule_id === rule_id ||
+        check._check_id === check_id ||
+        _.includes(check.check_combination_ids, check_combination_id)
+    );
+    if (matchingCheck) {
+      return [{ start: matchingCheck.start, end: matchingCheck.end }];
+    }
+    return [];
+  };
 
   const moveMenu = (
     <Menu
@@ -107,12 +123,15 @@ function PostItem({ post, isFiltered, isTested }: Props): ReactElement {
       <div className={clsx('flex flex-col', !post.title && 'ml-3')}>
         <div className='text-base'>
           {isFiltered ? (
-            <HighlightText text={post.title} match={matchTitle} />
+            <HighlightText
+              text={post.title}
+              match={makeMatch(matchingChecksTitle)}
+            />
           ) : (
             post.title
           )}
         </div>
-        <div className='flex items-center'>
+        <div className='flex items-center flex-wrap'>
           <a
             href={post.url}
             onClick={(e) => {
@@ -126,7 +145,7 @@ function PostItem({ post, isFiltered, isTested }: Props): ReactElement {
                 post.source === 'Spam'
                   ? 'text-red-600'
                   : post.source === 'Report' && 'text-yellow-500',
-                'text-xs font-bold'
+                'text-xs font-bold underline'
               )}
             >
               {post.source}
@@ -141,12 +160,11 @@ function PostItem({ post, isFiltered, isTested }: Props): ReactElement {
           >
             <div className='text-xs ml-2'>{dayjs().to(post.created_utc)}</div>
           </Tooltip>
-          
 
           {post.place === 'normal' ? (
             <Dropdown overlay={moveMenu}>
               <Button type='link'>
-                <div className='text-xs underline'>Move to Test Cases</div>
+                <div className='text-xs'>Move to Test Cases</div>
               </Button>
             </Dropdown>
           ) : (
@@ -169,13 +187,16 @@ function PostItem({ post, isFiltered, isTested }: Props): ReactElement {
           )}
         </div>
         {post.source === 'Spam' && (
-            <div className='text-red-600 text-xs'>
-              Removed by {post.banned_by}
-            </div>
-          )}
+          <div className='text-red-600 text-xs'>
+            Removed by {post.banned_by}
+          </div>
+        )}
         <div className='text-sm'>
           {isFiltered ? (
-            <HighlightText text={post.body} match={matchBody} />
+            <HighlightText
+              text={post.body}
+              match={makeMatch(matchingChecksBody)}
+            />
           ) : (
             post.body
           )}
