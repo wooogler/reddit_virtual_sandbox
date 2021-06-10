@@ -58,7 +58,7 @@ function PostList({ label, query, isLoading }: Props): ReactElement {
               ))}
             </React.Fragment>
           ))}
-          {query.hasNextPage && <div ref={ref}>loading...</div>}
+          {!isLoading && query.hasNextPage && <div ref={ref}>loading...</div>}
         </div>
       ) : (
         <div className='flex flex-1 justify-center items-center'>

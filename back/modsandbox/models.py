@@ -58,6 +58,10 @@ class Post(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     url = models.TextField(default='')
     banned_by = models.CharField(max_length=300, null=True)
+    post_karma = models.IntegerField(default=0)
+    comment_karma = models.IntegerField(default=0)
+    account_created_utc = models.DateTimeField(null=True)
+    reports = models.IntegerField(null=True)
 
     # for FP, FN
     sim = models.FloatField(default=0)

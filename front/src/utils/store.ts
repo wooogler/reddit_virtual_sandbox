@@ -9,6 +9,13 @@ type Order = '+created_utc' | '-created_utc';
 type PostType = 'Submission' | 'Comment' | 'all';
 type Source = 'Subreddit' | 'Spam' | 'all';
 
+type SelectedHighlight = {
+  config_id: number | undefined;
+  rule_id: number | undefined;
+  check_id: number | undefined;
+  check_combination_ids: number[];
+};
+
 type State = {
   config_id: number | undefined;
   rule_id: number | undefined;
@@ -23,6 +30,7 @@ type State = {
   refetching: boolean;
   code: string;
   imported: boolean;
+  selectedHighlight: SelectedHighlight;
   changeConfigId: (configId: number) => void;
   changeRuleId: (ruleId: number) => void;
   changeCheckId: (checkId: number) => void;
@@ -36,6 +44,7 @@ type State = {
   changeRefetching: (refetching: boolean) => void;
   changeCode: (code: string) => void;
   changeImported: (imported: boolean) => void;
+  changeSelectedHighlight: (selected: SelectedHighlight) => void;
 };
 
 const nowDayStart = dayjs().startOf('day');
@@ -57,6 +66,12 @@ export const useStore = create<State>(
         refetching: false,
         code: '',
         imported: false,
+        selectedHighlight: {
+          config_id: undefined,
+          rule_id: undefined,
+          check_id: undefined,
+          check_combination_ids: [],
+        },
         changeConfigId: (id: number) =>
           set((state) => ({
             config_id: id,
@@ -112,10 +127,28 @@ export const useStore = create<State>(
           set((state) => ({
             imported,
           })),
+        changeSelectedHighlight: (selected: SelectedHighlight) => {
+          set((state) => ({ selectedHighlight: selected }));
+          setTimeout(() => {
+            set((state) => ({
+              selectedHighlight: {
+                config_id: undefined,
+                rule_id: undefined,
+                check_combination_ids: [],
+                check_id: undefined,
+              },
+            }));
+          }, 1000);
+        },
       }),
       {
         name: 'modsandbox-storage',
-        blacklist: ['start_date', 'end_date', 'refetching'],
+        blacklist: [
+          'start_date',
+          'end_date',
+          'refetching',
+          'selectedHighlight',
+        ],
       }
     )
   )

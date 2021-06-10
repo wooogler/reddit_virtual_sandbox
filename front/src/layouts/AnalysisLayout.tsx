@@ -29,6 +29,7 @@ function AnalysisLayout(): ReactElement {
     check_combination_id,
     start_date,
     end_date,
+    selectedHighlight,
   } = useStore();
 
   const queryClient = useQueryClient();
@@ -255,8 +256,11 @@ function AnalysisLayout(): ReactElement {
               onSelect: onSelectConfig,
               selectedRowKeys: config_id ? [config_id] : [],
             }}
+            rowClassName={(record) =>
+              record.id === selectedHighlight.config_id ? 'table-row-bold' : ''
+            }
             style={{ whiteSpace: 'pre', content: undefined }}
-            scroll={{ y: isOpenEditor ? '25vh' : '55vh' }}
+            scroll={{ y: isOpenEditor ? '25vh' : '50vh' }}
             columns={configHistoryColumns}
             dataSource={configData?.map((item) => ({ key: item.id, ...item }))}
             size='small'
@@ -279,6 +283,11 @@ function AnalysisLayout(): ReactElement {
                       onSelect: onSelectRule,
                       selectedRowKeys: rule_id ? [rule_id] : [],
                     }}
+                    rowClassName={(record) =>
+                      record.id === selectedHighlight.rule_id
+                        ? 'table-row-bold'
+                        : ''
+                    }
                     style={{ whiteSpace: 'pre' }}
                     columns={ruleColumns}
                     dataSource={config.rules.map((item) => ({
@@ -299,6 +308,13 @@ function AnalysisLayout(): ReactElement {
                                 ? [check_combination_id]
                                 : [],
                             }}
+                            rowClassName={(record) =>
+                              selectedHighlight.check_combination_ids.includes(
+                                record.id
+                              )
+                                ? 'table-row-bold'
+                                : ''
+                            }
                             style={{ whiteSpace: 'pre' }}
                             columns={checkCombinationColumns}
                             dataSource={rule?.check_combinations.map(
@@ -317,6 +333,11 @@ function AnalysisLayout(): ReactElement {
                               onSelect: onSelectCheck,
                               selectedRowKeys: check_id ? [check_id] : [],
                             }}
+                            rowClassName={(record) =>
+                              record.id === selectedHighlight.check_id
+                                ? 'table-row-bold'
+                                : ''
+                            }
                             columns={checkColumns}
                             style={{ whiteSpace: 'pre' }}
                             dataSource={rule?.checks.map((item) => ({

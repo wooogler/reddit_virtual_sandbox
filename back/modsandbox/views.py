@@ -59,6 +59,7 @@ class RedditViewSet(viewsets.ViewSet):
         user.save()
 
         return redirect('http://modsandbox.s3-website.ap-northeast-2.amazonaws.com/')
+        # return redirect('http://localhost:3000/')
 
     @action(methods=['get'], detail=False)
     def logout(self, request):
@@ -124,6 +125,7 @@ class PostViewSet(viewsets.ModelViewSet):
         after = request.data.get('after')
         where = request.data.get('where')
         type = request.data.get('type')
+        use_author = request.data.get('use_author')
 
         if subreddit == '':
             return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -132,12 +134,12 @@ class PostViewSet(viewsets.ModelViewSet):
 
         if where == 'live':
             pushshift_posts = r.get_posts_from_pushshift(subreddit, after, type)
-            posts = create_posts(pushshift_posts, request.user, "normal")
+            posts = create_posts(pushshift_posts, request.user, "normal", use_author)
 
         elif where == 'spam':
             r.get_mod_subreddits()
             praw_spams = r.get_spams_from_praw(subreddit, after, type)
-            posts = create_posts(praw_spams, request.user, "normal")
+            posts = create_posts(praw_spams, request.user, "normal", use_author)
 
         configs = Config.objects.filter(user=request.user)
         for config in configs:
@@ -162,10 +164,11 @@ class TargetViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         full_name = request.data.get('full_name')
+        use_author = request.data.get('use_author')
         if full_name:
             r = RedditHandler(request.user)
             target_post = r.get_post_with_id(full_name)
-            posts = create_posts([target_post], request.user, "target")
+            posts = create_posts([target_post], request.user, "target", use_author)
         else:
             post = Post(user=request.user)
             serializer = PostSerializer(post, data=request.data)
@@ -173,6 +176,7 @@ class TargetViewSet(viewsets.ModelViewSet):
                 new_post = serializer.save()
                 posts = Post.objects.filter(id=new_post.id)
         configs = Config.objects.filter(user=request.user)
+        print(configs)
         for config in configs:
             apply_config(config, posts, False)
         return Response(status=status.HTTP_200_OK)
@@ -198,10 +202,11 @@ class ExceptViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         full_name = request.data.get('full_name')
+        use_author = request.data.get('use_author')
         if full_name:
             r = RedditHandler(request.user)
             except_post = r.get_post_with_id(full_name)
-            posts = create_posts([except_post], request.user, "target")
+            posts = create_posts([except_post], request.user, "except", use_author)
         else:
             post = Post(user=request.user)
             serializer = PostSerializer(post, data=request.data)

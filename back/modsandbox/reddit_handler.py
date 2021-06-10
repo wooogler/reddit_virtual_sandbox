@@ -1,3 +1,4 @@
+import asyncio
 import os
 from datetime import datetime
 
@@ -6,6 +7,7 @@ from django.utils import timezone
 from itertools import chain
 
 import praw
+import asyncpraw
 from psaw import PushshiftAPI
 from dateutil import relativedelta
 
@@ -32,8 +34,9 @@ def after_to_timestamp(after):
 
 
 class RedditHandler:
+    # asyncio.set_event_loop(asyncio.new_event_loop())
+
     def __init__(self, user):
-        print(user.reddit_token)
         if user.reddit_token != '':
             self.reddit = praw.Reddit(
                 client_id=os.environ.get("client_id"),
@@ -42,7 +45,6 @@ class RedditHandler:
                 user_agent=os.environ.get("user_agent"),
             )
         else:
-            print('anonymous')
             self.reddit = praw.Reddit(
                 client_id=os.environ.get("client_id"),
                 client_secret=os.environ.get("client_secret"),
@@ -75,10 +77,11 @@ class RedditHandler:
     def get_spams_from_praw(self, subreddit, after, type):
         if subreddit in self.mod_subreddits:
             spams = self.reddit.subreddit(subreddit).mod.spam(limit=None, only=type)
-            reports = self.reddit.subreddit(subreddit).mod.reports(limit=None, only=type)
+            # reports = self.reddit.subreddit(subreddit).mod.reports(limit=None, only=type)
             spams_after = [spam for spam in spams if spam.created_utc > after_to_timestamp(after)]
-            reports_after = [report for report in reports if report.created_utc > after_to_timestamp(after)]
+            # reports_after = [report for report in reports if report.created_utc > after_to_timestamp(after)]
 
-            return chain(spams_after, reports_after)
+            # return chain(spams_after, reports_after)
+            return spams_after
 
         return []

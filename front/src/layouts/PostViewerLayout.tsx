@@ -208,12 +208,12 @@ function PostViewerLayout(): ReactElement {
   const deleteAllRulesMutation = useMutation(
     () =>
       request({
-        url: 'rules/all/',
+        url: 'configs/all/',
         method: 'DELETE',
       }),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries('rules');
+        queryClient.invalidateQueries('configs');
       },
     }
   );

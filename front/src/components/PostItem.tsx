@@ -75,17 +75,51 @@ function PostItem({ post, isFiltered, isTested }: Props): ReactElement {
   );
 
   const makeMatch = (matchingChecks: MatchingCheck[]) => {
-    const matchingCheck = matchingChecks.find(
+    // const matchingCheck = matchingChecks.find(
+    //   (check) =>
+    //     check.config_id === config_id ||
+    //     check.rule_id === rule_id ||
+    //     check._check_id === check_id ||
+    //     _.includes(check.check_combination_ids, check_combination_id)
+    // );
+    // if (matchingCheck) {
+    //   return [
+    //     {
+    //       start: matchingCheck.start,
+    //       end: matchingCheck.end,
+    //       config_id: matchingCheck.config_id,
+    //       rule_id: matchingCheck.rule_id,
+    //       check_combination_ids: matchingCheck.check_combination_ids,
+    //       check_id: matchingCheck._check_id,
+    //     },
+    //   ];
+    // }
+    // return [];
+    const matchingCheck = matchingChecks.filter(
       (check) =>
         check.config_id === config_id ||
         check.rule_id === rule_id ||
         check._check_id === check_id ||
         _.includes(check.check_combination_ids, check_combination_id)
     );
-    if (matchingCheck) {
-      return [{ start: matchingCheck.start, end: matchingCheck.end }];
-    }
-    return [];
+    return matchingCheck.map((check) => {
+      const {
+        start,
+        end,
+        config_id,
+        rule_id,
+        check_combination_ids,
+        _check_id,
+      } = check;
+      return {
+        start,
+        end,
+        config_id,
+        rule_id,
+        check_combination_ids,
+        check_id: _check_id,
+      };
+    });
   };
 
   const moveMenu = (

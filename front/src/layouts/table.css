@@ -9,3 +9,7 @@
 .ant-table-wrapper:before {
   content: none;
 }
+
+.table-row-bold {
+  font-weight: bold;
+}
