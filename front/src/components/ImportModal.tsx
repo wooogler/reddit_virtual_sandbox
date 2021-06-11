@@ -106,12 +106,12 @@ function ImportModal({ visible, onCancel }: Props): ReactElement {
     onSuccess: (_, { type, where }) => {
       setComplete(true, { type, where });
       changeRefetching(false);
+      changeImported(true);
       queryClient.invalidateQueries('filtered');
       queryClient.invalidateQueries('not filtered');
       queryClient.invalidateQueries('stats/filtered');
       queryClient.invalidateQueries('stats/not_filtered');
       queryClient.invalidateQueries('setting');
-      changeImported(true);
     },
   });
 
