@@ -74,12 +74,21 @@ class RedditHandler:
                                             subreddit=subreddit)
 
     def get_spams_from_praw(self, subreddit, after, type):
+        type_dict = {
+            "Submission": "submissions",
+            "Comment": "comments",
+        }
+
         if subreddit in self.mod_subreddits:
+<<<<<<< HEAD
             if type == 'Submission':
                 post_type = 'submissions'
             else type == 'Comment':
                 post_type = 'comments'
             spams = self.reddit.subreddit(subreddit).mod.spam(limit=None, only=post_type)
+=======
+            spams = self.reddit.subreddit(subreddit).mod.spam(limit=None, only=type_dict[type])
+>>>>>>> d72e769651dfaaab23200178445359ad9754a800
             # reports = self.reddit.subreddit(subreddit).mod.reports(limit=None, only=type)
             spams_after = [spam for spam in spams if spam.created_utc > after_to_timestamp(after)]
             # reports_after = [report for report in reports if report.created_utc > after_to_timestamp(after)]

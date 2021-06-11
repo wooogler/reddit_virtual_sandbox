@@ -16,9 +16,9 @@ export interface Setting {
 
 export interface ImportSetting {
   subreddit: string;
-  where: 'all' | 'live' | 'spam';
+  where: 'all' | 'Subreddit' | 'Spam';
   after: '3months' | 'month' | '2weeks' | 'week' | '3days';
-  type: 'all' | 'submissions' | 'comments';
+  type: 'all' | 'Submission' | 'Comment';
 }
 
 export type EditorState = 'add' | 'edit' | false;

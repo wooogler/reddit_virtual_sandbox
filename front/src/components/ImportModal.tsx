@@ -8,6 +8,7 @@ import { useFormik } from 'formik';
 import { useStore } from '@utils/store';
 import ImportProgress from './ImportProgress';
 import { CheckCircleTwoTone, SyncOutlined } from '@ant-design/icons';
+import axios, { Canceler } from 'axios';
 
 const { Option } = Select;
 
@@ -24,8 +25,17 @@ function ImportModal({ visible, onCancel }: Props): ReactElement {
 
   const queryClient = useQueryClient();
 
-  const { after, imported, changeAfter, changeRefetching, changeImported } =
-    useStore();
+  const {
+    after,
+    imported,
+    post_type,
+    source,
+    changeAfter,
+    changeRefetching,
+    changeImported,
+    changeSource,
+    changePostType,
+  } = useStore();
 
   const { data: userData, refetch } = useQuery('me', async () => {
     const { data } = await request<IUser | false>({ url: '/rest-auth/user/' });
@@ -44,6 +54,9 @@ function ImportModal({ visible, onCancel }: Props): ReactElement {
     }
   );
 
+  const CancelToken = axios.CancelToken;
+
+  let cancelImport: Canceler;
   const importPosts = ({ type, where, subreddit, after }: ImportSetting) =>
     request({
       url: '/posts/',
@@ -54,8 +67,10 @@ function ImportModal({ visible, onCancel }: Props): ReactElement {
         after,
         where,
       },
+      cancelToken: new CancelToken(function executor(c) {
+        cancelImport = c;
+      }),
     });
-
   const setAllComplete = (value: boolean) => {
     setCompleteSpamCom(value);
     setCompleteSpamSub(value);
@@ -67,16 +82,16 @@ function ImportModal({ visible, onCancel }: Props): ReactElement {
     value: boolean,
     { type, where }: Pick<ImportSetting, 'type' | 'where'>
   ) => {
-    if (type === 'submissions') {
-      if (where === 'live') {
+    if (type === 'Submission') {
+      if (where === 'Subreddit') {
         setCompleteLiveSub(value);
-      } else if (where === 'spam') {
+      } else if (where === 'Spam') {
         setCompleteSpamSub(value);
       }
-    } else if (type === 'comments') {
-      if (where === 'live') {
+    } else if (type === 'Comment') {
+      if (where === 'Subreddit') {
         setCompleteLiveCom(value);
-      } else if (where === 'spam') {
+      } else if (where === 'Spam') {
         setCompleteSpamCom(value);
       }
     }
@@ -91,12 +106,12 @@ function ImportModal({ visible, onCancel }: Props): ReactElement {
     onSuccess: (_, { type, where }) => {
       setComplete(true, { type, where });
       changeRefetching(false);
+      changeImported(true);
       queryClient.invalidateQueries('filtered');
       queryClient.invalidateQueries('not filtered');
       queryClient.invalidateQueries('stats/filtered');
       queryClient.invalidateQueries('stats/not_filtered');
       queryClient.invalidateQueries('setting');
-      changeImported(true);
     },
   });
 
@@ -116,44 +131,44 @@ function ImportModal({ visible, onCancel }: Props): ReactElement {
   const formik = useFormik<ImportSetting>({
     initialValues: {
       subreddit: '',
-      after: 'week',
-      type: 'submissions',
-      where: 'live',
+      after: after,
+      type: post_type,
+      where: source,
     },
     onSubmit: async (values) => {
       const { subreddit, after, type, where } = values;
       changeAfter(values.after);
-      if (type !== 'comments' && where !== 'spam') {
+      if (type !== 'Comment' && where !== 'Spam') {
         await importPostsMutation.mutateAsync({
           subreddit,
           after,
-          type: 'submissions',
-          where: 'live',
+          type: 'Submission',
+          where: 'Subreddit',
         });
       }
-      if (type !== 'submissions' && where !== 'spam') {
+      if (type !== 'Submission' && where !== 'Spam') {
         await importPostsMutation.mutateAsync({
           subreddit,
           after,
-          type: 'comments',
-          where: 'live',
+          type: 'Comment',
+          where: 'Subreddit',
         });
       }
-      if (type !== 'comments' && where !== 'live') {
+      if (type !== 'Comment' && where !== 'Subreddit') {
         importPostsMutation.mutateAsync({
           subreddit,
           after,
-          type: 'submissions',
-          where: 'spam',
+          type: 'Submission',
+          where: 'Spam',
         });
       }
-      if (type !== 'submissions' && where !== 'live') {
+      if (type !== 'Submission' && where !== 'Subreddit') {
         console.log(type, where);
         await importPostsMutation.mutateAsync({
           subreddit,
           after,
-          type: 'comments',
-          where: 'spam',
+          type: 'Comment',
+          where: 'Spam',
         });
       }
     },
@@ -185,6 +200,9 @@ function ImportModal({ visible, onCancel }: Props): ReactElement {
       });
   }, [refetch]);
 
+  const onCancelImport = () => {
+    cancelImport();
+  };
 
   return (
     <Modal
@@ -216,6 +234,8 @@ function ImportModal({ visible, onCancel }: Props): ReactElement {
           {!imported && (
             <div className='ml-auto'>
               {!imported && (
+                <>
+                  {/* <Button onClick={onCancelImport}>Cancel</Button> */}
                   <Button
                     type='primary'
                     loading={importPostsMutation.isLoading}
@@ -224,6 +244,7 @@ function ImportModal({ visible, onCancel }: Props): ReactElement {
                   >
                     Import
                   </Button>
+                </>
               )}
             </div>
           )}
@@ -264,11 +285,17 @@ function ImportModal({ visible, onCancel }: Props): ReactElement {
           label='Post Type'
           name='type'
           className='w-full'
-          initialValue='submissions'
+          initialValue={post_type}
         >
-          <Select onChange={(value) => formik.setFieldValue('type', value)}>
-            <Option value='submissions'>Submission Only</Option>
-            <Option value='comments'>Comment Only</Option>
+          <Select
+            onChange={(value) => {
+              formik.setFieldValue('type', value);
+              changePostType(value);
+            }}
+            value={post_type}
+          >
+            <Option value='Submission'>Submission Only</Option>
+            <Option value='Comment'>Comment Only</Option>
             <Option value='all'>All Posts</Option>
           </Select>
         </Form.Item>
@@ -276,12 +303,18 @@ function ImportModal({ visible, onCancel }: Props): ReactElement {
           label='Import From'
           name='where'
           className='w-full'
-          initialValue='live'
+          initialValue={source}
         >
-          <Select onChange={(value) => formik.setFieldValue('where', value)}>
-            <Option value='live'>Current Subreddit</Option>
+          <Select
+            onChange={(value) => {
+              formik.setFieldValue('where', value);
+              changeSource(value);
+            }}
+            value={source}
+          >
+            <Option value='Subreddit'>Current Subreddit</Option>
             <Option
-              value='spam'
+              value='Spam'
               disabled={userData && userData.reddit_token === ''}
             >
               Spam/Reports in Mod Tools
@@ -295,7 +328,7 @@ function ImportModal({ visible, onCancel }: Props): ReactElement {
           </Select>
         </Form.Item>
         <div className='flex flex-col items-center'>
-          {formik.values.where !== 'spam' && (
+          {formik.values.where !== 'Spam' && (
             <>
               <div className='text-lg mt-2'>Current Subreddit</div>
               <div className='flex'>
@@ -318,7 +351,7 @@ function ImportModal({ visible, onCancel }: Props): ReactElement {
               </div>
             </>
           )}
-          {formik.values.where !== 'live' && (
+          {formik.values.where !== 'Subreddit' && (
             <>
               <div className='text-lg mt-2'>Spam/Reports in Mod Tools</div>
               <div className='flex'>

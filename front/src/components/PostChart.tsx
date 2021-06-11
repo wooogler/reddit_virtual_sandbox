@@ -2,9 +2,9 @@ import { IStat } from '@typings/db';
 import request from '@utils/request';
 import { useStore } from '@utils/store';
 import { AxiosError } from 'axios';
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
-import React, { ReactElement, useCallback } from 'react';
+import React, { ReactElement, useCallback, useState } from 'react';
 import { useQuery } from 'react-query';
 
 import {
@@ -40,6 +40,11 @@ function PostChart(): ReactElement {
     end_date,
     changeDateRange,
   } = useStore();
+
+  const [selectedTime, setSelectedTime] = useState<{
+    start: Dayjs;
+    end: Dayjs;
+  }>({ start: start_date, end: end_date });
 
   const { data: filteredStat } = useQuery<IStat[], AxiosError>(
     [
@@ -116,6 +121,10 @@ function PostChart(): ReactElement {
     [changeDateRange]
   );
 
+  const onChangeBrush = useCallback((domain: any) => {
+    setSelectedTime({ start: dayjs(domain.x[0]), end: dayjs(domain.x[1]) });
+  }, []);
+
   const filteredData = filteredStat?.map((datum) => ({
     x0: dayjs(datum.x0).toDate(),
     x1: dayjs(datum.x1).toDate(),
@@ -147,6 +156,10 @@ function PostChart(): ReactElement {
       : 'Only Spam/Reports'
   }`;
 
+  const selectedTimeLabel = `selected: ${selectedTime.start.format(
+    'lll'
+  )} - ${selectedTime.end.format('lll')}`;
+
   return (
     <div className='h-1/3'>
       <VictoryChart
@@ -154,15 +167,17 @@ function PostChart(): ReactElement {
           <VictoryBrushVoronoiContainer
             brushDimension='x'
             onBrushDomainChangeEnd={onBrush}
-            brushDomain={{x: [start_date.toDate(), end_date.toDate()]}}
-            labels={({ datum }) =>
-              `${dayjs(datum.x0).format('lll')} - ${dayjs(datum.x1).format(
-                'lll'
-              )}\nNumber of Posts: ${datum.y}`
-            }
+            onBrushDomainChange={onChangeBrush}
+            // brushDomain={{x: [start_date.toDate(), end_date.toDate()]}}
+            labels={({ datum }) => {
+              if (datum.y === 0) return '';
+              return `${dayjs(datum.x0).format('lll')} - ${dayjs(
+                datum.x1
+              ).format('lll')}\nNumber of Posts: ${datum.y}`;
+            }}
             labelComponent={
               <VictoryTooltip
-                style={{ fontSize: '15px', zIndex: 100 }}
+                style={{ fontSize: '10px', zIndex: 100 }}
                 constrainToVisibleArea
               />
             }
@@ -178,6 +193,12 @@ function PostChart(): ReactElement {
           y={10}
           x={225}
           style={{ fontSize: 16 }}
+        />
+        <VictoryLabel
+          text={selectedTimeLabel}
+          textAnchor='middle'
+          y={40}
+          x={255}
         />
         <VictoryAxis
           dependentAxis

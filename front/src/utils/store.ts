@@ -5,7 +5,7 @@ import { devtools } from 'zustand/middleware';
 import { persist } from 'zustand/middleware';
 import { afterToDate } from './util';
 
-type Order = '+created_utc' | '-created_utc';
+type Order = '+created_utc' | '-created_utc' | '+sim';
 type PostType = 'Submission' | 'Comment' | 'all';
 type Source = 'Subreddit' | 'Spam' | 'all';
 
