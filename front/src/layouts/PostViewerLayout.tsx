@@ -2,7 +2,7 @@ import { ArrowsAltOutlined, ShrinkOutlined } from '@ant-design/icons';
 import ImportModal from '@components/ImportModal';
 import PostList from '@components/PostList';
 import TargetList from '@components/TargetList';
-import { IPost, PaginatedPosts } from '@typings/db';
+import { IPost, IUser, PaginatedPosts } from '@typings/db';
 import { AutoModStat } from '@typings/types';
 import request from '@utils/request';
 import { useStore } from '@utils/store';
@@ -42,7 +42,7 @@ function PostViewerLayout(): ReactElement {
     changeOrder,
     changeImported,
   } = useStore();
-  const { refetch } = useQuery('me');
+  const { data: userData, refetch } = useQuery<IUser | false>('me');
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const targetQuery = useQuery<IPost[], AxiosError>(
@@ -235,14 +235,16 @@ function PostViewerLayout(): ReactElement {
     <div className='h-full w-full flex flex-col'>
       <div className='w-full flex items-center'>
         <div className='text-3xl font-bold ml-2'>Test Cases</div>
-        <Button
-          className='ml-auto'
-          icon={expand ? <ShrinkOutlined /> : <ArrowsAltOutlined />}
-          type='text'
-          onClick={onExpand}
-        >
-          {!expand ? 'Expand' : 'Collapse'}
-        </Button>
+        <div className='ml-auto flex items-center'>
+          <div>Hello, {userData && userData.username}!</div>
+          <Button
+            icon={expand ? <ShrinkOutlined /> : <ArrowsAltOutlined />}
+            type='text'
+            onClick={onExpand}
+          >
+            {!expand ? 'Expand' : 'Collapse'}
+          </Button>
+        </div>
       </div>
       <div className='flex overflow-y-auto' style={{ flex: 2 }}>
         <TargetList
@@ -291,6 +293,7 @@ function PostViewerLayout(): ReactElement {
           >
             <Select.Option value='-created_utc'>New</Select.Option>
             <Select.Option value='+created_utc'>Old</Select.Option>
+            <Select.Option value='+sim'>FP & FN</Select.Option>
           </Select>
           {imported ? (
             <Button
@@ -321,12 +324,16 @@ function PostViewerLayout(): ReactElement {
       {!expand && (
         <div className='flex overflow-y-auto' style={{ flex: 5 }}>
           <PostList
-            label='Possible false alarm'
+            label={
+              order === '+sim' ? 'Possible false alarm' : 'Filtered by AutoMod'
+            }
             query={filteredQuery}
             isLoading={filteredQuery.isLoading}
           />
           <PostList
-            label='Possible Miss'
+            label={
+              order === '+sim' ? 'Possible Miss' : 'Not filtered by AutoMod'
+            }
             query={notFilteredQuery}
             isLoading={notFilteredQuery.isLoading}
           />
