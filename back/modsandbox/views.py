@@ -132,11 +132,11 @@ class PostViewSet(viewsets.ModelViewSet):
 
         r = RedditHandler(request.user)
 
-        if where == 'live':
+        if where == 'Subreddit':
             pushshift_posts = r.get_posts_from_pushshift(subreddit, after, type)
             posts = create_posts(pushshift_posts, request.user, "normal", use_author)
 
-        elif where == 'spam':
+        elif where == 'Spam':
             r.get_mod_subreddits()
             praw_spams = r.get_spams_from_praw(subreddit, after, type)
             posts = create_posts(praw_spams, request.user, "normal", use_author)
@@ -149,7 +149,9 @@ class PostViewSet(viewsets.ModelViewSet):
 
     @action(methods=['delete'], detail=False)
     def all(self, request):
-        super().get_queryset().all().delete()
+        queryset = self.queryset.filter(user=self.request.user)
+        queryset.all().delete()
+        
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 

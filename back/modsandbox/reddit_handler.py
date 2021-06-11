@@ -7,7 +7,6 @@ from django.utils import timezone
 from itertools import chain
 
 import praw
-import asyncpraw
 from psaw import PushshiftAPI
 from dateutil import relativedelta
 
@@ -66,17 +65,21 @@ class RedditHandler:
             return self.reddit.comment(id=post_id)
 
     def get_posts_from_pushshift(self, subreddit, after, type):
-        if type == 'submissions':
+        if type == 'Submission':
             return self.api.search_submissions(after=after_to_timestamp(after),
                                                subreddit=subreddit)
 
-        elif type == 'comments':
+        elif type == 'Comment':
             return self.api.search_comments(after=after_to_timestamp(after),
                                             subreddit=subreddit)
 
     def get_spams_from_praw(self, subreddit, after, type):
         if subreddit in self.mod_subreddits:
-            spams = self.reddit.subreddit(subreddit).mod.spam(limit=None, only=type)
+            if type == 'Submission':
+                post_type = 'submissions'
+            else type == 'Comment':
+                post_type = 'comments'
+            spams = self.reddit.subreddit(subreddit).mod.spam(limit=None, only=post_type)
             # reports = self.reddit.subreddit(subreddit).mod.reports(limit=None, only=type)
             spams_after = [spam for spam in spams if spam.created_utc > after_to_timestamp(after)]
             # reports_after = [report for report in reports if report.created_utc > after_to_timestamp(after)]
