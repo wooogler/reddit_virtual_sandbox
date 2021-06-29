@@ -7,7 +7,6 @@ from django.utils import timezone
 from itertools import chain
 
 import praw
-import asyncpraw
 from psaw import PushshiftAPI
 from dateutil import relativedelta
 

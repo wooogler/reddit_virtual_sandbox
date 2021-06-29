@@ -171,7 +171,13 @@ class PostViewSet(viewsets.ModelViewSet):
 
     @action(methods=['delete'], detail=False)
     def all(self, request):
+<<<<<<< HEAD
         Post.objects.filter(user=request.user).delete()
+=======
+        queryset = self.queryset.filter(user=self.request.user)
+        queryset.all().delete()
+        
+>>>>>>> 30bc2a68e5edf739271a34049150894e57477227
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     @action(methods=['get'], detail=False)
