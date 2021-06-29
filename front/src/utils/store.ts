@@ -5,7 +5,7 @@ import { devtools } from 'zustand/middleware';
 import { persist } from 'zustand/middleware';
 import { afterToDate } from './util';
 
-type Order = '+created_utc' | '-created_utc' | '+sim';
+type Order = '+created_utc' | '-created_utc' | 'fpfn';
 type PostType = 'Submission' | 'Comment' | 'all';
 type Source = 'Subreddit' | 'Spam' | 'all';
 
@@ -21,8 +21,8 @@ type State = {
   rule_id: number | undefined;
   check_id: number | undefined;
   check_combination_id: number | undefined;
-  start_date: Dayjs;
-  end_date: Dayjs;
+  start_date?: Dayjs;
+  end_date?: Dayjs;
   post_type: PostType;
   source: Source;
   order: Order;
@@ -57,10 +57,12 @@ export const useStore = create<State>(
         rule_id: undefined,
         check_id: undefined,
         check_combination_id: undefined,
-        start_date: afterToDate('week', nowDayStart),
-        end_date: nowDayStart,
+        // start_date: afterToDate('week', nowDayStart),
+        // end_date: nowDayStart,
+        start_date: undefined,
+        end_date: undefined,
         post_type: 'all',
-        source: 'all',
+        source: 'Subreddit',
         order: '-created_utc',
         after: 'week',
         refetching: false,

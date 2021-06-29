@@ -45,8 +45,8 @@ function AnalysisLayout(): ReactElement {
       const { data } = await request<Config[]>({
         url: '/configs/',
         params: {
-          start_date: start_date.toDate(),
-          end_date: end_date.toDate(),
+          start_date: start_date?.toDate(),
+          end_date: end_date?.toDate(),
         },
       });
       return data;

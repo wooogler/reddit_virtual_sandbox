@@ -19,11 +19,12 @@ from django.urls import path, include
 from rest_framework import routers
 
 from modsandbox.views import TargetViewSet, ExceptViewSet, PostViewSet, RedditViewSet, StatViewSet, \
-    ConfigViewSet
+    ConfigViewSet, FpFnViewSet
 
 router = routers.DefaultRouter()
 router.register(r'posts/target', TargetViewSet)
 router.register(r'posts/except', ExceptViewSet)
+router.register(r'posts/fpfn', FpFnViewSet)
 router.register(r'posts', PostViewSet)
 router.register(r'reddit', RedditViewSet)
 router.register(r'configs', ConfigViewSet)

@@ -1,5 +1,11 @@
+import json
 import os
 import logging
+from types import SimpleNamespace
+
+import pandas as pd
+import pinecone
+from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 
 from django.shortcuts import redirect
 from rest_framework import viewsets
@@ -10,16 +16,18 @@ from rest_framework import status, filters
 from rest_framework.decorators import action
 from django_filters.rest_framework import DjangoFilterBackend
 import praw
-from rest_framework.views import APIView
 
 from modsandbox.filters import PostFilter
-from modsandbox.post_handler import create_posts
+from modsandbox.ml import process_embedding
+from modsandbox.pinecone_handler import create_index_pinecone, get_index_pinecone
+from modsandbox.post_handler import create_posts, get_filtered_posts, get_unfiltered_posts, get_df_posts_vector, \
+    get_average_vector, get_embedding_post
 from modsandbox.models import Post, User, Rule, Config
 from modsandbox.paginations import PostPagination
 from modsandbox.reddit_handler import RedditHandler
 from modsandbox.rule_handler import apply_config
 from modsandbox.serializers import PostSerializer, RuleSerializer, StatSerializer, ConfigSerializer
-from modsandbox.stat_handler import after_to_time_interval
+from modsandbox.stat_handler import after_to_time_interval, get_time_interval
 
 logger = logging.getLogger(__name__)
 
@@ -81,7 +89,7 @@ class PostViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
     filterset_class = PostFilter
-    ordering_fields = ['created_utc', 'sim']
+    ordering_fields = ['created_utc']
     ordering = ['created_utc']
 
     def get_queryset(self):
@@ -97,26 +105,10 @@ class PostViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         if filtered == 'true':
-            if config_id is not None:
-                queryset = queryset.filter(matching_configs__id=config_id)
-            elif rule_id is not None:
-                queryset = queryset.filter(matching_rules__id=rule_id)
-            elif check_combination_id is not None:
-                queryset = queryset.filter(matching_check_combinations__id=check_combination_id)
-            elif check_id is not None:
-                queryset = queryset.filter(matching_checks__id=check_id)
-            else:
-                queryset = queryset.none()
+            queryset = get_filtered_posts(queryset, config_id, rule_id, check_combination_id, check_id)
 
         else:
-            if config_id is not None:
-                queryset = queryset.exclude(matching_configs__id=config_id)
-            elif rule_id is not None:
-                queryset = queryset.exclude(matching_rules__id=rule_id)
-            elif check_combination_id is not None:
-                queryset = queryset.exclude(matching_check_combinations__id=check_combination_id)
-            elif check_id is not None:
-                queryset = queryset.exclude(matching_checks__id=check_id)
+            queryset = get_unfiltered_posts(queryset, config_id, rule_id, check_combination_id, check_id)
 
         return queryset
 
@@ -141,16 +133,121 @@ class PostViewSet(viewsets.ModelViewSet):
             praw_spams = r.get_spams_from_praw(subreddit, after, type)
             posts = create_posts(praw_spams, request.user, "normal", use_author)
 
+        else:  # for lab study
+            script_dir = os.path.dirname(__file__)
+            with open(os.path.join(script_dir, 'test_data/submission_cscareerquestions_may.json')) as normal_json:
+                normal = json.load(normal_json)
+                normal_json.close()
+
+            normal_posts = ([
+                SimpleNamespace(
+                    **{
+                        'id': 'test',
+                        'author': SimpleNamespace(**{'name': post['author']}),
+                        'title': post['title'],
+                        'name': 't3_test',
+                        'selftext': post['body'],
+                        'created_utc': post['created_utc'],
+                        'banned_by': None,
+                        'num_reports': None,
+                        'permalink': '',
+                    })
+                for post in normal])
+
+            posts = create_posts(normal_posts, request.user, 'normal', use_author)
+
         configs = Config.objects.filter(user=request.user)
         for config in configs:
             apply_config(config, posts, False)
 
-        return Response(status=status.HTTP_200_OK)
+        df_posts_vector = get_df_posts_vector(posts)
+
+        create_index_pinecone(request.user.username)
+        index = get_index_pinecone(request.user.username)
+        index.upsert(items=zip(df_posts_vector.id, df_posts_vector.vector), namespace='fn', batch_size=1000)
+        print('Pinecone indexing finish!', index.info(namespace='fn'))
+
+        return Response(status=status.HTTP_201_CREATED)
 
     @action(methods=['delete'], detail=False)
     def all(self, request):
-        super().get_queryset().all().delete()
+        Post.objects.filter(user=request.user).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @action(methods=['get'], detail=False)
+    def search(self, request):
+        posts = self.queryset.filter(user=request.user)
+        query = self.request.query_params.get("query")
+        # for sqlite3
+        # searched_posts = posts.filter(body__icontains=query) | posts.filter(title__icontains=query)
+        # for postgresql
+        search_vector = SearchVector('title', 'body')
+        search_query = SearchQuery(query)
+        searched_posts = posts.annotate(rank=SearchRank(search_vector, search_query)).order_by('-rank')
+
+        return Response(PostSerializer(searched_posts, many=True).data)
+
+
+class FpFnViewSet(viewsets.ModelViewSet):
+    queryset = Post.objects.filter(place__startswith='normal')
+    serializer_class = PostSerializer
+    pagination_class = PostPagination
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
+    filterset_class = PostFilter
+    ordering_fields = ['sim_fp', 'sim_fn']
+    ordering = ['sim_fp']
+
+    def get_queryset(self):
+        queryset = self.queryset.filter(user=self.request.user)
+        try:
+            filtered = self.request.query_params.get("filtered")
+        except Exception as e:
+            logger.error(e)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        if filtered == 'true':
+            queryset = queryset.filter(sim_fp__isnull=False)
+        else:
+            queryset = queryset.filter(sim_fn__isnull=False)
+        return queryset
+
+    def create(self, request, *args, **kwargs):
+        posts = self.queryset.filter(user=self.request.user)
+        posts.update(sim_fp=None, sim_fn=None)
+        target_posts = posts.filter(place__in=['target', 'normal-target'])
+
+        rule_id = self.request.data.get("rule_id")
+        check_id = self.request.data.get("check_id")
+        config_id = self.request.data.get("config_id")
+        check_combination_id = self.request.data.get("check_combination_id")
+
+        filtered_posts = get_filtered_posts(posts, config_id, rule_id, check_combination_id, check_id)
+        df_filtered_vector = get_df_posts_vector(filtered_posts)
+
+        index = get_index_pinecone(request.user.username)
+        index.delete(ids=df_filtered_vector.id, namespace='fn')
+        index.upsert(items=zip(df_filtered_vector.id, df_filtered_vector.vector), namespace='fp', batch_size=1000)
+        print(index.info(namespace='fp'), index.info(namespace='fn'))
+        target_vector = get_average_vector([get_embedding_post(post) for post in target_posts])
+        fn_result = index.query(queries=[target_vector], top_k=500, namespace='fn')
+        fp_result = index.query(queries=[(target_vector * -1)], top_k=500, namespace='fp')
+        if fn_result:
+            for i, post_id in enumerate(fn_result[0].ids):
+                fn_post = posts.get(id=post_id)
+                fn_post.sim_fn = fn_result[0].scores[i]
+                fn_post.save()
+        if fp_result:
+            for i, post_id in enumerate(fp_result[0].ids):
+                fp_post = posts.get(id=post_id)
+                fp_post.sim_fp = fp_result[0].scores[i]
+                fp_post.save()
+
+        index.delete(ids=df_filtered_vector.id, namespace='fp')
+        index.upsert(items=zip(df_filtered_vector.id, df_filtered_vector.vector), namespace='fn', batch_size=1000)
+        print(index.info(namespace='fp'), index.info(namespace='fn'))
+
+        return Response(status=status.HTTP_201_CREATED)
 
 
 class TargetViewSet(viewsets.ModelViewSet):
@@ -273,11 +370,18 @@ class StatViewSet(PostViewSet):
                 queryset = queryset.filter(source__in=['Spam', 'Report'])
             else:
                 queryset = queryset.filter(source=source)
-        datetime_interval = after_to_time_interval(after, 30)
+
+        posts = Post.objects.filter(user=request.user)
         data_array = []
-        for interval in datetime_interval:
-            y = queryset.filter(created_utc__range=interval).count()
-            data_array.append({'x0': interval[0], 'x1': interval[1], 'y': y})
+        # datetime_interval = after_to_time_interval(after, 30)
+        if posts:
+            end = posts.latest('created_utc').created_utc
+            start = posts.earliest('created_utc').created_utc
+            datetime_interval = get_time_interval(start, end, 30)
+            data_array = [
+                {'x0': interval[0], 'x1': interval[1], 'y': queryset.filter(created_utc__range=interval).count()}
+                for interval in datetime_interval]
+
         return Response(data_array)
 
     @action(detail=False, methods=['get'])

@@ -22,6 +22,8 @@ type NewPost = Omit<
   | 'banned_by'
   | 'isFiltered'
   | 'matching_configs'
+  | 'sim_fp'
+  | 'sim_fn'
 >;
 
 function AddPostModal({ visible, onCancel, place }: Props): ReactElement {

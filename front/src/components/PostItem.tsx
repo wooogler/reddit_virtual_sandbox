@@ -10,6 +10,7 @@ import HighlightText from './HighlightText';
 import { useMutation, useQueryClient } from 'react-query';
 import { useStore } from '@utils/store';
 import _ from 'lodash';
+import Highlighter from 'react-highlight-words';
 
 dayjs.extend(relativeTime);
 dayjs.extend(utc);
@@ -18,9 +19,15 @@ interface Props {
   post: IPost;
   isFiltered?: boolean;
   isTested: boolean;
+  searchQuery?: string;
 }
 
-function PostItem({ post, isFiltered, isTested }: Props): ReactElement {
+function PostItem({
+  post,
+  isFiltered,
+  isTested,
+  searchQuery,
+}: Props): ReactElement {
   const queryClient = useQueryClient();
   const { config_id, rule_id, check_combination_id, check_id } = useStore();
 
@@ -161,6 +168,12 @@ function PostItem({ post, isFiltered, isTested }: Props): ReactElement {
               text={post.title}
               match={makeMatch(matchingChecksTitle)}
             />
+          ) : searchQuery ? (
+            <Highlighter
+              searchWords={[searchQuery]}
+              textToHighlight={post.title}
+              highlightStyle={{ fontWeight: 'bolder' }}
+            />
           ) : (
             post.title
           )}
@@ -194,30 +207,35 @@ function PostItem({ post, isFiltered, isTested }: Props): ReactElement {
           >
             <div className='text-xs ml-2'>{dayjs().to(post.created_utc)}</div>
           </Tooltip>
-
-          {post.place === 'normal' ? (
-            <Dropdown overlay={moveMenu}>
-              <Button type='link'>
-                <div className='text-xs'>Move to Test Cases</div>
-              </Button>
-            </Dropdown>
-          ) : (
-            <Button
-              danger
-              type='link'
-              size='small'
-              onClick={() =>
-                deletePostFromTestCaseMutation.mutate({
-                  id: post.id,
-                  place: post.place,
-                })
-              }
-              disabled={!isTested}
-            >
-              <div className='text-xs underline'>
-                {isTested ? 'delete' : 'moved'}
-              </div>
-            </Button>
+          {!searchQuery && (
+            <>
+              {post.place === 'normal' ? (
+                <Dropdown overlay={moveMenu}>
+                  <Button type='link'>
+                    <div className='text-xs'>Move to Test Cases</div>
+                  </Button>
+                </Dropdown>
+              ) : (
+                <Button
+                  danger
+                  type='link'
+                  size='small'
+                  onClick={() =>
+                    deletePostFromTestCaseMutation.mutate({
+                      id: post.id,
+                      place: post.place,
+                    })
+                  }
+                  disabled={!isTested}
+                >
+                  <div className='text-xs underline'>
+                    {isTested ? 'delete' : 'moved'}
+                  </div>
+                </Button>
+              )}
+              <div>{post.sim_fp?.toFixed(2)}</div>
+              <div>{post.sim_fn?.toFixed(2)}</div>
+            </>
           )}
         </div>
         {post.source === 'Spam' && (
@@ -230,6 +248,12 @@ function PostItem({ post, isFiltered, isTested }: Props): ReactElement {
             <HighlightText
               text={post.body}
               match={makeMatch(matchingChecksBody)}
+            />
+          ) : searchQuery ? (
+            <Highlighter
+              searchWords={[searchQuery]}
+              textToHighlight={post.body}
+              highlightStyle={{ fontWeight: 'bolder' }}
             />
           ) : (
             post.body

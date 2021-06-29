@@ -1,6 +1,12 @@
-import { ArrowsAltOutlined, ShrinkOutlined } from '@ant-design/icons';
+import {
+  ArrowsAltOutlined,
+  SearchOutlined,
+  ShrinkOutlined,
+} from '@ant-design/icons';
+
 import ImportModal from '@components/ImportModal';
 import PostList from '@components/PostList';
+import SearchModal from '@components/SearchModal';
 import TargetList from '@components/TargetList';
 import { IPost, IUser, PaginatedPosts } from '@typings/db';
 import { AutoModStat } from '@typings/types';
@@ -8,7 +14,7 @@ import request from '@utils/request';
 import { useStore } from '@utils/store';
 import { Button, Select } from 'antd';
 import { AxiosError } from 'axios';
-import React, { ReactElement, useCallback, useState } from 'react';
+import React, { ReactElement, useCallback, useEffect, useState } from 'react';
 import {
   useInfiniteQuery,
   useMutation,
@@ -45,6 +51,7 @@ function PostViewerLayout(): ReactElement {
   const { data: userData, refetch } = useQuery<IUser | false>('me');
 
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isSearchVisible, setIsSearchVisible] = useState(false);
   const targetQuery = useQuery<IPost[], AxiosError>(
     ['target', { refetching }],
     async () => {
@@ -107,8 +114,8 @@ function PostViewerLayout(): ReactElement {
           rule_id,
           check_combination_id,
           check_id,
-          start_date: start_date.toDate(),
-          end_date: end_date.toDate(),
+          start_date: start_date?.toDate(),
+          end_date: end_date?.toDate(),
           filtered: true,
           post_type: post_type === 'all' ? undefined : post_type,
           source: source === 'all' ? undefined : source,
@@ -147,8 +154,8 @@ function PostViewerLayout(): ReactElement {
           check_combination_id,
           check_id,
           page: pageParam,
-          start_date: start_date.toDate(),
-          end_date: end_date.toDate(),
+          start_date: start_date?.toDate(),
+          end_date: end_date?.toDate(),
           post_type: post_type === 'all' ? undefined : post_type,
           filtered: false,
           source: source === 'all' ? undefined : source,
@@ -159,6 +166,86 @@ function PostViewerLayout(): ReactElement {
     {
       getNextPageParam: (lastPage) => lastPage.nextPage ?? undefined,
       refetchInterval: refetching ? 2000 : false,
+    }
+  );
+
+  const fpQuery = useInfiniteQuery<PaginatedPosts, AxiosError>(
+    [
+      'fp',
+      {
+        config_id,
+        rule_id,
+        check_combination_id,
+        check_id,
+        start_date,
+        end_date,
+        post_type,
+        order,
+        source,
+      },
+    ],
+    async ({ pageParam = 1 }) => {
+      const { data } = await request<PaginatedPosts>({
+        url: '/posts/fpfn/',
+        params: {
+          ordering: '-sim_fp',
+          config_id,
+          rule_id,
+          check_combination_id,
+          check_id,
+          page: pageParam,
+          start_date: start_date?.toDate(),
+          end_date: end_date?.toDate(),
+          post_type: post_type === 'all' ? undefined : post_type,
+          filtered: true,
+          source: source === 'all' ? undefined : source,
+        },
+      });
+      return data;
+    },
+    {
+      getNextPageParam: (lastPage) => lastPage.nextPage ?? undefined,
+      enabled: order === 'fpfn',
+    }
+  );
+
+  const fnQuery = useInfiniteQuery<PaginatedPosts, AxiosError>(
+    [
+      'fn',
+      {
+        config_id,
+        rule_id,
+        check_combination_id,
+        check_id,
+        start_date,
+        end_date,
+        post_type,
+        order,
+        source,
+      },
+    ],
+    async ({ pageParam = 1 }) => {
+      const { data } = await request<PaginatedPosts>({
+        url: '/posts/fpfn/',
+        params: {
+          ordering: '-sim_fn',
+          config_id,
+          rule_id,
+          check_combination_id,
+          check_id,
+          page: pageParam,
+          start_date: start_date?.toDate(),
+          end_date: end_date?.toDate(),
+          post_type: post_type === 'all' ? undefined : post_type,
+          filtered: false,
+          source: source === 'all' ? undefined : source,
+        },
+      });
+      return data;
+    },
+    {
+      getNextPageParam: (lastPage) => lastPage.nextPage ?? undefined,
+      enabled: order === 'fpfn',
     }
   );
 
@@ -218,25 +305,96 @@ function PostViewerLayout(): ReactElement {
     }
   );
 
+  const importTestPosts = () =>
+    request({
+      url: '/posts/',
+      method: 'POST',
+      data: {
+        where: 'Test',
+      },
+    });
+
+  const importTestPostsMutation = useMutation(importTestPosts, {
+    onSuccess: () => {
+      changeImported(true);
+      queryClient.invalidateQueries('filtered');
+      queryClient.invalidateQueries('not filtered');
+      queryClient.invalidateQueries('stats/filtered');
+      queryClient.invalidateQueries('stats/not_filtered');
+    },
+  });
+
   const onClickImport = useCallback(() => {
-    setIsModalVisible(true);
+    // setIsModalVisible(true);
+    importTestPostsMutation.mutate();
     queryClient.invalidateQueries('setting');
-  }, [queryClient]);
+  }, [queryClient, importTestPostsMutation]);
 
   const onCancel = useCallback(() => {
     setIsModalVisible(false);
+  }, []);
+
+  const onCancelSearch = useCallback(() => {
+    setIsSearchVisible(false);
   }, []);
 
   const onExpand = useCallback(() => {
     setExpand((state) => !state);
   }, []);
 
+  const sortFpFn = () =>
+    request<{ fp: IPost[]; fn: IPost[] }>({
+      url: `posts/fpfn/`,
+      method: 'POST',
+      data: {
+        config_id,
+        rule_id,
+        check_combination_id,
+        check_id,
+      },
+    });
+
+  const sortFpFnMutation = useMutation(sortFpFn, {
+    onSuccess: () => {
+      queryClient.invalidateQueries('fp');
+      queryClient.invalidateQueries('fn');
+    },
+  });
+
+  useEffect(() => {
+    if (order === 'fpfn') {
+      if (targetQuery.data?.length === 0) {
+        changeOrder('+created_utc');
+      } else {
+        sortFpFnMutation.mutate();
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    config_id,
+    rule_id,
+    check_combination_id,
+    check_id,
+    start_date,
+    end_date,
+    post_type,
+    order,
+    source,
+  ]);
+
   return (
     <div className='h-full w-full flex flex-col'>
       <div className='w-full flex items-center'>
-        <div className='text-3xl font-bold ml-2'>Test Cases</div>
+        <div className='text-3xl font-bold ml-2'>Test Cases (Objectives)</div>
         <div className='ml-auto flex items-center'>
-          <div>Hello, {userData && userData.username}!</div>
+          <Button
+            icon={<SearchOutlined />}
+            onClick={() => setIsSearchVisible(true)}
+          >
+            Reddit Search
+          </Button>
+          <SearchModal visible={isSearchVisible} onCancel={onCancelSearch} />
+          <div className='ml-2'>Hello, {userData && userData.username}!</div>
           <Button
             icon={expand ? <ShrinkOutlined /> : <ArrowsAltOutlined />}
             type='text'
@@ -293,7 +451,12 @@ function PostViewerLayout(): ReactElement {
           >
             <Select.Option value='-created_utc'>New</Select.Option>
             <Select.Option value='+created_utc'>Old</Select.Option>
-            <Select.Option value='+sim'>FP & FN</Select.Option>
+            <Select.Option
+              value='fpfn'
+              disabled={targetQuery.data?.length === 0}
+            >
+              FP & FN
+            </Select.Option>
           </Select>
           {imported ? (
             <Button
@@ -311,7 +474,12 @@ function PostViewerLayout(): ReactElement {
               Reset
             </Button>
           ) : (
-            <Button type='primary' className='ml-2' onClick={onClickImport}>
+            <Button
+              type='primary'
+              className='ml-2'
+              onClick={onClickImport}
+              loading={importTestPostsMutation.isLoading}
+            >
               Import
             </Button>
           )}
@@ -323,20 +491,34 @@ function PostViewerLayout(): ReactElement {
       <ImportModal visible={isModalVisible} onCancel={onCancel} />
       {!expand && (
         <div className='flex overflow-y-auto' style={{ flex: 5 }}>
-          <PostList
-            label={
-              order === '+sim' ? 'Possible false alarm' : 'Filtered by AutoMod'
-            }
-            query={filteredQuery}
-            isLoading={filteredQuery.isLoading}
-          />
-          <PostList
-            label={
-              order === '+sim' ? 'Possible Miss' : 'Not filtered by AutoMod'
-            }
-            query={notFilteredQuery}
-            isLoading={notFilteredQuery.isLoading}
-          />
+          {order === 'fpfn' ? (
+            <>
+              <PostList
+                label='Possible false alarm'
+                query={fpQuery}
+                isLoading={sortFpFnMutation.isLoading || fpQuery.isLoading}
+              />
+              <PostList
+                label='Possible miss'
+                query={fnQuery}
+                isLoading={sortFpFnMutation.isLoading || fnQuery.isLoading}
+                noCount
+              />
+            </>
+          ) : (
+            <>
+              <PostList
+                label='Filtered by AutoMod'
+                query={filteredQuery}
+                isLoading={filteredQuery.isLoading}
+              />
+              <PostList
+                label='Not filtered by AutoMod'
+                query={notFilteredQuery}
+                isLoading={notFilteredQuery.isLoading}
+              />
+            </>
+          )}
         </div>
       )}
     </div>

@@ -42,8 +42,8 @@ function PostChart(): ReactElement {
   } = useStore();
 
   const [selectedTime, setSelectedTime] = useState<{
-    start: Dayjs;
-    end: Dayjs;
+    start?: Dayjs;
+    end?: Dayjs;
   }>({ start: start_date, end: end_date });
 
   const { data: filteredStat } = useQuery<IStat[], AxiosError>(
@@ -156,9 +156,9 @@ function PostChart(): ReactElement {
       : 'Only Spam/Reports'
   }`;
 
-  const selectedTimeLabel = `selected: ${selectedTime.start.format(
+  const selectedTimeLabel = `selected: ${selectedTime.start?.format(
     'lll'
-  )} - ${selectedTime.end.format('lll')}`;
+  )} - ${selectedTime.end?.format('lll')}`;
 
   return (
     <div className='h-1/3'>

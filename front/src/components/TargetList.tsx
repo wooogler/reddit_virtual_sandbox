@@ -14,10 +14,10 @@ import PostItem from './PostItem';
 
 interface Props {
   label: string;
-  onSubmit: (postId: string) => void;
+  onSubmit?: (postId: string) => void;
   isLoading?: boolean;
   posts?: IPost[];
-  place: 'target' | 'except';
+  place?: 'target' | 'except';
 }
 
 function TargetList({
@@ -79,7 +79,10 @@ function TargetList({
       <OverlayLoading isLoading={isLoading} description='loading...' />
       <div className='flex items-center'>
         <PanelName>{label}</PanelName>
-        <div className='w-60 ml-auto flex items-center'>
+        {
+          place && 
+          <>
+          <div className='w-60 ml-auto flex items-center'>
           <Progress percent={rate * 100} showInfo={false} />
           <div className='text-xs ml-2 text-gray-400 w-48'>
             {(rate * 100).toFixed(2)} % ({stat.part}/{stat.total})
@@ -118,6 +121,9 @@ function TargetList({
           onCancel={onCancel}
           place={place}
         />
+        </>
+        }
+        
       </div>
       {posts?.length !== 0 ? (
         <div className='overflow-auto post-scroll'>

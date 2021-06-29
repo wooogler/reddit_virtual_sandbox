@@ -18,9 +18,10 @@ interface Props {
   stat?: AutoModStat;
   query: UseInfiniteQueryResult<PaginatedPosts, AxiosError<any>>;
   isLoading?: boolean;
+  noCount?: boolean;
 }
 
-function PostList({ label, query, isLoading }: Props): ReactElement {
+function PostList({ label, query, isLoading, noCount }: Props): ReactElement {
   const [ref, inView] = useInView({ threshold: 0 });
   const { config_id, rule_id, check_combination_id, check_id } = useStore();
 
@@ -36,7 +37,9 @@ function PostList({ label, query, isLoading }: Props): ReactElement {
       <OverlayLoading isLoading={isLoading} description='loading...' />
       <div className='flex items-center'>
         <PanelName>{label}</PanelName>
-        <div className='text-lg ml-2'>({query.data?.pages[0].count})</div>
+        {!noCount && (
+          <div className='text-lg ml-2'>({query.data?.pages[0].count})</div>
+        )}
       </div>
       {query.data?.pages[0].count !== 0 ? (
         <div className='overflow-y-auto post-scroll'>

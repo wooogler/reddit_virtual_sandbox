@@ -33,3 +33,8 @@ websocket-client==0.58.0
 django-filter~=2.4.0
 PyYAML~=5.4.1
 typer~=0.3.2
+tensorflow~=2.5.0
+nltk~=3.6.2
+asyncpraw~=7.2.0
+pandas~=1.2.5
+numpy~=1.19.5

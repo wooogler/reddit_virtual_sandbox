@@ -8,7 +8,6 @@ import { useFormik } from 'formik';
 import { useStore } from '@utils/store';
 import ImportProgress from './ImportProgress';
 import { CheckCircleTwoTone, SyncOutlined } from '@ant-design/icons';
-import axios, { Canceler } from 'axios';
 
 const { Option } = Select;
 
@@ -54,9 +53,6 @@ function ImportModal({ visible, onCancel }: Props): ReactElement {
     }
   );
 
-  const CancelToken = axios.CancelToken;
-
-  let cancelImport: Canceler;
   const importPosts = ({ type, where, subreddit, after }: ImportSetting) =>
     request({
       url: '/posts/',
@@ -67,9 +63,6 @@ function ImportModal({ visible, onCancel }: Props): ReactElement {
         after,
         where,
       },
-      cancelToken: new CancelToken(function executor(c) {
-        cancelImport = c;
-      }),
     });
   const setAllComplete = (value: boolean) => {
     setCompleteSpamCom(value);
@@ -200,10 +193,6 @@ function ImportModal({ visible, onCancel }: Props): ReactElement {
       });
   }, [refetch]);
 
-  const onCancelImport = () => {
-    cancelImport();
-  };
-
   return (
     <Modal
       title='Import Posts in Subreddit and Modlog'
@@ -294,9 +283,9 @@ function ImportModal({ visible, onCancel }: Props): ReactElement {
             }}
             value={post_type}
           >
-            <Option value='Submission'>Submission Only</Option>
-            <Option value='Comment'>Comment Only</Option>
-            <Option value='all'>All Posts</Option>
+            <Option value='Submission'>Only Submissions</Option>
+            <Option value='Comment'>Only Comments</Option>
+            <Option value='all'>Submissions & Comments</Option>
           </Select>
         </Form.Item>
         <Form.Item

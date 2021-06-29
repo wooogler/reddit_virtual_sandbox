@@ -2,6 +2,19 @@ import re
 import unicodedata
 
 from nltk import sent_tokenize
+import tensorflow as tf
+import numpy as np
+import tensorflow_hub as hub
+
+# Load Google Universal Encoder
+module_url = "https://tfhub.dev/google/universal-sentence-encoder/4"
+model = hub.load(module_url)
+print("module %s loaded" % module_url)
+
+
+def embed(input_):
+    return model(input_)
+
 
 # Anything that isn't a square closing bracket
 name_regex = "[^]]+"
@@ -56,3 +69,12 @@ def process_sentence(raw):
             processed_sentences.append(text)
 
     return " ".join(processed_sentences)
+
+
+def process_embedding(content):
+    """
+    :param content:
+    :return: embedding vector
+    """
+    processed = process_sentence(content)
+    return np.array(embed([processed])[0])

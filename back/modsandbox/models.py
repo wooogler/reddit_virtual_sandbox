@@ -64,7 +64,8 @@ class Post(models.Model):
     reports = models.IntegerField(null=True)
 
     # for FP, FN
-    sim = models.FloatField(default=0)
+    sim_fp = models.FloatField(default=None, null=True)
+    sim_fn = models.FloatField(default=None, null=True)
 
     TYPE_CHOICES = [('Submission', 'Submission'), ('Comment', 'Comment')]
     post_type = models.CharField(max_length=10, choices=TYPE_CHOICES)

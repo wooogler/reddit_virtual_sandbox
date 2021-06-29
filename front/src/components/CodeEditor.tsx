@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useState } from 'react';
 import AceEditor from 'react-ace';
 import 'ace-builds/src-noconflict/mode-yaml';
 import 'ace-builds/src-noconflict/theme-tomorrow';
@@ -9,6 +9,7 @@ import { useMutation, useQueryClient } from 'react-query';
 import { Config } from '@typings/db';
 import { useStore } from '@utils/store';
 import { EditorState } from '@typings/types';
+import GuideModal from './GuideModal';
 
 interface Props {
   editorState: EditorState;
@@ -28,6 +29,7 @@ function CodeEditor({
   setCode,
 }: Props): ReactElement {
   const queryClient = useQueryClient();
+  const [visibleGuideModal, setVisibleGuideModal] = useState(false);
   const { changeConfigId } = useStore();
   const addConfig = ({ code }: { code: string }) =>
     request<Config>({ url: '/configs/', method: 'POST', data: { code } });
@@ -63,6 +65,13 @@ function CodeEditor({
             : 'Edit the configuration'}
         </PanelName>
         <div className='flex ml-auto'>
+          <Button className='mr-2' onClick={() => setVisibleGuideModal(true)}>
+            Configuration Guide
+          </Button>
+          <GuideModal
+            visible={visibleGuideModal}
+            onCancel={() => setVisibleGuideModal(false)}
+          />
           {editorState === 'add' ? (
             <Button
               type='primary'
