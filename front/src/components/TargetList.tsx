@@ -31,7 +31,8 @@ function TargetList({
   const [urlHelp, setUrlHelp] = useState<any>('');
   const [visible, setVisible] = useState(false);
   const [openAddModal, setOpenAddModal] = useState(false);
-  const { rule_id, check_combination_id, check_id, config_id } = useStore();
+  const { rule_id, check_combination_id, check_id, config_id, condition } =
+    useStore();
   const [form] = useForm();
   const onClickAdd = useCallback(() => {
     setVisible((prev) => !prev);
@@ -79,51 +80,54 @@ function TargetList({
       <OverlayLoading isLoading={isLoading} description='loading...' />
       <div className='flex items-center'>
         <PanelName>{label}</PanelName>
-        {
-          place && 
+        {place && (
           <>
-          <div className='w-60 ml-auto flex items-center'>
-          <Progress percent={rate * 100} showInfo={false} />
-          <div className='text-xs ml-2 text-gray-400 w-48'>
-            {(rate * 100).toFixed(2)} % ({stat.part}/{stat.total})
-          </div>
-          <Popover
-            placement='bottom'
-            title='Add Posts with URL'
-            trigger='click'
-            content={
-              <div className='flex flex-col items-center'>
-                <Form form={form}>
-                  <Form.Item
-                    name='url'
-                    label='URL'
-                    validateStatus={urlStatus}
-                    help={urlHelp}
-                  >
-                    <Input.Search enterButton='Add' onSearch={onSearch} />
-                  </Form.Item>
-                </Form>
-                <Button onClick={() => setOpenAddModal(true)}>
-                  Add a custom post
+            <div className='w-60 ml-auto flex items-center'>
+              {condition !== 'baseline' && (
+                <>
+                  <Progress percent={rate * 100} showInfo={false} />
+                  <div className='text-xs ml-2 text-gray-400 w-48'>
+                    {(rate * 100).toFixed(2)} % ({stat.part}/{stat.total})
+                  </div>
+                </>
+              )}
+
+              <Popover
+                placement='bottom'
+                title='Add Posts with URL'
+                trigger='click'
+                content={
+                  <div className='flex flex-col items-center'>
+                    <Form form={form}>
+                      <Form.Item
+                        name='url'
+                        label='URL'
+                        validateStatus={urlStatus}
+                        help={urlHelp}
+                      >
+                        <Input.Search enterButton='Add' onSearch={onSearch} />
+                      </Form.Item>
+                    </Form>
+                    <Button onClick={() => setOpenAddModal(true)}>
+                      Add a custom post
+                    </Button>
+                  </div>
+                }
+                visible={visible}
+                onVisibleChange={(visible) => setVisible(visible)}
+              >
+                <Button size='small' className='ml-2' onClick={onClickAdd}>
+                  Add a Post
                 </Button>
-              </div>
-            }
-            visible={visible}
-            onVisibleChange={(visible) => setVisible(visible)}
-          >
-            <Button size='small' className='ml-2' onClick={onClickAdd}>
-              Add a Post
-            </Button>
-          </Popover>
-        </div>
-        <AddPostModal
-          visible={openAddModal}
-          onCancel={onCancel}
-          place={place}
-        />
-        </>
-        }
-        
+              </Popover>
+            </div>
+            <AddPostModal
+              visible={openAddModal}
+              onCancel={onCancel}
+              place={place}
+            />
+          </>
+        )}
       </div>
       {posts?.length !== 0 ? (
         <div className='overflow-auto post-scroll'>

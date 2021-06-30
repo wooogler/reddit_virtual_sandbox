@@ -36,7 +36,7 @@ function SearchModal({ visible, onCancel }: Props): ReactElement {
   const searchQuery = useQuery(['search', query], async () => {
     const submissions = await r
       .getSubreddit('cscareerquestions')
-      .search({ query, time: 'month' });
+      .search({ query, time: 'month'});
     const data = submissions.map<IPost>((sub: Submission) => ({
       id: sub.id,
       post_id: sub.id,

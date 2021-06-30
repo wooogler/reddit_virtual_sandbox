@@ -58,7 +58,9 @@ _match_modifiers = set(_match_regexes.keys()) | {
 }
 
 
-def create_config(code, user):
+def create_config(code, user, condition):
+    if condition == 'baseline':
+        return Config.objects.create(user=user, code=code)
     config = Config.objects.create(user=user, code=code)
     posts = Post.objects.filter(user=user)
     return apply_config(config, posts, True)

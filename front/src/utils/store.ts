@@ -8,6 +8,7 @@ import { afterToDate } from './util';
 type Order = '+created_utc' | '-created_utc' | 'fpfn';
 type PostType = 'Submission' | 'Comment' | 'all';
 type Source = 'Subreddit' | 'Spam' | 'all';
+export type Condition = 'baseline' | 'sandbox' | 'modsandbox';
 
 type SelectedHighlight = {
   config_id: number | undefined;
@@ -31,6 +32,7 @@ type State = {
   code: string;
   imported: boolean;
   selectedHighlight: SelectedHighlight;
+  condition: Condition;
   changeConfigId: (configId: number) => void;
   changeRuleId: (ruleId: number) => void;
   changeCheckId: (checkId: number) => void;
@@ -45,6 +47,7 @@ type State = {
   changeCode: (code: string) => void;
   changeImported: (imported: boolean) => void;
   changeSelectedHighlight: (selected: SelectedHighlight) => void;
+  changeCondition: (condition: Condition) => void;
 };
 
 const nowDayStart = dayjs().startOf('day');
@@ -74,6 +77,7 @@ export const useStore = create<State>(
           check_id: undefined,
           check_combination_ids: [],
         },
+        condition: 'sandbox',
         changeConfigId: (id: number) =>
           set((state) => ({
             config_id: id,
@@ -141,6 +145,9 @@ export const useStore = create<State>(
               },
             }));
           }, 1000);
+        },
+        changeCondition: (condition: Condition) => {
+          set((state) => ({ condition }));
         },
       }),
       {

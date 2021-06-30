@@ -159,7 +159,8 @@ class ConfigSerializer(serializers.ModelSerializer):
         ]
 
     def create(self, validated_data):
-        config = create_config(validated_data['code'], self.context['request'].user)
+        config = create_config(validated_data['code'], self.context['request'].user,
+                               self.context['request'].data['condition'])
         return config
 
 

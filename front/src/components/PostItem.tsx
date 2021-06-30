@@ -29,7 +29,8 @@ function PostItem({
   searchQuery,
 }: Props): ReactElement {
   const queryClient = useQueryClient();
-  const { config_id, rule_id, check_combination_id, check_id } = useStore();
+  const { config_id, rule_id, check_combination_id, check_id, condition } =
+    useStore();
 
   const invalidatePostQueries = (place: IPost['place']) => {
     if (place.includes('normal')) {
@@ -233,8 +234,12 @@ function PostItem({
                   </div>
                 </Button>
               )}
-              <div>{post.sim_fp?.toFixed(2)}</div>
-              <div>{post.sim_fn?.toFixed(2)}</div>
+              {condition === 'modsandbox' && (
+                <>
+                  <div>{post.sim_fp?.toFixed(2)}</div>
+                  <div>{post.sim_fn?.toFixed(2)}</div>
+                </>
+              )}
             </>
           )}
         </div>
@@ -243,22 +248,26 @@ function PostItem({
             Removed by {post.banned_by}
           </div>
         )}
-        <div className='text-sm'>
-          {isFiltered ? (
-            <HighlightText
-              text={post.body}
-              match={makeMatch(matchingChecksBody)}
-            />
-          ) : searchQuery ? (
-            <Highlighter
-              searchWords={[searchQuery]}
-              textToHighlight={post.body}
-              highlightStyle={{ fontWeight: 'bolder' }}
-            />
-          ) : (
-            post.body
-          )}
-        </div>
+        {condition === 'modsandbox' ? (
+          <div className='text-sm'>
+            {isFiltered ? (
+              <HighlightText
+                text={post.body}
+                match={makeMatch(matchingChecksBody)}
+              />
+            ) : searchQuery ? (
+              <Highlighter
+                searchWords={[searchQuery]}
+                textToHighlight={post.body}
+                highlightStyle={{ fontWeight: 'bolder' }}
+              />
+            ) : (
+              post.body
+            )}
+          </div>
+        ) : (
+          <div className='text-sm'>{post.body}</div>
+        )}
       </div>
     </div>
   );

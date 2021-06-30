@@ -42,7 +42,7 @@ function PostViewerLayout(): ReactElement {
     source,
     order,
     refetching,
-    imported,
+    condition,
     changePostType,
     changeSource,
     changeOrder,
@@ -451,14 +451,16 @@ function PostViewerLayout(): ReactElement {
           >
             <Select.Option value='-created_utc'>New</Select.Option>
             <Select.Option value='+created_utc'>Old</Select.Option>
-            <Select.Option
-              value='fpfn'
-              disabled={targetQuery.data?.length === 0}
-            >
-              FP & FN
-            </Select.Option>
+            {condition === 'modsandbox' && (
+              <Select.Option
+                value='fpfn'
+                disabled={targetQuery.data?.length === 0}
+              >
+                FP & FN
+              </Select.Option>
+            )}
           </Select>
-          {imported ? (
+          {notFilteredQuery.data?.pages[0].count !== 0 ? (
             <Button
               onClick={() => {
                 deleteAllPostsMutation.mutate();
@@ -507,13 +509,22 @@ function PostViewerLayout(): ReactElement {
             </>
           ) : (
             <>
+              {condition !== 'baseline' ? (
+                <PostList
+                  label='Filtered by AutoMod'
+                  query={filteredQuery}
+                  isLoading={filteredQuery.isLoading}
+                />
+              ) : (
+                <div className='h-full p-2 w-1/2'></div>
+              )}
+
               <PostList
-                label='Filtered by AutoMod'
-                query={filteredQuery}
-                isLoading={filteredQuery.isLoading}
-              />
-              <PostList
-                label='Not filtered by AutoMod'
+                label={
+                  condition !== 'baseline'
+                    ? 'Not filtered by AutoMod'
+                    : 'Post List'
+                }
                 query={notFilteredQuery}
                 isLoading={notFilteredQuery.isLoading}
               />

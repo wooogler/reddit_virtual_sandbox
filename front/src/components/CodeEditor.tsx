@@ -30,9 +30,13 @@ function CodeEditor({
 }: Props): ReactElement {
   const queryClient = useQueryClient();
   const [visibleGuideModal, setVisibleGuideModal] = useState(false);
-  const { changeConfigId } = useStore();
+  const { changeConfigId, condition } = useStore();
   const addConfig = ({ code }: { code: string }) =>
-    request<Config>({ url: '/configs/', method: 'POST', data: { code } });
+    request<Config>({
+      url: '/configs/',
+      method: 'POST',
+      data: { code, condition: 'modsandbox' },
+    });
   const addConfigMutation = useMutation(addConfig, {
     onSuccess: (res, { code }) => {
       queryClient.invalidateQueries('configs');
@@ -44,7 +48,7 @@ function CodeEditor({
     request<Config>({
       url: `/configs/${configId}/`,
       method: 'PATCH',
-      data: { code },
+      data: { code, condition: 'modsandbox' },
     });
   const editConfigMutation = useMutation(editConfig, {
     onSuccess: (res, { code }) => {
@@ -60,7 +64,9 @@ function CodeEditor({
     <>
       <div className='flex mb-2 items-center'>
         <PanelName>
-          {editorState === 'add'
+          {condition === 'sandbox'
+            ? 'AutoMod Configuration'
+            : editorState === 'add'
             ? 'Add a new configuration'
             : 'Edit the configuration'}
         </PanelName>
@@ -78,7 +84,7 @@ function CodeEditor({
               onClick={() => addConfigMutation.mutate({ code })}
               loading={addConfigMutation.isLoading}
             >
-              Add
+              {condition === 'modsandbox' ? 'Add' : 'Apply'}
             </Button>
           ) : (
             <Button
@@ -95,9 +101,11 @@ function CodeEditor({
             </Button>
           )}
 
-          <Button type='primary' danger onClick={onClose} className='ml-2'>
-            Close
-          </Button>
+          {condition === 'modsandbox' && (
+            <Button type='primary' danger onClick={onClose} className='ml-2'>
+              Close
+            </Button>
+          )}
         </div>
       </div>
       <div className='flex-1'>
