@@ -2,9 +2,9 @@ import { IStat } from '@typings/db';
 import request from '@utils/request';
 import { useStore } from '@utils/store';
 import { AxiosError } from 'axios';
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
-import React, { ReactElement, useCallback, useState } from 'react';
+import React, { ReactElement, useCallback, useEffect } from 'react';
 import { useQuery } from 'react-query';
 
 import {
@@ -40,11 +40,6 @@ function PostChart(): ReactElement {
     end_date,
     changeDateRange,
   } = useStore();
-
-  const [selectedTime, setSelectedTime] = useState<{
-    start?: Dayjs;
-    end?: Dayjs;
-  }>({ start: start_date, end: end_date });
 
   const { data: filteredStat } = useQuery<IStat[], AxiosError>(
     [
@@ -121,10 +116,6 @@ function PostChart(): ReactElement {
     [changeDateRange]
   );
 
-  const onChangeBrush = useCallback((domain: any) => {
-    setSelectedTime({ start: dayjs(domain.x[0]), end: dayjs(domain.x[1]) });
-  }, []);
-
   const filteredData = filteredStat?.map((datum) => ({
     x0: dayjs(datum.x0).toDate(),
     x1: dayjs(datum.x1).toDate(),
@@ -142,33 +133,59 @@ function PostChart(): ReactElement {
     y: datum.y,
   }));
 
-  const chartLabel = `Number of ${
+  const chartLabel = `Time Series Chart of Filtered ${
     post_type === 'all'
       ? 'Submissions & Comments'
       : post_type === 'Submission'
-      ? 'Only Submissions'
-      : 'Only Comments'
-  } in ${
+      ? 'Submissions'
+      : 'Comments'
+  } on ${
     source === 'all'
-      ? 'Subreddits & Spam/Reports'
+      ? 'Subreddit & Spam/Reports'
       : source === 'Subreddit'
-      ? 'Only Subreddits'
-      : 'Only Spam/Reports'
+      ? 'Subreddit'
+      : 'Spam/Reports'
   }`;
 
-  const selectedTimeLabel = `selected: ${selectedTime.start?.format(
-    'lll'
-  )} - ${selectedTime.end?.format('lll')}`;
+  useEffect(() => {
+    const fetchGraph = async () => {
+      const { data } = await request<IStat[]>({
+        url: '/stats/graph',
+        params: {
+          post_type: 'all',
+          filtered: false,
+          source: 'all',
+        },
+      });
+      const startDate = data
+        .map((item) => item.x0)
+        .reduce((min, cur) => {
+          return cur < min ? cur : min;
+        });
+      const endDate = data
+        .map((item) => item.x1)
+        .reduce((min, cur) => {
+          return cur > min ? cur : min;
+        });
+      changeDateRange(dayjs(startDate), dayjs(endDate));
+    };
+    fetchGraph();
+  }, [changeDateRange]);
+
+  const selectedTimeLabel = start_date
+    ? `Selected time range: ${start_date?.format('lll')} - ${end_date?.format(
+        'lll'
+      )}`
+    : 'Brush on the chart for setting the time range!';
 
   return (
-    <div className='h-1/3'>
+    <div className='h-1/3 border-t-4 border-gray-200'>
       <VictoryChart
         containerComponent={
           <VictoryBrushVoronoiContainer
             brushDimension='x'
             onBrushDomainChangeEnd={onBrush}
-            onBrushDomainChange={onChangeBrush}
-            // brushDomain={{x: [start_date.toDate(), end_date.toDate()]}}
+            // onBrushDomainChange={onChangeBrush}
             labels={({ datum }) => {
               if (datum.y === 0) return '';
               return `${dayjs(datum.x0).format('lll')} - ${dayjs(

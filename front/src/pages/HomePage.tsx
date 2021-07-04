@@ -23,14 +23,14 @@ function HomePage(): ReactElement {
 
   return (
     <div className='h-screen w-screen flex'>
-      <div className='w-2/3 h-full'>
+      <div className='w-2/3 h-full border-gray-200 border-r-4'>
         <PostViewerLayout />
       </div>
       <div className='w-1/3 h-full flex flex-col'>
         {condition !== 'baseline' ? (
           <>
             <AnalysisLayout />
-            <PostChart />
+            {condition === 'modsandbox' && <PostChart />}
           </>
         ) : (
           <BaselineLayout />

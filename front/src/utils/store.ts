@@ -64,7 +64,7 @@ export const useStore = create<State>(
         // end_date: nowDayStart,
         start_date: undefined,
         end_date: undefined,
-        post_type: 'all',
+        post_type: 'Submission',
         source: 'Subreddit',
         order: '-created_utc',
         after: 'week',
@@ -77,7 +77,7 @@ export const useStore = create<State>(
           check_id: undefined,
           check_combination_ids: [],
         },
-        condition: 'sandbox',
+        condition: 'modsandbox',
         changeConfigId: (id: number) =>
           set((state) => ({
             config_id: id,
@@ -158,6 +158,7 @@ export const useStore = create<State>(
           'refetching',
           'selectedHighlight',
         ],
+        
       }
     )
   )

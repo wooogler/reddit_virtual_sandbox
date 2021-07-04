@@ -1,6 +1,7 @@
 import { IPost } from '@typings/db';
 import { ImportSetting } from '@typings/types';
 import { Dayjs } from 'dayjs';
+import { QueryClient } from 'react-query';
 
 export const isFiltered = (
   post: IPost,
@@ -67,4 +68,14 @@ export const afterToDate = (after: ImportSetting['after'], now: Dayjs) => {
     case '3days':
       return now.subtract(3, 'day');
   }
+};
+
+export const invalidatePostQueries = (queryClient: QueryClient) => {
+  queryClient.invalidateQueries('configs');
+  queryClient.invalidateQueries('filtered');
+  queryClient.invalidateQueries('not filtered');
+  queryClient.invalidateQueries('stats/filtered');
+  queryClient.invalidateQueries('stats/not_filtered');
+  queryClient.invalidateQueries('target');
+  queryClient.invalidateQueries('except');
 };

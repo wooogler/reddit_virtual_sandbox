@@ -10,6 +10,12 @@ import { Config } from '@typings/db';
 import { useStore } from '@utils/store';
 import { EditorState } from '@typings/types';
 import GuideModal from './GuideModal';
+import {
+  EditOutlined,
+  InfoCircleOutlined,
+  PlayCircleOutlined,
+} from '@ant-design/icons';
+import { invalidatePostQueries } from '@utils/util';
 
 interface Props {
   editorState: EditorState;
@@ -39,7 +45,7 @@ function CodeEditor({
     });
   const addConfigMutation = useMutation(addConfig, {
     onSuccess: (res, { code }) => {
-      queryClient.invalidateQueries('configs');
+      invalidatePostQueries(queryClient);
       changeConfigId(res.data.id);
     },
   });
@@ -52,11 +58,7 @@ function CodeEditor({
     });
   const editConfigMutation = useMutation(editConfig, {
     onSuccess: (res, { code }) => {
-      queryClient.invalidateQueries('configs');
-      queryClient.invalidateQueries('filtered');
-      queryClient.invalidateQueries('not filtered');
-      queryClient.invalidateQueries('stats/filtered');
-      queryClient.invalidateQueries('stats/not_filtered');
+      invalidatePostQueries(queryClient);
     },
   });
 
@@ -67,11 +69,16 @@ function CodeEditor({
           {condition === 'sandbox'
             ? 'AutoMod Configuration'
             : editorState === 'add'
-            ? 'Add a new configuration'
+            ? 'AutoMod Configuration'
             : 'Edit the configuration'}
         </PanelName>
         <div className='flex ml-auto'>
-          <Button className='mr-2' onClick={() => setVisibleGuideModal(true)}>
+          <Button
+            icon={<InfoCircleOutlined />}
+            className='mr-2'
+            onClick={() => setVisibleGuideModal(true)}
+            size='small'
+          >
             Configuration Guide
           </Button>
           <GuideModal
@@ -80,15 +87,18 @@ function CodeEditor({
           />
           {editorState === 'add' ? (
             <Button
-              type='primary'
+              type='link'
+              icon={<PlayCircleOutlined />}
               onClick={() => addConfigMutation.mutate({ code })}
               loading={addConfigMutation.isLoading}
+              size='small'
             >
-              {condition === 'modsandbox' ? 'Add' : 'Apply'}
+              Apply
             </Button>
           ) : (
             <Button
-              type='primary'
+              type='link'
+              icon={<EditOutlined />}
               onClick={() =>
                 editConfigMutation.mutate({
                   code,
@@ -96,16 +106,21 @@ function CodeEditor({
                 })
               }
               loading={editConfigMutation.isLoading}
+              size='small'
             >
               Edit
             </Button>
           )}
-
-          {condition === 'modsandbox' && (
-            <Button type='primary' danger onClick={onClose} className='ml-2'>
+          {/* {condition === 'modsandbox' && (
+            <Button
+              type='link'
+              danger
+              onClick={onClose}
+              icon={<CloseOutlined />}
+            >
               Close
             </Button>
-          )}
+          )} */}
         </div>
       </div>
       <div className='flex-1'>

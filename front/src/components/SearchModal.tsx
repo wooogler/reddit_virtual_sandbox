@@ -1,6 +1,6 @@
 import { IPost } from '@typings/db';
 
-import { Input } from 'antd';
+import { Input, Select } from 'antd';
 import Modal from 'antd/lib/modal/Modal';
 import React, { ReactElement, useState } from 'react';
 import { useQuery } from 'react-query';
@@ -17,6 +17,8 @@ interface Props {
 
 function SearchModal({ visible, onCancel }: Props): ReactElement {
   const [query, setQuery] = useState('');
+  const [time, setTime] = useState<snoowrap.SearchOptions['time']>('week');
+  const [sort, setSort] = useState<snoowrap.SearchOptions['sort']>('relevance');
   // const searchQuery = useQuery(['search', query], async () => {
   //   const { data } = await request<IPost[]>({
   //     url: '/posts/search/',
@@ -33,30 +35,32 @@ function SearchModal({ visible, onCancel }: Props): ReactElement {
     password: process.env.REACT_APP_PASSWORD,
   });
 
-  const searchQuery = useQuery(['search', query], async () => {
-    const submissions = await r
+  const searchQuery = useQuery(['search', { query, sort, time }], async () => {
+    const posts = await r
       .getSubreddit('cscareerquestions')
-      .search({ query, time: 'month'});
-    const data = submissions.map<IPost>((sub: Submission) => ({
-      id: sub.id,
-      post_id: sub.id,
-      source: 'Subreddit',
-      place: 'normal',
-      post_type: 'Submission',
-      title: sub.title,
-      body: sub.selftext,
-      author: sub.author.name,
-      created_utc: dayjs.unix(sub.created_utc).toDate(),
-      url: 'https://www.reddit.com' + sub.permalink,
-      banned_by: '',
-      isFiltered: false,
-      matching_configs: [],
-      matching_rules: [],
-      matching_check_combinations: [],
-      matching_checks: [],
-      sim_fp: 0,
-      sim_fn: 0,
-    }));
+      .search({ query, time, sort });
+    const data = posts.map<IPost>((post: Submission) => {
+      return {
+        id: post.id,
+        post_id: post.id,
+        source: 'Subreddit',
+        place: 'normal',
+        post_type: 'Submission',
+        title: post.title,
+        body: post.selftext,
+        author: post.author.name,
+        created_utc: dayjs.unix(post.created_utc).toDate(),
+        url: 'https://www.reddit.com' + post.permalink,
+        banned_by: '',
+        isFiltered: false,
+        matching_configs: [],
+        matching_rules: [],
+        matching_check_combinations: [],
+        matching_checks: [],
+        sim_fp: 0,
+        sim_fn: 0,
+      };
+    });
     return data;
   });
 
@@ -69,16 +73,49 @@ function SearchModal({ visible, onCancel }: Props): ReactElement {
       title='Search Posts'
       visible={visible}
       onCancel={() => {
+        setQuery('');
         onCancel();
       }}
       maskClosable={false}
       centered
       destroyOnClose
+      footer={false}
     >
       <Input.Search
         onSearch={onSearch}
         loading={searchQuery.isLoading}
       ></Input.Search>
+      <div>
+        Search results in <b>r/cscareerquestions</b>
+      </div>
+      <div className='flex text-xs items-center'>
+        <div>SORT BY</div>
+        <Select
+          value={sort}
+          onChange={(value) => setSort(value)}
+          dropdownMatchSelectWidth={false}
+          bordered={false}
+        >
+          <Select.Option value='relevance'>Relevance</Select.Option>
+          <Select.Option value='hot'>Hot</Select.Option>
+          <Select.Option value='top'>Top</Select.Option>
+          <Select.Option value='new'>New</Select.Option>
+        </Select>
+        <div>POSTS FROM</div>
+        <Select
+          value={time}
+          onChange={(value) => setTime(value)}
+          dropdownMatchSelectWidth={false}
+          bordered={false}
+        >
+          <Select.Option value='hour'>Past Hour</Select.Option>
+          <Select.Option value='day'>Past 24 Hours</Select.Option>
+          <Select.Option value='week'>Past Week</Select.Option>
+          <Select.Option value='month'>Past Month</Select.Option>
+          <Select.Option value='year'>Past Year</Select.Option>
+          <Select.Option value='all'>All Time</Select.Option>
+        </Select>
+      </div>
       <div
         className='relative flex flex-col p-2 overflow-y-auto'
         style={{ height: '70vh' }}

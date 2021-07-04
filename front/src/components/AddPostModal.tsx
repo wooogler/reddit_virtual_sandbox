@@ -97,6 +97,7 @@ function AddPostModal({ visible, onCancel, place }: Props): ReactElement {
         formik.handleSubmit();
       }}
       okButtonProps={{ loading: addCustomPostMutation.isLoading }}
+      zIndex={2000}
     >
       <Form labelCol={{ span: 4 }}>
         <Form.Item

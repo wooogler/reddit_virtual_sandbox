@@ -10,11 +10,13 @@ import {
   DeleteOutlined,
   DownSquareOutlined,
   FormOutlined,
+  PlusOutlined,
   UpSquareOutlined,
 } from '@ant-design/icons';
 import CodeEditor from '@components/CodeEditor';
 import './table.css';
 import { EditorState } from '@typings/types';
+import { invalidatePostQueries } from '@utils/util';
 
 function AnalysisLayout(): ReactElement {
   const {
@@ -38,12 +40,10 @@ function AnalysisLayout(): ReactElement {
   const [code, setCode] = useState('');
   const [configId, setConfigId] = useState<number | undefined>(undefined);
 
-  const [isOpenEditor, setIsOpenEditor] = useState<EditorState>(
-    condition === 'modsandbox' ? false : 'add'
-  );
+  const [isOpenEditor, setIsOpenEditor] = useState<EditorState>('add');
 
   const { data: configData, isLoading: configLoading } = useQuery(
-    ['configs', { start_date, end_date, config_id }],
+    ['configs', { start_date, end_date }],
     async () => {
       const { data } = await request<Config[]>({
         url: '/configs/',
@@ -86,11 +86,7 @@ function AnalysisLayout(): ReactElement {
 
   const deleteConfigMutation = useMutation(deleteConfig, {
     onSuccess: (_, { configId }) => {
-      queryClient.invalidateQueries('configs');
-      queryClient.invalidateQueries('filtered');
-      queryClient.invalidateQueries('not filtered');
-      queryClient.invalidateQueries('stats/filtered');
-      queryClient.invalidateQueries('stats/not_filtered');
+      invalidatePostQueries(queryClient);
       if (configId === config_id) {
         clearConfigId();
       }
@@ -121,16 +117,17 @@ function AnalysisLayout(): ReactElement {
       ),
     },
     {
-      title: 'Subreddit',
+      title: 'Filtered',
       dataIndex: 'subreddit_count',
+      width: 80,
     },
-    {
-      title: 'Spam/Report',
-      dataIndex: 'spam_count',
-    },
+    // {
+    //   title: 'Spam/Report',
+    //   dataIndex: 'spam_count',
+    // },
     {
       title: 'Action',
-      width: 60,
+      width: 120,
       fixed: 'right',
       render: (text, record) => (
         <div className='flex'>
@@ -144,7 +141,9 @@ function AnalysisLayout(): ReactElement {
             type='link'
             icon={<FormOutlined />}
             onClick={() => onClickEditConfig(record.code, record.id)}
-          />
+          >
+            Edit
+          </Button>
         </div>
       ),
     },
@@ -168,13 +167,14 @@ function AnalysisLayout(): ReactElement {
       ),
     },
     {
-      title: 'Subreddit',
+      title: 'Filtered',
+      width: 200,
       dataIndex: 'subreddit_count',
     },
-    {
-      title: 'Spam/Report',
-      dataIndex: 'spam_count',
-    },
+    // {
+    //   title: 'Spam/Report',
+    //   dataIndex: 'spam_count',
+    // },
   ];
 
   const checkCombinationColumns: ColumnsType<any> = [
@@ -195,13 +195,14 @@ function AnalysisLayout(): ReactElement {
       ),
     },
     {
-      title: 'Subreddit',
+      title: 'Filtered',
       dataIndex: 'subreddit_count',
+      width: 200,
     },
-    {
-      title: 'Spam/Report',
-      dataIndex: 'spam_count',
-    },
+    // {
+    //   title: 'Spam/Report',
+    //   dataIndex: 'spam_count',
+    // },
   ];
 
   const ruleColumns: ColumnsType<any> = [
@@ -222,13 +223,14 @@ function AnalysisLayout(): ReactElement {
       ),
     },
     {
-      title: 'Subreddit',
+      title: 'Filtered',
       dataIndex: 'subreddit_count',
+      width: 200,
     },
-    {
-      title: 'Spam/Report',
-      dataIndex: 'spam_count',
-    },
+    // {
+    //   title: 'Spam/Report',
+    //   dataIndex: 'spam_count',
+    // },
   ];
 
   const onClickAddNewConfig = useCallback(() => {
@@ -241,21 +243,46 @@ function AnalysisLayout(): ReactElement {
 
   return (
     <div className='h-2/3 flex flex-col'>
+      {isOpenEditor && (
+        <div className='flex-1 flex flex-col p-2'>
+          <CodeEditor
+            configId={configId}
+            editorState={isOpenEditor}
+            placeholder=''
+            onClose={onCloseEditor}
+            code={code}
+            setCode={setCode}
+          />
+        </div>
+      )}
       {condition === 'modsandbox' && (
         <div className='flex-1 flex flex-col p-2'>
           <div className='flex items-center mb-2'>
-            <PanelName>AutoMod Configurations</PanelName>
-            {!isOpenEditor && (
+            <PanelName>Configruation History</PanelName>
+            {/* {!isOpenEditor && (
               <div className='ml-auto flex'>
-                <Button onClick={onClickAddNewConfig}>
-                  Write a new configuration
+                <Button
+                  onClick={onClickAddNewConfig}
+                  icon={<PlusOutlined />}
+                  type='link'
+                >
+                  Add
                 </Button>
               </div>
-            )}
+            )} */}
           </div>
 
           <div>
             <Table
+              footer={() => (
+                <Button
+                  onClick={onClickAddNewConfig}
+                  icon={<PlusOutlined />}
+                  type='link'
+                >
+                  Add
+                </Button>
+              )}
               rowSelection={{
                 type: 'radio',
                 onSelect: onSelectConfig,
@@ -267,7 +294,7 @@ function AnalysisLayout(): ReactElement {
                   : ''
               }
               style={{ whiteSpace: 'pre', content: undefined }}
-              scroll={{ y: isOpenEditor ? '25vh' : '50vh' }}
+              scroll={{ y: isOpenEditor ? '20vh' : '50vh' }}
               columns={configHistoryColumns}
               dataSource={configData?.map((item) => ({
                 key: item.id,
@@ -310,33 +337,37 @@ function AnalysisLayout(): ReactElement {
                       expandable={{
                         expandedRowRender: (rule) => (
                           <div className='ml-5'>
-                            <Table
-                              rowSelection={{
-                                type: 'radio',
-                                onSelect: onSelectPart,
-                                selectedRowKeys: check_combination_id
-                                  ? [check_combination_id]
-                                  : [],
-                              }}
-                              rowClassName={(record) =>
-                                selectedHighlight.check_combination_ids.includes(
-                                  record.id
-                                )
-                                  ? 'table-row-bold'
-                                  : ''
-                              }
-                              style={{ whiteSpace: 'pre' }}
-                              columns={checkCombinationColumns}
-                              dataSource={rule?.check_combinations.map(
-                                (item) => ({
-                                  key: item.id,
-                                  ...item,
-                                })
-                              )}
-                              size='small'
-                              loading={configLoading}
-                              pagination={false}
-                            />
+                            {rule?.check_combinations.length !==
+                              rule?.checks.length && (
+                              <Table
+                                rowSelection={{
+                                  type: 'radio',
+                                  onSelect: onSelectPart,
+                                  selectedRowKeys: check_combination_id
+                                    ? [check_combination_id]
+                                    : [],
+                                }}
+                                rowClassName={(record) =>
+                                  selectedHighlight.check_combination_ids.includes(
+                                    record.id
+                                  )
+                                    ? 'table-row-bold'
+                                    : ''
+                                }
+                                style={{ whiteSpace: 'pre' }}
+                                columns={checkCombinationColumns}
+                                dataSource={rule?.check_combinations.map(
+                                  (item) => ({
+                                    key: item.id,
+                                    ...item,
+                                  })
+                                )}
+                                size='small'
+                                loading={configLoading}
+                                pagination={false}
+                              />
+                            )}
+
                             <Table
                               rowSelection={{
                                 type: 'radio',
@@ -379,7 +410,7 @@ function AnalysisLayout(): ReactElement {
                     />
                   </div>
                 ),
-                columnWidth: '2.5rem',
+
                 expandIcon: ({ expanded, onExpand, record }) =>
                   expanded ? (
                     <Button
@@ -397,19 +428,6 @@ function AnalysisLayout(): ReactElement {
               }}
             />
           </div>
-        </div>
-      )}
-
-      {isOpenEditor && (
-        <div className='flex-1 flex flex-col p-2'>
-          <CodeEditor
-            configId={configId}
-            editorState={isOpenEditor}
-            placeholder=''
-            onClose={onCloseEditor}
-            code={code}
-            setCode={setCode}
-          />
         </div>
       )}
     </div>

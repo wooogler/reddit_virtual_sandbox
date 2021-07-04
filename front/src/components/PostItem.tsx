@@ -196,7 +196,7 @@ function PostItem({
                 'text-xs font-bold underline'
               )}
             >
-              {post.source}
+              View in {post.source}
             </div>
           </a>
           <div className='text-xs ml-2'>{post.author}</div>
@@ -234,12 +234,12 @@ function PostItem({
                   </div>
                 </Button>
               )}
-              {condition === 'modsandbox' && (
+              {/* {condition === 'modsandbox' && (
                 <>
                   <div>{post.sim_fp?.toFixed(2)}</div>
                   <div>{post.sim_fn?.toFixed(2)}</div>
                 </>
-              )}
+              )} */}
             </>
           )}
         </div>

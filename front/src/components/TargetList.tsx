@@ -82,7 +82,7 @@ function TargetList({
         <PanelName>{label}</PanelName>
         {place && (
           <>
-            <div className='w-60 ml-auto flex items-center'>
+            <div className='ml-auto flex items-center'>
               {condition !== 'baseline' && (
                 <>
                   <Progress percent={rate * 100} showInfo={false} />
@@ -105,7 +105,11 @@ function TargetList({
                         validateStatus={urlStatus}
                         help={urlHelp}
                       >
-                        <Input.Search enterButton='Add' onSearch={onSearch} />
+                        <Input.Search
+                          enterButton='Add'
+                          onSearch={onSearch}
+                          placeholder='ex) https://www.reddit.com/r/cscareerquestions/...'
+                        />
                       </Form.Item>
                     </Form>
                     <Button onClick={() => setOpenAddModal(true)}>

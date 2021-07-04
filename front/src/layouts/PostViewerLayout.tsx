@@ -12,6 +12,7 @@ import { IPost, IUser, PaginatedPosts } from '@typings/db';
 import { AutoModStat } from '@typings/types';
 import request from '@utils/request';
 import { useStore } from '@utils/store';
+import { invalidatePostQueries } from '@utils/util';
 import { Button, Select } from 'antd';
 import { AxiosError } from 'axios';
 import React, { ReactElement, useCallback, useEffect, useState } from 'react';
@@ -43,8 +44,8 @@ function PostViewerLayout(): ReactElement {
     order,
     refetching,
     condition,
-    changePostType,
-    changeSource,
+    // changePostType,
+    // changeSource,
     changeOrder,
     changeImported,
   } = useStore();
@@ -260,18 +261,18 @@ function PostViewerLayout(): ReactElement {
       });
   }, [refetch]);
 
-  const onChangePostType = useCallback(
-    (value: 'all' | 'Submission' | 'Comment') => {
-      return changePostType(value);
-    },
-    [changePostType]
-  );
-  const onChangeSource = useCallback(
-    (value: 'all' | 'Subreddit' | 'Spam') => {
-      return changeSource(value);
-    },
-    [changeSource]
-  );
+  // const onChangePostType = useCallback(
+  //   (value: 'all' | 'Submission' | 'Comment') => {
+  //     return changePostType(value);
+  //   },
+  //   [changePostType]
+  // );
+  // const onChangeSource = useCallback(
+  //   (value: 'all' | 'Subreddit' | 'Spam') => {
+  //     return changeSource(value);
+  //   },
+  //   [changeSource]
+  // );
 
   const deleteAllPostsMutation = useMutation(
     () =>
@@ -281,12 +282,7 @@ function PostViewerLayout(): ReactElement {
       }),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries('target');
-        queryClient.invalidateQueries('except');
-        queryClient.invalidateQueries('filtered');
-        queryClient.invalidateQueries('not filtered');
-        queryClient.invalidateQueries('stats/filtered');
-        queryClient.invalidateQueries('stats/not_filtered');
+        invalidatePostQueries(queryClient);
         changeImported(false);
       },
     }
@@ -336,7 +332,8 @@ function PostViewerLayout(): ReactElement {
 
   const onCancelSearch = useCallback(() => {
     setIsSearchVisible(false);
-  }, []);
+    queryClient.removeQueries('search');
+  }, [queryClient]);
 
   const onExpand = useCallback(() => {
     setExpand((state) => !state);
@@ -385,11 +382,12 @@ function PostViewerLayout(): ReactElement {
   return (
     <div className='h-full w-full flex flex-col'>
       <div className='w-full flex items-center'>
-        <div className='text-3xl font-bold ml-2'>Test Cases (Objectives)</div>
+        <div className='text-3xl font-bold ml-2'>Test Cases</div>
         <div className='ml-auto flex items-center'>
           <Button
             icon={<SearchOutlined />}
             onClick={() => setIsSearchVisible(true)}
+            size='small'
           >
             Reddit Search
           </Button>
@@ -414,6 +412,7 @@ function PostViewerLayout(): ReactElement {
           }
           place='target'
         />
+        <div className='border-gray-200 border-r-2' />
         <TargetList
           label='Posts to avoid being filtered'
           posts={exceptQuery.data}
@@ -424,70 +423,96 @@ function PostViewerLayout(): ReactElement {
           place='except'
         />
       </div>
-      <div className='w-full flex items-center flex-wrap'>
-        <div className='text-3xl font-bold ml-2'>Post Viewer</div>
-        <div className='flex ml-auto items-center'>
-          <div className='mx-2'>Type:</div>
-          <Select
-            defaultValue='all'
-            onChange={onChangePostType}
-            value={post_type}
-          >
-            <Select.Option value='all'>Submissions & Comments</Select.Option>
-            <Select.Option value='Submission'>Only Submissions</Select.Option>
-            <Select.Option value='Comment'>Only Comments</Select.Option>
-          </Select>
-          <div className='mx-2'>location:</div>
-          <Select defaultValue='all' onChange={onChangeSource} value={source}>
-            <Select.Option value='all'>Subreddits & Spam/Reports</Select.Option>
-            <Select.Option value='Subreddit'>Only Subreddits</Select.Option>
-            <Select.Option value='Spam'>Only Spam/Reports</Select.Option>
-          </Select>
-          <div className='mx-2'>Sort by:</div>
-          <Select
-            defaultValue='-created_utc'
-            onChange={changeOrder}
-            value={order}
-          >
-            <Select.Option value='-created_utc'>New</Select.Option>
-            <Select.Option value='+created_utc'>Old</Select.Option>
-            {condition === 'modsandbox' && (
-              <Select.Option
-                value='fpfn'
-                disabled={targetQuery.data?.length === 0}
-              >
-                FP & FN
+      <div className='w-full flex items-center flex-wrap border-gray-200 border-t-4'>
+        <div className='text-3xl font-bold ml-2'>Imported Posts</div>
+        <div className='flex ml-auto items-center flex-wrap'>
+          {/* <div className='flex'>
+            <div className='mx-2'>Type:</div>
+            <Select
+              defaultValue='all'
+              onChange={onChangePostType}
+              value={post_type}
+              dropdownMatchSelectWidth={false}
+              size='small'
+            >
+              <Select.Option value='all'>Submissions & Comments</Select.Option>
+              <Select.Option value='Submission'>Only Submissions</Select.Option>
+              <Select.Option value='Comment'>Only Comments</Select.Option>
+            </Select>
+          </div>
+          <div className='flex'>
+            <div className='mx-2'>Location:</div>
+            <Select
+              defaultValue='all'
+              onChange={onChangeSource}
+              value={source}
+              dropdownMatchSelectWidth={false}
+              size='small'
+            >
+              <Select.Option value='all'>
+                Subreddits & Spam/Reports
               </Select.Option>
+              <Select.Option value='Subreddit'>Only Subreddits</Select.Option>
+              <Select.Option value='Spam'>Only Spam/Reports</Select.Option>
+            </Select>
+          </div> */}
+          <div className='flex'>
+            <div className='mx-2'>Sort by:</div>
+            <Select
+              onChange={changeOrder}
+              value={order}
+              dropdownMatchSelectWidth={false}
+              size='small'
+            >
+              <Select.Option value='-created_utc'>New</Select.Option>
+              <Select.Option value='+created_utc'>Old</Select.Option>
+              {condition === 'modsandbox' && (
+                <Select.Option
+                  title={
+                    targetQuery.data?.length === 0
+                      ? 'Please add posts that should be filtered.'
+                      : 'FP & FN'
+                  }
+                  value='fpfn'
+                  disabled={targetQuery.data?.length === 0}
+                >
+                  Possible False Alarms & Miss
+                </Select.Option>
+              )}
+            </Select>
+          </div>
+          <div className='flex'>
+            {notFilteredQuery.data?.pages[0].count !== 0 ? (
+              <Button
+                onClick={() => {
+                  deleteAllPostsMutation.mutate();
+                  deleteAllRulesMutation.mutate();
+                }}
+                loading={
+                  deleteAllPostsMutation.isLoading ||
+                  deleteAllRulesMutation.isLoading
+                }
+                danger
+                className='ml-2'
+                size='small'
+              >
+                Reset
+              </Button>
+            ) : (
+              <Button
+                type='primary'
+                className='ml-2'
+                onClick={onClickImport}
+                loading={importTestPostsMutation.isLoading}
+                size='small'
+              >
+                Import
+              </Button>
             )}
-          </Select>
-          {notFilteredQuery.data?.pages[0].count !== 0 ? (
-            <Button
-              onClick={() => {
-                deleteAllPostsMutation.mutate();
-                deleteAllRulesMutation.mutate();
-              }}
-              loading={
-                deleteAllPostsMutation.isLoading ||
-                deleteAllRulesMutation.isLoading
-              }
-              danger
-              className='ml-2'
-            >
-              Reset
+            <Button danger className='mx-2' onClick={onLogOut} size='small'>
+              Log out
             </Button>
-          ) : (
-            <Button
-              type='primary'
-              className='ml-2'
-              onClick={onClickImport}
-              loading={importTestPostsMutation.isLoading}
-            >
-              Import
-            </Button>
-          )}
-          <Button danger className='mx-2' onClick={onLogOut}>
-            Log out
-          </Button>
+          </div>
         </div>
       </div>
       <ImportModal visible={isModalVisible} onCancel={onCancel} />
@@ -500,6 +525,7 @@ function PostViewerLayout(): ReactElement {
                 query={fpQuery}
                 isLoading={sortFpFnMutation.isLoading || fpQuery.isLoading}
               />
+              <div className='border-gray-200 border-r-4' />
               <PostList
                 label='Possible miss'
                 query={fnQuery}
@@ -509,16 +535,14 @@ function PostViewerLayout(): ReactElement {
             </>
           ) : (
             <>
-              {condition !== 'baseline' ? (
+              {condition !== 'baseline' && (
                 <PostList
                   label='Filtered by AutoMod'
                   query={filteredQuery}
                   isLoading={filteredQuery.isLoading}
                 />
-              ) : (
-                <div className='h-full p-2 w-1/2'></div>
               )}
-
+              <div className='border-gray-200 border-r-2' />
               <PostList
                 label={
                   condition !== 'baseline'

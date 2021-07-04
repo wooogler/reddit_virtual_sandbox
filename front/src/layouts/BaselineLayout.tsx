@@ -8,6 +8,7 @@ import GuideModal from '@components/GuideModal';
 import request from '@utils/request';
 import { Config } from '@typings/db';
 import { useMutation } from 'react-query';
+import { InfoCircleOutlined } from '@ant-design/icons';
 
 function BaselineLayout(): ReactElement {
   const [code, setCode] = useState('');
@@ -32,7 +33,12 @@ function BaselineLayout(): ReactElement {
         <div className='flex items-center mb-2'>
           <PanelName>AutoMod Configurations</PanelName>
           <div className='flex ml-auto'>
-            <Button className='mr-2' onClick={() => setVisibleGuideModal(true)}>
+            <Button
+              className='mr-2'
+              icon={<InfoCircleOutlined />}
+              onClick={() => setVisibleGuideModal(true)}
+              size='small'
+            >
               Configuration Guide
             </Button>
             <GuideModal
@@ -40,7 +46,8 @@ function BaselineLayout(): ReactElement {
               onCancel={() => setVisibleGuideModal(false)}
             />
             <Button
-              type='primary'
+              type='link'
+              size='small'
               onClick={() => submitConfigMutation.mutate({ code })}
             >
               Submit
