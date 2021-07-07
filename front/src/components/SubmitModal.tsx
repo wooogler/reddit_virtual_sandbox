@@ -18,7 +18,7 @@ function SubmitModal({ onCancel, visible }: Props): ReactElement {
     request<Config>({
       url: '/configs/',
       method: 'POST',
-      data: { code, condition: 'baseline' },
+      data: { code },
     });
 
   const { refetch } = useQuery<IUser | false>('me');
@@ -35,9 +35,7 @@ function SubmitModal({ onCancel, visible }: Props): ReactElement {
   }, [refetch]);
 
   const submitConfigMutation = useMutation(submitConfig, {
-    onSuccess: () => {
-      onLogOut();
-    },
+    onSuccess: () => setIsVisibleConfirmModal(true),
   });
 
   const [isVisibleConfirmModal, setIsVisibleConfirmModal] = useState(false);
@@ -50,7 +48,7 @@ function SubmitModal({ onCancel, visible }: Props): ReactElement {
       maskClosable={false}
       centered
       destroyOnClose
-      onOk={() => setIsVisibleConfirmModal(true)}
+      onOk={() => submitConfigMutation.mutate({ code })}
       okText='Submit & Finish'
     >
       <AceEditor
@@ -69,7 +67,7 @@ function SubmitModal({ onCancel, visible }: Props): ReactElement {
       />
       <Modal
         visible={isVisibleConfirmModal}
-        onOk={() => submitConfigMutation.mutate({ code })}
+        onOk={() => onLogOut()}
         onCancel={() => setIsVisibleConfirmModal(false)}
         centered
       >

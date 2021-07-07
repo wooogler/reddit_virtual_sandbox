@@ -11,10 +11,10 @@ type Source = 'Subreddit' | 'Spam' | 'all';
 export type Condition = 'baseline' | 'sandbox' | 'modsandbox';
 
 type SelectedHighlight = {
-  config_id: number | undefined;
-  rule_id: number | undefined;
-  check_id: number | undefined;
-  check_combination_ids: number[];
+  config_id?: number;
+  rule_id?: number;
+  check_id?: number;
+  check_combination_ids?: number[];
 };
 
 type State = {

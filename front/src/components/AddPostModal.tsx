@@ -19,6 +19,7 @@ export type NewPost = Omit<
   | 'matching_rules'
   | 'matching_checks'
   | 'matching_check_combinations'
+  | 'matching_not_checks'
   | 'id'
   | 'banned_by'
   | 'isFiltered'

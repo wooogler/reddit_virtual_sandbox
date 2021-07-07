@@ -6,11 +6,7 @@ import request from '@utils/request';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { Check, CheckCombination, Config, Rule } from '@typings/db';
 import { useStore } from '@utils/store';
-import {
-  DeleteOutlined,
-  FormOutlined,
-  PlusOutlined,
-} from '@ant-design/icons';
+import { DeleteOutlined, FormOutlined, PlusOutlined } from '@ant-design/icons';
 import CodeEditor from '@components/CodeEditor';
 import './table.css';
 import { EditorState } from '@typings/types';
@@ -334,35 +330,36 @@ function AnalysisLayout(): ReactElement {
                         expandedRowRender: (rule) => (
                           <div className='ml-5'>
                             {rule?.check_combinations.length !==
-                              rule?.checks.length && (
-                              <Table
-                                rowSelection={{
-                                  type: 'radio',
-                                  onSelect: onSelectPart,
-                                  selectedRowKeys: check_combination_id
-                                    ? [check_combination_id]
-                                    : [],
-                                }}
-                                rowClassName={(record) =>
-                                  selectedHighlight.check_combination_ids.includes(
-                                    record.id
-                                  )
-                                    ? 'table-row-bold'
-                                    : ''
-                                }
-                                style={{ whiteSpace: 'pre' }}
-                                columns={checkCombinationColumns}
-                                dataSource={rule?.check_combinations.map(
-                                  (item) => ({
-                                    key: item.id,
-                                    ...item,
-                                  })
-                                )}
-                                size='small'
-                                loading={configLoading}
-                                pagination={false}
-                              />
-                            )}
+                              rule?.checks.length &&
+                              rule?.check_combinations.length !== 1 && (
+                                <Table
+                                  rowSelection={{
+                                    type: 'radio',
+                                    onSelect: onSelectPart,
+                                    selectedRowKeys: check_combination_id
+                                      ? [check_combination_id]
+                                      : [],
+                                  }}
+                                  rowClassName={(record) =>
+                                    selectedHighlight.check_combination_ids?.includes(
+                                      record.id
+                                    )
+                                      ? 'table-row-bold'
+                                      : ''
+                                  }
+                                  style={{ whiteSpace: 'pre' }}
+                                  columns={checkCombinationColumns}
+                                  dataSource={rule?.check_combinations.map(
+                                    (item) => ({
+                                      key: item.id,
+                                      ...item,
+                                    })
+                                  )}
+                                  size='small'
+                                  loading={configLoading}
+                                  pagination={false}
+                                />
+                              )}
 
                             <Table
                               rowSelection={{

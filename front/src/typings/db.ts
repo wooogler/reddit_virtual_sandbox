@@ -20,6 +20,7 @@ export interface IPost {
   matching_rules: number[];
   matching_check_combinations: number[];
   matching_checks: MatchingCheck[];
+  matching_not_checks: MatchingCheck[];
   sim: number;
   score: number;
 }

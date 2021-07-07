@@ -1,22 +1,26 @@
 import { useStore } from '@utils/store';
 import React, { ReactElement, useCallback } from 'react';
 
+interface Match {
+  start: number;
+  end: number;
+  config_id?: number;
+  rule_id?: number;
+  check_combination_ids?: number[];
+  check_id: number;
+}
+
 interface Props {
   text: string;
-  match: {
-    start: number;
-    end: number;
-    config_id: number;
-    rule_id: number;
-    check_combination_ids: number[];
-    check_id: number;
-  }[];
+
+  match: Match[];
 }
 
 function HighlightText({ text, match }: Props): ReactElement {
   const { changeSelectedHighlight } = useStore();
 
   const matchTextArray = match
+
     .sort((a, b) => a.start - b.start)
     .reduce<string[]>(
       (acc, index) => {

@@ -44,7 +44,7 @@ function CodeEditor({
     request<Config>({
       url: '/configs/',
       method: 'POST',
-      data: { code, condition },
+      data: { code },
     });
   const addConfigMutation = useMutation(addConfig, {
     onSuccess: (res, { code }) => {

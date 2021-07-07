@@ -1,7 +1,7 @@
 from collections import defaultdict
 from rest_framework import serializers
 from rest_auth.serializers import UserDetailsSerializer
-from .models import Post, User, Rule, Check, CheckCombination, Match, Config
+from .models import Post, User, Rule, Check, CheckCombination, Match, Config, NotMatch
 from .rule_handler import create_config
 
 
@@ -30,8 +30,28 @@ class MatchSerializer(serializers.ModelSerializer):
         fields = ('id', 'field', 'start', 'end', '_check_id', 'rule_id', 'check_combination_ids', 'config_id')
 
 
+class NotMatchSerializer(serializers.ModelSerializer):
+    rule_id = serializers.SerializerMethodField()
+    check_combination_ids = serializers.SerializerMethodField()
+    config_id = serializers.SerializerMethodField()
+
+    def get_config_id(self, obj):
+        return obj._check.rule.config.id
+
+    def get_rule_id(self, obj):
+        return obj._check.rule.id
+
+    def get_check_combination_ids(self, obj):
+        return obj._check.checkcombination_set.values_list('id', flat=True)
+
+    class Meta:
+        model = NotMatch
+        fields = ('id', 'field', 'start', 'end', '_check_id', 'rule_id', 'check_combination_ids', 'config_id')
+
+
 class PostSerializer(serializers.ModelSerializer):
     matching_checks = MatchSerializer(source='match_set', many=True, read_only=True)
+    matching_not_checks = NotMatchSerializer(source='notmatch_set', many=True, read_only=True)
 
     class Meta:
         model = Post
@@ -159,8 +179,7 @@ class ConfigSerializer(serializers.ModelSerializer):
         ]
 
     def create(self, validated_data):
-        config = create_config(validated_data['code'], self.context['request'].user,
-                               self.context['request'].data['condition'])
+        config = create_config(validated_data['code'], self.context['request'].user)
         return config
 
 

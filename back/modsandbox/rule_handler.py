@@ -58,9 +58,7 @@ _match_modifiers = set(_match_regexes.keys()) | {
 }
 
 
-def create_config(code, user, condition):
-    if condition == 'baseline':
-        return Config.objects.create(user=user, code=code)
+def create_config(code, user):
     config = Config.objects.create(user=user, code=code)
     posts = Post.objects.filter(user=user)
     return apply_config(config, posts, True)
@@ -125,6 +123,7 @@ def apply_config(config, posts, check_create):
         """
         # keys = [check["key"] for check in checks]
         post_to_check_links = []
+        post_to_not_check_links = []
         arr = []
 
         post_with_check_ids = set()
@@ -141,6 +140,7 @@ def apply_config(config, posts, check_create):
             {'fields': {'title'}, 'match': None, 'other': None, 'not': False}
             {'fields': {'body'}, 'match': 'includes', 'other': None, 'not': False}
             """
+            print(parsed_key)
             for field in parsed_key["fields"]:
                 key = compose_key(field, parsed_key["match"], parsed_key["other"], parsed_key["not"])
 
@@ -158,10 +158,20 @@ def apply_config(config, posts, check_create):
                         word=check["word"],
                         line=check["line"],
                     )
+
                 arr.append((check["line"], check_object.id))
                 for post in posts:
                     post_value = get_field_value_from_post(post, field)
                     match = check["regex"].search(post_value)
+
+                    if bool(match) == parsed_key["not"]:
+                        if match:
+                            post_to_not_check_links.append(
+                                Post.matching_not_checks.through(post_id=post.id, _check_id=check_object.id,
+                                                                 field=field,
+                                                                 start=match.start(), end=match.end())
+                            )
+
                     if bool(match) != parsed_key["not"]:
                         post_with_check_ids.add(post.id)
                         if match:
@@ -170,9 +180,11 @@ def apply_config(config, posts, check_create):
                                                              start=match.start(), end=match.end()))
                         else:
                             post_to_check_links.append(
-                                Post.matching_checks.through(post_id=post.id, check_id=check_object.id))
+                                Post.matching_checks.through(post_id=post.id, _check_id=check_object.id,
+                                                             field='~' + field))
 
         Post.matching_checks.through.objects.bulk_create(post_to_check_links)
+        Post.matching_not_checks.through.objects.bulk_create(post_to_not_check_links)
 
         check_dict = defaultdict(list)
         for line, check_id in arr:
@@ -198,24 +210,26 @@ def apply_config(config, posts, check_create):
                                                             checkcombination_id=check_combination_object.id))
 
             CheckCombination.checks.through.objects.bulk_create(check_to_check_combination_link)
+
         checked_posts = posts.filter(id__in=list(post_with_check_ids))
-        checked_post_rule_array = [{'id': post.id, 'checked': False} for post in checked_posts]
+        checked_array = [False] * len(checked_posts)
+        start_time = time()
         for check_combination in CheckCombination.objects.filter(rule=rule):
             check_combination_set = set(check_combination.checks.values_list('id', flat=True))
-            for item in checked_post_rule_array:
-                post = checked_posts.get(id=item['id'])
+
+            for (i, post) in enumerate(checked_posts):
                 post_set = set(post.matching_checks.values_list('id', flat=True))
                 if check_combination_set.issubset(post_set):
-                    item['checked'] = True
+                    checked_array[i] = True
                     post_to_check_combination_links.append(
                         Post.matching_check_combinations.through(post_id=post.id,
                                                                  checkcombination_id=check_combination.id))
 
+        print(time() - start_time)
         Post.matching_check_combinations.through.objects.bulk_create(post_to_check_combination_links)
-        for item in checked_post_rule_array:
-            if item['checked']:
-                post = checked_posts.get(id=item['id'])
-                post_config_set.add(item['id'])
+        for (i, post) in enumerate(checked_posts):
+            if checked_array[i]:
+                post_config_set.add(post.id)
                 post_to_rule_links.append(
                     Post.matching_rules.through(
                         post_id=post.id,

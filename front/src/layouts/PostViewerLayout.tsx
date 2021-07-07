@@ -6,7 +6,7 @@ import {
   SearchOutlined,
 } from '@ant-design/icons';
 
-import ImportModal from '@components/ImportModal';
+
 import PostList from '@components/PostList';
 import SearchModal from '@components/SearchModal';
 import SubmitModal from '@components/SubmitModal';
@@ -30,6 +30,7 @@ type Size = 'mini' | 'middle' | 'full';
 function PostViewerLayout(): ReactElement {
   const queryClient = useQueryClient();
   const [size, setSize] = useState<Size>('middle');
+  const [searchQuery, setSearchQuery] = useState('');
 
   const {
     config_id,
@@ -49,7 +50,7 @@ function PostViewerLayout(): ReactElement {
     changeImported,
   } = useStore();
 
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  // const [isModalVisible, setIsModalVisible] = useState(false);
   const [isSearchVisible, setIsSearchVisible] = useState(false);
   const [isSubmitVisible, setIsSubmitVisible] = useState(false);
   const targetQuery = useQuery<IPost[], AxiosError>(
@@ -266,9 +267,9 @@ function PostViewerLayout(): ReactElement {
     queryClient.invalidateQueries('setting');
   }, [queryClient, importTestPostsMutation]);
 
-  const onCancel = useCallback(() => {
-    setIsModalVisible(false);
-  }, []);
+  // const onCancel = useCallback(() => {
+  //   setIsModalVisible(false);
+  // }, []);
 
   const onCancelSearch = useCallback(() => {
     setIsSearchVisible(false);
@@ -303,7 +304,10 @@ function PostViewerLayout(): ReactElement {
           <div className='text-sm ml-2'>in May 2021</div>
           <Input
             prefix={<SearchOutlined />}
-            onPressEnter={() => setIsSearchVisible(true)}
+            onPressEnter={() => {
+              setIsSearchVisible(true);
+              setSearchQuery(query);
+            }}
             placeholder='Search'
             value={query}
             onChange={(e) => setQuery(e.target.value)}
@@ -313,7 +317,7 @@ function PostViewerLayout(): ReactElement {
           <SearchModal
             visible={isSearchVisible}
             onCancel={onCancelSearch}
-            query={query}
+            query={searchQuery}
           />
         </div>
         <div className='flex ml-auto items-center flex-wrap'>
@@ -384,7 +388,7 @@ function PostViewerLayout(): ReactElement {
                 danger
                 className='ml-2'
                 size='small'
-                disabled
+                // disabled
               >
                 Reset
               </Button>
@@ -414,17 +418,22 @@ function PostViewerLayout(): ReactElement {
           </div>
         </div>
       </div>
-      <ImportModal visible={isModalVisible} onCancel={onCancel} />
+      {/* <ImportModal visible={isModalVisible} onCancel={onCancel} /> */}
       {size !== 'full' && (
         <div className='flex overflow-y-auto' style={{ flex: 5 }}>
           <>
             <PostList
               label={
                 totalCount !== notFilteredCount
-                  ? order !== 'fpfn'
-                    ? 'Not filtered by AutoMod'
-                    : 'Misses'
+                  ? 'Not filtered by AutoMod'
                   : 'Posts in Subreddits'
+              }
+              description={
+                order === '-created_utc'
+                  ? '(Recent Posts)'
+                  : order === '-score'
+                  ? '(Popular Posts)'
+                  : '(Missed Posts)'
               }
               query={notFilteredQuery}
               isLoading={
@@ -437,8 +446,13 @@ function PostViewerLayout(): ReactElement {
 
             {condition !== 'baseline' && (
               <PostList
-                label={
-                  order !== 'fpfn' ? 'Filtered by AutoMod' : 'False Alarms'
+                label='Filtered by AutoMod'
+                description={
+                  order === '-created_utc'
+                    ? '(Recent Posts)'
+                    : order === '-score'
+                    ? '(Popular Posts)'
+                    : '(False Alarms)'
                 }
                 query={filteredQuery}
                 isLoading={

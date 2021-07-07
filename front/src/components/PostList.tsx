@@ -18,7 +18,7 @@ interface Props {
   stat?: AutoModStat;
   query: UseInfiniteQueryResult<PaginatedPosts, AxiosError<any>>;
   isLoading?: boolean;
-  noCount?: boolean;
+  description: string;
   totalCount?: number;
 }
 
@@ -26,7 +26,7 @@ function PostList({
   label,
   query,
   isLoading,
-  noCount,
+  description,
   totalCount,
 }: Props): ReactElement {
   const [ref, inView] = useInView({ threshold: 0 });
@@ -47,6 +47,7 @@ function PostList({
       <OverlayLoading isLoading={isLoading} description='loading...' />
       <div className='flex items-center flex-wrap'>
         <PanelName>{label}</PanelName>
+        <div className='text-sm mr-4'>{description}</div>
         <div className='text-sm text-gray-400'>
           ({queryCount} / {totalCount}){' '}
           {queryCount &&

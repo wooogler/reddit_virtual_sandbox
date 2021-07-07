@@ -149,28 +149,14 @@ function PostItem({
   const matchingChecksTitle = post.matching_checks.filter(
     (check) => check.field === 'title'
   );
+  const matchingNotChecksBody = post.matching_not_checks.filter(
+    (check) => check.field === 'body'
+  );
+  const matchingNotChecksTitle = post.matching_not_checks.filter(
+    (check) => check.field === 'title'
+  );
 
   const makeMatch = (matchingChecks: MatchingCheck[]) => {
-    // const matchingCheck = matchingChecks.find(
-    //   (check) =>
-    //     check.config_id === config_id ||
-    //     check.rule_id === rule_id ||
-    //     check._check_id === check_id ||
-    //     _.includes(check.check_combination_ids, check_combination_id)
-    // );
-    // if (matchingCheck) {
-    //   return [
-    //     {
-    //       start: matchingCheck.start,
-    //       end: matchingCheck.end,
-    //       config_id: matchingCheck.config_id,
-    //       rule_id: matchingCheck.rule_id,
-    //       check_combination_ids: matchingCheck.check_combination_ids,
-    //       check_id: matchingCheck._check_id,
-    //     },
-    //   ];
-    // }
-    // return [];
     const matchingCheck = matchingChecks.filter(
       (check) =>
         check.config_id === config_id ||
@@ -246,19 +232,19 @@ function PostItem({
       )}
       <div className={clsx('flex flex-col', !post.title && 'ml-3')}>
         <div className='text-base font-semibold mb-1'>
-          {isFiltered ? (
-            <HighlightText
-              text={post.title}
-              match={makeMatch(matchingChecksTitle)}
-            />
-          ) : searchQuery ? (
+          {searchQuery ? (
             <Highlighter
               searchWords={[searchQuery]}
               textToHighlight={post.title}
               highlightStyle={{ fontWeight: 'bolder' }}
             />
           ) : (
-            post.title
+            <HighlightText
+              text={post.title}
+              match={makeMatch(
+                matchingChecksTitle.concat(matchingNotChecksTitle)
+              )}
+            />
           )}
         </div>
         <div className='flex items-center flex-wrap mb-1'>
@@ -285,19 +271,19 @@ function PostItem({
         <div>
           {condition === 'modsandbox' ? (
             <div className='text-sm'>
-              {isFiltered ? (
-                <HighlightText
-                  text={post.body}
-                  match={makeMatch(matchingChecksBody)}
-                />
-              ) : searchQuery ? (
+              {searchQuery ? (
                 <Highlighter
                   searchWords={[searchQuery]}
                   textToHighlight={post.body}
                   highlightStyle={{ fontWeight: 'bolder' }}
                 />
               ) : (
-                post.body
+                <HighlightText
+                  text={post.body}
+                  match={makeMatch(
+                    matchingChecksBody.concat(matchingNotChecksBody)
+                  )}
+                />
               )}
             </div>
           ) : (

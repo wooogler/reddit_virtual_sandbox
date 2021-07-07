@@ -84,6 +84,7 @@ class Post(models.Model):
     matching_configs = models.ManyToManyField(Config, blank=True)
     matching_rules = models.ManyToManyField(Rule, blank=True)
     matching_checks = models.ManyToManyField(Check, blank=True, through='Match')
+    matching_not_checks = models.ManyToManyField(Check, blank=True, through='NotMatch', related_name='not_check')
     matching_check_combinations = models.ManyToManyField(CheckCombination, blank=True)
 
     def __str__(self):
@@ -91,6 +92,14 @@ class Post(models.Model):
 
 
 class Match(models.Model):
+    _check = models.ForeignKey(Check, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    field = models.CharField(max_length=50, null=True)
+    start = models.IntegerField(null=True)
+    end = models.IntegerField(null=True)
+
+
+class NotMatch(models.Model):
     _check = models.ForeignKey(Check, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     field = models.CharField(max_length=50, null=True)

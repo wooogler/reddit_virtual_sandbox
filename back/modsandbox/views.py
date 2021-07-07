@@ -185,14 +185,19 @@ class PostViewSet(viewsets.ModelViewSet):
 
     @action(methods=['get'], detail=False)
     def search(self, request):
-        posts = self.queryset.filter(user=request.user)
         query = self.request.query_params.get("query")
-        # for sqlite3
-        # searched_posts = posts.filter(body__icontains=query) | posts.filter(title__icontains=query)
+        sort = self.request.query_params.get("sort")
+        posts = self.queryset.filter(user=request.user)
+        searched_posts = posts.filter(body__icontains=query) | posts.filter(title__icontains=query)
         # for postgresql
-        search_vector = SearchVector('title', 'body')
-        search_query = SearchQuery(query)
-        searched_posts = posts.annotate(rank=SearchRank(search_vector, search_query)).order_by('-rank')
+        if sort == 'relevance':
+            search_vector = SearchVector('title', 'body')
+            search_query = SearchQuery(query)
+            searched_posts = searched_posts.annotate(rank=SearchRank(search_vector, search_query)).order_by('-rank')
+        elif sort == 'new':
+            searched_posts = searched_posts.order_by('-created_utc')
+        elif sort == 'top':
+            searched_posts = searched_posts.order_by('-score')
 
         return Response(PostSerializer(searched_posts, many=True).data)
 
@@ -302,7 +307,6 @@ class TargetViewSet(viewsets.ModelViewSet):
                 new_post = serializer.save()
                 posts = Post.objects.filter(id=new_post.id)
         configs = Config.objects.filter(user=request.user)
-        print(configs)
         for config in configs:
             apply_config(config, posts, False)
         return Response(status=status.HTTP_200_OK)
