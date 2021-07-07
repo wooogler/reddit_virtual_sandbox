@@ -1,7 +1,7 @@
 import { IPost, IUser } from '@typings/db';
 import request from '@utils/request';
 import { useStore } from '@utils/store';
-import { Form, Input, Modal, Select } from 'antd';
+import { Form, Input, Modal } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import { useFormik } from 'formik';
 import React, { ReactElement } from 'react';
@@ -106,10 +106,10 @@ function AddPostModal({ visible, onCancel, place }: Props): ReactElement {
       addCustomPostMutation.mutate(values);
     },
   });
-  const { Option } = Select;
+
   return (
     <Modal
-      title='Add a Custom Post'
+      title='Create Post'
       visible={visible}
       onCancel={onCancel}
       maskClosable={false}

@@ -7,7 +7,7 @@ import PostViewerLayout from '@layouts/PostViewerLayout';
 import AnalysisLayout from '@layouts/AnalysisLayout';
 import PostChart from '@components/PostChart';
 import { useStore } from '@utils/store';
-import BaselineLayout from '@layouts/BaselineLayout';
+
 
 function HomePage(): ReactElement {
   const { data } = useQuery('me', async () => {

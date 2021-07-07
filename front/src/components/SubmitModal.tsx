@@ -1,6 +1,6 @@
 import { Config, IUser } from '@typings/db';
 import request from '@utils/request';
-import { message, Modal } from 'antd';
+import { Modal } from 'antd';
 import React, { ReactElement, useCallback, useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
 import AceEditor from 'react-ace';

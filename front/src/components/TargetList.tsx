@@ -2,11 +2,10 @@ import { IPost } from '@typings/db';
 import { AutoModStat } from '@typings/types';
 import { useStore } from '@utils/store';
 import { isFiltered } from '@utils/util';
-import { Button, Empty, Form, Input, Popover, Progress } from 'antd';
+import { Button, Empty } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
-import React, { ReactElement, useCallback, useState } from 'react';
-import Url from 'url-parse';
-import isUrl from 'validator/es/lib/isURL';
+import { ReactElement, useCallback, useState } from 'react';
+
 import AddPostModal from './AddPostModal';
 import OverlayLoading from './OverlayLoading';
 import PanelName from './PanelName';
@@ -27,9 +26,9 @@ function TargetList({
   posts,
   place,
 }: Props): ReactElement {
-  const [urlStatus, setUrlStatus] = useState<any>('');
-  const [urlHelp, setUrlHelp] = useState<any>('');
-  const [visible, setVisible] = useState(false);
+  // const [urlStatus, setUrlStatus] = useState<any>('');
+  // const [urlHelp, setUrlHelp] = useState<any>('');
+  // const [visible, setVisible] = useState(false);
   const [openAddModal, setOpenAddModal] = useState(false);
   const { rule_id, check_combination_id, check_id, config_id, condition } =
     useStore();
@@ -39,28 +38,28 @@ function TargetList({
     setOpenAddModal(true);
     form.resetFields();
   }, [form]);
-  const onSearch = (val: string) => {
-    setUrlHelp('');
-    setUrlStatus('');
-    if (!isUrl(val)) {
-      setUrlHelp('Please Input URL address');
-      setUrlStatus('error');
-      return;
-    }
-    const postUrl = new Url(val);
-    if (postUrl.host !== 'www.reddit.com') {
-      setUrlHelp('You can only use reddit url!');
-      setUrlStatus('error');
-      return;
-    }
-    const pathname = postUrl.pathname.split('/');
-    const postId =
-      pathname[6] === '' ? `t3_${pathname[4]}` : `t1_${pathname[6]}`;
-    if (onSubmit) {
-      onSubmit(postId);
-    }
-    setVisible(false);
-  };
+  // const onSearch = (val: string) => {
+  //   setUrlHelp('');
+  //   setUrlStatus('');
+  //   if (!isUrl(val)) {
+  //     setUrlHelp('Please Input URL address');
+  //     setUrlStatus('error');
+  //     return;
+  //   }
+  //   const postUrl = new Url(val);
+  //   if (postUrl.host !== 'www.reddit.com') {
+  //     setUrlHelp('You can only use reddit url!');
+  //     setUrlStatus('error');
+  //     return;
+  //   }
+  //   const pathname = postUrl.pathname.split('/');
+  //   const postId =
+  //     pathname[6] === '' ? `t3_${pathname[4]}` : `t1_${pathname[6]}`;
+  //   if (onSubmit) {
+  //     onSubmit(postId);
+  //   }
+  //   setVisible(false);
+  // };
 
   const onCancel = () => {
     setOpenAddModal(false);
@@ -79,15 +78,15 @@ function TargetList({
   return (
     <div className='relative flex flex-col h-full p-2 w-1/2 overflow-y-auto'>
       <OverlayLoading isLoading={isLoading} description='loading...' />
-      <div className='flex items-center'>
+      <div className='flex items-center flex-wrap'>
         <PanelName>{label}</PanelName>
+        <div className='text-sm text-gray-400'>
+          ({stat.part}/{stat.total}) {(rate * 100).toFixed(2)} %
+        </div>
         {place && (
           <>
             <div className='ml-auto flex items-center'>
-              <Progress percent={rate * 100} showInfo={false} />
-              <div className='text-xs ml-2 text-gray-400 w-40'>
-                {(rate * 100).toFixed(2)} % ({stat.part}/{stat.total})
-              </div>
+              {/* <Progress percent={rate * 100} showInfo={false} /> */}
 
               {/* <Popover
                 placement='bottom'
@@ -152,7 +151,11 @@ function TargetList({
         <div className='flex flex-1 justify-center items-center'>
           <Empty
             image={Empty.PRESENTED_IMAGE_SIMPLE}
-            description='Add a post in Test cases'
+            description={
+              condition !== 'baseline'
+                ? 'Add a post in your collection'
+                : 'Empty'
+            }
           />
         </div>
       )}

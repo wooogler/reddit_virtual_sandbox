@@ -109,6 +109,9 @@ export const useStore = create<State>(
         clearConfigId: () =>
           set((state) => ({
             config_id: undefined,
+            rule_id: undefined,
+            check_id: undefined,
+            check_combination_id: undefined,
           })),
         changeDateRange: (start_date: Dayjs, end_date: Dayjs) =>
           set((state) => ({

@@ -1,5 +1,5 @@
 import PanelName from '@components/PanelName';
-import React, { Key, ReactElement, useCallback, useState } from 'react';
+import { Key, ReactElement, useCallback, useState } from 'react';
 import { Button, Empty, Table, Tooltip } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import request from '@utils/request';
@@ -8,10 +8,8 @@ import { Check, CheckCombination, Config, Rule } from '@typings/db';
 import { useStore } from '@utils/store';
 import {
   DeleteOutlined,
-  DownSquareOutlined,
   FormOutlined,
   PlusOutlined,
-  UpSquareOutlined,
 } from '@ant-design/icons';
 import CodeEditor from '@components/CodeEditor';
 import './table.css';
@@ -127,8 +125,7 @@ function AnalysisLayout(): ReactElement {
     // },
     {
       title: 'Action',
-      width: 120,
-      fixed: 'right',
+      width: 60,
       align: 'right',
       render: (text, record) => (
         <div className='flex'>
@@ -142,9 +139,7 @@ function AnalysisLayout(): ReactElement {
             type='link'
             icon={<FormOutlined />}
             onClick={() => onClickEditConfig(record.code, record.id)}
-          >
-            Edit
-          </Button>
+          />
         </div>
       ),
     },

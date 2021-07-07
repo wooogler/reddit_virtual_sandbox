@@ -1,17 +1,16 @@
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import React, { ReactElement } from 'react';
+import { ReactElement } from 'react';
 import clsx from 'clsx';
 import { IPost, MatchingCheck } from '@typings/db';
 import { Button, Dropdown, Menu, Tooltip } from 'antd';
 import request from '@utils/request';
 import utc from 'dayjs/plugin/utc';
 import HighlightText from './HighlightText';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { useStore } from '@utils/store';
 import _ from 'lodash';
 import Highlighter from 'react-highlight-words';
-import { AxiosError } from 'axios';
 import { NewPost } from './AddPostModal';
 
 dayjs.extend(relativeTime);
@@ -38,7 +37,6 @@ function PostItem({
     check_id,
     condition,
     order,
-    changeOrder,
   } = useStore();
 
   const invalidatePostQueries = (place: IPost['place']) => {
@@ -232,7 +230,7 @@ function PostItem({
     <div
       className={clsx(
         isFiltered && 'bg-blue-100',
-        'p-2 border-gray-200 border flex flex-1'
+        'p-2 border-gray-400 border-b-2 flex flex-1'
       )}
       style={{
         borderLeft:
@@ -247,7 +245,7 @@ function PostItem({
         <div className='border-gray-300 border-l-2 border-dotted'></div>
       )}
       <div className={clsx('flex flex-col', !post.title && 'ml-3')}>
-        <div className='text-base'>
+        <div className='text-base font-semibold mb-1'>
           {isFiltered ? (
             <HighlightText
               text={post.title}
@@ -263,7 +261,7 @@ function PostItem({
             post.title
           )}
         </div>
-        <div className='flex items-center flex-wrap'>
+        <div className='flex items-center flex-wrap mb-1'>
           <div className='text-xs'>{post.author}</div>
           <Tooltip
             placement='top'
@@ -274,80 +272,87 @@ function PostItem({
             <div className='text-xs mx-2'>{dayjs().to(post.created_utc)}</div>
           </Tooltip>
           <Tooltip placement='top' title='upvote - downvote'>
-            <div className='mr-2 text-xs'>score: {post.score}</div>
+            <div className='mr-2 text-xs'>
+              score: <b>{post.score}</b>
+            </div>
           </Tooltip>
-          {post.post_id !== 'ffffff' && (
-            <a
-              href={post.url}
-              onClick={(e) => {
-                e.stopPropagation();
-              }}
-              target='_blank'
-              rel='noopener noreferrer'
-            >
-              <div
-                className={clsx(
-                  post.source === 'Spam'
-                    ? 'text-red-600'
-                    : post.source === 'Report' && 'text-yellow-500',
-                  'text-xs font-bold underline'
-                )}
-              >
-                View in {post.source}
-              </div>
-            </a>
-          )}
-
-          {condition !== 'baseline' && (post.place === 'normal' ? (
-            <Dropdown overlay={moveMenu}>
-              <Button type='link'>
-                <div className='text-xs underline'>Move</div>
-              </Button>
-            </Dropdown>
-          ) : (
-            <Button
-              danger
-              type='link'
-              size='small'
-              onClick={() =>
-                deletePostFromTestCaseMutation.mutate({
-                  id: post.id,
-                  place: post.place,
-                })
-              }
-              disabled={!isTested}
-            >
-              <div className='text-xs underline'>
-                {isTested ? 'delete' : 'moved'}
-              </div>
-            </Button>)
+          {post.source === 'Spam' && (
+            <div className='text-red-600 text-xs'>
+              Removed by {post.banned_by}
+            </div>
           )}
         </div>
-        {post.source === 'Spam' && (
-          <div className='text-red-600 text-xs'>
-            Removed by {post.banned_by}
-          </div>
-        )}
-        {condition === 'modsandbox' ? (
-          <div className='text-sm'>
-            {isFiltered ? (
-              <HighlightText
-                text={post.body}
-                match={makeMatch(matchingChecksBody)}
-              />
-            ) : searchQuery ? (
-              <Highlighter
-                searchWords={[searchQuery]}
-                textToHighlight={post.body}
-                highlightStyle={{ fontWeight: 'bolder' }}
-              />
-            ) : (
-              post.body
+        <div>
+          {condition === 'modsandbox' ? (
+            <div className='text-sm'>
+              {isFiltered ? (
+                <HighlightText
+                  text={post.body}
+                  match={makeMatch(matchingChecksBody)}
+                />
+              ) : searchQuery ? (
+                <Highlighter
+                  searchWords={[searchQuery]}
+                  textToHighlight={post.body}
+                  highlightStyle={{ fontWeight: 'bolder' }}
+                />
+              ) : (
+                post.body
+              )}
+            </div>
+          ) : (
+            <div className='text-sm'>{post.body}</div>
+          )}
+          <div className='flex items-center'>
+            {post.post_id !== 'ffffff' && (
+              <a
+                href={post.url}
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
+                target='_blank'
+                rel='noopener noreferrer'
+              >
+                <div
+                  className={clsx(
+                    post.source === 'Spam'
+                      ? 'text-red-600'
+                      : post.source === 'Report' && 'text-yellow-500',
+                    'text-xs underline'
+                  )}
+                >
+                  View in {post.source}
+                </div>
+              </a>
             )}
+
+            {condition !== 'baseline' &&
+              (post.place === 'normal' ? (
+                <Dropdown overlay={moveMenu}>
+                  <Button type='link'>
+                    <div className='text-xs underline'>Move</div>
+                  </Button>
+                </Dropdown>
+              ) : (
+                <Button
+                  danger
+                  type='link'
+                  size='small'
+                  onClick={() =>
+                    deletePostFromTestCaseMutation.mutate({
+                      id: post.id,
+                      place: post.place,
+                    })
+                  }
+                  disabled={!isTested}
+                >
+                  <div className='text-xs underline'>
+                    {isTested ? 'delete' : 'moved'}
+                  </div>
+                </Button>
+              ))}
           </div>
-        ) : (
-          <div className='text-sm'>{post.body}</div>
-        )}
+        </div>
       </div>
     </div>
   );

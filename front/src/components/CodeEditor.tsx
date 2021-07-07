@@ -44,7 +44,7 @@ function CodeEditor({
     request<Config>({
       url: '/configs/',
       method: 'POST',
-      data: { code, condition: 'modsandbox' },
+      data: { code, condition },
     });
   const addConfigMutation = useMutation(addConfig, {
     onSuccess: (res, { code }) => {
@@ -57,7 +57,7 @@ function CodeEditor({
     request<Config>({
       url: `/configs/${configId}/`,
       method: 'PATCH',
-      data: { code, condition: 'modsandbox' },
+      data: { code, condition },
     });
   const editConfigMutation = useMutation(editConfig, {
     onSuccess: (res, { code }) => {
@@ -66,7 +66,9 @@ function CodeEditor({
   });
 
   const onClickApply = () => {
-    setIsSaved(true);
+    if (condition === 'baseline') {
+      setIsSaved(true);
+    }
     if (editorState === 'add') {
       addConfigMutation.mutate({ code });
     } else if (editorState === 'edit') {
@@ -115,7 +117,7 @@ function CodeEditor({
 
   return (
     <>
-      <div className='flex mb-2 items-center'>
+      <div className='flex mb-2 items-center flex-wrap'>
         <PanelName>
           {condition === 'sandbox'
             ? 'AutoMod Configuration'
@@ -130,24 +132,34 @@ function CodeEditor({
             onClick={() => setVisibleGuideModal(true)}
             size='small'
           >
-            Configuration Guide
+            Guide
           </Button>
           <GuideModal
             visible={visibleGuideModal}
             onCancel={() => setVisibleGuideModal(false)}
           />
           {condition !== 'baseline' ? (
-            <Button
-              type='link'
-              icon={<PlayCircleOutlined />}
-              onClick={onClickApply}
-              loading={
-                addConfigMutation.isLoading || editConfigMutation.isLoading
-              }
-              size='small'
-            >
-              Apply
-            </Button>
+            <div className='flex'>
+              <Button
+                type='link'
+                size='small'
+                onClick={() => clearConfigId()}
+                danger
+              >
+                Cancel
+              </Button>
+              <Button
+                type='link'
+                icon={<PlayCircleOutlined />}
+                onClick={onClickApply}
+                loading={
+                  addConfigMutation.isLoading || editConfigMutation.isLoading
+                }
+                size='small'
+              >
+                Apply
+              </Button>
+            </div>
           ) : isSaved ? (
             <Button
               type='link'

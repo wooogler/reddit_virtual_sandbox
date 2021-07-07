@@ -84,8 +84,7 @@ def apply_config(config, posts, check_create):
     yaml_sections = [
         section.strip("\r\n") for section in re.split("^---", code, flags=re.MULTILINE)
     ]
-
-    post_config_array = [False] * len(posts)
+    post_config_set = set([])
     for section_num, section in enumerate(yaml_sections, 1):
 
         if check_create:
@@ -182,7 +181,6 @@ def apply_config(config, posts, check_create):
 
         post_to_check_combination_links = []
         post_to_rule_links = []
-        post_rule_array = [False] * len(posts)
 
         if check_create:
             check_to_check_combination_link = []
@@ -200,22 +198,24 @@ def apply_config(config, posts, check_create):
                                                             checkcombination_id=check_combination_object.id))
 
             CheckCombination.checks.through.objects.bulk_create(check_to_check_combination_link)
-        posts = posts.filter(id__in=list(post_with_check_ids))
+        checked_posts = posts.filter(id__in=list(post_with_check_ids))
+        checked_post_rule_array = [{'id': post.id, 'checked': False} for post in checked_posts]
         for check_combination in CheckCombination.objects.filter(rule=rule):
             check_combination_set = set(check_combination.checks.values_list('id', flat=True))
-            for i, post in enumerate(posts):
+            for item in checked_post_rule_array:
+                post = checked_posts.get(id=item['id'])
                 post_set = set(post.matching_checks.values_list('id', flat=True))
                 if check_combination_set.issubset(post_set):
-                    post_rule_array[i] = True
+                    item['checked'] = True
                     post_to_check_combination_links.append(
                         Post.matching_check_combinations.through(post_id=post.id,
                                                                  checkcombination_id=check_combination.id))
 
         Post.matching_check_combinations.through.objects.bulk_create(post_to_check_combination_links)
-
-        for i, post in enumerate(posts):
-            if post_rule_array[i]:
-                post_config_array[i] = True
+        for item in checked_post_rule_array:
+            if item['checked']:
+                post = checked_posts.get(id=item['id'])
+                post_config_set.add(item['id'])
                 post_to_rule_links.append(
                     Post.matching_rules.through(
                         post_id=post.id,
@@ -228,8 +228,8 @@ def apply_config(config, posts, check_create):
     post_to_config_links = []
     if check_create:
         Post.matching_configs.through.objects.filter(config_id=config.id).delete()
-    for i, post in enumerate(posts):
-        if post_config_array[i]:
+    for post in posts:
+        if post.id in post_config_set:
             post_to_config_links.append(Post.matching_configs.through(post_id=post.id, config_id=config.id))
 
     Post.matching_configs.through.objects.bulk_create(post_to_config_links)

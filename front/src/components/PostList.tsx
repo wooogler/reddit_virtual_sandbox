@@ -40,16 +40,20 @@ function PostList({
     }
   }, [inView, fetchNextPage]);
 
+  const queryCount = query.data?.pages[0].count;
+
   return (
     <div className='relative flex flex-col h-full p-2 w-1/2'>
       <OverlayLoading isLoading={isLoading} description='loading...' />
-      <div className='flex items-center'>
+      <div className='flex items-center flex-wrap'>
         <PanelName>{label}</PanelName>
-        {condition !== 'baseline' && (
-          <div className='text-lg ml-2'>
-            ({query.data?.pages[0].count} / {totalCount})
-          </div>
-        )}
+        <div className='text-sm text-gray-400'>
+          ({queryCount} / {totalCount}){' '}
+          {queryCount &&
+            totalCount &&
+            ((queryCount / totalCount) * 100).toFixed(2)}{' '}
+          %
+        </div>
       </div>
       {query.data?.pages[0].count !== 0 ? (
         <div className='overflow-y-auto post-scroll'>

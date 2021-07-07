@@ -61,9 +61,9 @@ function LogInPage(): ReactElement {
             defaultValue={condition}
             onChange={(value: Condition) => changeCondition(value)}
           >
-            <Select.Option value='modsandbox'>A</Select.Option>
-            <Select.Option value='sandbox'>B</Select.Option>
-            <Select.Option value='baseline'>C</Select.Option>
+            <Select.Option value='modsandbox'>System A</Select.Option>
+            <Select.Option value='sandbox'>System B</Select.Option>
+            <Select.Option value='baseline'>System C</Select.Option>
           </Select>
         </Form.Item>
         <Form.Item

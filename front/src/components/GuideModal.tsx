@@ -17,9 +17,48 @@ function GuideModal({ visible, onCancel }: Props): ReactElement {
       onCancel={onCancel}
       centered
       footer={false}
+      width={800}
     >
       <GuideDiv>
-        <Tabs defaultActiveKey='1' centered>
+        <Tabs defaultActiveKey='0' centered>
+          <TabPane tab='Search Checks' key='0'>
+            <div className='category'>Search Checks</div>
+            <div className='text'>
+              If you want to filter comments with "keyword1" in{' '}
+              <strong>"title"</strong>
+            </div>
+            <div className='code'>
+              <strong>title</strong>: ['keyword1']
+            </div>
+            <div className='text'>
+              If you want to filter comments with "keyword2" in{' '}
+              <strong>"body"</strong>
+            </div>
+            <div className='code'>
+              <strong>body</strong>: ['keyword2']
+            </div>
+            <Alert
+              message={
+                <div>
+                  Keyword filters are <strong>case-insensitive</strong> by
+                  default
+                </div>
+              }
+              type='warning'
+              showIcon
+              className='my-1'
+            />
+            <Alert
+              message={
+                <div>
+                  "Don't forget a <strong>space</strong> after colon!"
+                </div>
+              }
+              type='warning'
+              showIcon
+              className='my-1'
+            />
+          </TabPane>
           <TabPane tab='AND, OR, NOT' key='1'>
             <div className='category'>AND, OR, NOT</div>
             <div className='text'>
@@ -28,18 +67,6 @@ function GuideModal({ visible, onCancel }: Props): ReactElement {
             <div className='code'>
               <strong>body: ['</strong>keyword<strong>']</strong>
             </div>
-            <Alert
-              message='Keyword filters are case-insensitive by default'
-              type='warning'
-              showIcon
-              className='my-1'
-            />
-            <Alert
-              message="Don't omit a space after colon!"
-              type='warning'
-              showIcon
-              className='my-1'
-            />
             <div className='text'>
               If you want to filter comments with “keyword1” <strong>OR</strong>{' '}
               “keyword2”
@@ -107,7 +134,12 @@ function GuideModal({ visible, onCancel }: Props): ReactElement {
             </div>
             <div className='group'>Group 2</div>
             <Alert
-              message='Keyword filters are case-insensitive by default'
+              message={
+                <div>
+                  Keyword filters are <strong>case-insensitive</strong> by
+                  default
+                </div>
+              }
               type='warning'
               showIcon
               className='my-1'

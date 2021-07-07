@@ -1,11 +1,9 @@
 import {
-  ArrowsAltOutlined,
   BorderOutlined,
   FullscreenOutlined,
   LineOutlined,
   RedditOutlined,
   SearchOutlined,
-  ShrinkOutlined,
 } from '@ant-design/icons';
 
 import ImportModal from '@components/ImportModal';
@@ -13,14 +11,13 @@ import PostList from '@components/PostList';
 import SearchModal from '@components/SearchModal';
 import SubmitModal from '@components/SubmitModal';
 import TargetList from '@components/TargetList';
-import { IPost, IUser, PaginatedPosts } from '@typings/db';
-import { AutoModStat } from '@typings/types';
+import { IPost, PaginatedPosts } from '@typings/db';
 import request from '@utils/request';
-import { Order, useStore } from '@utils/store';
+import { useStore } from '@utils/store';
 import { invalidatePostQueries } from '@utils/util';
-import { Button, Input, Radio, RadioChangeEvent, Select, Tooltip } from 'antd';
+import { Button, Input, Radio, RadioChangeEvent, Tooltip } from 'antd';
 import { AxiosError } from 'axios';
-import React, { ReactElement, useCallback, useEffect, useState } from 'react';
+import { ReactElement, useCallback, useEffect, useState } from 'react';
 import {
   useInfiniteQuery,
   useMutation,
@@ -51,7 +48,6 @@ function PostViewerLayout(): ReactElement {
     changeOrder,
     changeImported,
   } = useStore();
-  const { data: userData, refetch } = useQuery<IUser | false>('me');
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isSearchVisible, setIsSearchVisible] = useState(false);
@@ -282,12 +278,13 @@ function PostViewerLayout(): ReactElement {
   const totalCount =
     (filteredQuery.data?.pages[0].count || 0) +
     (notFilteredQuery.data?.pages[0].count || 0);
-  const notFilteredCount = notFilteredQuery.data?.pages[0].count
+  const notFilteredCount = notFilteredQuery.data?.pages[0].count;
 
   useEffect(() => {
     if (notFilteredCount === 0) {
       importTestPostsMutation.mutate();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [notFilteredCount]);
 
   const [query, setQuery] = useState('');
@@ -363,7 +360,9 @@ function PostViewerLayout(): ReactElement {
                   disabled={targetQuery.data?.length === 0}
                 >
                   {targetQuery.data?.length === 0 ? (
-                    <Tooltip title='Add target posts to use'>Smart</Tooltip>
+                    <Tooltip title='Add a post in your collections'>
+                      Smart
+                    </Tooltip>
                   ) : (
                     'Smart'
                   )}
@@ -385,6 +384,7 @@ function PostViewerLayout(): ReactElement {
                 danger
                 className='ml-2'
                 size='small'
+                disabled
               >
                 Reset
               </Button>
@@ -420,7 +420,7 @@ function PostViewerLayout(): ReactElement {
           <>
             <PostList
               label={
-                condition !== 'baseline'
+                totalCount !== notFilteredCount
                   ? order !== 'fpfn'
                     ? 'Not filtered by AutoMod'
                     : 'Misses'
@@ -454,7 +454,12 @@ function PostViewerLayout(): ReactElement {
       <div className='w-full flex items-center border-gray-200 border-t-4'>
         <div className='text-2xl ml-2 flex items-center'>
           <RedditOutlined style={{ color: 'orangered' }} />
-          <div className='ml-2'>r/sandbox_{userData && userData.username}</div>
+          <div className='ml-2 flex items-center'>
+            <div>Your Post Collections</div>
+            <div className='text-sm ml-2'>
+              (You can test your AutoMod configuration here)
+            </div>
+          </div>
         </div>
         <div className='ml-auto flex items-center'>
           <Button

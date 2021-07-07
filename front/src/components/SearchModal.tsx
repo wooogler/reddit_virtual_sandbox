@@ -1,6 +1,6 @@
 import { IPost } from '@typings/db';
 
-import { Input, Select } from 'antd';
+import {  Select } from 'antd';
 import Modal from 'antd/lib/modal/Modal';
 import React, { ReactElement, useState } from 'react';
 import { useQuery } from 'react-query';

@@ -5,7 +5,7 @@ interface Props {
 }
 
 function PanelName({ children }: Props): ReactElement {
-  return <div className='text-xl font-bold'>{children}</div>;
+  return <div className='text-xl font-bold mr-2'>{children}</div>;
 }
 
 export default PanelName;

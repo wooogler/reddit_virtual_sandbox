@@ -134,8 +134,8 @@ class PostViewSet(viewsets.ModelViewSet):
             posts = create_posts(praw_spams, request.user, "normal", use_author)
 
         else:  # for lab study
-            script_dir = os.path.dirname(__file__)
-            with open(os.path.join(script_dir, 'test_data/submission_cscareerquestions_may_2.json')) as normal_json:
+            with open(os.path.join(os.path.dirname(__file__),
+                                   'test_data/submission_cscareerquestions_may_2.json')) as normal_json:
                 normal = json.load(normal_json)
                 normal_json.close()
 
@@ -167,7 +167,9 @@ class PostViewSet(viewsets.ModelViewSet):
             apply_config(config, posts, False)
 
         df_posts_vector = get_df_posts_vector(posts)
-        df_posts_vector.to_pickle('post_vectors_' + request.user.username + '.pkl')
+        vector_path = os.path.join(os.path.dirname(__file__), 'vector_db',
+                                   'post_vectors_' + request.user.username + '.pkl')
+        df_posts_vector.to_pickle(vector_path)
         # create_index_pinecone(request.user.username)
         # index = get_index_pinecone(request.user.username)
         # index.upsert(items=zip(df_posts_vector.id, df_posts_vector.vector), namespace='fn', batch_size=1000)
@@ -200,7 +202,9 @@ class PostViewSet(viewsets.ModelViewSet):
         normal_posts = posts.filter(place__startswith='normal')
         target_posts = posts.filter(place__in=['target', 'normal-target'])
         target_vector = get_average_vector([get_embedding_post(post) for post in target_posts])
-        post_vectors = pd.read_pickle('post_vectors_' + request.user.username + '.pkl')
+        vector_path = os.path.join(os.path.dirname(__file__), 'vector_db',
+                                   'post_vectors_' + request.user.username + '.pkl')
+        post_vectors = pd.read_pickle(vector_path)
         if target_vector is not None:
             for post in normal_posts:
                 post_vector = post_vectors[post_vectors.id == post.id].vector
