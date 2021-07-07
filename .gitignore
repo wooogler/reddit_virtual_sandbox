@@ -1,4 +1,3 @@
-test_data/
 *.pickle
 *.npy
 my.cnf
