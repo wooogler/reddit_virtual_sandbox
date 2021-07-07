@@ -45,13 +45,6 @@ function BaselineLayout(): ReactElement {
               visible={visibleGuideModal}
               onCancel={() => setVisibleGuideModal(false)}
             />
-            <Button
-              type='link'
-              size='small'
-              onClick={() => submitConfigMutation.mutate({ code })}
-            >
-              Submit
-            </Button>
           </div>
         </div>
         <div className='flex-1'>

@@ -150,24 +150,26 @@ function PostChart(): ReactElement {
   useEffect(() => {
     const fetchGraph = async () => {
       const { data } = await request<IStat[]>({
-        url: '/stats/graph',
+        url: '/stats/graph/',
         params: {
           post_type: 'all',
           filtered: false,
           source: 'all',
         },
       });
-      const startDate = data
-        .map((item) => item.x0)
-        .reduce((min, cur) => {
-          return cur < min ? cur : min;
-        });
-      const endDate = data
-        .map((item) => item.x1)
-        .reduce((min, cur) => {
-          return cur > min ? cur : min;
-        });
-      changeDateRange(dayjs(startDate), dayjs(endDate));
+      if (data.length !== 0) {
+        const startDate = data
+          .map((item) => item.x0)
+          .reduce((min, cur) => {
+            return cur < min ? cur : min;
+          });
+        const endDate = data
+          .map((item) => item.x1)
+          .reduce((min, cur) => {
+            return cur > min ? cur : min;
+          });
+        changeDateRange(dayjs(startDate), dayjs(endDate));
+      }
     };
     fetchGraph();
   }, [changeDateRange]);

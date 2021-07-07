@@ -1,28 +1,14 @@
-import praw
-import re
+import ast
 
-import yaml
-
-reddit = praw.Reddit(
-    client_id="BSuv858saoRX6Q",
-    client_secret="si5WWPBCyfnfdknA7qRR7bTKFD7Z6g",
-    user_agent="modsandbox by /u/leesang627",
-)
-
-_operator_regex = r"(==?|<|>)"
+import pandas as pd
+import numpy as np
 
 
-def author(code):
-    values = yaml.safe_load(code)
-    author = values.pop("author", None)
-    if not isinstance(author, dict):
-        # if they just specified string(s) for author
-        # that's the same as checking against name
-        if isinstance(author, list):
-            author = {"name": author}
-        else:
-            author = {}
-    print(author)
+def stringTolist(value):
+    return value
 
 
-author("author: \n    account_age: '> 7 years'")
+post_vectors = pd.read_pickle('post_vectors_leesang627.pkl')
+vector1 = post_vectors[post_vectors.id == 20496].vector.tolist()
+vector2 = post_vectors.iloc[2].vector.tolist()
+print(np.inner(vector2, vector1)[0])

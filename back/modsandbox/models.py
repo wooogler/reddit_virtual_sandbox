@@ -62,10 +62,13 @@ class Post(models.Model):
     comment_karma = models.IntegerField(default=0)
     account_created_utc = models.DateTimeField(null=True)
     reports = models.IntegerField(null=True)
+    score = models.IntegerField(default=0)
 
+    # # for FP, FN
+    # sim_fp = models.FloatField(default=None, null=True)
+    # sim_fn = models.FloatField(default=None, null=True)
     # for FP, FN
-    sim_fp = models.FloatField(default=None, null=True)
-    sim_fn = models.FloatField(default=None, null=True)
+    sim = models.FloatField(default=0)
 
     TYPE_CHOICES = [('Submission', 'Submission'), ('Comment', 'Comment')]
     post_type = models.CharField(max_length=10, choices=TYPE_CHOICES)

@@ -35,7 +35,8 @@ function TargetList({
     useStore();
   const [form] = useForm();
   const onClickAdd = useCallback(() => {
-    setVisible((prev) => !prev);
+    // setVisible((prev) => !prev);
+    setOpenAddModal(true);
     form.resetFields();
   }, [form]);
   const onSearch = (val: string) => {
@@ -83,16 +84,12 @@ function TargetList({
         {place && (
           <>
             <div className='ml-auto flex items-center'>
-              {condition !== 'baseline' && (
-                <>
-                  <Progress percent={rate * 100} showInfo={false} />
-                  <div className='text-xs ml-2 text-gray-400 w-48'>
-                    {(rate * 100).toFixed(2)} % ({stat.part}/{stat.total})
-                  </div>
-                </>
-              )}
+              <Progress percent={rate * 100} showInfo={false} />
+              <div className='text-xs ml-2 text-gray-400 w-40'>
+                {(rate * 100).toFixed(2)} % ({stat.part}/{stat.total})
+              </div>
 
-              <Popover
+              {/* <Popover
                 placement='bottom'
                 title='Add Posts with URL'
                 trigger='click'
@@ -119,11 +116,11 @@ function TargetList({
                 }
                 visible={visible}
                 onVisibleChange={(visible) => setVisible(visible)}
-              >
-                <Button size='small' className='ml-2' onClick={onClickAdd}>
-                  Add a Post
-                </Button>
-              </Popover>
+              > */}
+              <Button size='small' onClick={onClickAdd}>
+                Create Post
+              </Button>
+              {/* </Popover> */}
             </div>
             <AddPostModal
               visible={openAddModal}

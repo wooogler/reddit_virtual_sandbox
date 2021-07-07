@@ -117,9 +117,9 @@ function AnalysisLayout(): ReactElement {
       ),
     },
     {
-      title: 'Filtered',
+      title: '# of Filtered posts',
       dataIndex: 'subreddit_count',
-      width: 80,
+      width: 130,
     },
     // {
     //   title: 'Spam/Report',
@@ -129,6 +129,7 @@ function AnalysisLayout(): ReactElement {
       title: 'Action',
       width: 120,
       fixed: 'right',
+      align: 'right',
       render: (text, record) => (
         <div className='flex'>
           <Button
@@ -167,7 +168,7 @@ function AnalysisLayout(): ReactElement {
       ),
     },
     {
-      title: 'Filtered',
+      title: '# of Filtered posts',
       width: 200,
       dataIndex: 'subreddit_count',
     },
@@ -195,7 +196,7 @@ function AnalysisLayout(): ReactElement {
       ),
     },
     {
-      title: 'Filtered',
+      title: '# of Filtered posts',
       dataIndex: 'subreddit_count',
       width: 200,
     },
@@ -223,7 +224,7 @@ function AnalysisLayout(): ReactElement {
       ),
     },
     {
-      title: 'Filtered',
+      title: '# of Filtered posts',
       dataIndex: 'subreddit_count',
       width: 200,
     },
@@ -255,10 +256,10 @@ function AnalysisLayout(): ReactElement {
           />
         </div>
       )}
-      {condition === 'modsandbox' && (
+      {condition !== 'baseline' && (
         <div className='flex-1 flex flex-col p-2'>
           <div className='flex items-center mb-2'>
-            <PanelName>Configruation History</PanelName>
+            <PanelName>Configuration History</PanelName>
             {/* {!isOpenEditor && (
               <div className='ml-auto flex'>
                 <Button
@@ -392,39 +393,39 @@ function AnalysisLayout(): ReactElement {
                           </div>
                         ),
                         columnWidth: '2.5rem',
-                        expandIcon: ({ expanded, onExpand, record }) =>
-                          expanded ? (
-                            <Button
-                              type='link'
-                              onClick={(e) => onExpand(record, e)}
-                              icon={<UpSquareOutlined />}
-                            />
-                          ) : (
-                            <Button
-                              type='link'
-                              onClick={(e) => onExpand(record, e)}
-                              icon={<DownSquareOutlined />}
-                            />
-                          ),
+                        // expandIcon: ({ expanded, onExpand, record }) =>
+                        //   expanded ? (
+                        //     <Button
+                        //       type='link'
+                        //       onClick={(e) => onExpand(record, e)}
+                        //       icon={<UpSquareOutlined />}
+                        //     />
+                        //   ) : (
+                        //     <Button
+                        //       type='link'
+                        //       onClick={(e) => onExpand(record, e)}
+                        //       icon={<DownSquareOutlined />}
+                        //     />
+                        //   ),
                       }}
                     />
                   </div>
                 ),
 
-                expandIcon: ({ expanded, onExpand, record }) =>
-                  expanded ? (
-                    <Button
-                      type='link'
-                      onClick={(e) => onExpand(record, e)}
-                      icon={<UpSquareOutlined />}
-                    />
-                  ) : (
-                    <Button
-                      type='link'
-                      onClick={(e) => onExpand(record, e)}
-                      icon={<DownSquareOutlined />}
-                    />
-                  ),
+                // expandIcon: ({ expanded, onExpand, record }) =>
+                //   expanded ? (
+                //     <Button
+                //       type='link'
+                //       onClick={(e) => onExpand(record, e)}
+                //       icon={<UpSquareOutlined />}
+                //     />
+                //   ) : (
+                //     <Button
+                //       type='link'
+                //       onClick={(e) => onExpand(record, e)}
+                //       icon={<DownSquareOutlined />}
+                //     />
+                //   ),
               }}
             />
           </div>

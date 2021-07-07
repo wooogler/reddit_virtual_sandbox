@@ -16,6 +16,7 @@ function GuideModal({ visible, onCancel }: Props): ReactElement {
       visible={visible}
       onCancel={onCancel}
       centered
+      footer={false}
     >
       <GuideDiv>
         <Tabs defaultActiveKey='1' centered>

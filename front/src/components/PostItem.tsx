@@ -7,10 +7,12 @@ import { Button, Dropdown, Menu, Tooltip } from 'antd';
 import request from '@utils/request';
 import utc from 'dayjs/plugin/utc';
 import HighlightText from './HighlightText';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useStore } from '@utils/store';
 import _ from 'lodash';
 import Highlighter from 'react-highlight-words';
+import { AxiosError } from 'axios';
+import { NewPost } from './AddPostModal';
 
 dayjs.extend(relativeTime);
 dayjs.extend(utc);
@@ -29,8 +31,15 @@ function PostItem({
   searchQuery,
 }: Props): ReactElement {
   const queryClient = useQueryClient();
-  const { config_id, rule_id, check_combination_id, check_id, condition } =
-    useStore();
+  const {
+    config_id,
+    rule_id,
+    check_combination_id,
+    check_id,
+    condition,
+    order,
+    changeOrder,
+  } = useStore();
 
   const invalidatePostQueries = (place: IPost['place']) => {
     if (place.includes('normal')) {
@@ -48,6 +57,21 @@ function PostItem({
     }
   };
 
+  const sortFpFnMutation = useMutation(
+    () =>
+      request({
+        url: `posts/fpfn/`,
+        method: 'POST',
+      }),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('filtered');
+        queryClient.invalidateQueries('not filtered');
+      },
+      mutationKey: 'fpfn',
+    }
+  );
+
   const deletePostFromTestCase = ({ id, place }: Pick<IPost, 'id' | 'place'>) =>
     request({
       url: `/posts/${place.includes('target') ? 'target' : 'except'}/${id}/`,
@@ -57,6 +81,49 @@ function PostItem({
   const deletePostFromTestCaseMutation = useMutation(deletePostFromTestCase, {
     onSuccess: (_, { place }) => {
       invalidatePostQueries(place);
+      if (place.includes('target') && order === 'fpfn') {
+        sortFpFnMutation.mutate();
+      }
+    },
+  });
+
+  const addCustomPost = ({
+    post_id,
+    post_type,
+    title,
+    body,
+    author,
+    place,
+    created_utc,
+    url,
+    source,
+  }: NewPost) =>
+    request({
+      url: `/posts/${place}/`,
+      method: 'POST',
+      data: {
+        post_id,
+        post_type,
+        title,
+        body,
+        author,
+        place,
+        created_utc,
+        url,
+        source,
+      },
+    });
+
+  const addCustomPostMutation = useMutation(addCustomPost, {
+    onSuccess: (_, { place }) => {
+      if (place === 'target') {
+        queryClient.invalidateQueries('target');
+        if (order === 'fpfn') {
+          sortFpFnMutation.mutate();
+        }
+      } else {
+        queryClient.invalidateQueries('except');
+      }
     },
   });
 
@@ -72,6 +139,9 @@ function PostItem({
   const movePostToTestCaseMutation = useMutation(movePostToTestCase, {
     onSuccess: (_, { place }) => {
       invalidatePostQueries(place);
+      if (place.includes('target') && order === 'fpfn') {
+        sortFpFnMutation.mutate();
+      }
     },
   });
 
@@ -132,12 +202,26 @@ function PostItem({
 
   const moveMenu = (
     <Menu
-      onClick={({ key }) =>
-        movePostToTestCaseMutation.mutate({
-          id: post.id,
-          place: key as 'normal-target' | 'normal-except',
-        })
-      }
+      onClick={({ key }) => {
+        if (post.id === 'search') {
+          addCustomPostMutation.mutate({
+            post_id: post.id,
+            post_type: 'Submission',
+            source: 'Subreddit',
+            place: key === 'normal-target' ? 'target' : 'except',
+            created_utc: post.created_utc,
+            title: post.title,
+            body: post.body,
+            author: post.author,
+            url: post.url,
+          });
+        } else {
+          movePostToTestCaseMutation.mutate({
+            id: post.id,
+            place: key as 'normal-target' | 'normal-except',
+          });
+        }
+      }}
     >
       <Menu.Item key='normal-target'>Posts that should be filtered</Menu.Item>
       <Menu.Item key='normal-except'>Posts to avoid being filtered</Menu.Item>
@@ -180,67 +264,63 @@ function PostItem({
           )}
         </div>
         <div className='flex items-center flex-wrap'>
-          <a
-            href={post.url}
-            onClick={(e) => {
-              e.stopPropagation();
-            }}
-            target='_blank'
-            rel='noopener noreferrer'
-          >
-            <div
-              className={clsx(
-                post.source === 'Spam'
-                  ? 'text-red-600'
-                  : post.source === 'Report' && 'text-yellow-500',
-                'text-xs font-bold underline'
-              )}
-            >
-              View in {post.source}
-            </div>
-          </a>
-          <div className='text-xs ml-2'>{post.author}</div>
+          <div className='text-xs'>{post.author}</div>
           <Tooltip
             placement='top'
             title={dayjs(post.created_utc)
               .local()
               .format('ddd MMM D YYYY hh:mm:ss')}
           >
-            <div className='text-xs ml-2'>{dayjs().to(post.created_utc)}</div>
+            <div className='text-xs mx-2'>{dayjs().to(post.created_utc)}</div>
           </Tooltip>
-          {!searchQuery && (
-            <>
-              {post.place === 'normal' ? (
-                <Dropdown overlay={moveMenu}>
-                  <Button type='link'>
-                    <div className='text-xs'>Move to Test Cases</div>
-                  </Button>
-                </Dropdown>
-              ) : (
-                <Button
-                  danger
-                  type='link'
-                  size='small'
-                  onClick={() =>
-                    deletePostFromTestCaseMutation.mutate({
-                      id: post.id,
-                      place: post.place,
-                    })
-                  }
-                  disabled={!isTested}
-                >
-                  <div className='text-xs underline'>
-                    {isTested ? 'delete' : 'moved'}
-                  </div>
-                </Button>
-              )}
-              {/* {condition === 'modsandbox' && (
-                <>
-                  <div>{post.sim_fp?.toFixed(2)}</div>
-                  <div>{post.sim_fn?.toFixed(2)}</div>
-                </>
-              )} */}
-            </>
+          <Tooltip placement='top' title='upvote - downvote'>
+            <div className='mr-2 text-xs'>score: {post.score}</div>
+          </Tooltip>
+          {post.post_id !== 'ffffff' && (
+            <a
+              href={post.url}
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+              target='_blank'
+              rel='noopener noreferrer'
+            >
+              <div
+                className={clsx(
+                  post.source === 'Spam'
+                    ? 'text-red-600'
+                    : post.source === 'Report' && 'text-yellow-500',
+                  'text-xs font-bold underline'
+                )}
+              >
+                View in {post.source}
+              </div>
+            </a>
+          )}
+
+          {condition !== 'baseline' && (post.place === 'normal' ? (
+            <Dropdown overlay={moveMenu}>
+              <Button type='link'>
+                <div className='text-xs underline'>Move</div>
+              </Button>
+            </Dropdown>
+          ) : (
+            <Button
+              danger
+              type='link'
+              size='small'
+              onClick={() =>
+                deletePostFromTestCaseMutation.mutate({
+                  id: post.id,
+                  place: post.place,
+                })
+              }
+              disabled={!isTested}
+            >
+              <div className='text-xs underline'>
+                {isTested ? 'delete' : 'moved'}
+              </div>
+            </Button>)
           )}
         </div>
         {post.source === 'Spam' && (

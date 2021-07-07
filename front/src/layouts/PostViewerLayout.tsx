@@ -1,5 +1,9 @@
 import {
   ArrowsAltOutlined,
+  BorderOutlined,
+  FullscreenOutlined,
+  LineOutlined,
+  RedditOutlined,
   SearchOutlined,
   ShrinkOutlined,
 } from '@ant-design/icons';
@@ -7,13 +11,14 @@ import {
 import ImportModal from '@components/ImportModal';
 import PostList from '@components/PostList';
 import SearchModal from '@components/SearchModal';
+import SubmitModal from '@components/SubmitModal';
 import TargetList from '@components/TargetList';
 import { IPost, IUser, PaginatedPosts } from '@typings/db';
 import { AutoModStat } from '@typings/types';
 import request from '@utils/request';
-import { useStore } from '@utils/store';
+import { Order, useStore } from '@utils/store';
 import { invalidatePostQueries } from '@utils/util';
-import { Button, Select } from 'antd';
+import { Button, Input, Radio, RadioChangeEvent, Select, Tooltip } from 'antd';
 import { AxiosError } from 'axios';
 import React, { ReactElement, useCallback, useEffect, useState } from 'react';
 import {
@@ -23,14 +28,11 @@ import {
   useQueryClient,
 } from 'react-query';
 
-export const mockStat: AutoModStat = {
-  part: 10,
-  total: 100,
-};
+type Size = 'mini' | 'middle' | 'full';
 
 function PostViewerLayout(): ReactElement {
   const queryClient = useQueryClient();
-  const [expand, setExpand] = useState(false);
+  const [size, setSize] = useState<Size>('middle');
 
   const {
     config_id,
@@ -53,25 +55,30 @@ function PostViewerLayout(): ReactElement {
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isSearchVisible, setIsSearchVisible] = useState(false);
+  const [isSubmitVisible, setIsSubmitVisible] = useState(false);
   const targetQuery = useQuery<IPost[], AxiosError>(
-    ['target', { refetching }],
+    'target',
     async () => {
       const { data } = await request<IPost[]>({
         url: '/posts/target/',
       });
       return data;
+    },
+    {
+      onSuccess: (data) => {
+        if (data.length === 0 && order === 'fpfn') {
+          changeOrder('-created_utc');
+        }
+      },
     }
   );
 
-  const exceptQuery = useQuery<IPost[], AxiosError>(
-    ['except', { refetching }],
-    async () => {
-      const { data } = await request<IPost[]>({
-        url: '/posts/except/',
-      });
-      return data;
-    }
-  );
+  const exceptQuery = useQuery<IPost[], AxiosError>('except', async () => {
+    const { data } = await request<IPost[]>({
+      url: '/posts/except/',
+    });
+    return data;
+  });
 
   const addTestCase = ({ postId, place }: { postId: string; place: string }) =>
     request({
@@ -80,10 +87,28 @@ function PostViewerLayout(): ReactElement {
       data: { full_name: postId },
     });
 
+  const sortFpFnMutation = useMutation(
+    () =>
+      request({
+        url: `posts/fpfn/`,
+        method: 'POST',
+      }),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('filtered');
+        queryClient.invalidateQueries('not filtered');
+      },
+      mutationKey: 'fpfn',
+    }
+  );
+
   const addTestCaseMutation = useMutation(addTestCase, {
     onSuccess: (_, { place }) => {
       if (place === 'target') {
         queryClient.invalidateQueries('target');
+        if (order === 'fpfn') {
+          sortFpFnMutation.mutate();
+        }
       } else {
         queryClient.invalidateQueries('except');
       }
@@ -109,7 +134,7 @@ function PostViewerLayout(): ReactElement {
       const { data } = await request<PaginatedPosts>({
         url: '/posts/',
         params: {
-          ordering: order,
+          ordering: order === 'fpfn' ? 'sim' : order,
           page: pageParam,
           config_id,
           rule_id,
@@ -149,7 +174,7 @@ function PostViewerLayout(): ReactElement {
       const { data } = await request<PaginatedPosts>({
         url: '/posts/',
         params: {
-          ordering: order,
+          ordering: order === 'fpfn' ? '-sim' : order,
           config_id,
           rule_id,
           check_combination_id,
@@ -158,7 +183,7 @@ function PostViewerLayout(): ReactElement {
           start_date: start_date?.toDate(),
           end_date: end_date?.toDate(),
           post_type: post_type === 'all' ? undefined : post_type,
-          filtered: false,
+          filtered: condition !== 'baseline' ? false : undefined,
           source: source === 'all' ? undefined : source,
         },
       });
@@ -170,96 +195,15 @@ function PostViewerLayout(): ReactElement {
     }
   );
 
-  const fpQuery = useInfiniteQuery<PaginatedPosts, AxiosError>(
-    [
-      'fp',
-      {
-        config_id,
-        rule_id,
-        check_combination_id,
-        check_id,
-        start_date,
-        end_date,
-        post_type,
-        order,
-        source,
-      },
-    ],
-    async ({ pageParam = 1 }) => {
-      const { data } = await request<PaginatedPosts>({
-        url: '/posts/fpfn/',
-        params: {
-          ordering: '-sim_fp',
-          config_id,
-          rule_id,
-          check_combination_id,
-          check_id,
-          page: pageParam,
-          start_date: start_date?.toDate(),
-          end_date: end_date?.toDate(),
-          post_type: post_type === 'all' ? undefined : post_type,
-          filtered: true,
-          source: source === 'all' ? undefined : source,
-        },
-      });
-      return data;
+  const onChangeOrder = useCallback(
+    (e: RadioChangeEvent) => {
+      changeOrder(e.target.value);
+      if (e.target.value === 'fpfn') {
+        sortFpFnMutation.mutate();
+      }
     },
-    {
-      getNextPageParam: (lastPage) => lastPage.nextPage ?? undefined,
-      enabled: order === 'fpfn',
-    }
+    [changeOrder, sortFpFnMutation]
   );
-
-  const fnQuery = useInfiniteQuery<PaginatedPosts, AxiosError>(
-    [
-      'fn',
-      {
-        config_id,
-        rule_id,
-        check_combination_id,
-        check_id,
-        start_date,
-        end_date,
-        post_type,
-        order,
-        source,
-      },
-    ],
-    async ({ pageParam = 1 }) => {
-      const { data } = await request<PaginatedPosts>({
-        url: '/posts/fpfn/',
-        params: {
-          ordering: '-sim_fn',
-          config_id,
-          rule_id,
-          check_combination_id,
-          check_id,
-          page: pageParam,
-          start_date: start_date?.toDate(),
-          end_date: end_date?.toDate(),
-          post_type: post_type === 'all' ? undefined : post_type,
-          filtered: false,
-          source: source === 'all' ? undefined : source,
-        },
-      });
-      return data;
-    },
-    {
-      getNextPageParam: (lastPage) => lastPage.nextPage ?? undefined,
-      enabled: order === 'fpfn',
-    }
-  );
-
-  const onLogOut = useCallback(() => {
-    request({ url: '/rest-auth/logout/', method: 'POST' })
-      .then(() => {
-        localStorage.clear();
-        refetch();
-      })
-      .catch((error) => {
-        console.dir(error);
-      });
-  }, [refetch]);
 
   // const onChangePostType = useCallback(
   //   (value: 'all' | 'Submission' | 'Comment') => {
@@ -335,96 +279,46 @@ function PostViewerLayout(): ReactElement {
     queryClient.removeQueries('search');
   }, [queryClient]);
 
-  const onExpand = useCallback(() => {
-    setExpand((state) => !state);
-  }, []);
-
-  const sortFpFn = () =>
-    request<{ fp: IPost[]; fn: IPost[] }>({
-      url: `posts/fpfn/`,
-      method: 'POST',
-      data: {
-        config_id,
-        rule_id,
-        check_combination_id,
-        check_id,
-      },
-    });
-
-  const sortFpFnMutation = useMutation(sortFpFn, {
-    onSuccess: () => {
-      queryClient.invalidateQueries('fp');
-      queryClient.invalidateQueries('fn');
-    },
-  });
+  const totalCount =
+    (filteredQuery.data?.pages[0].count || 0) +
+    (notFilteredQuery.data?.pages[0].count || 0);
+  const notFilteredCount = notFilteredQuery.data?.pages[0].count
 
   useEffect(() => {
-    if (order === 'fpfn') {
-      if (targetQuery.data?.length === 0) {
-        changeOrder('+created_utc');
-      } else {
-        sortFpFnMutation.mutate();
-      }
+    if (notFilteredCount === 0) {
+      importTestPostsMutation.mutate();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    config_id,
-    rule_id,
-    check_combination_id,
-    check_id,
-    start_date,
-    end_date,
-    post_type,
-    order,
-    source,
-  ]);
+  }, [notFilteredCount]);
+
+  const [query, setQuery] = useState('');
 
   return (
     <div className='h-full w-full flex flex-col'>
-      <div className='w-full flex items-center'>
-        <div className='text-3xl font-bold ml-2'>Test Cases</div>
-        <div className='ml-auto flex items-center'>
-          <Button
-            icon={<SearchOutlined />}
-            onClick={() => setIsSearchVisible(true)}
-            size='small'
-          >
-            Reddit Search
-          </Button>
-          <SearchModal visible={isSearchVisible} onCancel={onCancelSearch} />
-          <div className='ml-2'>Hello, {userData && userData.username}!</div>
-          <Button
-            icon={expand ? <ShrinkOutlined /> : <ArrowsAltOutlined />}
-            type='text'
-            onClick={onExpand}
-          >
-            {!expand ? 'Expand' : 'Collapse'}
-          </Button>
+      <div className='w-full flex items-center flex-wrap '>
+        <div className='text-2xl ml-2 flex items-center'>
+          {/* <img
+            alt='subreddit-icon'
+            src='https://styles.redditmedia.com/t5_2sdpm/styles/communityIcon_u6zl61vcy9511.png'
+            className='w-10 mr-3'
+          /> */}
+          <RedditOutlined style={{ color: 'orangered' }} />
+          <div className='ml-2'>r/cscareerquestions</div>
+          <div className='text-sm ml-2'>in May 2021</div>
+          <Input
+            prefix={<SearchOutlined />}
+            onPressEnter={() => setIsSearchVisible(true)}
+            placeholder='Search'
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            className='ml-4'
+            style={{ width: '15rem' }}
+          />
+          <SearchModal
+            visible={isSearchVisible}
+            onCancel={onCancelSearch}
+            query={query}
+          />
         </div>
-      </div>
-      <div className='flex overflow-y-auto' style={{ flex: 2 }}>
-        <TargetList
-          label='Posts that should be filtered'
-          posts={targetQuery.data}
-          isLoading={addTestCaseMutation.isLoading}
-          onSubmit={(postId) =>
-            addTestCaseMutation.mutate({ postId, place: 'target' })
-          }
-          place='target'
-        />
-        <div className='border-gray-200 border-r-2' />
-        <TargetList
-          label='Posts to avoid being filtered'
-          posts={exceptQuery.data}
-          isLoading={addTestCaseMutation.isLoading}
-          onSubmit={(postId) =>
-            addTestCaseMutation.mutate({ postId, place: 'except' })
-          }
-          place='except'
-        />
-      </div>
-      <div className='w-full flex items-center flex-wrap border-gray-200 border-t-4'>
-        <div className='text-3xl font-bold ml-2'>Imported Posts</div>
         <div className='flex ml-auto items-center flex-wrap'>
           {/* <div className='flex'>
             <div className='mx-2'>Type:</div>
@@ -456,30 +350,26 @@ function PostViewerLayout(): ReactElement {
               <Select.Option value='Spam'>Only Spam/Reports</Select.Option>
             </Select>
           </div> */}
+
           <div className='flex'>
-            <div className='mx-2'>Sort by:</div>
-            <Select
-              onChange={changeOrder}
-              value={order}
-              dropdownMatchSelectWidth={false}
-              size='small'
-            >
-              <Select.Option value='-created_utc'>New</Select.Option>
-              <Select.Option value='+created_utc'>Old</Select.Option>
+            {/* <div className='mr-2'>Hello, {userData && userData.username}!</div> */}
+            <div className='text-sm mr-2'>Sort:</div>
+            <Radio.Group onChange={onChangeOrder} value={order} size='small'>
+              <Radio.Button value='-created_utc'>New</Radio.Button>
+              <Radio.Button value='-score'>Top</Radio.Button>
               {condition === 'modsandbox' && (
-                <Select.Option
-                  title={
-                    targetQuery.data?.length === 0
-                      ? 'Please add posts that should be filtered.'
-                      : 'FP & FN'
-                  }
+                <Radio.Button
                   value='fpfn'
                   disabled={targetQuery.data?.length === 0}
                 >
-                  Possible False Alarms & Miss
-                </Select.Option>
+                  {targetQuery.data?.length === 0 ? (
+                    <Tooltip title='Add target posts to use'>Smart</Tooltip>
+                  ) : (
+                    'Smart'
+                  )}
+                </Radio.Button>
               )}
-            </Select>
+            </Radio.Group>
           </div>
           <div className='flex'>
             {notFilteredQuery.data?.pages[0].count !== 0 ? (
@@ -509,51 +399,102 @@ function PostViewerLayout(): ReactElement {
                 Import
               </Button>
             )}
-            <Button danger className='mx-2' onClick={onLogOut} size='small'>
-              Log out
+            <Button
+              onClick={() => setIsSubmitVisible(true)}
+              size='small'
+              danger
+              className='mx-2'
+            >
+              Finish
             </Button>
+            <SubmitModal
+              visible={isSubmitVisible}
+              onCancel={() => setIsSubmitVisible(false)}
+            />
           </div>
         </div>
       </div>
       <ImportModal visible={isModalVisible} onCancel={onCancel} />
-      {!expand && (
+      {size !== 'full' && (
         <div className='flex overflow-y-auto' style={{ flex: 5 }}>
-          {order === 'fpfn' ? (
-            <>
-              <PostList
-                label='Possible false alarm'
-                query={fpQuery}
-                isLoading={sortFpFnMutation.isLoading || fpQuery.isLoading}
-              />
-              <div className='border-gray-200 border-r-4' />
-              <PostList
-                label='Possible miss'
-                query={fnQuery}
-                isLoading={sortFpFnMutation.isLoading || fnQuery.isLoading}
-                noCount
-              />
-            </>
-          ) : (
-            <>
-              {condition !== 'baseline' && (
-                <PostList
-                  label='Filtered by AutoMod'
-                  query={filteredQuery}
-                  isLoading={filteredQuery.isLoading}
-                />
-              )}
-              <div className='border-gray-200 border-r-2' />
+          <>
+            <PostList
+              label={
+                condition !== 'baseline'
+                  ? order !== 'fpfn'
+                    ? 'Not filtered by AutoMod'
+                    : 'Misses'
+                  : 'Posts in Subreddits'
+              }
+              query={notFilteredQuery}
+              isLoading={
+                notFilteredQuery.isLoading ||
+                !!queryClient.isMutating({ mutationKey: 'fpfn' })
+              }
+              totalCount={totalCount}
+            />
+            <div className='border-gray-200 border-r-2' />
+
+            {condition !== 'baseline' && (
               <PostList
                 label={
-                  condition !== 'baseline'
-                    ? 'Not filtered by AutoMod'
-                    : 'Post List'
+                  order !== 'fpfn' ? 'Filtered by AutoMod' : 'False Alarms'
                 }
-                query={notFilteredQuery}
-                isLoading={notFilteredQuery.isLoading}
+                query={filteredQuery}
+                isLoading={
+                  filteredQuery.isLoading ||
+                  !!queryClient.isMutating({ mutationKey: 'fpfn' })
+                }
+                totalCount={totalCount}
               />
-            </>
-          )}
+            )}
+          </>
+        </div>
+      )}
+      <div className='w-full flex items-center border-gray-200 border-t-4'>
+        <div className='text-2xl ml-2 flex items-center'>
+          <RedditOutlined style={{ color: 'orangered' }} />
+          <div className='ml-2'>r/sandbox_{userData && userData.username}</div>
+        </div>
+        <div className='ml-auto flex items-center'>
+          <Button
+            icon={<FullscreenOutlined />}
+            type='text'
+            onClick={() => setSize('full')}
+          />
+          <Button
+            icon={<BorderOutlined />}
+            type='text'
+            onClick={() => setSize('middle')}
+          />
+          <Button
+            icon={<LineOutlined />}
+            type='text'
+            onClick={() => setSize('mini')}
+          />
+        </div>
+      </div>
+      {size !== 'mini' && (
+        <div className='flex overflow-y-auto' style={{ flex: 3 }}>
+          <TargetList
+            label='Posts that should be filtered'
+            posts={targetQuery.data}
+            isLoading={addTestCaseMutation.isLoading}
+            onSubmit={(postId) =>
+              addTestCaseMutation.mutate({ postId, place: 'target' })
+            }
+            place='target'
+          />
+          <div className='border-gray-200 border-r-2' />
+          <TargetList
+            label='Posts to avoid being filtered'
+            posts={exceptQuery.data}
+            isLoading={addTestCaseMutation.isLoading}
+            onSubmit={(postId) =>
+              addTestCaseMutation.mutate({ postId, place: 'except' })
+            }
+            place='except'
+          />
         </div>
       )}
     </div>

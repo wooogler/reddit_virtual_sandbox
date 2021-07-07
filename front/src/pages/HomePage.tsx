@@ -27,14 +27,8 @@ function HomePage(): ReactElement {
         <PostViewerLayout />
       </div>
       <div className='w-1/3 h-full flex flex-col'>
-        {condition !== 'baseline' ? (
-          <>
-            <AnalysisLayout />
-            {condition === 'modsandbox' && <PostChart />}
-          </>
-        ) : (
-          <BaselineLayout />
-        )}
+        <AnalysisLayout />
+        {condition === 'modsandbox' && <PostChart />}
       </div>
     </div>
   );

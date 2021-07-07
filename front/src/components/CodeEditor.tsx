@@ -14,6 +14,7 @@ import {
   EditOutlined,
   InfoCircleOutlined,
   PlayCircleOutlined,
+  SaveOutlined,
 } from '@ant-design/icons';
 import { invalidatePostQueries } from '@utils/util';
 
@@ -36,7 +37,9 @@ function CodeEditor({
 }: Props): ReactElement {
   const queryClient = useQueryClient();
   const [visibleGuideModal, setVisibleGuideModal] = useState(false);
-  const { changeConfigId, condition } = useStore();
+
+  const [isSaved, setIsSaved] = useState(false);
+  const { changeConfigId, condition, clearConfigId, config_id } = useStore();
   const addConfig = ({ code }: { code: string }) =>
     request<Config>({
       url: '/configs/',
@@ -59,6 +62,54 @@ function CodeEditor({
   const editConfigMutation = useMutation(editConfig, {
     onSuccess: (res, { code }) => {
       invalidatePostQueries(queryClient);
+    },
+  });
+
+  const onClickApply = () => {
+    setIsSaved(true);
+    if (editorState === 'add') {
+      addConfigMutation.mutate({ code });
+    } else if (editorState === 'edit') {
+      editConfigMutation.mutate({ code, configId: configId as number });
+    }
+  };
+
+  const deleteTargetPostsMutation = useMutation(
+    () =>
+      request({
+        url: 'posts/target/all/',
+        method: 'DELETE',
+      }),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('target');
+      },
+    }
+  );
+  const deleteExceptPostsMutation = useMutation(
+    () =>
+      request({
+        url: 'posts/except/all/',
+        method: 'DELETE',
+      }),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('except');
+      },
+    }
+  );
+
+  const deleteConfig = ({ configId }: { configId: number }) =>
+    request({ url: `/configs/${configId}/`, method: 'DELETE' });
+
+  const deleteConfigMutation = useMutation(deleteConfig, {
+    onSuccess: (_, { configId }) => {
+      invalidatePostQueries(queryClient);
+      if (configId === config_id) {
+        clearConfigId();
+      }
+      deleteTargetPostsMutation.mutate();
+      deleteExceptPostsMutation.mutate();
     },
   });
 
@@ -85,42 +136,46 @@ function CodeEditor({
             visible={visibleGuideModal}
             onCancel={() => setVisibleGuideModal(false)}
           />
-          {editorState === 'add' ? (
+          {condition !== 'baseline' ? (
             <Button
               type='link'
               icon={<PlayCircleOutlined />}
-              onClick={() => addConfigMutation.mutate({ code })}
-              loading={addConfigMutation.isLoading}
+              onClick={onClickApply}
+              loading={
+                addConfigMutation.isLoading || editConfigMutation.isLoading
+              }
               size='small'
             >
               Apply
             </Button>
-          ) : (
+          ) : isSaved ? (
             <Button
               type='link'
               icon={<EditOutlined />}
-              onClick={() =>
-                editConfigMutation.mutate({
-                  code,
-                  configId: configId as number,
-                })
+              onClick={() => {
+                deleteConfigMutation.mutate({ configId: config_id as number });
+                setIsSaved(false);
+              }}
+              loading={
+                addConfigMutation.isLoading || editConfigMutation.isLoading
               }
-              loading={editConfigMutation.isLoading}
               size='small'
             >
               Edit
             </Button>
-          )}
-          {/* {condition === 'modsandbox' && (
+          ) : (
             <Button
               type='link'
-              danger
-              onClick={onClose}
-              icon={<CloseOutlined />}
+              icon={<SaveOutlined />}
+              onClick={onClickApply}
+              loading={
+                addConfigMutation.isLoading || editConfigMutation.isLoading
+              }
+              size='small'
             >
-              Close
+              Save
             </Button>
-          )} */}
+          )}
         </div>
       </div>
       <div className='flex-1'>
@@ -137,6 +192,7 @@ function CodeEditor({
             fontSize: '18px',
           }}
           placeholder={placeholder}
+          readOnly={isSaved}
         />
       </div>
     </>

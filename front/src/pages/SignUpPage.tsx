@@ -61,9 +61,9 @@ function SignUpPage(): ReactElement {
             defaultValue={condition}
             onChange={(value: Condition) => changeCondition(value)}
           >
-            <Select.Option value='modsandbox'>ModSandbox</Select.Option>
-            <Select.Option value='sandbox'>Sandbox</Select.Option>
-            <Select.Option value='baseline'>Baseline</Select.Option>
+            <Select.Option value='modsandbox'>A</Select.Option>
+            <Select.Option value='sandbox'>B</Select.Option>
+            <Select.Option value='baseline'>C</Select.Option>
           </Select>
         </Form.Item>
         <Form.Item

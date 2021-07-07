@@ -13,10 +13,10 @@ import dayjs from 'dayjs';
 interface Props {
   visible: boolean;
   onCancel: () => void;
+  query: string;
 }
 
-function SearchModal({ visible, onCancel }: Props): ReactElement {
-  const [query, setQuery] = useState('');
+function SearchModal({ visible, onCancel, query }: Props): ReactElement {
   const [time, setTime] = useState<snoowrap.SearchOptions['time']>('week');
   const [sort, setSort] = useState<snoowrap.SearchOptions['sort']>('relevance');
   // const searchQuery = useQuery(['search', query], async () => {
@@ -41,7 +41,7 @@ function SearchModal({ visible, onCancel }: Props): ReactElement {
       .search({ query, time, sort });
     const data = posts.map<IPost>((post: Submission) => {
       return {
-        id: post.id,
+        id: 'search',
         post_id: post.id,
         source: 'Subreddit',
         place: 'normal',
@@ -57,34 +57,24 @@ function SearchModal({ visible, onCancel }: Props): ReactElement {
         matching_rules: [],
         matching_check_combinations: [],
         matching_checks: [],
-        sim_fp: 0,
-        sim_fn: 0,
+        sim: 0,
+        score: post.score,
       };
     });
     return data;
   });
 
-  const onSearch = (value: string) => {
-    setQuery(value);
-  };
-
   return (
     <Modal
       title='Search Posts'
       visible={visible}
-      onCancel={() => {
-        setQuery('');
-        onCancel();
-      }}
+      onCancel={onCancel}
       maskClosable={false}
       centered
       destroyOnClose
       footer={false}
     >
-      <Input.Search
-        onSearch={onSearch}
-        loading={searchQuery.isLoading}
-      ></Input.Search>
+      <div className='text-2xl font-bold'>{query}</div>
       <div>
         Search results in <b>r/cscareerquestions</b>
       </div>

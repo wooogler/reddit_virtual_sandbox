@@ -24,7 +24,7 @@ from modsandbox.views import TargetViewSet, ExceptViewSet, PostViewSet, RedditVi
 router = routers.DefaultRouter()
 router.register(r'posts/target', TargetViewSet)
 router.register(r'posts/except', ExceptViewSet)
-router.register(r'posts/fpfn', FpFnViewSet)
+# router.register(r'posts/fpfn', FpFnViewSet)
 router.register(r'posts', PostViewSet)
 router.register(r'reddit', RedditViewSet)
 router.register(r'configs', ConfigViewSet)

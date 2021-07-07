@@ -5,6 +5,7 @@ from types import SimpleNamespace
 
 import pandas as pd
 import pinecone
+import numpy as np
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 
 from django.shortcuts import redirect
@@ -21,7 +22,7 @@ from modsandbox.filters import PostFilter
 from modsandbox.ml import process_embedding
 from modsandbox.pinecone_handler import create_index_pinecone, get_index_pinecone
 from modsandbox.post_handler import create_posts, get_filtered_posts, get_unfiltered_posts, get_df_posts_vector, \
-    get_average_vector, get_embedding_post
+    get_average_vector, get_embedding_post, create_test_posts
 from modsandbox.models import Post, User, Rule, Config
 from modsandbox.paginations import PostPagination
 from modsandbox.reddit_handler import RedditHandler
@@ -89,8 +90,7 @@ class PostViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
     filterset_class = PostFilter
-    ordering_fields = ['created_utc']
-    ordering = ['created_utc']
+    ordering_fields = ['sim', 'created_utc', 'score']
 
     def get_queryset(self):
         queryset = self.queryset.filter(user=self.request.user)
@@ -107,7 +107,7 @@ class PostViewSet(viewsets.ModelViewSet):
         if filtered == 'true':
             queryset = get_filtered_posts(queryset, config_id, rule_id, check_combination_id, check_id)
 
-        else:
+        elif filtered == 'false':
             queryset = get_unfiltered_posts(queryset, config_id, rule_id, check_combination_id, check_id)
 
         return queryset
@@ -135,37 +135,43 @@ class PostViewSet(viewsets.ModelViewSet):
 
         else:  # for lab study
             script_dir = os.path.dirname(__file__)
-            with open(os.path.join(script_dir, 'test_data/submission_cscareerquestions_may.json')) as normal_json:
+            with open(os.path.join(script_dir, 'test_data/submission_cscareerquestions_may_2.json')) as normal_json:
                 normal = json.load(normal_json)
                 normal_json.close()
 
             normal_posts = ([
                 SimpleNamespace(
                     **{
-                        'id': 'test',
-                        'author': SimpleNamespace(**{'name': post['author']}),
+                        'id': post['id'],
+                        'author': SimpleNamespace(**{
+                            'name': post['author_name'],
+                            'link_karma': post['author_link_karma'],
+                            'comment_karma': post['author_comment_karma'],
+                            'created_utc': post['author_created_utc'],
+                        }),
                         'title': post['title'],
-                        'name': 't3_test',
+                        'name': post['name'],
                         'selftext': post['body'],
                         'created_utc': post['created_utc'],
                         'banned_by': None,
                         'num_reports': None,
-                        'permalink': '',
+                        'permalink': post['permalink'],
+                        'score': post['score'],
                     })
                 for post in normal])
 
-            posts = create_posts(normal_posts, request.user, 'normal', use_author)
+            posts = create_test_posts(normal_posts, request.user, 'normal')
 
         configs = Config.objects.filter(user=request.user)
         for config in configs:
             apply_config(config, posts, False)
 
         df_posts_vector = get_df_posts_vector(posts)
-
-        create_index_pinecone(request.user.username)
-        index = get_index_pinecone(request.user.username)
-        index.upsert(items=zip(df_posts_vector.id, df_posts_vector.vector), namespace='fn', batch_size=1000)
-        print('Pinecone indexing finish!', index.info(namespace='fn'))
+        df_posts_vector.to_pickle('post_vectors_' + request.user.username + '.pkl')
+        # create_index_pinecone(request.user.username)
+        # index = get_index_pinecone(request.user.username)
+        # index.upsert(items=zip(df_posts_vector.id, df_posts_vector.vector), namespace='fn', batch_size=1000)
+        # print('Pinecone indexing finish!', index.info(namespace='fn'))
 
         return Response(status=status.HTTP_201_CREATED)
 
@@ -187,6 +193,24 @@ class PostViewSet(viewsets.ModelViewSet):
         searched_posts = posts.annotate(rank=SearchRank(search_vector, search_query)).order_by('-rank')
 
         return Response(PostSerializer(searched_posts, many=True).data)
+
+    @action(methods=['post'], detail=False)
+    def fpfn(self, request):
+        posts = Post.objects.filter(user=request.user)
+        normal_posts = posts.filter(place__startswith='normal')
+        target_posts = posts.filter(place__in=['target', 'normal-target'])
+        target_vector = get_average_vector([get_embedding_post(post) for post in target_posts])
+        post_vectors = pd.read_pickle('post_vectors_' + request.user.username + '.pkl')
+        if target_vector is not None:
+            for post in normal_posts:
+                post_vector = post_vectors[post_vectors.id == post.id].vector
+                post.sim = np.inner(post_vector.tolist(), target_vector.tolist())[0]
+
+            Post.objects.bulk_update(normal_posts, ['sim'])
+        else:
+            posts.update(sim=0)
+
+        return Response(status=status.HTTP_200_OK)
 
 
 class FpFnViewSet(viewsets.ModelViewSet):
@@ -288,6 +312,12 @@ class TargetViewSet(viewsets.ModelViewSet):
             instance.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+    @action(methods=['delete'], detail=False)
+    def all(self, request):
+        self.queryset.filter(user=request.user).delete()
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 class ExceptViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.filter(place__in=['except', 'normal-except'])
@@ -325,6 +355,12 @@ class ExceptViewSet(viewsets.ModelViewSet):
             instance.save()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+    @action(methods=['delete'], detail=False)
+    def all(self, request):
+        self.queryset.filter(user=request.user).delete()
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 class ConfigViewSet(viewsets.ModelViewSet):
     queryset = Config.objects.all()
@@ -350,7 +386,7 @@ class ConfigViewSet(viewsets.ModelViewSet):
 
     @action(methods=['delete'], detail=False)
     def all(self, request):
-        super().get_queryset().all().delete()
+        self.queryset.filter(user=request.user).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
@@ -363,7 +399,7 @@ class StatViewSet(PostViewSet):
         after = self.request.query_params.get("after")
         post_type = self.request.query_params.get("post_type")
         source = self.request.query_params.get("source")
-        queryset = self.get_queryset()
+        queryset = self.get_queryset().filter(place__startswith='normal')
         if post_type:
             queryset = queryset.filter(post_type=post_type)
         if source:
@@ -372,7 +408,7 @@ class StatViewSet(PostViewSet):
             else:
                 queryset = queryset.filter(source=source)
 
-        posts = Post.objects.filter(user=request.user)
+        posts = Post.objects.filter(user=request.user, place__startswith='normal')
         data_array = []
         # datetime_interval = after_to_time_interval(after, 30)
         if posts:

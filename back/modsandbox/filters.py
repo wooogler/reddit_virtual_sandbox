@@ -25,5 +25,5 @@ class PostFilter(django_filters.FilterSet):
             "matching_check_combinations",
             "source",
             "place",
-            "post_type"
+            "post_type",
         ]

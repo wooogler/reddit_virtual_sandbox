@@ -1,10 +1,11 @@
-import { IPost } from '@typings/db';
+import { IPost, IUser } from '@typings/db';
 import request from '@utils/request';
+import { useStore } from '@utils/store';
 import { Form, Input, Modal, Select } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import { useFormik } from 'formik';
 import React, { ReactElement } from 'react';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 interface Props {
   visible: boolean;
@@ -12,7 +13,7 @@ interface Props {
   place: IPost['place'];
 }
 
-type NewPost = Omit<
+export type NewPost = Omit<
   IPost,
   | 'user'
   | 'matching_rules'
@@ -22,12 +23,16 @@ type NewPost = Omit<
   | 'banned_by'
   | 'isFiltered'
   | 'matching_configs'
-  | 'sim_fp'
-  | 'sim_fn'
+  | 'sim'
+  | 'score'
 >;
 
 function AddPostModal({ visible, onCancel, place }: Props): ReactElement {
   const queryClient = useQueryClient();
+
+  const { data: userData } = useQuery<IUser | false>('me');
+  const { order } = useStore();
+
   const addCustomPost = ({
     post_id,
     post_type,
@@ -55,10 +60,28 @@ function AddPostModal({ visible, onCancel, place }: Props): ReactElement {
       },
     });
 
+  const sortFpFnMutation = useMutation(
+    () =>
+      request({
+        url: `posts/fpfn/`,
+        method: 'POST',
+      }),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('filtered');
+        queryClient.invalidateQueries('not filtered');
+      },
+      mutationKey: 'fpfn',
+    }
+  );
+
   const addCustomPostMutation = useMutation(addCustomPost, {
     onSuccess: (_, { place }) => {
       if (place === 'target') {
         queryClient.invalidateQueries('target');
+        if (order === 'fpfn') {
+          sortFpFnMutation.mutate();
+        }
         onCancel();
       } else {
         queryClient.invalidateQueries('except');
@@ -73,14 +96,13 @@ function AddPostModal({ visible, onCancel, place }: Props): ReactElement {
       post_type: 'Submission',
       title: '',
       body: '',
-      author: 'FakeUser',
+      author: userData ? userData.username : 'fake_user',
       place,
       created_utc: new Date(),
       url: 'self.modsandbox',
       source: 'Subreddit',
     },
     onSubmit: (values) => {
-      console.log(values);
       addCustomPostMutation.mutate(values);
     },
   });
@@ -100,7 +122,7 @@ function AddPostModal({ visible, onCancel, place }: Props): ReactElement {
       zIndex={2000}
     >
       <Form labelCol={{ span: 4 }}>
-        <Form.Item
+        {/* <Form.Item
           label='Post Type'
           name='post_type'
           initialValue={formik.values.post_type}
@@ -112,7 +134,7 @@ function AddPostModal({ visible, onCancel, place }: Props): ReactElement {
             <Option value='Submission'>Submission</Option>
             <Option value='Comment'>Comment</Option>
           </Select>
-        </Form.Item>
+        </Form.Item> */}
         {formik.values.post_type === 'Submission' && (
           <Form.Item
             label='Title'
@@ -147,6 +169,7 @@ function AddPostModal({ visible, onCancel, place }: Props): ReactElement {
             onChange={(value) =>
               formik.setFieldValue('body', value.target.value)
             }
+            rows={15}
           />
         </Form.Item>
       </Form>

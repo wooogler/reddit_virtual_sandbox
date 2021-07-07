@@ -19,11 +19,19 @@ interface Props {
   query: UseInfiniteQueryResult<PaginatedPosts, AxiosError<any>>;
   isLoading?: boolean;
   noCount?: boolean;
+  totalCount?: number;
 }
 
-function PostList({ label, query, isLoading, noCount }: Props): ReactElement {
+function PostList({
+  label,
+  query,
+  isLoading,
+  noCount,
+  totalCount,
+}: Props): ReactElement {
   const [ref, inView] = useInView({ threshold: 0 });
-  const { config_id, rule_id, check_combination_id, check_id } = useStore();
+  const { config_id, rule_id, check_combination_id, check_id, condition } =
+    useStore();
 
   const { fetchNextPage } = query;
   useEffect(() => {
@@ -37,8 +45,10 @@ function PostList({ label, query, isLoading, noCount }: Props): ReactElement {
       <OverlayLoading isLoading={isLoading} description='loading...' />
       <div className='flex items-center'>
         <PanelName>{label}</PanelName>
-        {!noCount && (
-          <div className='text-lg ml-2'>({query.data?.pages[0].count})</div>
+        {condition !== 'baseline' && (
+          <div className='text-lg ml-2'>
+            ({query.data?.pages[0].count} / {totalCount})
+          </div>
         )}
       </div>
       {query.data?.pages[0].count !== 0 ? (
@@ -49,13 +59,17 @@ function PostList({ label, query, isLoading, noCount }: Props): ReactElement {
                 <PostItem
                   key={post.id}
                   post={post}
-                  isFiltered={isFiltered(
-                    post,
-                    config_id,
-                    rule_id,
-                    check_combination_id,
-                    check_id
-                  )}
+                  isFiltered={
+                    condition !== 'baseline'
+                      ? isFiltered(
+                          post,
+                          config_id,
+                          rule_id,
+                          check_combination_id,
+                          check_id
+                        )
+                      : false
+                  }
                   isTested={false}
                 />
               ))}

@@ -5,7 +5,7 @@ import { devtools } from 'zustand/middleware';
 import { persist } from 'zustand/middleware';
 import { afterToDate } from './util';
 
-type Order = '+created_utc' | '-created_utc' | 'fpfn';
+export type Order = 'created_utc' | '-created_utc' | 'fpfn' | '-score';
 type PostType = 'Submission' | 'Comment' | 'all';
 type Source = 'Subreddit' | 'Spam' | 'all';
 export type Condition = 'baseline' | 'sandbox' | 'modsandbox';
@@ -158,7 +158,6 @@ export const useStore = create<State>(
           'refetching',
           'selectedHighlight',
         ],
-        
       }
     )
   )
