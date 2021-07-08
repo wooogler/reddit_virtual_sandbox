@@ -17,13 +17,19 @@ interface Props {
 
 function SearchModal({ visible, onCancel, query }: Props): ReactElement {
   const [sort, setSort] = useState<'relevance' | 'new' | 'top'>('relevance');
-  const searchQuery = useQuery(['search', { query, sort }], async () => {
-    const { data } = await request<IPost[]>({
-      url: '/posts/search/',
-      params: { query, sort },
-    });
-    return data;
-  });
+  const searchQuery = useQuery(
+    ['search', { query, sort }],
+    async () => {
+      const { data } = await request<IPost[]>({
+        url: '/posts/search/',
+        params: { query, sort },
+      });
+      return data;
+    },
+    {
+      enabled: visible,
+    }
+  );
 
   return (
     <Modal

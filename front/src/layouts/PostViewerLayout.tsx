@@ -6,7 +6,6 @@ import {
   SearchOutlined,
 } from '@ant-design/icons';
 
-
 import PostList from '@components/PostList';
 import SearchModal from '@components/SearchModal';
 import SubmitModal from '@components/SubmitModal';
@@ -388,7 +387,7 @@ function PostViewerLayout(): ReactElement {
                 danger
                 className='ml-2'
                 size='small'
-                // disabled
+                disabled
               >
                 Reset
               </Button>

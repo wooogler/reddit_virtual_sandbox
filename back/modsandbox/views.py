@@ -135,7 +135,7 @@ class PostViewSet(viewsets.ModelViewSet):
 
         else:  # for lab study
             with open(os.path.join(os.path.dirname(__file__),
-                                   'test_data/submission_cscareerquestions_may_2.json')) as normal_json:
+                                   'test_data/submission_cscareerquestions_may_1st.json')) as normal_json:
                 normal = json.load(normal_json)
                 normal_json.close()
 
