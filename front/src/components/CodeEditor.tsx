@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from 'react';
+import { ReactElement, useEffect, useState } from 'react';
 import AceEditor from 'react-ace';
 import 'ace-builds/src-noconflict/mode-yaml';
 import 'ace-builds/src-noconflict/theme-tomorrow';
@@ -8,9 +8,9 @@ import request from '@utils/request';
 import { useMutation, useQueryClient } from 'react-query';
 import { Config } from '@typings/db';
 import { useStore } from '@utils/store';
-import { EditorState } from '@typings/types';
 import GuideModal from './GuideModal';
 import {
+  ClearOutlined,
   EditOutlined,
   InfoCircleOutlined,
   PlayCircleOutlined,
@@ -19,27 +19,23 @@ import {
 import { invalidatePostQueries } from '@utils/util';
 
 interface Props {
-  editorState: EditorState;
-  configId?: number;
   placeholder: string;
-  onClose: () => void;
-  code: string;
-  setCode: React.Dispatch<React.SetStateAction<string>>;
 }
 
-function CodeEditor({
-  editorState,
-  configId,
-  placeholder,
-  onClose,
-  code,
-  setCode,
-}: Props): ReactElement {
+function CodeEditor({ placeholder }: Props): ReactElement {
   const queryClient = useQueryClient();
+  const [code, setCode] = useState('');
   const [visibleGuideModal, setVisibleGuideModal] = useState(false);
 
   const [isSaved, setIsSaved] = useState(false);
   const { changeConfigId, condition, clearConfigId, config_id } = useStore();
+
+  const storedCode = useStore().code;
+
+  useEffect(() => {
+    setCode(storedCode);
+  }, [storedCode]);
+
   const addConfig = ({ code }: { code: string }) =>
     request<Config>({
       url: '/configs/',
@@ -53,27 +49,11 @@ function CodeEditor({
     },
   });
 
-  const editConfig = ({ code, configId }: { code: string; configId: number }) =>
-    request<Config>({
-      url: `/configs/${configId}/`,
-      method: 'PATCH',
-      data: { code, condition },
-    });
-  const editConfigMutation = useMutation(editConfig, {
-    onSuccess: (res, { code }) => {
-      invalidatePostQueries(queryClient);
-    },
-  });
-
   const onClickApply = () => {
     if (condition === 'baseline') {
       setIsSaved(true);
     }
-    if (editorState === 'add') {
-      addConfigMutation.mutate({ code });
-    } else if (editorState === 'edit') {
-      editConfigMutation.mutate({ code, configId: configId as number });
-    }
+    addConfigMutation.mutate({ code });
   };
 
   const deleteTargetPostsMutation = useMutation(
@@ -115,16 +95,14 @@ function CodeEditor({
     },
   });
 
+  const onClickClear = () => {
+    setCode('');
+    clearConfigId();
+  };
   return (
     <>
       <div className='flex mb-2 items-center flex-wrap'>
-        <PanelName>
-          {condition === 'sandbox'
-            ? 'AutoMod Configuration'
-            : editorState === 'add'
-            ? 'AutoMod Configuration'
-            : 'Edit the configuration'}
-        </PanelName>
+        <PanelName>AutoMod Configuration</PanelName>
         <div className='flex ml-auto'>
           <Button
             icon={<InfoCircleOutlined />}
@@ -143,18 +121,17 @@ function CodeEditor({
               <Button
                 type='link'
                 size='small'
-                onClick={() => clearConfigId()}
+                onClick={onClickClear}
                 danger
+                icon={<ClearOutlined />}
               >
-                Cancel
+                Clear
               </Button>
               <Button
                 type='link'
                 icon={<PlayCircleOutlined />}
                 onClick={onClickApply}
-                loading={
-                  addConfigMutation.isLoading || editConfigMutation.isLoading
-                }
+                loading={addConfigMutation.isLoading}
                 size='small'
               >
                 Apply
@@ -168,9 +145,7 @@ function CodeEditor({
                 deleteConfigMutation.mutate({ configId: config_id as number });
                 setIsSaved(false);
               }}
-              loading={
-                addConfigMutation.isLoading || editConfigMutation.isLoading
-              }
+              loading={addConfigMutation.isLoading}
               size='small'
             >
               Edit
@@ -180,9 +155,7 @@ function CodeEditor({
               type='link'
               icon={<SaveOutlined />}
               onClick={onClickApply}
-              loading={
-                addConfigMutation.isLoading || editConfigMutation.isLoading
-              }
+              loading={addConfigMutation.isLoading}
               size='small'
             >
               Save

@@ -404,17 +404,7 @@ class StatViewSet(PostViewSet):
 
     @action(detail=False, methods=['get'])
     def graph(self, request):
-        after = self.request.query_params.get("after")
-        post_type = self.request.query_params.get("post_type")
-        source = self.request.query_params.get("source")
         queryset = self.get_queryset().filter(place__startswith='normal')
-        if post_type:
-            queryset = queryset.filter(post_type=post_type)
-        if source:
-            if source == 'Spam':
-                queryset = queryset.filter(source__in=['Spam', 'Report'])
-            else:
-                queryset = queryset.filter(source=source)
 
         posts = Post.objects.filter(user=request.user, place__startswith='normal')
         data_array = []

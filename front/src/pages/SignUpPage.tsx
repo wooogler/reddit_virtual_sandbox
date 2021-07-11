@@ -3,7 +3,7 @@ import { IUser } from '@typings/db';
 import request from '@utils/request';
 import { Condition, useStore } from '@utils/store';
 import { Button, Form, Input, Select } from 'antd';
-import React, { ReactElement, useCallback } from 'react';
+import React, { ReactElement, useCallback, useState } from 'react';
 import { useQuery } from 'react-query';
 import { Link, Redirect } from 'react-router-dom';
 
@@ -19,6 +19,7 @@ function SignUpPage(): ReactElement {
   });
 
   const { condition, changeCondition } = useStore();
+  const [task, setTask] = useState<'A' | 'B'>('A');
 
   const onFinish = useCallback(
     (values: SignUpForm) => {
@@ -26,7 +27,7 @@ function SignUpPage(): ReactElement {
         url: '/rest-auth/registration/',
         method: 'POST',
         data: {
-          username: values.username,
+          username: values.username + '-' + task,
           password1: 'modsandbox',
           password2: 'modsandbox',
         },
@@ -40,7 +41,7 @@ function SignUpPage(): ReactElement {
           console.log(error.response);
         });
     },
-    [refetch]
+    [refetch, task]
   );
 
   if (data) {
@@ -64,6 +65,16 @@ function SignUpPage(): ReactElement {
             <Select.Option value='modsandbox'>System A</Select.Option>
             <Select.Option value='sandbox'>System B</Select.Option>
             <Select.Option value='baseline'>System C</Select.Option>
+          </Select>
+        </Form.Item>
+        <Form.Item label='Task' name='task'>
+          <Select
+            value={task}
+            defaultValue={'A'}
+            onChange={(value) => setTask(value)}
+          >
+            <Select.Option value='A'>Task A</Select.Option>
+            <Select.Option value='B'>Task B</Select.Option>
           </Select>
         </Form.Item>
         <Form.Item

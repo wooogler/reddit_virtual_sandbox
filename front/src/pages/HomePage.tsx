@@ -1,13 +1,12 @@
-import React, { ReactElement } from 'react';
-import { IUser } from '@typings/db';
+import { ReactElement, useEffect } from 'react';
+import { IStat, IUser } from '@typings/db';
 import { useQuery } from 'react-query';
 import { Redirect } from 'react-router-dom';
 import request from '@utils/request';
 import PostViewerLayout from '@layouts/PostViewerLayout';
 import AnalysisLayout from '@layouts/AnalysisLayout';
-import PostChart from '@components/PostChart';
 import { useStore } from '@utils/store';
-
+import dayjs from 'dayjs';
 
 function HomePage(): ReactElement {
   const { data } = useQuery('me', async () => {
@@ -15,7 +14,35 @@ function HomePage(): ReactElement {
     return data;
   });
 
-  const { condition } = useStore();
+  const { changeDateRange } = useStore();
+
+  useEffect(() => {
+    const fetchGraph = async () => {
+      await request<IStat[]>({
+        url: '/stats/graph/',
+        params: {
+          post_type: 'all',
+          filtered: false,
+          source: 'all',
+        },
+      }).then(({ data }) => {
+        if (data.length !== 0) {
+          const startDate = data
+            .map((item) => item.x0)
+            .reduce((min, cur) => {
+              return cur < min ? cur : min;
+            });
+          const endDate = data
+            .map((item) => item.x1)
+            .reduce((min, cur) => {
+              return cur > min ? cur : min;
+            });
+          changeDateRange(dayjs(startDate), dayjs(endDate));
+        }
+      });
+    };
+    fetchGraph();
+  }, [changeDateRange]);
 
   if (!data) {
     return <Redirect to='/login' />;
@@ -28,7 +55,7 @@ function HomePage(): ReactElement {
       </div>
       <div className='w-1/3 h-full flex flex-col'>
         <AnalysisLayout />
-        {condition === 'modsandbox' && <PostChart />}
+        {/* {condition === 'modsandbox' && <PostChart />} */}
       </div>
     </div>
   );

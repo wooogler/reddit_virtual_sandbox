@@ -62,6 +62,8 @@ class PostSerializer(serializers.ModelSerializer):
 class CheckSerializer(serializers.ModelSerializer):
     subreddit_count = serializers.SerializerMethodField()
     spam_count = serializers.SerializerMethodField()
+    target_count = serializers.SerializerMethodField()
+    except_count = serializers.SerializerMethodField()
     code = serializers.SerializerMethodField()
 
     def get_subreddit_count(self, obj):
@@ -74,25 +76,39 @@ class CheckSerializer(serializers.ModelSerializer):
         end_date = self.context['request'].query_params.get('end_date')
         return obj.post_set.filter(source__in=['Spam', 'Report'], created_utc__range=(start_date, end_date)).count()
 
+    def get_target_count(self, obj):
+        start_date = self.context['request'].query_params.get('start_date')
+        end_date = self.context['request'].query_params.get('end_date')
+        return obj.post_set.filter(place__in=['target', 'normal-target'],
+                                   created_utc__range=(start_date, end_date)).count()
+
+    def get_except_count(self, obj):
+        start_date = self.context['request'].query_params.get('start_date')
+        end_date = self.context['request'].query_params.get('end_date')
+        return obj.post_set.filter(place__in=['except', 'normal-except'],
+                                   created_utc__range=(start_date, end_date)).count()
+
     def get_code(self, obj):
-        return obj.fields + ': ' + "[ '" + obj.word + "' ]"
+        return obj.fields + ': ' + "['" + obj.word + "']"
 
     class Meta:
         model = Check
         fields = [
             "id",
-            "fields",
-            "word",
             'subreddit_count',
             'spam_count',
             'code',
             'line',
+            'target_count',
+            'except_count',
         ]
 
 
 class CheckCombinationSerializer(serializers.ModelSerializer):
     subreddit_count = serializers.SerializerMethodField()
     spam_count = serializers.SerializerMethodField()
+    target_count = serializers.SerializerMethodField()
+    except_count = serializers.SerializerMethodField()
     code = serializers.SerializerMethodField()
     checks = CheckSerializer(many=True, read_only=True)
 
@@ -105,6 +121,18 @@ class CheckCombinationSerializer(serializers.ModelSerializer):
         start_date = self.context['request'].query_params.get('start_date')
         end_date = self.context['request'].query_params.get('end_date')
         return obj.post_set.filter(source__in=['Spam', 'Report'], created_utc__range=(start_date, end_date)).count()
+
+    def get_target_count(self, obj):
+        start_date = self.context['request'].query_params.get('start_date')
+        end_date = self.context['request'].query_params.get('end_date')
+        return obj.post_set.filter(place__in=['target', 'normal-target'],
+                                   created_utc__range=(start_date, end_date)).count()
+
+    def get_except_count(self, obj):
+        start_date = self.context['request'].query_params.get('start_date')
+        end_date = self.context['request'].query_params.get('end_date')
+        return obj.post_set.filter(place__in=['except', 'normal-except'],
+                                   created_utc__range=(start_date, end_date)).count()
 
     def get_code(self, obj):
         checks = obj.checks.all()
@@ -121,12 +149,16 @@ class CheckCombinationSerializer(serializers.ModelSerializer):
             'code',
             'subreddit_count',
             'spam_count',
+            'target_count',
+            'except_count',
         ]
 
 
 class RuleSerializer(serializers.ModelSerializer):
     subreddit_count = serializers.SerializerMethodField()
     spam_count = serializers.SerializerMethodField()
+    target_count = serializers.SerializerMethodField()
+    except_count = serializers.SerializerMethodField()
     checks = CheckSerializer(many=True, read_only=True)
     check_combinations = CheckCombinationSerializer(many=True, read_only=True)
 
@@ -140,6 +172,18 @@ class RuleSerializer(serializers.ModelSerializer):
         end_date = self.context['request'].query_params.get('end_date')
         return obj.post_set.filter(source=['Spam', 'Report'], created_utc__range=(start_date, end_date)).count()
 
+    def get_target_count(self, obj):
+        start_date = self.context['request'].query_params.get('start_date')
+        end_date = self.context['request'].query_params.get('end_date')
+        return obj.post_set.filter(place__in=['target', 'normal-target'],
+                                   created_utc__range=(start_date, end_date)).count()
+
+    def get_except_count(self, obj):
+        start_date = self.context['request'].query_params.get('start_date')
+        end_date = self.context['request'].query_params.get('end_date')
+        return obj.post_set.filter(place__in=['except', 'normal-except'],
+                                   created_utc__range=(start_date, end_date)).count()
+
     class Meta:
         model = Rule
         fields = [
@@ -149,6 +193,8 @@ class RuleSerializer(serializers.ModelSerializer):
             'check_combinations',
             'subreddit_count',
             'spam_count',
+            'target_count',
+            'except_count',
         ]
 
 
@@ -156,6 +202,8 @@ class ConfigSerializer(serializers.ModelSerializer):
     rules = RuleSerializer(many=True, read_only=True)
     subreddit_count = serializers.SerializerMethodField()
     spam_count = serializers.SerializerMethodField()
+    target_count = serializers.SerializerMethodField()
+    except_count = serializers.SerializerMethodField()
 
     def get_subreddit_count(self, obj):
         start_date = self.context['request'].query_params.get('start_date')
@@ -167,6 +215,18 @@ class ConfigSerializer(serializers.ModelSerializer):
         end_date = self.context['request'].query_params.get('end_date')
         return obj.post_set.filter(source=['Spam', 'Report'], created_utc__range=(start_date, end_date)).count()
 
+    def get_target_count(self, obj):
+        start_date = self.context['request'].query_params.get('start_date')
+        end_date = self.context['request'].query_params.get('end_date')
+        return obj.post_set.filter(place__in=['target', 'normal-target'],
+                                   created_utc__range=(start_date, end_date)).count()
+
+    def get_except_count(self, obj):
+        start_date = self.context['request'].query_params.get('start_date')
+        end_date = self.context['request'].query_params.get('end_date')
+        return obj.post_set.filter(place__in=['except', 'normal-except'],
+                                   created_utc__range=(start_date, end_date)).count()
+
     class Meta:
         model = Config
         fields = [
@@ -176,6 +236,8 @@ class ConfigSerializer(serializers.ModelSerializer):
             'rules',
             'subreddit_count',
             'spam_count',
+            'target_count',
+            'except_count',
         ]
 
     def create(self, validated_data):

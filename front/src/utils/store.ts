@@ -17,6 +17,13 @@ type SelectedHighlight = {
   check_combination_ids?: number[];
 };
 
+type TotalCount = {
+  filteredCount: number;
+  notFilteredCount: number;
+  targetCount: number;
+  exceptCount: number;
+};
+
 type State = {
   config_id: number | undefined;
   rule_id: number | undefined;
@@ -33,6 +40,7 @@ type State = {
   imported: boolean;
   selectedHighlight: SelectedHighlight;
   condition: Condition;
+  totalCount: TotalCount;
   changeConfigId: (configId: number) => void;
   changeRuleId: (ruleId: number) => void;
   changeCheckId: (checkId: number) => void;
@@ -48,6 +56,7 @@ type State = {
   changeImported: (imported: boolean) => void;
   changeSelectedHighlight: (selected: SelectedHighlight) => void;
   changeCondition: (condition: Condition) => void;
+  changeTotalCount: (totalCount: Partial<TotalCount>) => void;
 };
 
 const nowDayStart = dayjs().startOf('day');
@@ -78,6 +87,12 @@ export const useStore = create<State>(
           check_combination_ids: [],
         },
         condition: 'modsandbox',
+        totalCount: {
+          filteredCount: 0,
+          notFilteredCount: 0,
+          targetCount: 0,
+          exceptCount: 0,
+        },
         changeConfigId: (id: number) =>
           set((state) => ({
             config_id: id,
@@ -87,22 +102,22 @@ export const useStore = create<State>(
           })),
         changeRuleId: (id: number) =>
           set((state) => ({
-            config_id: undefined,
+            // config_id: undefined,
             rule_id: id,
             check_id: undefined,
             check_combination_id: undefined,
           })),
         changeCheckId: (id: number) =>
           set((state) => ({
-            config_id: undefined,
-            rule_id: undefined,
+            // config_id: undefined,
+            // rule_id: undefined,
             check_id: id,
             check_combination_id: undefined,
           })),
         changeCheckCombinationId: (id: number) =>
           set((state) => ({
-            config_id: undefined,
-            rule_id: undefined,
+            // config_id: undefined,
+            // rule_id: undefined,
             check_id: undefined,
             check_combination_id: id,
           })),
@@ -152,6 +167,11 @@ export const useStore = create<State>(
         changeCondition: (condition: Condition) => {
           set((state) => ({ condition }));
         },
+        changeTotalCount: (count: Partial<TotalCount>) => {
+          set((state) => ({
+            totalCount: { ...state.totalCount, ...count },
+          }));
+        },
       }),
       {
         name: 'modsandbox-storage',
@@ -160,6 +180,7 @@ export const useStore = create<State>(
           'end_date',
           'refetching',
           'selectedHighlight',
+          'totalCount',
         ],
       }
     )

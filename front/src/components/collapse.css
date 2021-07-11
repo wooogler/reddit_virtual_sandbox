@@ -1,0 +1,17 @@
+.ant-collapse-content > .ant-collapse-content-box {
+  padding: 0rem;
+}
+
+.ant-collapse > .ant-collapse-item > .ant-collapse-header {
+  padding: 0rem;
+  margin: 0.2rem 0rem;
+  padding-left: 2rem;
+}
+
+.ant-collapse > .ant-collapse-item > .ant-collapse-header .ant-collapse-arrow {
+  padding: 0rem;
+}
+
+div.custom {
+  padding-left: 1rem;
+}

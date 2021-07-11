@@ -3,7 +3,7 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import { ReactElement } from 'react';
 import clsx from 'clsx';
 import { IPost, MatchingCheck } from '@typings/db';
-import { Button, Dropdown, Menu, Tooltip } from 'antd';
+import { Dropdown, Menu, Tooltip } from 'antd';
 import request from '@utils/request';
 import utc from 'dayjs/plugin/utc';
 import HighlightText from './HighlightText';
@@ -40,6 +40,7 @@ function PostItem({
   } = useStore();
 
   const invalidatePostQueries = (place: IPost['place']) => {
+    queryClient.invalidateQueries('configs');
     if (place.includes('normal')) {
       if (isFiltered) {
         queryClient.invalidateQueries('filtered');
@@ -125,7 +126,7 @@ function PostItem({
     },
   });
 
-  const movePostToTestCase = ({ id, place }: Pick<IPost, 'id' | 'place'>) =>
+  const movePost = ({ id, place }: Pick<IPost, 'id' | 'place'>) =>
     request({
       url: `/posts/${post.id}/`,
       method: 'PATCH',
@@ -134,7 +135,7 @@ function PostItem({
       },
     });
 
-  const movePostToTestCaseMutation = useMutation(movePostToTestCase, {
+  const movePostMutation = useMutation(movePost, {
     onSuccess: (_, { place }) => {
       invalidatePostQueries(place);
       if (place.includes('target') && order === 'fpfn') {
@@ -200,7 +201,7 @@ function PostItem({
             url: post.url,
           });
         } else {
-          movePostToTestCaseMutation.mutate({
+          movePostMutation.mutate({
             id: post.id,
             place: key as 'normal-target' | 'normal-except',
           });
@@ -209,6 +210,19 @@ function PostItem({
     >
       <Menu.Item key='normal-target'>Posts that should be filtered</Menu.Item>
       <Menu.Item key='normal-except'>Posts to avoid being filtered</Menu.Item>
+    </Menu>
+  );
+
+  const revertMenu = (
+    <Menu
+      onClick={() =>
+        deletePostFromTestCaseMutation.mutate({
+          id: post.id,
+          place: post.place,
+        })
+      }
+    >
+      <Menu.Item>Revert</Menu.Item>
     </Menu>
   );
 
@@ -247,21 +261,66 @@ function PostItem({
             />
           )}
         </div>
-        <div className='flex items-center flex-wrap mb-1'>
-          <div className='text-xs'>{post.author}</div>
+        <div className='flex items-center flex-wrap mb-1 text-xs'>
+          <div>{post.author}</div>
           <Tooltip
             placement='top'
             title={dayjs(post.created_utc)
               .local()
               .format('ddd MMM D YYYY hh:mm:ss')}
           >
-            <div className='text-xs mx-2'>{dayjs().to(post.created_utc)}</div>
+            <div className='mx-2'>{dayjs().to(post.created_utc)}</div>
           </Tooltip>
           <Tooltip placement='top' title='upvote - downvote'>
-            <div className='mr-2 text-xs'>
+            <div className='mr-2'>
               score: <b>{post.score}</b>
             </div>
           </Tooltip>
+          {condition !== 'baseline' ? (
+            post.place === 'normal' ? (
+              <Dropdown overlay={moveMenu}>
+                <div className='underline cursor-pointer text-blue-600'>
+                  Move to
+                </div>
+              </Dropdown>
+            ) : isTested ? (
+              <div
+                className='cursor-pointer text-red-500 underline'
+                onClick={() =>
+                  deletePostFromTestCaseMutation.mutate({
+                    id: post.id,
+                    place: post.place,
+                  })
+                }
+              >
+                {['target', 'except'].includes(post.place)
+                  ? 'remove'
+                  : 'revert'}
+              </div>
+            ) : (
+              <Dropdown overlay={revertMenu}>
+                <div className='text-gray-400 underline cursor-pointer'>
+                  moved in{' '}
+                  {post.place === 'normal-target'
+                    ? 'posts that should be filtered'
+                    : 'posts to avoid being filtered'}
+                </div>
+              </Dropdown>
+            )
+          ) : (
+            <div
+              className='cursor-pointer text-red-500 underline'
+              onClick={() =>
+                deletePostFromTestCaseMutation.mutate({
+                  id: post.id,
+                  place: post.place,
+                })
+              }
+            >
+              remove
+            </div>
+          )}
+
           {post.source === 'Spam' && (
             <div className='text-red-600 text-xs'>
               Removed by {post.banned_by}
@@ -269,26 +328,24 @@ function PostItem({
           )}
         </div>
         <div>
-          {condition === 'modsandbox' ? (
-            <div className='text-sm'>
-              {searchQuery ? (
-                <Highlighter
-                  searchWords={[searchQuery]}
-                  textToHighlight={post.body}
-                  highlightStyle={{ fontWeight: 'bolder' }}
-                />
-              ) : (
-                <HighlightText
-                  text={post.body}
-                  match={makeMatch(
-                    matchingChecksBody.concat(matchingNotChecksBody)
-                  )}
-                />
-              )}
-            </div>
-          ) : (
-            <div className='text-sm'>{post.body}</div>
-          )}
+          <div className='text-sm'>
+            {searchQuery ? (
+              <Highlighter
+                searchWords={[searchQuery]}
+                textToHighlight={post.body}
+                highlightStyle={{ fontWeight: 'bolder' }}
+              />
+            ) : condition === 'modsandbox' ? (
+              <HighlightText
+                text={post.body}
+                match={makeMatch(
+                  matchingChecksBody.concat(matchingNotChecksBody)
+                )}
+              />
+            ) : (
+              <div>{post.body}</div>
+            )}
+          </div>
           <div className='flex items-center'>
             {post.post_id !== 'ffffff' && (
               <a
@@ -311,32 +368,6 @@ function PostItem({
                 </div>
               </a>
             )}
-
-            {condition !== 'baseline' &&
-              (post.place === 'normal' ? (
-                <Dropdown overlay={moveMenu}>
-                  <Button type='link'>
-                    <div className='text-xs underline'>Move</div>
-                  </Button>
-                </Dropdown>
-              ) : (
-                <Button
-                  danger
-                  type='link'
-                  size='small'
-                  onClick={() =>
-                    deletePostFromTestCaseMutation.mutate({
-                      id: post.id,
-                      place: post.place,
-                    })
-                  }
-                  disabled={!isTested}
-                >
-                  <div className='text-xs underline'>
-                    {isTested ? 'delete' : 'moved'}
-                  </div>
-                </Button>
-              ))}
           </div>
         </div>
       </div>

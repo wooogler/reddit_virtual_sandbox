@@ -26,14 +26,10 @@ export const isFiltered = (
   //     return false;
   //   }
   // }
-  if (config_id) {
-    if (post.matching_configs.includes(config_id)) {
-      return true;
-    }
-    return false;
-  }
-  if (rule_id) {
-    if (post.matching_rules.includes(rule_id)) {
+  if (check_id) {
+    if (
+      post.matching_checks.map((check) => check._check_id).includes(check_id)
+    ) {
       return true;
     }
     return false;
@@ -44,14 +40,19 @@ export const isFiltered = (
     }
     return false;
   }
-  if (check_id) {
-    if (
-      post.matching_checks.map((check) => check._check_id).includes(check_id)
-    ) {
+  if (rule_id) {
+    if (post.matching_rules.includes(rule_id)) {
       return true;
     }
     return false;
   }
+  if (config_id) {
+    if (post.matching_configs.includes(config_id)) {
+      return true;
+    }
+    return false;
+  }
+
   return false;
 };
 

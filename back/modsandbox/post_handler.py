@@ -114,28 +114,30 @@ def create_posts(posts, user, place, use_author):
 
 def get_filtered_posts(posts: Post.objects, config_id: [int], rule_id: [int]
                        , check_combination_id: [int], check_id: [int]):
-    if config_id is not None:
-        return posts.filter(matching_configs__id=config_id)
-    elif rule_id is not None:
-        return posts.filter(matching_rules__id=rule_id)
+    if check_id is not None:
+        return posts.filter(matching_checks__id=check_id)
     elif check_combination_id is not None:
         return posts.filter(matching_check_combinations__id=check_combination_id)
-    elif check_id is not None:
-        return posts.filter(matching_checks__id=check_id)
+    elif rule_id is not None:
+        return posts.filter(matching_rules__id=rule_id)
+    elif config_id is not None:
+        return posts.filter(matching_configs__id=config_id)
+
     else:
         return posts.none()
 
 
 def get_unfiltered_posts(posts: Post.objects, config_id: [int], rule_id: [int]
                          , check_combination_id: [int], check_id: [int]):
-    if config_id is not None:
-        return posts.exclude(matching_configs__id=config_id)
-    elif rule_id is not None:
-        return posts.exclude(matching_rules__id=rule_id)
+    if check_id is not None:
+        return posts.exclude(matching_checks__id=check_id)
     elif check_combination_id is not None:
         return posts.exclude(matching_check_combinations__id=check_combination_id)
-    elif check_id is not None:
-        return posts.exclude(matching_checks__id=check_id)
+    elif rule_id is not None:
+        return posts.exclude(matching_rules__id=rule_id)
+    elif config_id is not None:
+        return posts.exclude(matching_configs__id=config_id)
+
     else:
         return posts
 

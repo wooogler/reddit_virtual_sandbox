@@ -1,7 +1,4 @@
 import {
-  BorderOutlined,
-  FullscreenOutlined,
-  LineOutlined,
   RedditOutlined,
   SearchOutlined,
 } from '@ant-design/icons';
@@ -10,7 +7,7 @@ import PostList from '@components/PostList';
 import SearchModal from '@components/SearchModal';
 import SubmitModal from '@components/SubmitModal';
 import TargetList from '@components/TargetList';
-import { IPost, PaginatedPosts } from '@typings/db';
+import { IPost, IUser, PaginatedPosts } from '@typings/db';
 import request from '@utils/request';
 import { useStore } from '@utils/store';
 import { invalidatePostQueries } from '@utils/util';
@@ -23,13 +20,15 @@ import {
   useQuery,
   useQueryClient,
 } from 'react-query';
-
-type Size = 'mini' | 'middle' | 'full';
+import { Split } from '@geoffcox/react-splitter';
 
 function PostViewerLayout(): ReactElement {
   const queryClient = useQueryClient();
-  const [size, setSize] = useState<Size>('middle');
   const [searchQuery, setSearchQuery] = useState('');
+  const { data: userData } = useQuery('me', async () => {
+    const { data } = await request<IUser | false>({ url: '/rest-auth/user/' });
+    return data;
+  });
 
   const {
     config_id,
@@ -47,13 +46,27 @@ function PostViewerLayout(): ReactElement {
     // changeSource,
     changeOrder,
     changeImported,
+    changeTotalCount,
+    totalCount,
   } = useStore();
 
-  // const [isModalVisible, setIsModalVisible] = useState(false);
   const [isSearchVisible, setIsSearchVisible] = useState(false);
   const [isSubmitVisible, setIsSubmitVisible] = useState(false);
   const targetQuery = useQuery<IPost[], AxiosError>(
-    'target',
+    [
+      'target',
+      {
+        config_id,
+        rule_id,
+        check_combination_id,
+        check_id,
+        start_date,
+        end_date,
+        post_type,
+        order,
+        source,
+      },
+    ],
     async () => {
       const { data } = await request<IPost[]>({
         url: '/posts/target/',
@@ -65,16 +78,38 @@ function PostViewerLayout(): ReactElement {
         if (data.length === 0 && order === 'fpfn') {
           changeOrder('-created_utc');
         }
+        changeTotalCount({ targetCount: data.length });
       },
     }
   );
 
-  const exceptQuery = useQuery<IPost[], AxiosError>('except', async () => {
-    const { data } = await request<IPost[]>({
-      url: '/posts/except/',
-    });
-    return data;
-  });
+  const exceptQuery = useQuery<IPost[], AxiosError>(
+    [
+      'except',
+      {
+        config_id,
+        rule_id,
+        check_combination_id,
+        check_id,
+        start_date,
+        end_date,
+        post_type,
+        order,
+        source,
+      },
+    ],
+    async () => {
+      const { data } = await request<IPost[]>({
+        url: '/posts/except/',
+      });
+      return data;
+    },
+    {
+      onSuccess: (data) => {
+        changeTotalCount({ exceptCount: data.length });
+      },
+    }
+  );
 
   const addTestCase = ({ postId, place }: { postId: string; place: string }) =>
     request({
@@ -148,6 +183,9 @@ function PostViewerLayout(): ReactElement {
     {
       getNextPageParam: (lastPage) => lastPage.nextPage ?? undefined,
       refetchInterval: refetching ? 2000 : false,
+      onSuccess: (data) => {
+        changeTotalCount({ filteredCount: data.pages[0].count });
+      },
     }
   );
 
@@ -188,6 +226,9 @@ function PostViewerLayout(): ReactElement {
     {
       getNextPageParam: (lastPage) => lastPage.nextPage ?? undefined,
       refetchInterval: refetching ? 2000 : false,
+      onSuccess: (data) => {
+        changeTotalCount({ notFilteredCount: data.pages[0].count });
+      },
     }
   );
 
@@ -266,18 +307,11 @@ function PostViewerLayout(): ReactElement {
     queryClient.invalidateQueries('setting');
   }, [queryClient, importTestPostsMutation]);
 
-  // const onCancel = useCallback(() => {
-  //   setIsModalVisible(false);
-  // }, []);
-
   const onCancelSearch = useCallback(() => {
     setIsSearchVisible(false);
     queryClient.removeQueries('search');
   }, [queryClient]);
 
-  const totalCount =
-    (filteredQuery.data?.pages[0].count || 0) +
-    (notFilteredQuery.data?.pages[0].count || 0);
   const notFilteredCount = notFilteredQuery.data?.pages[0].count;
 
   useEffect(() => {
@@ -290,37 +324,38 @@ function PostViewerLayout(): ReactElement {
   const [query, setQuery] = useState('');
 
   return (
-    <div className='h-full w-full flex flex-col'>
-      <div className='w-full flex items-center flex-wrap '>
-        <div className='text-2xl ml-2 flex items-center'>
-          {/* <img
-            alt='subreddit-icon'
-            src='https://styles.redditmedia.com/t5_2sdpm/styles/communityIcon_u6zl61vcy9511.png'
-            className='w-10 mr-3'
-          /> */}
-          <RedditOutlined style={{ color: 'orangered' }} />
-          <div className='ml-2'>r/cscareerquestions</div>
-          <div className='text-sm ml-2'>in May 2021</div>
-          <Input
-            prefix={<SearchOutlined />}
-            onPressEnter={() => {
-              setIsSearchVisible(true);
-              setSearchQuery(query);
-            }}
-            placeholder='Search'
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            className='ml-4'
-            style={{ width: '15rem' }}
-          />
-          <SearchModal
-            visible={isSearchVisible}
-            onCancel={onCancelSearch}
-            query={searchQuery}
-          />
-        </div>
-        <div className='flex ml-auto items-center flex-wrap'>
-          {/* <div className='flex'>
+    <Split
+      horizontal
+      initialPrimarySize='70%'
+      minPrimarySize='10%'
+      minSecondarySize='10%'
+    >
+      <div className='h-full flex flex-col'>
+        <div className='w-full flex items-center flex-wrap '>
+          <div className='text-2xl ml-2 flex items-center'>
+            <RedditOutlined style={{ color: 'orangered' }} />
+            <div className='ml-2'>Posts on r/cscareerquestions</div>
+            {/* <div className='text-sm ml-2'>in May 2021</div> */}
+            <Input
+              prefix={<SearchOutlined />}
+              onPressEnter={() => {
+                setIsSearchVisible(true);
+                setSearchQuery(query);
+              }}
+              placeholder='Search'
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              className='ml-4'
+              style={{ width: '10rem' }}
+            />
+            <SearchModal
+              visible={isSearchVisible}
+              onCancel={onCancelSearch}
+              query={searchQuery}
+            />
+          </div>
+          <div className='flex ml-auto items-center flex-wrap'>
+            {/* <div className='flex'>
             <div className='mx-2'>Type:</div>
             <Select
               defaultValue='all'
@@ -351,79 +386,81 @@ function PostViewerLayout(): ReactElement {
             </Select>
           </div> */}
 
-          <div className='flex'>
-            {/* <div className='mr-2'>Hello, {userData && userData.username}!</div> */}
-            <div className='text-sm mr-2'>Sort:</div>
-            <Radio.Group onChange={onChangeOrder} value={order} size='small'>
-              <Radio.Button value='-created_utc'>New</Radio.Button>
-              <Radio.Button value='-score'>Top</Radio.Button>
-              {condition === 'modsandbox' && (
-                <Radio.Button
-                  value='fpfn'
-                  disabled={targetQuery.data?.length === 0}
+            <div className='flex items-center'>
+              {/* <div className='mr-2'>Hello, {userData && userData.username}!</div> */}
+
+              <Radio.Group
+                onChange={onChangeOrder}
+                value={order}
+                buttonStyle='solid'
+              >
+                <Radio.Button value='-created_utc'>New</Radio.Button>
+                <Radio.Button value='-score'>Top</Radio.Button>
+                {condition === 'modsandbox' && (
+                  <Radio.Button
+                    value='fpfn'
+                    disabled={totalCount.targetCount === 0}
+                  >
+                    {totalCount.targetCount === 0 ? (
+                      <Tooltip title='Add a post in your collections'>
+                        Smart
+                      </Tooltip>
+                    ) : (
+                      'Smart'
+                    )}
+                  </Radio.Button>
+                )}
+              </Radio.Group>
+            </div>
+            <div className='flex'>
+              {process.env.NODE_ENV === 'development' &&
+              totalCount.notFilteredCount !== 0 ? (
+                <Button
+                  onClick={() => {
+                    deleteAllPostsMutation.mutate();
+                    deleteAllRulesMutation.mutate();
+                  }}
+                  loading={
+                    deleteAllPostsMutation.isLoading ||
+                    deleteAllRulesMutation.isLoading
+                  }
+                  danger
+                  className='ml-2'
                 >
-                  {targetQuery.data?.length === 0 ? (
-                    <Tooltip title='Add a post in your collections'>
-                      Smart
-                    </Tooltip>
-                  ) : (
-                    'Smart'
-                  )}
-                </Radio.Button>
+                  Reset
+                </Button>
+              ) : (
+                <Button
+                  type='primary'
+                  className='ml-2'
+                  onClick={onClickImport}
+                  loading={importTestPostsMutation.isLoading}
+                >
+                  Import
+                </Button>
               )}
-            </Radio.Group>
-          </div>
-          <div className='flex'>
-            {notFilteredQuery.data?.pages[0].count !== 0 ? (
               <Button
-                onClick={() => {
-                  deleteAllPostsMutation.mutate();
-                  deleteAllRulesMutation.mutate();
-                }}
-                loading={
-                  deleteAllPostsMutation.isLoading ||
-                  deleteAllRulesMutation.isLoading
-                }
+                onClick={() => setIsSubmitVisible(true)}
+                className='mx-2'
                 danger
-                className='ml-2'
-                size='small'
-                disabled
-              >
-                Reset
-              </Button>
-            ) : (
-              <Button
                 type='primary'
-                className='ml-2'
-                onClick={onClickImport}
-                loading={importTestPostsMutation.isLoading}
-                size='small'
               >
-                Import
+                Finish
               </Button>
-            )}
-            <Button
-              onClick={() => setIsSubmitVisible(true)}
-              size='small'
-              danger
-              className='mx-2'
-            >
-              Finish
-            </Button>
-            <SubmitModal
-              visible={isSubmitVisible}
-              onCancel={() => setIsSubmitVisible(false)}
-            />
+              <SubmitModal
+                visible={isSubmitVisible}
+                onCancel={() => setIsSubmitVisible(false)}
+              />
+            </div>
           </div>
         </div>
-      </div>
-      {/* <ImportModal visible={isModalVisible} onCancel={onCancel} /> */}
-      {size !== 'full' && (
-        <div className='flex overflow-y-auto' style={{ flex: 5 }}>
+        {/* <ImportModal visible={isModalVisible} onCancel={onCancel} /> */}
+
+        <div className='flex overflow-y-auto flex-1'>
           <>
             <PostList
               label={
-                totalCount !== notFilteredCount
+                totalCount.filteredCount !== 0
                   ? 'Not filtered by AutoMod'
                   : 'Posts in Subreddits'
               }
@@ -437,9 +474,9 @@ function PostViewerLayout(): ReactElement {
               query={notFilteredQuery}
               isLoading={
                 notFilteredQuery.isLoading ||
-                !!queryClient.isMutating({ mutationKey: 'fpfn' })
+                !!queryClient.isMutating({ mutationKey: 'fpfn' }) ||
+                importTestPostsMutation.isLoading
               }
-              totalCount={totalCount}
             />
             <div className='border-gray-200 border-r-2' />
 
@@ -458,42 +495,32 @@ function PostViewerLayout(): ReactElement {
                   filteredQuery.isLoading ||
                   !!queryClient.isMutating({ mutationKey: 'fpfn' })
                 }
-                totalCount={totalCount}
               />
             )}
           </>
         </div>
-      )}
-      <div className='w-full flex items-center border-gray-200 border-t-4'>
-        <div className='text-2xl ml-2 flex items-center'>
-          <RedditOutlined style={{ color: 'orangered' }} />
-          <div className='ml-2 flex items-center'>
-            <div>Your Post Collections</div>
+      </div>
+      <div className='h-full flex flex-col'>
+        <div className='w-full flex items-center'>
+          <div className='text-2xl ml-2 flex items-center flex-wrap'>
+            <RedditOutlined style={{ color: 'orangered' }} />
+            <div className='ml-2 flex items-center'>
+              <div>
+                {condition !== 'baseline'
+                  ? 'Your Post Collections'
+                  : 'Testing Subreddit'}
+              </div>
+            </div>
             <div className='text-sm ml-2'>
-              (You can test your AutoMod configuration here)
+              Rule:{' '}
+              {userData && userData.username.endsWith('A')
+                ? 'Do not post questions asking “how to work as a software engineer without a CS relevant degree.”'
+                : 'Autonomously add “covid-19” flag to every post that is related to or mention covid-19.'}
             </div>
           </div>
         </div>
-        <div className='ml-auto flex items-center'>
-          <Button
-            icon={<FullscreenOutlined />}
-            type='text'
-            onClick={() => setSize('full')}
-          />
-          <Button
-            icon={<BorderOutlined />}
-            type='text'
-            onClick={() => setSize('middle')}
-          />
-          <Button
-            icon={<LineOutlined />}
-            type='text'
-            onClick={() => setSize('mini')}
-          />
-        </div>
-      </div>
-      {size !== 'mini' && (
-        <div className='flex overflow-y-auto' style={{ flex: 3 }}>
+
+        <div className='flex overflow-y-auto flex-1'>
           <TargetList
             label='Posts that should be filtered'
             posts={targetQuery.data}
@@ -514,8 +541,8 @@ function PostViewerLayout(): ReactElement {
             place='except'
           />
         </div>
-      )}
-    </div>
+      </div>
+    </Split>
   );
 }
 

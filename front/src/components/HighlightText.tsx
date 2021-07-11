@@ -12,7 +12,6 @@ interface Match {
 
 interface Props {
   text: string;
-
   match: Match[];
 }
 

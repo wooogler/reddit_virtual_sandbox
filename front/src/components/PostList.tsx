@@ -19,7 +19,6 @@ interface Props {
   query: UseInfiniteQueryResult<PaginatedPosts, AxiosError<any>>;
   isLoading?: boolean;
   description: string;
-  totalCount?: number;
 }
 
 function PostList({
@@ -27,11 +26,16 @@ function PostList({
   query,
   isLoading,
   description,
-  totalCount,
 }: Props): ReactElement {
   const [ref, inView] = useInView({ threshold: 0 });
-  const { config_id, rule_id, check_combination_id, check_id, condition } =
-    useStore();
+  const {
+    config_id,
+    rule_id,
+    check_combination_id,
+    check_id,
+    condition,
+    totalCount,
+  } = useStore();
 
   const { fetchNextPage } = query;
   useEffect(() => {
@@ -42,19 +46,27 @@ function PostList({
 
   const queryCount = query.data?.pages[0].count;
 
+  const total = totalCount.filteredCount + totalCount.notFilteredCount;
+
   return (
     <div className='relative flex flex-col h-full p-2 w-1/2'>
       <OverlayLoading isLoading={isLoading} description='loading...' />
       <div className='flex items-center flex-wrap'>
         <PanelName>{label}</PanelName>
         <div className='text-sm mr-4'>{description}</div>
-        <div className='text-sm text-gray-400'>
-          ({queryCount} / {totalCount}){' '}
-          {queryCount &&
-            totalCount &&
-            ((queryCount / totalCount) * 100).toFixed(2)}{' '}
-          %
-        </div>
+        {condition !== 'baseline' ? (
+          <div className='text-sm text-gray-400'>
+            ({queryCount} / {total}){' '}
+            {queryCount &&
+              totalCount &&
+              ((queryCount / total) * 100).toFixed(2)}{' '}
+            %
+          </div>
+        ) : (
+          <div className='text-sm text-gray-400'>
+            {totalCount.notFilteredCount} Posts
+          </div>
+        )}
       </div>
       {query.data?.pages[0].count !== 0 ? (
         <div className='overflow-y-auto post-scroll'>

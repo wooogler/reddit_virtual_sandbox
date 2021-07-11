@@ -24,18 +24,25 @@ function GuideModal({ visible, onCancel }: Props): ReactElement {
           <TabPane tab='Search Checks' key='0'>
             <div className='category'>Search Checks</div>
             <div className='text'>
-              If you want to filter comments with "keyword1" in{' '}
+              If you want to filter posts with "keyword1" in{' '}
               <strong>"title"</strong>
             </div>
             <div className='code'>
               <strong>title</strong>: ['keyword1']
             </div>
             <div className='text'>
-              If you want to filter comments with "keyword2" in{' '}
+              If you want to filter posts with "keyword2" in{' '}
               <strong>"body"</strong>
             </div>
             <div className='code'>
               <strong>body</strong>: ['keyword2']
+            </div>
+            <div className='text'>
+              If you want to filter posts with "keyword3" in title{' '}
+              <strong>OR</strong> body
+            </div>
+            <div className='code'>
+              <strong>title+body</strong>: ['keyword3']
             </div>
             <Alert
               message={
@@ -59,24 +66,18 @@ function GuideModal({ visible, onCancel }: Props): ReactElement {
               className='my-1'
             />
           </TabPane>
-          <TabPane tab='AND, OR, NOT' key='1'>
-            <div className='category'>AND, OR, NOT</div>
+          <TabPane tab='Logics' key='1'>
+            <div className='category'>Logics</div>
             <div className='text'>
-              If you want to filter comments <strong>with</strong> "keyword"
-            </div>
-            <div className='code'>
-              <strong>body: ['</strong>keyword<strong>']</strong>
-            </div>
-            <div className='text'>
-              If you want to filter comments with “keyword1” <strong>OR</strong>{' '}
+              If you want to filter posts with “keyword1” <strong>OR</strong>{' '}
               “keyword2”
             </div>
             <div className='code'>
               body: [‘keyword1’<strong>,</strong> ‘keyword2’]
             </div>
             <div className='text'>
-              If you want to filter comments with “keyword1”{' '}
-              <strong>AND</strong> “keyword2”
+              If you want to filter posts with “keyword1” <strong>AND</strong>{' '}
+              “keyword2”
             </div>
             <div className='code'>
               <div>
@@ -87,13 +88,13 @@ function GuideModal({ visible, onCancel }: Props): ReactElement {
               </div>
             </div>
             <div className='text'>
-              If you want to filter comments <strong>without</strong> “keyword3”
+              If you want to filter posts <strong>without</strong> “keyword3”
             </div>
             <div className='code'>
               <strong>~</strong>body: [‘keyword3’]
             </div>
             <div className='text'>
-              If you want to filter comments with “keyword1” <strong>OR</strong>{' '}
+              If you want to filter posts with “keyword1” <strong>OR</strong>{' '}
               “keyword2” <strong>AND without</strong> “keyword3”
             </div>
             <div className='code'>
@@ -152,7 +153,7 @@ function GuideModal({ visible, onCancel }: Props): ReactElement {
               regular expression
             </div>
             <div className='text'>
-              If you filter the comments with the words start with “Sunny”
+              If you filter the posts with the words start with “Sunny”
             </div>
             <div className='code'>
               body (starts-with, case-sensitive) : [‘Sunny’]
@@ -161,8 +162,7 @@ function GuideModal({ visible, onCancel }: Props): ReactElement {
           <TabPane tab='Multiple filters' key='3'>
             <div className='category'>Multiple filters</div>
             <div className='text'>
-              You can separate into multiple keyword filters and label on them
-              for categorizing
+              You can set multiple filters in a configuration.
             </div>
             <div className='mt-2'>
               <code>---</code> : line separating two filters
@@ -181,6 +181,10 @@ function GuideModal({ visible, onCancel }: Props): ReactElement {
               </div>
               <div>body: ['lion', 'tiger', 'elephant']</div>
               <div>---</div>
+            </div>
+            <div className='text'>
+              The filter above can filter posts with colors <strong>OR</strong>{' '}
+              animals
             </div>
           </TabPane>
         </Tabs>

@@ -1,11 +1,12 @@
 import { Config, IUser } from '@typings/db';
 import request from '@utils/request';
 import { Modal } from 'antd';
-import React, { ReactElement, useCallback, useState } from 'react';
+import React, { ReactElement, useCallback, useEffect, useState } from 'react';
 import { useMutation, useQuery } from 'react-query';
 import AceEditor from 'react-ace';
 import 'ace-builds/src-noconflict/mode-yaml';
 import 'ace-builds/src-noconflict/theme-tomorrow';
+import { useStore } from '@utils/store';
 
 interface Props {
   onCancel: () => void;
@@ -20,6 +21,12 @@ function SubmitModal({ onCancel, visible }: Props): ReactElement {
       method: 'POST',
       data: { code },
     });
+
+  const storedCode = useStore().code;
+
+  useEffect(() => {
+    setCode(storedCode);
+  }, [storedCode]);
 
   const { refetch } = useQuery<IUser | false>('me');
 
@@ -51,6 +58,11 @@ function SubmitModal({ onCancel, visible }: Props): ReactElement {
       onOk={() => submitConfigMutation.mutate({ code })}
       okText='Submit & Finish'
     >
+      <div className='flex flex-col items-center'>
+        <div className='text-red-500 font-bold mb-2'>
+          Please check your final configuration before submission!
+        </div>
+      </div>
       <AceEditor
         mode='yaml'
         theme='tomorrow'

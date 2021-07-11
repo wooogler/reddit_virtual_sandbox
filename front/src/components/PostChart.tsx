@@ -83,6 +83,7 @@ function PostChart(): ReactElement {
         rule_id,
         check_combination_id,
         check_id,
+        config_id,
         post_type,
         after,
         refetching,
@@ -96,6 +97,7 @@ function PostChart(): ReactElement {
           rule_id,
           check_id,
           check_combination_id,
+          config_id,
           post_type: post_type === 'all' ? undefined : post_type,
           after,
           filtered: false,
@@ -133,19 +135,19 @@ function PostChart(): ReactElement {
     y: datum.y,
   }));
 
-  const chartLabel = `Time Series Chart of Filtered ${
-    post_type === 'all'
-      ? 'Submissions & Comments'
-      : post_type === 'Submission'
-      ? 'Submissions'
-      : 'Comments'
-  } on ${
-    source === 'all'
-      ? 'Subreddit & Spam/Reports'
-      : source === 'Subreddit'
-      ? 'Subreddit'
-      : 'Spam/Reports'
-  }`;
+  // const chartLabel = `Time Series Chart of Filtered ${
+  //   post_type === 'all'
+  //     ? 'Submissions & Comments'
+  //     : post_type === 'Submission'
+  //     ? 'Submissions'
+  //     : 'Comments'
+  // } on ${
+  //   source === 'all'
+  //     ? 'Subreddit & Spam/Reports'
+  //     : source === 'Subreddit'
+  //     ? 'Subreddit'
+  //     : 'Spam/Reports'
+  // }`;
 
   useEffect(() => {
     const fetchGraph = async () => {
@@ -182,7 +184,7 @@ function PostChart(): ReactElement {
     : 'Brush on the chart for setting the time range!';
 
   return (
-    <div className='h-1/3 border-t-4 border-gray-200'>
+    <div className='h-full'>
       <VictoryChart
         containerComponent={
           <VictoryBrushVoronoiContainer
@@ -203,22 +205,22 @@ function PostChart(): ReactElement {
             }
           />
         }
-        padding={{ top: 30, left: 50, right: 10, bottom: 50 }}
+        padding={{ top: 10, left: 40, right: 10, bottom: 45 }}
         domainPadding={{ y: [0, 50], x: 8 }}
         scale={{ x: 'time' }}
       >
-        <VictoryLabel
+        {/* <VictoryLabel
           text={chartLabel}
           textAnchor='middle'
           y={10}
           x={225}
           style={{ fontSize: 16 }}
-        />
+        /> */}
         <VictoryLabel
           text={selectedTimeLabel}
           textAnchor='middle'
-          y={40}
-          x={255}
+          y={20}
+          x={245}
         />
         <VictoryAxis
           dependentAxis

@@ -45,35 +45,41 @@ export interface PaginatedPosts {
 export interface Config {
   id: number;
   code: string;
-  created_at: Date;
+  subreddit_count: number;
+  spam_count: number;
+  target_count: number;
+  except_count: number;
   rules: Rule[];
 }
 
 export interface Rule {
   id: number;
   code: string;
-  created_at: Date;
-  checks: Check[];
-  check_combinations: CheckCombination[];
   subreddit_count: number;
   spam_count: number;
+  target_count: number;
+  except_count: number;
+  checks: Check[];
+  check_combinations: CheckCombination[];
 }
 
 export interface CheckCombination {
   id: number;
-  checks: Check[];
+  code: string;
   subreddit_count: number;
   spam_count: number;
-  code: string;
+  target_count: number;
+  except_count: number;
+  checks: Check[];
 }
 
 export interface Check {
   id: number;
-  fields: string;
-  word: string;
+  code: string;
   subreddit_count: number;
   spam_count: number;
-  code: string;
+  target_count: number;
+  except_count: number;
 }
 
 export interface IStat {
