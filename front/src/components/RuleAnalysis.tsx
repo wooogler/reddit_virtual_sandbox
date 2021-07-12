@@ -1,7 +1,7 @@
 import { Config } from '@typings/db';
 import request from '@utils/request';
 import { useStore } from '@utils/store';
-import { Collapse, Select } from 'antd';
+import { Collapse } from 'antd';
 import { ReactElement } from 'react';
 import { useQuery } from 'react-query';
 import RuleItem from './RuleItem';
