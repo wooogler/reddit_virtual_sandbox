@@ -32,10 +32,6 @@ function RuleAnalysis(): ReactElement {
       return data;
     }
   );
-
-  const checkedCheck = (id: number) => {
-    return id === check_id || id === check_combination_id;
-  };
   const checkedRule = (id: number) => {
     if (check_id || check_combination_id) {
       return false;
@@ -52,69 +48,77 @@ function RuleAnalysis(): ReactElement {
   return (
     <div className='flex flex-col p-2 relative'>
       <OverlayLoading isLoading={configLoading} description='loading...' />
-      <Collapse accordion activeKey={config_id}>
+      <Collapse accordion activeKey={config_id} bordered={false}>
         {configData?.map((config) => (
-          <Panel
-            key={config.id}
-            header={
-              <RuleItem
-                rule={config}
-                key={config.id}
-                ruleType='config'
-                checked={checkedConfig(config.id)}
-              />
-            }
-          >
-            <Collapse accordion activeKey={rule_id}>
-              {config.rules.map((rule) => (
-                <Panel
-                  key={rule.id}
-                  header={
-                    <RuleItem
-                      rule={rule}
-                      key={rule.id}
-                      ruleType='rule'
-                      checked={checkedRule(rule.id)}
-                    />
-                  }
-                  className='custom'
-                >
-                  <div className='ml-8'>
-                    {rule.check_combinations.length !== rule.checks.length &&
-                      rule.check_combinations.length !== 1 && (
-                        <>
-                          <div>Sub-Rule</div>
-                          <div className='ml-2'>
-                            {rule.check_combinations.map((checkCombination) => (
-                              <RuleItem
-                                rule={checkCombination}
-                                key={checkCombination.id}
-                                className='my-1'
-                                ruleType='checkCombination'
-                                checked={checkedCheck(checkCombination.id)}
-                              />
-                            ))}
-                          </div>
-                        </>
-                      )}
+          <>
+            <Panel
+              key={config.id}
+              header={
+                <RuleItem
+                  rule={config}
+                  key={config.id}
+                  ruleType='config'
+                  checked={checkedConfig(config.id)}
+                />
+              }
+            >
+              <Collapse accordion activeKey={rule_id} bordered={false}>
+                <div className='font-bold ml-6'>Rules</div>
+                {config.rules.map((rule) => (
+                  <Panel
+                    key={rule.id}
+                    header={
+                      <RuleItem
+                        rule={rule}
+                        key={rule.id}
+                        ruleType='rule'
+                        checked={checkedRule(rule.id)}
+                      />
+                    }
+                    className='custom'
+                  >
+                    <div className='ml-8'>
+                      {rule.check_combinations.length !== rule.checks.length &&
+                        rule.check_combinations.length !== 1 && (
+                          <>
+                            <div className='font-bold'>Sub-Rules</div>
+                            <div className='ml-4'>
+                              {rule.check_combinations.map(
+                                (checkCombination) => (
+                                  <RuleItem
+                                    rule={checkCombination}
+                                    key={checkCombination.id}
+                                    className='my-1'
+                                    ruleType='checkCombination'
+                                    checked={
+                                      checkCombination.id ===
+                                      check_combination_id
+                                    }
+                                  />
+                                )
+                              )}
+                            </div>
+                          </>
+                        )}
 
-                    <div>Keywords</div>
-                    <div className='ml-2'>
-                      {rule.checks.map((check) => (
-                        <RuleItem
-                          rule={check}
-                          key={check.id}
-                          className='my-1'
-                          ruleType='check'
-                          checked={checkedCheck(check.id)}
-                        />
-                      ))}
+                      <div className='font-bold'>Keywords</div>
+                      <div className='ml-4'>
+                        {rule.checks.map((check) => (
+                          <RuleItem
+                            rule={check}
+                            key={check.id}
+                            className='my-1'
+                            ruleType='check'
+                            checked={check.id === check_id}
+                          />
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                </Panel>
-              ))}
-            </Collapse>
-          </Panel>
+                  </Panel>
+                ))}
+              </Collapse>
+            </Panel>
+          </>
         ))}
       </Collapse>
     </div>

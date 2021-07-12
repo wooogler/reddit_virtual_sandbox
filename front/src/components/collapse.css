@@ -15,3 +15,7 @@
 div.custom {
   padding-left: 1rem;
 }
+
+.ant-collapse-borderless {
+  background-color: white;
+}

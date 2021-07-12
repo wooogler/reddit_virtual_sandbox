@@ -64,7 +64,8 @@ class CheckSerializer(serializers.ModelSerializer):
     spam_count = serializers.SerializerMethodField()
     target_count = serializers.SerializerMethodField()
     except_count = serializers.SerializerMethodField()
-    code = serializers.SerializerMethodField()
+
+    # code = serializers.SerializerMethodField()
 
     def get_subreddit_count(self, obj):
         start_date = self.context['request'].query_params.get('start_date')
@@ -88,8 +89,8 @@ class CheckSerializer(serializers.ModelSerializer):
         return obj.post_set.filter(place__in=['except', 'normal-except'],
                                    created_utc__range=(start_date, end_date)).count()
 
-    def get_code(self, obj):
-        return obj.fields + ': ' + "['" + obj.word + "']"
+    # def get_code(self, obj):
+    #     return obj.fields + ': ' + "['" + obj.word + "']"
 
     class Meta:
         model = Check
@@ -109,7 +110,7 @@ class CheckCombinationSerializer(serializers.ModelSerializer):
     spam_count = serializers.SerializerMethodField()
     target_count = serializers.SerializerMethodField()
     except_count = serializers.SerializerMethodField()
-    code = serializers.SerializerMethodField()
+    # code = serializers.SerializerMethodField()
     checks = CheckSerializer(many=True, read_only=True)
 
     def get_subreddit_count(self, obj):
@@ -134,12 +135,12 @@ class CheckCombinationSerializer(serializers.ModelSerializer):
         return obj.post_set.filter(place__in=['except', 'normal-except'],
                                    created_utc__range=(start_date, end_date)).count()
 
-    def get_code(self, obj):
-        checks = obj.checks.all()
-        codes = []
-        for check in checks:
-            codes.append(check.fields + ': ' + "[ '" + check.word + "' ]")
-        return "\n".join(codes)
+    # def get_code(self, obj):
+    #     checks = obj.checks.all()
+    #     codes = []
+    #     for check in checks:
+    #         codes.append(check.fields + ': ' + "[ '" + check.word + "' ]")
+    #     return "\n".join(codes)
 
     class Meta:
         model = CheckCombination

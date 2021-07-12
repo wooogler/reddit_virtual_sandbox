@@ -38,6 +38,7 @@ class Check(models.Model):
     fields = models.CharField(max_length=50)
     word = models.TextField()
     line = models.IntegerField()
+    code = models.TextField(default='')
 
 
 class CheckCombination(models.Model):

@@ -252,13 +252,15 @@ function PostItem({
               textToHighlight={post.title}
               highlightStyle={{ fontWeight: 'bolder' }}
             />
-          ) : (
+          ) : condition === 'modsandbox' ? (
             <HighlightText
               text={post.title}
               match={makeMatch(
                 matchingChecksTitle.concat(matchingNotChecksTitle)
               )}
             />
+          ) : (
+            <div>{post.title}</div>
           )}
         </div>
         <div className='flex items-center flex-wrap mb-1 text-xs'>
@@ -308,17 +310,19 @@ function PostItem({
               </Dropdown>
             )
           ) : (
-            <div
-              className='cursor-pointer text-red-500 underline'
-              onClick={() =>
-                deletePostFromTestCaseMutation.mutate({
-                  id: post.id,
-                  place: post.place,
-                })
-              }
-            >
-              remove
-            </div>
+            isTested && (
+              <div
+                className='cursor-pointer text-red-500 underline'
+                onClick={() =>
+                  deletePostFromTestCaseMutation.mutate({
+                    id: post.id,
+                    place: post.place,
+                  })
+                }
+              >
+                remove
+              </div>
+            )
           )}
 
           {post.source === 'Spam' && (

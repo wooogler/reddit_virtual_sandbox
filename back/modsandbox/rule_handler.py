@@ -150,6 +150,7 @@ def apply_config(config, posts, check_create):
                         fields=key,
                         word=check["word"],
                         line=check["line"],
+                        code=check["key"] + ": ['" + check["word"] + "']",
                     )
                 else:
                     check_object = Check.objects.get(
@@ -198,11 +199,11 @@ def apply_config(config, posts, check_create):
             check_to_check_combination_link = []
             for check_combination in check_combinations:
                 checks_in_combination = Check.objects.filter(id__in=list(check_combination))
-                code_line = [check.fields + ": ['" + check.word + "']" for check in checks_in_combination]
+                # code_line = [check.fields + ": ['" + check.word + "']" for check in checks_in_combination]
                 if check_create:
                     check_combination_object = CheckCombination.objects.create(
                         rule=rule,
-                        code="\n".join(code_line)
+                        code="\n".join([check.code for check in checks_in_combination])
                     )
                     for check in checks_in_combination:
                         check_to_check_combination_link.append(

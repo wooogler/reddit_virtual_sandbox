@@ -1,7 +1,4 @@
-import {
-  RedditOutlined,
-  SearchOutlined,
-} from '@ant-design/icons';
+import { RedditOutlined, SearchOutlined } from '@ant-design/icons';
 
 import PostList from '@components/PostList';
 import SearchModal from '@components/SearchModal';
@@ -414,31 +411,31 @@ function PostViewerLayout(): ReactElement {
             </div>
             <div className='flex'>
               {process.env.NODE_ENV === 'development' &&
-              totalCount.notFilteredCount !== 0 ? (
-                <Button
-                  onClick={() => {
-                    deleteAllPostsMutation.mutate();
-                    deleteAllRulesMutation.mutate();
-                  }}
-                  loading={
-                    deleteAllPostsMutation.isLoading ||
-                    deleteAllRulesMutation.isLoading
-                  }
-                  danger
-                  className='ml-2'
-                >
-                  Reset
-                </Button>
-              ) : (
-                <Button
-                  type='primary'
-                  className='ml-2'
-                  onClick={onClickImport}
-                  loading={importTestPostsMutation.isLoading}
-                >
-                  Import
-                </Button>
-              )}
+                (totalCount.notFilteredCount !== 0 ? (
+                  <Button
+                    onClick={() => {
+                      deleteAllPostsMutation.mutate();
+                      deleteAllRulesMutation.mutate();
+                    }}
+                    loading={
+                      deleteAllPostsMutation.isLoading ||
+                      deleteAllRulesMutation.isLoading
+                    }
+                    danger
+                    className='ml-2'
+                  >
+                    Reset
+                  </Button>
+                ) : (
+                  <Button
+                    type='primary'
+                    className='ml-2'
+                    onClick={onClickImport}
+                    loading={importTestPostsMutation.isLoading}
+                  >
+                    Import
+                  </Button>
+                ))}
               <Button
                 onClick={() => setIsSubmitVisible(true)}
                 className='mx-2'

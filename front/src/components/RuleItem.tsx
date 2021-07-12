@@ -62,13 +62,17 @@ function RuleItem({ rule, className, ruleType, checked }: Props): ReactElement {
   return (
     <div
       className={clsx(
-        'flex items-center cursor-pointer hover:bg-gray-200',
-        `${checked && 'bg-blue-100'}`,
+        'flex items-center cursor-pointer hover:bg-gray-300 p-1',
+        `${checked && 'bg-blue-200'}`,
+
+          'bg-gray-100 rounded-md',
         className
       )}
       onClick={() => onClickRadio()}
     >
-      <div className='flex-1 font-mono whitespace-pre-wrap'>{rule.code}</div>
+      <div className={clsx('flex-1 font-mono whitespace-pre-wrap ml-2')}>
+        {rule.code}
+      </div>
       {ruleType === 'config' && (
         <Popconfirm title='Are you sure?' onConfirm={onClickDelete}>
           <DeleteOutlined className='mr-2' style={{ color: 'red' }} />
