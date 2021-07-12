@@ -1,7 +1,7 @@
 import { Config } from '@typings/db';
 import request from '@utils/request';
 import { useStore } from '@utils/store';
-import { Collapse } from 'antd';
+import { Collapse, Select } from 'antd';
 import { ReactElement } from 'react';
 import { useQuery } from 'react-query';
 import RuleItem from './RuleItem';
@@ -18,6 +18,7 @@ function RuleAnalysis(): ReactElement {
     check_id,
     start_date,
     end_date,
+    selectedHighlight,
   } = useStore();
   const { data: configData, isLoading: configLoading } = useQuery(
     ['configs', { start_date, end_date }],
@@ -59,6 +60,7 @@ function RuleAnalysis(): ReactElement {
                   key={config.id}
                   ruleType='config'
                   checked={checkedConfig(config.id)}
+                  selected={config.id === selectedHighlight.config_id}
                 />
               }
             >
@@ -73,6 +75,7 @@ function RuleAnalysis(): ReactElement {
                         key={rule.id}
                         ruleType='rule'
                         checked={checkedRule(rule.id)}
+                        selected={rule.id === selectedHighlight.rule_id}
                       />
                     }
                     className='custom'
@@ -94,6 +97,9 @@ function RuleAnalysis(): ReactElement {
                                       checkCombination.id ===
                                       check_combination_id
                                     }
+                                    selected={selectedHighlight.check_combination_ids?.includes(
+                                      checkCombination.id
+                                    )}
                                   />
                                 )
                               )}
@@ -110,6 +116,7 @@ function RuleAnalysis(): ReactElement {
                             className='my-1'
                             ruleType='check'
                             checked={check.id === check_id}
+                            selected={check.id === selectedHighlight.check_id}
                           />
                         ))}
                       </div>

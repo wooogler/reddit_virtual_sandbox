@@ -14,9 +14,16 @@ interface Props {
   className?: string;
   ruleType: 'config' | 'rule' | 'checkCombination' | 'check';
   checked: boolean;
+  selected?: boolean;
 }
 
-function RuleItem({ rule, className, ruleType, checked }: Props): ReactElement {
+function RuleItem({
+  rule,
+  className,
+  ruleType,
+  checked,
+  selected,
+}: Props): ReactElement {
   const {
     totalCount,
     config_id,
@@ -63,9 +70,9 @@ function RuleItem({ rule, className, ruleType, checked }: Props): ReactElement {
     <div
       className={clsx(
         'flex items-center cursor-pointer hover:bg-gray-300 p-1',
-        `${checked && 'bg-blue-200'}`,
-
-          'bg-gray-100 rounded-md',
+        `${selected && 'bg-yellow-300'}`,
+        `${!selected && checked && 'bg-blue-200'}`,
+        'bg-gray-100 rounded-md',
         className
       )}
       onClick={() => onClickRadio()}
