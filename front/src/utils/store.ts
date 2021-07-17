@@ -55,6 +55,7 @@ type State = {
   changeCode: (code: string) => void;
   changeImported: (imported: boolean) => void;
   changeSelectedHighlight: (selected: SelectedHighlight) => void;
+  clearSelectedHighlight: () => void;
   changeCondition: (condition: Condition) => void;
   changeTotalCount: (totalCount: Partial<TotalCount>) => void;
 };
@@ -153,16 +154,16 @@ export const useStore = create<State>(
           })),
         changeSelectedHighlight: (selected: SelectedHighlight) => {
           set((state) => ({ selectedHighlight: selected }));
-          setTimeout(() => {
-            set((state) => ({
-              selectedHighlight: {
-                config_id: undefined,
-                rule_id: undefined,
-                check_combination_ids: [],
-                check_id: undefined,
-              },
-            }));
-          }, 1000);
+        },
+        clearSelectedHighlight: () => {
+          set((state) => ({
+            selectedHighlight: {
+              config_id: undefined,
+              rule_id: undefined,
+              check_combination_ids: [],
+              check_id: undefined,
+            },
+          }));
         },
         changeCondition: (condition: Condition) => {
           set((state) => ({ condition }));

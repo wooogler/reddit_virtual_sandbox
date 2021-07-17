@@ -81,9 +81,9 @@ function RuleItem({
         {rule.code}
       </div>
       {ruleType === 'config' && (
-        <Popconfirm title='Are you sure?' onConfirm={onClickDelete}>
-          <DeleteOutlined className='mr-2' style={{ color: 'red' }} />
-        </Popconfirm>
+        // <Popconfirm title='Are you sure?' onConfirm={onClickDelete}>
+        <DeleteOutlined className='mr-2' style={{ color: 'red' }} onClick={onClickDelete}/>
+        // </Popconfirm>
       )}
       <div className='ml-auto w-12 h-8 flex mr-2'>
         <BarRate

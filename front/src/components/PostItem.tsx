@@ -158,13 +158,28 @@ function PostItem({
   );
 
   const makeMatch = (matchingChecks: MatchingCheck[]) => {
-    const matchingCheck = matchingChecks.filter(
-      (check) =>
-        check.config_id === config_id ||
-        check.rule_id === rule_id ||
-        check._check_id === check_id ||
-        _.includes(check.check_combination_ids, check_combination_id)
-    );
+    const matchingCheck = matchingChecks.filter((check) => {
+      if (check_id || check_combination_id) {
+        if (
+          check._check_id === check_id ||
+          _.includes(check.check_combination_ids, check_combination_id)
+        ) {
+          return true;
+        }
+        return false;
+      } else if (rule_id) {
+        if (check.rule_id === rule_id) {
+          return true;
+        }
+        return false;
+      } else if (config_id) {
+        if (check.config_id === config_id) {
+          return true;
+        }
+        return false;
+      }
+      return false;
+    });
     return matchingCheck.map((check) => {
       const {
         start,
@@ -281,7 +296,10 @@ function PostItem({
           {condition === 'modsandbox' ? (
             post.place === 'normal' ? (
               <Dropdown overlay={moveMenu}>
-                <div className='underline cursor-pointer text-blue-600' data-tour="move-to">
+                <div
+                  className='underline cursor-pointer text-blue-600'
+                  data-tour='move-to'
+                >
                   Move to
                 </div>
               </Dropdown>

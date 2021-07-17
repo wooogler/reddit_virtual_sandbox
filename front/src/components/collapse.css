@@ -19,3 +19,8 @@ div.custom {
 .ant-collapse-borderless {
   background-color: white;
 }
+
+.highlighted {
+  background-color: yellow;
+  text-decoration: underline;
+}
