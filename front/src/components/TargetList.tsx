@@ -17,6 +17,7 @@ interface Props {
   isLoading?: boolean;
   posts?: IPost[];
   place?: 'target' | 'except';
+  totalTarget?: number;
 }
 
 function TargetList({
@@ -25,6 +26,7 @@ function TargetList({
   isLoading,
   posts,
   place,
+  totalTarget,
 }: Props): ReactElement {
   // const [urlStatus, setUrlStatus] = useState<any>('');
   // const [urlHelp, setUrlHelp] = useState<any>('');
@@ -71,7 +73,7 @@ function TargetList({
           isFiltered(post, config_id, rule_id, check_combination_id, check_id)
         ).length
       : 0,
-    total: posts ? posts.length : 0,
+    total: totalTarget ?? (posts ? posts.length : 0),
   };
   const rate = stat.total === 0 ? 0 : stat.part / stat.total;
 
@@ -83,7 +85,7 @@ function TargetList({
         <div className='text-sm text-gray-400'>
           ({stat.part}/{stat.total}) {(rate * 100).toFixed(2)} %
         </div>
-        {place && (
+        {onSubmit && place && (
           <>
             <div className='ml-auto flex items-center'>
               {/* <Progress percent={rate * 100} showInfo={false} /> */}
@@ -116,7 +118,7 @@ function TargetList({
                 visible={visible}
                 onVisibleChange={(visible) => setVisible(visible)}
               > */}
-              <Button size='small' onClick={onClickAdd}>
+              <Button size='small' onClick={onClickAdd} data-tour="create-post">
                 Create Post
               </Button>
               {/* </Popover> */}

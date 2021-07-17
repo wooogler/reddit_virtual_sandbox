@@ -278,10 +278,10 @@ function PostItem({
               score: <b>{post.score}</b>
             </div>
           </Tooltip>
-          {condition !== 'baseline' ? (
+          {condition === 'modsandbox' ? (
             post.place === 'normal' ? (
               <Dropdown overlay={moveMenu}>
-                <div className='underline cursor-pointer text-blue-600'>
+                <div className='underline cursor-pointer text-blue-600' data-tour="move-to">
                   Move to
                 </div>
               </Dropdown>

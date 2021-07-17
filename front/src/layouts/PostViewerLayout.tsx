@@ -26,6 +26,7 @@ function PostViewerLayout(): ReactElement {
     const { data } = await request<IUser | false>({ url: '/rest-auth/user/' });
     return data;
   });
+  const username = userData && userData.username;
 
   const {
     config_id,
@@ -327,7 +328,7 @@ function PostViewerLayout(): ReactElement {
       minPrimarySize='10%'
       minSecondarySize='10%'
     >
-      <div className='h-full flex flex-col'>
+      <div className='h-full flex flex-col' data-tour='subreddit'>
         <div className='w-full flex items-center flex-wrap '>
           <div className='text-2xl ml-2 flex items-center'>
             <RedditOutlined style={{ color: 'orangered' }} />
@@ -344,6 +345,7 @@ function PostViewerLayout(): ReactElement {
               onChange={(e) => setQuery(e.target.value)}
               className='ml-4'
               style={{ width: '10rem' }}
+              data-tour='search'
             />
             <SearchModal
               visible={isSearchVisible}
@@ -383,7 +385,7 @@ function PostViewerLayout(): ReactElement {
             </Select>
           </div> */}
 
-            <div className='flex items-center'>
+            <div className='flex items-center' data-tour='sort'>
               {/* <div className='mr-2'>Hello, {userData && userData.username}!</div> */}
 
               <Radio.Group
@@ -397,6 +399,7 @@ function PostViewerLayout(): ReactElement {
                   <Radio.Button
                     value='fpfn'
                     disabled={totalCount.targetCount === 0}
+                    data-tour='sort-smart'
                   >
                     {totalCount.targetCount === 0 ? (
                       <Tooltip title='Add a post in your collections'>
@@ -497,46 +500,86 @@ function PostViewerLayout(): ReactElement {
           </>
         </div>
       </div>
-      <div className='h-full flex flex-col'>
+
+      <div
+        className='h-full flex flex-col'
+        data-tour={
+          condition === 'modsandbox' ? 'post-collection' : 'testing-subreddit'
+        }
+      >
         <div className='w-full flex items-center'>
           <div className='text-2xl ml-2 flex items-center flex-wrap'>
             <RedditOutlined style={{ color: 'orangered' }} />
             <div className='ml-2 flex items-center'>
               <div>
-                {condition !== 'baseline'
+                {condition === 'modsandbox'
                   ? 'Your Post Collections'
                   : 'Testing Subreddit'}
               </div>
             </div>
             <div className='text-sm ml-2'>
-              Rule:{' '}
-              {userData && userData.username.endsWith('A')
+              Norm:{' '}
+              {username && username.endsWith('A')
                 ? 'Do not post questions asking “how to work as a software engineer without a CS relevant degree.”'
-                : 'Autonomously add “covid-19” flag to every post that is related to or mention covid-19.'}
+                : username && username.endsWith('B')
+                ? 'Autonomously add “covid-19” flag to every post that is related to or mention covid-19.'
+                : 'Do not post questions asking about "stress in your working space"'}
             </div>
           </div>
         </div>
-
         <div className='flex overflow-y-auto flex-1'>
           <TargetList
-            label='Posts that should be filtered'
-            posts={targetQuery.data}
+            label={
+              condition === 'modsandbox'
+                ? 'Posts that should be filtered'
+                : 'Not Filtered by AutoMod'
+            }
+            posts={
+              condition === 'modsandbox'
+                ? targetQuery.data
+                : targetQuery.data?.filter(
+                    (post) => post.matching_configs.length === 0
+                  )
+            }
             isLoading={addTestCaseMutation.isLoading}
             onSubmit={(postId) =>
               addTestCaseMutation.mutate({ postId, place: 'target' })
             }
             place='target'
+            totalTarget={
+              condition === 'modsandbox' ? undefined : targetQuery.data?.length
+            }
           />
           <div className='border-gray-200 border-r-2' />
-          <TargetList
-            label='Posts to avoid being filtered'
-            posts={exceptQuery.data}
-            isLoading={addTestCaseMutation.isLoading}
-            onSubmit={(postId) =>
-              addTestCaseMutation.mutate({ postId, place: 'except' })
-            }
-            place='except'
-          />
+          {condition !== 'baseline' && (
+            <TargetList
+              label={
+                condition === 'modsandbox'
+                  ? 'Posts to avoid being filtered'
+                  : 'Filtered by AutoMod'
+              }
+              posts={
+                condition === 'modsandbox'
+                  ? exceptQuery.data
+                  : targetQuery.data?.filter(
+                      (post) => post.matching_configs.length !== 0
+                    )
+              }
+              isLoading={addTestCaseMutation.isLoading}
+              onSubmit={
+                condition === 'modsandbox'
+                  ? (postId) =>
+                      addTestCaseMutation.mutate({ postId, place: 'except' })
+                  : undefined
+              }
+              totalTarget={
+                condition === 'modsandbox'
+                  ? undefined
+                  : targetQuery.data?.length
+              }
+              place='except'
+            />
+          )}
         </div>
       </div>
     </Split>

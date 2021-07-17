@@ -5,7 +5,7 @@ import { Condition, useStore } from '@utils/store';
 import { Button, Form, Input, Select } from 'antd';
 import React, { ReactElement, useCallback, useState } from 'react';
 import { useQuery } from 'react-query';
-import { Link, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 
 interface LogInForm {
   username: string;
@@ -19,11 +19,10 @@ function LogInPage(): ReactElement {
   });
 
   const { condition, changeCondition } = useStore();
-  const [task, setTask] = useState<'A' | 'B'>('A');
+  const [task, setTask] = useState<'A' | 'B' | 'C'>('A');
 
   const onFinish = useCallback(
     (values: LogInForm) => {
-      console.log(values);
       request<{ key: string }>({
         url: '/rest-auth/login/',
         method: 'POST',
@@ -37,8 +36,24 @@ function LogInPage(): ReactElement {
           localStorage.setItem('token', response.data.key);
           refetch();
         })
-        .catch((error) => {
-          console.log(error);
+        .catch(() => {
+          request<{ key: string }>({
+            url: '/rest-auth/registration/',
+            method: 'POST',
+            data: {
+              username: values.username + '-' + task,
+              password1: 'modsandbox',
+              password2: 'modsandbox',
+            },
+          })
+            .then((response) => {
+              console.log(response);
+              localStorage.setItem('token', response.data.key);
+              refetch();
+            })
+            .catch((error) => {
+              console.log(error.response);
+            });
         });
     },
     [refetch, task]
@@ -54,7 +69,7 @@ function LogInPage(): ReactElement {
   };
 
   return (
-    <PageLayout title='Login'>
+    <PageLayout title='Join'>
       <Form {...layout} onFinish={onFinish}>
         <Form.Item label='Condition' name='condition'>
           <Select
@@ -75,6 +90,7 @@ function LogInPage(): ReactElement {
           >
             <Select.Option value='A'>Task A</Select.Option>
             <Select.Option value='B'>Task B</Select.Option>
+            <Select.Option value='C'>Example Task</Select.Option>
           </Select>
         </Form.Item>
         <Form.Item
@@ -86,11 +102,11 @@ function LogInPage(): ReactElement {
         </Form.Item>
         <div className='flex justify-center'>
           <Button type='primary' htmlType='submit'>
-            Log In
+            Join
           </Button>
-          <Link to='/signup'>
+          {/* <Link to='/signup'>
             <Button className='ml-2'>Join</Button>
-          </Link>
+          </Link> */}
         </div>
       </Form>
     </PageLayout>

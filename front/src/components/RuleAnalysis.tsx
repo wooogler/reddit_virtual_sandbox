@@ -81,6 +81,19 @@ function RuleAnalysis(): ReactElement {
                     className='custom'
                   >
                     <div className='ml-8'>
+                      <div className='font-bold'>Keywords</div>
+                      <div className='ml-4'>
+                        {rule.checks.map((check) => (
+                          <RuleItem
+                            rule={check}
+                            key={check.id}
+                            className='my-1'
+                            ruleType='check'
+                            checked={check.id === check_id}
+                            selected={check.id === selectedHighlight.check_id}
+                          />
+                        ))}
+                      </div>
                       {rule.check_combinations.length !== rule.checks.length &&
                         rule.check_combinations.length !== 1 && (
                           <>
@@ -106,20 +119,6 @@ function RuleAnalysis(): ReactElement {
                             </div>
                           </>
                         )}
-
-                      <div className='font-bold'>Keywords</div>
-                      <div className='ml-4'>
-                        {rule.checks.map((check) => (
-                          <RuleItem
-                            rule={check}
-                            key={check.id}
-                            className='my-1'
-                            ruleType='check'
-                            checked={check.id === check_id}
-                            selected={check.id === selectedHighlight.check_id}
-                          />
-                        ))}
-                      </div>
                     </div>
                   </Panel>
                 ))}

@@ -19,10 +19,13 @@ function AnalysisLayout(): ReactElement {
           `${condition === 'modsandbox' ? 'h-1/4' : 'h-full'}`
         )}
       >
-        <CodeEditor placeholder='' />
+        <CodeEditor placeholder=''  />
       </div>
       {condition === 'modsandbox' && (
-        <div className='flex flex-col p-2 h-3/4'>
+        <div
+          className='flex flex-col p-2 h-3/4'
+          data-tour='configuration-analysis'
+        >
           <div className='flex items-center border-t-2 border-gray-300'>
             <PanelName>Configuration Analysis</PanelName>
           </div>

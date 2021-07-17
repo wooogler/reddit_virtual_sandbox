@@ -28,7 +28,8 @@ function CodeEditor({ placeholder }: Props): ReactElement {
   const [visibleGuideModal, setVisibleGuideModal] = useState(false);
 
   const [isSaved, setIsSaved] = useState(false);
-  const { changeConfigId, condition, clearConfigId, config_id } = useStore();
+  const { changeConfigId, condition, clearConfigId, config_id, changeCode } =
+    useStore();
 
   const storedCode = useStore().code;
 
@@ -44,6 +45,7 @@ function CodeEditor({ placeholder }: Props): ReactElement {
     });
   const addConfigMutation = useMutation(addConfig, {
     onSuccess: (res, { code }) => {
+      changeCode(code);
       invalidatePostQueries(queryClient);
       changeConfigId(res.data.id);
     },
@@ -109,6 +111,7 @@ function CodeEditor({ placeholder }: Props): ReactElement {
             className='mr-2'
             onClick={() => setVisibleGuideModal(true)}
             size='small'
+            data-tour='guide'
           >
             Guide
           </Button>
@@ -163,7 +166,7 @@ function CodeEditor({ placeholder }: Props): ReactElement {
           )}
         </div>
       </div>
-      <div className='flex-1'>
+      <div className='flex-1' data-tour='configuration'>
         <AceEditor
           mode='yaml'
           theme='tomorrow'
