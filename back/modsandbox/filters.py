@@ -1,6 +1,12 @@
 import django_filters
 
-from modsandbox.models import Post
+from modsandbox.models import Post, Config
+
+
+class ConfigFilter(django_filters.FilterSet):
+    class Meta:
+        model = Config
+        fields = ['task']
 
 
 class PostFilter(django_filters.FilterSet):

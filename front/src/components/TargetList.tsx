@@ -1,10 +1,11 @@
 import { IPost } from '@typings/db';
-import { AutoModStat } from '@typings/types';
+import { AutoModStat, Condition } from '@typings/types';
 import { useStore } from '@utils/store';
 import { isFiltered } from '@utils/util';
 import { Button, Empty } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
 import { ReactElement, useCallback, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 import AddPostModal from './AddPostModal';
 import OverlayLoading from './OverlayLoading';
@@ -32,8 +33,8 @@ function TargetList({
   // const [urlHelp, setUrlHelp] = useState<any>('');
   // const [visible, setVisible] = useState(false);
   const [openAddModal, setOpenAddModal] = useState(false);
-  const { rule_id, check_combination_id, check_id, config_id, condition } =
-    useStore();
+  const { rule_id, check_combination_id, check_id, config_id } = useStore();
+  const { condition } = useParams<{ condition: Condition }>();
   const [form] = useForm();
   const onClickAdd = useCallback(() => {
     // setVisible((prev) => !prev);
@@ -83,7 +84,9 @@ function TargetList({
       <div className='flex items-center flex-wrap'>
         <PanelName>{label}</PanelName>
         <div className='text-sm text-gray-400'>
-          ({stat.part}/{stat.total}) {(rate * 100).toFixed(2)} %
+          {condition !== 'baseline'
+            ? `(${stat.part}/${stat.total}) ${(rate * 100).toFixed(2)} %`
+            : `${stat.total} Posts`}
         </div>
         {onSubmit && place && (
           <>
@@ -118,7 +121,7 @@ function TargetList({
                 visible={visible}
                 onVisibleChange={(visible) => setVisible(visible)}
               > */}
-              <Button size='small' onClick={onClickAdd} data-tour="create-post">
+              <Button size='small' onClick={onClickAdd} data-tour='create-post'>
                 Create Post
               </Button>
               {/* </Popover> */}

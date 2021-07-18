@@ -1,5 +1,5 @@
 import { useStore } from '@utils/store';
-import { matches } from 'lodash';
+
 import React, { ReactElement, useCallback } from 'react';
 
 interface Match {
@@ -17,7 +17,7 @@ interface Props {
 }
 
 function HighlightText({ text, match }: Props): ReactElement {
-  const { changeSelectedHighlight, clearSelectedHighlight } = useStore();
+  const { changeSelectedHighlights, clearSelectedHighlight } = useStore();
 
   let rangeSet = new Set<number>();
   match.forEach((item) => {
@@ -25,19 +25,22 @@ function HighlightText({ text, match }: Props): ReactElement {
     rangeSet.add(item.end);
   });
   const ranges = [...rangeSet].sort((a, b) => a - b);
-  const matchArray = ranges.slice(1).map((a, i, aa) => {
-    const start = i ? aa[i - 1] : ranges[0];
-    const end = a;
-    const ids = match
-      .filter((d) => d.start <= start && end <= d.end)
-      .map(({ config_id, rule_id, check_combination_ids, check_id }) => ({
-        config_id,
-        rule_id,
-        check_combination_ids,
-        check_id,
-      }));
-    return { start, end, ids };
-  });
+  const matchArray = ranges
+    .slice(1)
+    .map((a, i, aa) => {
+      const start = i ? aa[i - 1] : ranges[0];
+      const end = a;
+      const ids = match
+        .filter((d) => d.start <= start && end <= d.end)
+        .map(({ config_id, rule_id, check_combination_ids, check_id }) => ({
+          config_id,
+          rule_id,
+          check_combination_ids,
+          check_id,
+        }));
+      return { start, end, ids };
+    })
+    .filter((item) => item.ids.length !== 0);
 
   const matchTextArray = matchArray.reduce<string[]>(
     (acc, index) => {
@@ -58,21 +61,15 @@ function HighlightText({ text, match }: Props): ReactElement {
   const onMouseOverHighlight = useCallback(
     (index: number) => {
       const { ids } = matchArray[(index - 1) / 2];
-      ids.forEach(({ config_id, rule_id, check_combination_ids, check_id }) => {
-        changeSelectedHighlight({
-          config_id,
-          rule_id,
-          check_combination_ids,
-          check_id,
-        });
-      });
+      changeSelectedHighlights(ids);
+      console.log(matchArray);
     },
-    [changeSelectedHighlight, matchArray]
+    [changeSelectedHighlights, matchArray]
   );
 
   const onMouseOutHighlight = useCallback(() => {
     clearSelectedHighlight();
-  }, [clearSelectedHighlight])
+  }, [clearSelectedHighlight]);
 
   return (
     <>
@@ -82,7 +79,11 @@ function HighlightText({ text, match }: Props): ReactElement {
         }
         return (
           <span
-            style={{ backgroundColor: `rgba(255,255,0,${matchArray[(index - 1) / 2].ids.length * 0.3})` }}
+            style={{
+              backgroundColor: `rgba(255,255,0,${
+                matchArray[(index - 1) / 2].ids.length * 0.5
+              })`,
+            }}
             onMouseOver={() => onMouseOverHighlight(index)}
             onMouseOut={onMouseOutHighlight}
             key={index}

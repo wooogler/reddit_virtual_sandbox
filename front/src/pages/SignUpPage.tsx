@@ -1,15 +1,13 @@
 import PageLayout from '@layouts/PageLayout';
 import { IUser } from '@typings/db';
 import request from '@utils/request';
-import { Condition, useStore } from '@utils/store';
-import { Button, Form, Input, Select } from 'antd';
-import React, { ReactElement, useCallback, useState } from 'react';
+import { Button, Form, Input } from 'antd';
+import { ReactElement, useCallback } from 'react';
 import { useQuery } from 'react-query';
 import { Link, Redirect } from 'react-router-dom';
 
 interface SignUpForm {
   username: string;
-  condition: Condition;
 }
 
 function SignUpPage(): ReactElement {
@@ -18,16 +16,13 @@ function SignUpPage(): ReactElement {
     return data;
   });
 
-  const { condition, changeCondition } = useStore();
-  const [task, setTask] = useState<'A' | 'B'>('A');
-
   const onFinish = useCallback(
     (values: SignUpForm) => {
       request<{ key: string }>({
         url: '/rest-auth/registration/',
         method: 'POST',
         data: {
-          username: values.username + '-' + task,
+          username: values.username,
           password1: 'modsandbox',
           password2: 'modsandbox',
         },
@@ -41,7 +36,7 @@ function SignUpPage(): ReactElement {
           console.log(error.response);
         });
     },
-    [refetch, task]
+    [refetch]
   );
 
   if (data) {
@@ -56,27 +51,6 @@ function SignUpPage(): ReactElement {
   return (
     <PageLayout title='Join'>
       <Form {...layout} onFinish={onFinish}>
-        <Form.Item label='Condition' name='condition'>
-          <Select
-            value={condition}
-            defaultValue={condition}
-            onChange={(value: Condition) => changeCondition(value)}
-          >
-            <Select.Option value='modsandbox'>System A</Select.Option>
-            <Select.Option value='sandbox'>System B</Select.Option>
-            <Select.Option value='baseline'>System C</Select.Option>
-          </Select>
-        </Form.Item>
-        <Form.Item label='Task' name='task'>
-          <Select
-            value={task}
-            defaultValue={'A'}
-            onChange={(value) => setTask(value)}
-          >
-            <Select.Option value='A'>Task A</Select.Option>
-            <Select.Option value='B'>Task B</Select.Option>
-          </Select>
-        </Form.Item>
         <Form.Item
           label='Username'
           name='username'

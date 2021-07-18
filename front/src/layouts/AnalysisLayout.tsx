@@ -1,15 +1,16 @@
 import PanelName from '@components/PanelName';
 import { ReactElement, useState } from 'react';
-import { useStore } from '@utils/store';
 import CodeEditor from '@components/CodeEditor';
 import './table.css';
 import RuleAnalysis from '@components/RuleAnalysis';
 import PostChart from '@components/PostChart';
 import clsx from 'clsx';
+import { useParams } from 'react-router-dom';
+import { Condition } from '@typings/types';
 
 function AnalysisLayout(): ReactElement {
-  const { condition } = useStore();
   const [isViewChart, setIsViewChart] = useState(false);
+  const { condition } = useParams<{ condition: Condition }>();
 
   return (
     <div className='h-full flex flex-col'>

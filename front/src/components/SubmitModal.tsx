@@ -2,11 +2,13 @@ import { Config, IUser } from '@typings/db';
 import request from '@utils/request';
 import { Modal } from 'antd';
 import React, { ReactElement, useCallback, useEffect, useState } from 'react';
-import { useMutation, useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import AceEditor from 'react-ace';
 import 'ace-builds/src-noconflict/mode-yaml';
 import 'ace-builds/src-noconflict/theme-tomorrow';
 import { useStore } from '@utils/store';
+import { useHistory, useParams } from 'react-router-dom';
+import { Condition, Task } from '@typings/types';
 
 interface Props {
   onCancel: () => void;
@@ -14,13 +16,22 @@ interface Props {
 }
 
 function SubmitModal({ onCancel, visible }: Props): ReactElement {
+  const queryClient = useQueryClient();
+  const { task, condition } = useParams<{ task: Task; condition: Condition }>();
+  const history = useHistory();
   const [code, setCode] = useState('');
+  const { clearConfigId } = useStore();
+  const [isVisibleConfirmModal, setIsVisibleConfirmModal] = useState(false);
   const submitConfig = ({ code }: { code: string }) =>
     request<Config>({
       url: '/configs/',
       method: 'POST',
-      data: { code },
+      data: { code, task },
     });
+
+  const submitConfigMutation = useMutation(submitConfig, {
+    onSuccess: () => setIsVisibleConfirmModal(true),
+  });
 
   const storedCode = useStore().code;
 
@@ -35,17 +46,67 @@ function SubmitModal({ onCancel, visible }: Props): ReactElement {
       .then(() => {
         localStorage.clear();
         refetch();
+        history.push('/finish');
       })
       .catch((error) => {
         console.dir(error);
       });
-  }, [refetch]);
+  }, [history, refetch]);
 
-  const submitConfigMutation = useMutation(submitConfig, {
-    onSuccess: () => setIsVisibleConfirmModal(true),
-  });
+  const deleteTargetPostsMutation = useMutation(
+    () =>
+      request({
+        url: 'posts/target/all/',
+        method: 'DELETE',
+      }),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('target');
+      },
+    }
+  );
+  const deleteExceptPostsMutation = useMutation(
+    () =>
+      request({
+        url: 'posts/except/all/',
+        method: 'DELETE',
+      }),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('except');
+      },
+    }
+  );
 
-  const [isVisibleConfirmModal, setIsVisibleConfirmModal] = useState(false);
+  const onFinishExperiment = useCallback(() => {
+    if (task === 'A1' || task === 'B2') {
+      setIsVisibleConfirmModal(false);
+      onCancel();
+      clearConfigId();
+      deleteTargetPostsMutation.mutate();
+      deleteExceptPostsMutation.mutate();
+    }
+    if (task === 'A1') {
+      history.push(`/home/${condition}/B1`);
+    } else if (task === 'B1') {
+      onLogOut();
+    } else if (task === 'B2') {
+      history.push(`/home/${condition}/A2`);
+    } else if (task === 'A2') {
+      onLogOut();
+    } else {
+      onLogOut();
+    }
+  }, [
+    clearConfigId,
+    condition,
+    deleteExceptPostsMutation,
+    deleteTargetPostsMutation,
+    history,
+    onCancel,
+    onLogOut,
+    task,
+  ]);
 
   return (
     <Modal
@@ -57,6 +118,7 @@ function SubmitModal({ onCancel, visible }: Props): ReactElement {
       destroyOnClose
       onOk={() => submitConfigMutation.mutate({ code })}
       okText='Submit & Finish'
+      okButtonProps={{ loading: submitConfigMutation.isLoading }}
     >
       <div className='flex flex-col items-center'>
         <div className='text-red-500 font-bold mb-2'>
@@ -79,7 +141,7 @@ function SubmitModal({ onCancel, visible }: Props): ReactElement {
       />
       <Modal
         visible={isVisibleConfirmModal}
-        onOk={() => onLogOut()}
+        onOk={onFinishExperiment}
         onCancel={() => setIsVisibleConfirmModal(false)}
         centered
       >

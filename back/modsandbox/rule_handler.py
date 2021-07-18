@@ -58,8 +58,8 @@ _match_modifiers = set(_match_regexes.keys()) | {
 }
 
 
-def create_config(code, user):
-    config = Config.objects.create(user=user, code=code)
+def create_config(code, user, task):
+    config = Config.objects.create(user=user, code=code, task=task)
     posts = Post.objects.filter(user=user)
     return apply_config(config, posts, True)
 
@@ -80,7 +80,7 @@ def apply_config(config, posts, check_create):
     code = config.code
 
     yaml_sections = [
-        section.strip("\r\n") for section in re.split("^---", code, flags=re.MULTILINE)
+        section.strip("\r\n") for section in re.split("^---", code, flags=re.MULTILINE) if section
     ]
     post_config_set = set([])
     for section_num, section in enumerate(yaml_sections, 1):
@@ -140,7 +140,6 @@ def apply_config(config, posts, check_create):
             {'fields': {'title'}, 'match': None, 'other': None, 'not': False}
             {'fields': {'body'}, 'match': 'includes', 'other': None, 'not': False}
             """
-            print(parsed_key)
             for field in parsed_key["fields"]:
                 key = compose_key(field, parsed_key["match"], parsed_key["other"], parsed_key["not"])
 

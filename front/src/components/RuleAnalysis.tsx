@@ -2,14 +2,17 @@ import { Config } from '@typings/db';
 import request from '@utils/request';
 import { useStore } from '@utils/store';
 import { Collapse } from 'antd';
-import { ReactElement } from 'react';
+import React, { ReactElement } from 'react';
 import { useQuery } from 'react-query';
 import RuleItem from './RuleItem';
 import './collapse.css';
 import OverlayLoading from './OverlayLoading';
+import { useParams } from 'react-router-dom';
+import { Task } from '@typings/types';
 
 function RuleAnalysis(): ReactElement {
   const { Panel } = Collapse;
+  const { task } = useParams<{ task: Task }>();
 
   const {
     config_id,
@@ -18,16 +21,17 @@ function RuleAnalysis(): ReactElement {
     check_id,
     start_date,
     end_date,
-    selectedHighlight,
+    selectedHighlights,
   } = useStore();
   const { data: configData, isLoading: configLoading } = useQuery(
-    ['configs', { start_date, end_date }],
+    ['configs', { start_date, end_date, task }],
     async () => {
       const { data } = await request<Config[]>({
         url: '/configs/',
         params: {
           start_date: start_date?.toDate(),
           end_date: end_date?.toDate(),
+          task,
         },
       });
       return data;
@@ -51,8 +55,12 @@ function RuleAnalysis(): ReactElement {
       <OverlayLoading isLoading={configLoading} description='loading...' />
       <Collapse accordion activeKey={config_id} bordered={false}>
         {configData?.map((config) => (
-          <>
+          <React.Fragment key={config.id}>
+            {config.id === config_id && (
+              <div className='font-bold'>Current Configuration</div>
+            )}
             <Panel
+              showArrow={false}
               key={config.id}
               header={
                 <RuleItem
@@ -60,29 +68,32 @@ function RuleAnalysis(): ReactElement {
                   key={config.id}
                   ruleType='config'
                   checked={checkedConfig(config.id)}
-                  selected={config.id === selectedHighlight.config_id}
+                  selectedIds={selectedHighlights.map((item) => item.config_id)}
                 />
               }
             >
-              <Collapse accordion activeKey={rule_id} bordered={false}>
-                <div className='font-bold ml-6'>Rules</div>
-                {config.rules.map((rule) => (
-                  <Panel
-                    key={rule.id}
-                    header={
-                      <RuleItem
-                        rule={rule}
-                        key={rule.id}
-                        ruleType='rule'
-                        checked={checkedRule(rule.id)}
-                        selected={rule.id === selectedHighlight.rule_id}
-                      />
-                    }
-                    className='custom'
-                  >
-                    <div className='ml-8'>
-                      <div className='font-bold'>Keywords</div>
-                      <div className='ml-4'>
+              <div className='ml-4'>
+                <Collapse accordion activeKey={rule_id} bordered={false}>
+                  <div className='font-bold'>Rules - Click for Details</div>
+                  {config.rules.map((rule) => (
+                    <Panel
+                      key={rule.id}
+                      showArrow={false}
+                      header={
+                        <RuleItem
+                          rule={rule}
+                          key={rule.id}
+                          ruleType='rule'
+                          checked={checkedRule(rule.id)}
+                          selectedIds={selectedHighlights.map(
+                            (item) => item.rule_id
+                          )}
+                        />
+                      }
+                      className='custom'
+                    >
+                      <div className='ml-8'>
+                        <div className='font-bold'>Keywords</div>
                         {rule.checks.map((check) => (
                           <RuleItem
                             rule={check}
@@ -90,41 +101,39 @@ function RuleAnalysis(): ReactElement {
                             className='my-1'
                             ruleType='check'
                             checked={check.id === check_id}
-                            selected={check.id === selectedHighlight.check_id}
+                            selectedIds={selectedHighlights.map(
+                              (item) => item.check_id
+                            )}
                           />
                         ))}
-                      </div>
-                      {rule.check_combinations.length !== rule.checks.length &&
-                        rule.check_combinations.length !== 1 && (
+                        {rule.check_combinations.length !== 1 && (
                           <>
-                            <div className='font-bold'>Sub-Rules</div>
-                            <div className='ml-4'>
-                              {rule.check_combinations.map(
-                                (checkCombination) => (
-                                  <RuleItem
-                                    rule={checkCombination}
-                                    key={checkCombination.id}
-                                    className='my-1'
-                                    ruleType='checkCombination'
-                                    checked={
-                                      checkCombination.id ===
-                                      check_combination_id
-                                    }
-                                    selected={selectedHighlight.check_combination_ids?.includes(
-                                      checkCombination.id
-                                    )}
-                                  />
-                                )
-                              )}
+                            <div className='font-bold'>
+                              Keyword Combintations
                             </div>
+                            {rule.check_combinations.map((checkCombination) => (
+                              <RuleItem
+                                rule={checkCombination}
+                                key={checkCombination.id}
+                                className='my-1'
+                                ruleType='checkCombination'
+                                checked={
+                                  checkCombination.id === check_combination_id
+                                }
+                                selectedIdsArray={selectedHighlights.map(
+                                  (item) => item.check_combination_ids
+                                )}
+                              />
+                            ))}
                           </>
                         )}
-                    </div>
-                  </Panel>
-                ))}
-              </Collapse>
+                      </div>
+                    </Panel>
+                  ))}
+                </Collapse>
+              </div>
             </Panel>
-          </>
+          </React.Fragment>
         ))}
       </Collapse>
     </div>

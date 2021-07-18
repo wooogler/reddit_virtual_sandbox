@@ -12,6 +12,8 @@ import { useStore } from '@utils/store';
 import _ from 'lodash';
 import Highlighter from 'react-highlight-words';
 import { NewPost } from './AddPostModal';
+import { useParams } from 'react-router-dom';
+import { Condition } from '@typings/types';
 
 dayjs.extend(relativeTime);
 dayjs.extend(utc);
@@ -30,14 +32,10 @@ function PostItem({
   searchQuery,
 }: Props): ReactElement {
   const queryClient = useQueryClient();
-  const {
-    config_id,
-    rule_id,
-    check_combination_id,
-    check_id,
-    condition,
-    order,
-  } = useStore();
+  const { config_id, rule_id, check_combination_id, check_id, order } =
+    useStore();
+
+  const { condition } = useParams<{ condition: Condition }>();
 
   const invalidatePostQueries = (place: IPost['place']) => {
     queryClient.invalidateQueries('configs');

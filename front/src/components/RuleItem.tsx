@@ -3,7 +3,7 @@ import { Check, CheckCombination, Config, Rule } from '@typings/db';
 import request from '@utils/request';
 import { useStore } from '@utils/store';
 import { invalidatePostQueries } from '@utils/util';
-import { Popconfirm } from 'antd';
+import { Button } from 'antd';
 import clsx from 'clsx';
 import { ReactElement, useCallback } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
@@ -14,7 +14,8 @@ interface Props {
   className?: string;
   ruleType: 'config' | 'rule' | 'checkCombination' | 'check';
   checked: boolean;
-  selected?: boolean;
+  selectedIds?: (number | undefined)[];
+  selectedIdsArray?: (number[] | undefined)[];
 }
 
 function RuleItem({
@@ -22,7 +23,8 @@ function RuleItem({
   className,
   ruleType,
   checked,
-  selected,
+  selectedIds,
+  selectedIdsArray,
 }: Props): ReactElement {
   const {
     totalCount,
@@ -39,6 +41,7 @@ function RuleItem({
   const onClickRadio = () => {
     if (ruleType === 'config') {
       changeConfigId(rule.id);
+      changeCode(rule.code);
     } else if (ruleType === 'rule') {
       changeRuleId(rule.id);
     } else if (ruleType === 'checkCombination') {
@@ -46,7 +49,6 @@ function RuleItem({
     } else if (ruleType === 'check') {
       changeCheckId(rule.id);
     }
-    changeCode(rule.code);
   };
   const queryClient = useQueryClient();
   const deleteConfig = ({ configId }: { configId: number }) =>
@@ -61,20 +63,36 @@ function RuleItem({
     },
   });
 
-  const onClickDelete = useCallback(
-    () => deleteConfigMutation.mutate({ configId: rule.id }),
+  const onClickDelete: React.MouseEventHandler<HTMLElement> = useCallback(
+    (e) => {
+      e.stopPropagation();
+      deleteConfigMutation.mutate({ configId: rule.id });
+    },
     [deleteConfigMutation, rule.id]
   );
+
+  const bgSelectedColor = () => {
+    if (selectedIds && selectedIds.includes(rule.id)) {
+      return `rgba(255,255,0,${selectedIds.length * 0.5})`;
+    } else if (selectedIdsArray && selectedIdsArray.flat().includes(rule.id)) {
+      return `rgba(255,255,0,${selectedIdsArray.length * 0.5})`;
+    }
+    return undefined;
+  };
 
   return (
     <div
       className={clsx(
-        'flex items-center cursor-pointer hover:bg-gray-300 p-1',
-        `${selected && 'bg-yellow-300'}`,
-        `${!selected && checked && 'bg-blue-200'}`,
-        'bg-gray-100 rounded-md',
+        'flex items-center cursor-pointer hover:bg-gray-300 p-1 rounded-md border-gray-300 border',
         className
       )}
+      style={{
+        backgroundColor: bgSelectedColor()
+          ? bgSelectedColor()
+          : checked
+          ? 'rgba(219, 234, 254, 1)'
+          : undefined,
+      }}
       onClick={() => onClickRadio()}
     >
       <div className={clsx('flex-1 font-mono whitespace-pre-wrap ml-2')}>
@@ -82,7 +100,14 @@ function RuleItem({
       </div>
       {ruleType === 'config' && (
         // <Popconfirm title='Are you sure?' onConfirm={onClickDelete}>
-        <DeleteOutlined className='mr-2' style={{ color: 'red' }} onClick={onClickDelete}/>
+        <Button
+          icon={<DeleteOutlined />}
+          style={{ color: 'red' }}
+          onClick={onClickDelete}
+          type='link'
+          loading={deleteConfigMutation.isLoading}
+        />
+
         // </Popconfirm>
       )}
       <div className='ml-auto w-12 h-8 flex mr-2'>
@@ -90,19 +115,19 @@ function RuleItem({
           total={total}
           part={rule.subreddit_count}
           className='bg-blue-400'
-          place='total posts'
+          place='Posts on subreddit'
         />
         <BarRate
           total={totalCount.targetCount}
           part={rule.target_count}
           className='bg-green-400'
-          place='posts that should be filtered'
+          place='Posts that should be filtered'
         />
         <BarRate
           total={totalCount.exceptCount}
           part={rule.except_count}
           className='bg-red-400'
-          place='posts to avoid being filtered'
+          place='Posts to avoid being filtered'
         />
       </div>
       {/* <Radio onClick={onClickRadio} checked={checked} /> */}

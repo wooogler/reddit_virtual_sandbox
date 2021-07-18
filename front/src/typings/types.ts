@@ -21,4 +21,8 @@ export interface ImportSetting {
   type: 'all' | 'Submission' | 'Comment';
 }
 
+export type Condition = 'baseline' | 'sandbox' | 'modsandbox';
+export type Task = 'A1' | 'B1' | 'A2' | 'B2' | 'example';
+export type Order = '1' | '2';
+
 export type EditorState = 'add' | 'edit' | false;

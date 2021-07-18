@@ -110,7 +110,7 @@ function AddPostModal({ visible, onCancel, place }: Props): ReactElement {
 
   return (
     <Modal
-      title='Create Post'
+      title={`Create your post in ${place==='target' ? '"Posts that should be filtered"' : '"Posts to avoid being filtered"'}`}
       visible={visible}
       onCancel={onCancel}
       maskClosable={false}

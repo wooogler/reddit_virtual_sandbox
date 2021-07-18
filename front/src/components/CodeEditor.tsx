@@ -17,6 +17,8 @@ import {
   SaveOutlined,
 } from '@ant-design/icons';
 import { invalidatePostQueries } from '@utils/util';
+import { useParams } from 'react-router-dom';
+import { Condition, Task } from '@typings/types';
 
 interface Props {
   placeholder: string;
@@ -26,10 +28,10 @@ function CodeEditor({ placeholder }: Props): ReactElement {
   const queryClient = useQueryClient();
   const [code, setCode] = useState('');
   const [visibleGuideModal, setVisibleGuideModal] = useState(false);
+  const { condition, task } = useParams<{ condition: Condition; task: Task }>();
 
   const [isSaved, setIsSaved] = useState(false);
-  const { changeConfigId, condition, clearConfigId, config_id, changeCode } =
-    useStore();
+  const { changeConfigId, clearConfigId, config_id, changeCode } = useStore();
 
   const storedCode = useStore().code;
 
@@ -41,7 +43,7 @@ function CodeEditor({ placeholder }: Props): ReactElement {
     request<Config>({
       url: '/configs/',
       method: 'POST',
-      data: { code },
+      data: { code, task },
     });
   const addConfigMutation = useMutation(addConfig, {
     onSuccess: (res, { code }) => {
@@ -99,6 +101,7 @@ function CodeEditor({ placeholder }: Props): ReactElement {
 
   const onClickClear = () => {
     setCode('');
+    changeCode('');
     clearConfigId();
   };
   return (

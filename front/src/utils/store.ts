@@ -8,7 +8,7 @@ import { afterToDate } from './util';
 export type Order = 'created_utc' | '-created_utc' | 'fpfn' | '-score';
 type PostType = 'Submission' | 'Comment' | 'all';
 type Source = 'Subreddit' | 'Spam' | 'all';
-export type Condition = 'baseline' | 'sandbox' | 'modsandbox';
+
 
 type SelectedHighlight = {
   config_id?: number;
@@ -38,8 +38,7 @@ type State = {
   refetching: boolean;
   code: string;
   imported: boolean;
-  selectedHighlight: SelectedHighlight;
-  condition: Condition;
+  selectedHighlights: SelectedHighlight[];
   totalCount: TotalCount;
   changeConfigId: (configId: number) => void;
   changeRuleId: (ruleId: number) => void;
@@ -54,9 +53,8 @@ type State = {
   changeRefetching: (refetching: boolean) => void;
   changeCode: (code: string) => void;
   changeImported: (imported: boolean) => void;
-  changeSelectedHighlight: (selected: SelectedHighlight) => void;
+  changeSelectedHighlights: (selected: SelectedHighlight[]) => void;
   clearSelectedHighlight: () => void;
-  changeCondition: (condition: Condition) => void;
   changeTotalCount: (totalCount: Partial<TotalCount>) => void;
 };
 
@@ -81,13 +79,7 @@ export const useStore = create<State>(
         refetching: false,
         code: '',
         imported: false,
-        selectedHighlight: {
-          config_id: undefined,
-          rule_id: undefined,
-          check_id: undefined,
-          check_combination_ids: [],
-        },
-        condition: 'modsandbox',
+        selectedHighlights: [],
         totalCount: {
           filteredCount: 0,
           notFilteredCount: 0,
@@ -152,21 +144,13 @@ export const useStore = create<State>(
           set((state) => ({
             imported,
           })),
-        changeSelectedHighlight: (selected: SelectedHighlight) => {
-          set((state) => ({ selectedHighlight: selected }));
+        changeSelectedHighlights: (selected: SelectedHighlight[]) => {
+          set((state) => ({ selectedHighlights: selected }));
         },
         clearSelectedHighlight: () => {
           set((state) => ({
-            selectedHighlight: {
-              config_id: undefined,
-              rule_id: undefined,
-              check_combination_ids: [],
-              check_id: undefined,
-            },
+            selectedHighlights: [],
           }));
-        },
-        changeCondition: (condition: Condition) => {
-          set((state) => ({ condition }));
         },
         changeTotalCount: (count: Partial<TotalCount>) => {
           set((state) => ({
@@ -180,7 +164,7 @@ export const useStore = create<State>(
           'start_date',
           'end_date',
           'refetching',
-          'selectedHighlight',
+          'selectedHighlights',
           'totalCount',
         ],
       }

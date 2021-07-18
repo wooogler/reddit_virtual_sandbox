@@ -4,7 +4,7 @@ import PostList from '@components/PostList';
 import SearchModal from '@components/SearchModal';
 import SubmitModal from '@components/SubmitModal';
 import TargetList from '@components/TargetList';
-import { IPost, IUser, PaginatedPosts } from '@typings/db';
+import { IPost, PaginatedPosts } from '@typings/db';
 import request from '@utils/request';
 import { useStore } from '@utils/store';
 import { invalidatePostQueries } from '@utils/util';
@@ -18,15 +18,12 @@ import {
   useQueryClient,
 } from 'react-query';
 import { Split } from '@geoffcox/react-splitter';
+import { useParams } from 'react-router-dom';
+import { Condition, Task } from '@typings/types';
 
 function PostViewerLayout(): ReactElement {
   const queryClient = useQueryClient();
   const [searchQuery, setSearchQuery] = useState('');
-  const { data: userData } = useQuery('me', async () => {
-    const { data } = await request<IUser | false>({ url: '/rest-auth/user/' });
-    return data;
-  });
-  const username = userData && userData.username;
 
   const {
     config_id,
@@ -39,7 +36,6 @@ function PostViewerLayout(): ReactElement {
     source,
     order,
     refetching,
-    condition,
     // changePostType,
     // changeSource,
     changeOrder,
@@ -47,6 +43,7 @@ function PostViewerLayout(): ReactElement {
     changeTotalCount,
     totalCount,
   } = useStore();
+  const { condition, task } = useParams<{ condition: Condition; task: Task }>();
 
   const [isSearchVisible, setIsSearchVisible] = useState(false);
   const [isSubmitVisible, setIsSubmitVisible] = useState(false);
@@ -63,6 +60,7 @@ function PostViewerLayout(): ReactElement {
         post_type,
         order,
         source,
+        task,
       },
     ],
     async () => {
@@ -94,6 +92,7 @@ function PostViewerLayout(): ReactElement {
         post_type,
         order,
         source,
+        task,
       },
     ],
     async () => {
@@ -157,6 +156,7 @@ function PostViewerLayout(): ReactElement {
         post_type,
         order,
         source,
+        task,
       },
     ],
     async ({ pageParam = 1 }) => {
@@ -200,6 +200,7 @@ function PostViewerLayout(): ReactElement {
         post_type,
         order,
         source,
+        task,
       },
     ],
     async ({ pageParam = 1 }) => {
@@ -510,20 +511,22 @@ function PostViewerLayout(): ReactElement {
         <div className='w-full flex items-center'>
           <div className='text-2xl ml-2 flex items-center flex-wrap'>
             <RedditOutlined style={{ color: 'orangered' }} />
-            <div className='ml-2 flex items-center'>
-              <div>
-                {condition === 'modsandbox'
-                  ? 'Your Post Collections'
-                  : 'Testing Subreddit'}
-              </div>
+            <div className='mx-2 flex items-center'>
+              {condition === 'modsandbox'
+                ? 'Your Post Collections'
+                : 'Testing Subreddit'}
             </div>
-            <div className='text-sm ml-2'>
-              Norm:{' '}
-              {username && username.endsWith('A')
-                ? 'Do not post questions asking “how to work as a software engineer without a CS relevant degree.”'
-                : username && username.endsWith('B')
-                ? 'Autonomously add “covid-19” flag to every post that is related to or mention covid-19.'
-                : 'Do not post questions asking about "stress in your working space"'}
+            <div className='flex text-sm flex-wrap ml-auto'>
+              <div>
+                Goal: Create AutoMod configuration to only filter every posts
+              </div>
+              <div className='font-bold ml-1 text-red-500'>
+                {task.startsWith('A')
+                  ? 'asking how to work as a software engineer without a CS relevant degree.'
+                  : task.startsWith('B')
+                  ? 'that are related to or mention covid-19.'
+                  : 'stress in your working space'}
+              </div>
             </div>
           </div>
         </div>
@@ -532,14 +535,16 @@ function PostViewerLayout(): ReactElement {
             label={
               condition === 'modsandbox'
                 ? 'Posts that should be filtered'
-                : 'Not Filtered by AutoMod'
+                : condition === 'sandbox'
+                ? 'Not Filtered by AutoMod'
+                : 'Posts on Testing Subreddit'
             }
             posts={
-              condition === 'modsandbox'
-                ? targetQuery.data
-                : targetQuery.data?.filter(
+              condition === 'sandbox'
+                ? targetQuery.data?.filter(
                     (post) => post.matching_configs.length === 0
                   )
+                : targetQuery.data
             }
             isLoading={addTestCaseMutation.isLoading}
             onSubmit={(postId) =>

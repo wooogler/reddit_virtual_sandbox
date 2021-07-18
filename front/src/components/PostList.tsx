@@ -1,7 +1,7 @@
 import React, { ReactElement, useEffect } from 'react';
 
 import { PaginatedPosts } from '@typings/db';
-import { AutoModStat } from '@typings/types';
+import { AutoModStat, Condition } from '@typings/types';
 import PanelName from './PanelName';
 import PostItem from './PostItem';
 
@@ -12,6 +12,7 @@ import { useInView } from 'react-intersection-observer';
 import { useStore } from '@utils/store';
 import { isFiltered } from '@utils/util';
 import { Empty } from 'antd';
+import { useParams } from 'react-router-dom';
 
 interface Props {
   label: string;
@@ -28,14 +29,8 @@ function PostList({
   description,
 }: Props): ReactElement {
   const [ref, inView] = useInView({ threshold: 0 });
-  const {
-    config_id,
-    rule_id,
-    check_combination_id,
-    check_id,
-    condition,
-    totalCount,
-  } = useStore();
+  const { config_id, rule_id, check_combination_id, check_id, totalCount } =
+    useStore();
 
   const { fetchNextPage } = query;
   useEffect(() => {
@@ -43,6 +38,7 @@ function PostList({
       fetchNextPage();
     }
   }, [inView, fetchNextPage]);
+  const { condition } = useParams<{ condition: Condition }>();
 
   const queryCount = query.data?.pages[0].count;
 
@@ -54,19 +50,16 @@ function PostList({
       <div className='flex items-center flex-wrap'>
         <PanelName>{label}</PanelName>
         <div className='text-sm mr-4'>{description}</div>
-        {condition !== 'baseline' ? (
-          <div className='text-sm text-gray-400'>
-            ({queryCount} / {total}){' '}
-            {queryCount &&
+        <div className='text-sm text-gray-400'>
+          {condition !== 'baseline'
+            ? `(${queryCount} / ${total}) 
+            ${
+              queryCount &&
               totalCount &&
-              ((queryCount / total) * 100).toFixed(2)}{' '}
-            %
-          </div>
-        ) : (
-          <div className='text-sm text-gray-400'>
-            {totalCount.notFilteredCount} Posts
-          </div>
-        )}
+              ((queryCount / total) * 100).toFixed(2)
+            } %`
+            : `${totalCount.notFilteredCount} Posts`}
+        </div>
       </div>
       {query.data?.pages[0].count !== 0 ? (
         <div className='overflow-y-auto post-scroll'>

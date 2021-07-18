@@ -1,19 +1,19 @@
-import { ReactElement, useEffect, useState } from 'react';
+import { ReactElement, useEffect } from 'react';
 import { IStat, IUser } from '@typings/db';
 import { useQuery } from 'react-query';
-import { Redirect } from 'react-router-dom';
+import { Redirect, useParams } from 'react-router-dom';
 import request from '@utils/request';
 import PostViewerLayout from '@layouts/PostViewerLayout';
 import AnalysisLayout from '@layouts/AnalysisLayout';
 import { useStore } from '@utils/store';
-import Tour from 'reactour';
 import dayjs from 'dayjs';
-import { stepsBaseline, stepsModSandbox, stepsSandbox } from '@utils/steps';
-import { Modal } from 'antd';
 
 function HomePage(): ReactElement {
-  const [isTourOpen, setIsTourOpen] = useState(false);
-  const [isVisible, setIsVisible] = useState(true);
+  const availableCondition = ['baseline', 'sandbox', 'modsandbox'];
+  const availableTask = ['A1', 'B1', 'A2', 'B2', 'example'];
+  const { condition, task } = useParams<{ condition: string; task: string }>();
+  // const [isTourOpen, setIsTourOpen] = useState(false);
+  // const [isVisible, setIsVisible] = useState(true);
   const { data } = useQuery('me', async () => {
     const { data } = await request<IUser | false>({
       url: '/rest-auth/user/',
@@ -21,9 +21,9 @@ function HomePage(): ReactElement {
     return data;
   });
 
-  const username = data && data.username;
+  // const username = data && data.username;
 
-  const { changeDateRange, condition } = useStore();
+  const { changeDateRange } = useStore();
 
   useEffect(() => {
     const fetchGraph = async () => {
@@ -54,7 +54,14 @@ function HomePage(): ReactElement {
   }, [changeDateRange]);
 
   if (!data) {
-    return <Redirect to='/login' />;
+    return <Redirect to={`/login/${condition}/${task.slice(1)}`} />;
+  }
+
+  if (!availableCondition.includes(condition)) {
+    if (availableTask.includes(task)) {
+      return <Redirect to={`/home/baseline/${task}`} />;
+    }
+    return <Redirect to={`/home/baseline/A1`} />;
   }
 
   return (
@@ -65,7 +72,7 @@ function HomePage(): ReactElement {
       <div className='w-1/3 h-full flex flex-col'>
         <AnalysisLayout />
       </div>
-      <Tour
+      {/* <Tour
         steps={
           condition === 'modsandbox'
             ? stepsModSandbox
@@ -89,7 +96,7 @@ function HomePage(): ReactElement {
         >
           Do you want to start a system tutorial?
         </Modal>
-      )}
+      )} */}
     </div>
   );
 }

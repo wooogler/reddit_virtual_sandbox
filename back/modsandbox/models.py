@@ -13,6 +13,7 @@ class Config(models.Model):
     user = models.ForeignKey(User, related_name='configs', on_delete=models.CASCADE)
     code = models.TextField(default='')
     created_at = models.DateTimeField(auto_now_add=True)
+    task = models.CharField(max_length=50, null=True)
 
     def __str__(self):
         return self.code

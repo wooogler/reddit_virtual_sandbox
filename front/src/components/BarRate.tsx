@@ -7,9 +7,9 @@ interface Props {
   part: number;
   className: string;
   place:
-    | 'total posts'
-    | 'posts that should be filtered'
-    | 'posts to avoid being filtered';
+    | 'Posts on subreddit'
+    | 'Posts that should be filtered'
+    | 'Posts to avoid being filtered';
 }
 
 function BarRate({ total, part, className, place }: Props): ReactElement {

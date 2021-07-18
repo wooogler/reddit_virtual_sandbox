@@ -4,7 +4,6 @@ import logging
 from types import SimpleNamespace
 
 import pandas as pd
-import pinecone
 import numpy as np
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchRank
 
@@ -18,7 +17,7 @@ from rest_framework.decorators import action
 from django_filters.rest_framework import DjangoFilterBackend
 import praw
 
-from modsandbox.filters import PostFilter
+from modsandbox.filters import PostFilter, ConfigFilter
 from modsandbox.ml import process_embedding
 from modsandbox.pinecone_handler import create_index_pinecone, get_index_pinecone
 from modsandbox.post_handler import create_posts, get_filtered_posts, get_unfiltered_posts, get_df_posts_vector, \
@@ -374,6 +373,7 @@ class ConfigViewSet(viewsets.ModelViewSet):
     queryset = Config.objects.all()
     serializer_class = ConfigSerializer
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
+    filterset_class = ConfigFilter
     ordering_fields = ['created_at']
     ordering = ['-created_at']
 

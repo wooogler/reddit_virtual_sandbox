@@ -1,15 +1,14 @@
 import PageLayout from '@layouts/PageLayout';
 import { IUser } from '@typings/db';
 import request from '@utils/request';
-import { Condition, useStore } from '@utils/store';
-import { Button, Form, Input, Select } from 'antd';
-import React, { ReactElement, useCallback, useState } from 'react';
+
+import { Button, Form, Input } from 'antd';
+import { ReactElement, useCallback } from 'react';
 import { useQuery } from 'react-query';
-import { Redirect } from 'react-router-dom';
+import { Redirect, useParams } from 'react-router-dom';
 
 interface LogInForm {
   username: string;
-  condition: Condition;
 }
 
 function LogInPage(): ReactElement {
@@ -18,8 +17,10 @@ function LogInPage(): ReactElement {
     return data;
   });
 
-  const { condition, changeCondition } = useStore();
-  const [task, setTask] = useState<'A' | 'B' | 'C'>('A');
+  const availableCondition = ['baseline', 'sandbox', 'modsandbox'];
+
+  const { condition, order } =
+    useParams<{ condition: string; order: string }>();
 
   const onFinish = useCallback(
     (values: LogInForm) => {
@@ -27,7 +28,7 @@ function LogInPage(): ReactElement {
         url: '/rest-auth/login/',
         method: 'POST',
         data: {
-          username: values.username + '-' + task,
+          username: values.username,
           password: 'modsandbox',
         },
       })
@@ -41,7 +42,7 @@ function LogInPage(): ReactElement {
             url: '/rest-auth/registration/',
             method: 'POST',
             data: {
-              username: values.username + '-' + task,
+              username: values.username,
               password1: 'modsandbox',
               password2: 'modsandbox',
             },
@@ -56,13 +57,24 @@ function LogInPage(): ReactElement {
             });
         });
     },
-    [refetch, task]
+    [refetch]
   );
 
-  if (data) {
-    console.log('logged in', data);
-    return <Redirect to='/' />;
+  if (!availableCondition.includes(condition)) {
+    return <Redirect to='/login/baseline/1' />;
   }
+
+  if (data) {
+    if (order === '1') {
+      return <Redirect to={`/home/${condition}/A1`} />;
+    } else if (order === '2') {
+      return <Redirect to={`/home/${condition}/B2`} />;
+    }
+    if (order === 'example') {
+      return <Redirect to={`/home/${condition}/example`} />;
+    }
+  }
+
   const layout = {
     labelCol: { span: 8 },
     wrapperCol: { span: 16 },
@@ -71,28 +83,6 @@ function LogInPage(): ReactElement {
   return (
     <PageLayout title='Join'>
       <Form {...layout} onFinish={onFinish}>
-        <Form.Item label='Condition' name='condition'>
-          <Select
-            value={condition}
-            defaultValue={condition}
-            onChange={(value: Condition) => changeCondition(value)}
-          >
-            <Select.Option value='modsandbox'>System A</Select.Option>
-            <Select.Option value='sandbox'>System B</Select.Option>
-            <Select.Option value='baseline'>System C</Select.Option>
-          </Select>
-        </Form.Item>
-        <Form.Item label='Task' name='task'>
-          <Select
-            value={task}
-            defaultValue={'A'}
-            onChange={(value) => setTask(value)}
-          >
-            <Select.Option value='A'>Task A</Select.Option>
-            <Select.Option value='B'>Task B</Select.Option>
-            <Select.Option value='C'>Example Task</Select.Option>
-          </Select>
-        </Form.Item>
         <Form.Item
           label='Username'
           name='username'
@@ -104,9 +94,6 @@ function LogInPage(): ReactElement {
           <Button type='primary' htmlType='submit'>
             Join
           </Button>
-          {/* <Link to='/signup'>
-            <Button className='ml-2'>Join</Button>
-          </Link> */}
         </div>
       </Form>
     </PageLayout>

@@ -1,4 +1,3 @@
-from collections import defaultdict
 from rest_framework import serializers
 from rest_auth.serializers import UserDetailsSerializer
 from .models import Post, User, Rule, Check, CheckCombination, Match, Config, NotMatch
@@ -235,6 +234,7 @@ class ConfigSerializer(serializers.ModelSerializer):
             'code',
             'created_at',
             'rules',
+            'task',
             'subreddit_count',
             'spam_count',
             'target_count',
@@ -242,7 +242,7 @@ class ConfigSerializer(serializers.ModelSerializer):
         ]
 
     def create(self, validated_data):
-        config = create_config(validated_data['code'], self.context['request'].user)
+        config = create_config(validated_data['code'], self.context['request'].user, validated_data['task'])
         return config
 
 
