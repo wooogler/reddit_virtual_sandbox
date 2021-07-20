@@ -54,7 +54,13 @@ function HomePage(): ReactElement {
   }, [changeDateRange]);
 
   if (!data) {
-    return <Redirect to={`/login/${condition}/${task.slice(1)}`} />;
+    return (
+      <Redirect
+        to={`/login/${condition}/${
+          task !== 'example' ? task.slice(1) : 'example'
+        }`}
+      />
+    );
   }
 
   if (!availableCondition.includes(condition)) {

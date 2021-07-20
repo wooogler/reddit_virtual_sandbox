@@ -1,4 +1,5 @@
 import { DeleteOutlined } from '@ant-design/icons';
+import useLogMutation from '@hooks/useLogMutation';
 import { Check, CheckCombination, Config, Rule } from '@typings/db';
 import request from '@utils/request';
 import { useStore } from '@utils/store';
@@ -7,6 +8,7 @@ import { Button } from 'antd';
 import clsx from 'clsx';
 import { ReactElement, useCallback } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
+import { useParams } from 'react-router-dom';
 import BarRate from './BarRate';
 
 interface Props {
@@ -37,17 +39,43 @@ function RuleItem({
     changeCode,
   } = useStore();
   const total = totalCount.notFilteredCount + totalCount.filteredCount;
+  const logMutation = useLogMutation();
+  const { task } = useParams<{ task: string }>();
 
   const onClickRadio = () => {
     if (ruleType === 'config') {
       changeConfigId(rule.id);
       changeCode(rule.code);
+      logMutation.mutate({
+        task,
+        info: 'select',
+        content: rule.code,
+        config_id: rule.id,
+      });
     } else if (ruleType === 'rule') {
       changeRuleId(rule.id);
+      logMutation.mutate({
+        task,
+        info: 'select',
+        content: rule.code,
+        rule_id: rule.id,
+      });
     } else if (ruleType === 'checkCombination') {
       changeCheckCombinationId(rule.id);
+      logMutation.mutate({
+        task,
+        info: 'select',
+        content: rule.code,
+        check_combination_id: rule.id,
+      });
     } else if (ruleType === 'check') {
       changeCheckId(rule.id);
+      logMutation.mutate({
+        task,
+        info: 'select',
+        content: rule.code,
+        check_id: rule.id,
+      });
     }
   };
   const queryClient = useQueryClient();
@@ -60,6 +88,12 @@ function RuleItem({
       if (configId === config_id) {
         clearConfigId();
       }
+      logMutation.mutate({
+        task,
+        info: 'delete config',
+        content: rule.code,
+        config_id: configId,
+      });
     },
   });
 

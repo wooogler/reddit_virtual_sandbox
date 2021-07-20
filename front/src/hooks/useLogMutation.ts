@@ -6,7 +6,7 @@ interface Props {
   info?: string;
   content?: string;
   move_to?: string;
-  post_id?: number;
+  post_id?: string;
   config_id?: number;
   rule_id?: number;
   check_combination_id?: number;
@@ -14,31 +14,32 @@ interface Props {
 }
 
 export default function useLogMutation() {
-  return useMutation(({
-    task,
-    info,
-    content,
-    move_to,
-    post_id,
-    config_id,
-    rule_id,
-    check_combination_id,
-    check_id,
-  }: Props) =>
-    request({
-      url: 'log',
-      method: 'POST',
-      data: {
-        task,
-        info,
-        content,
-        move_to,
-        post_id,
-        config_id,
-        rule_id,
-        check_combination_id,
-        check_id,
-      },
-    })
+  return useMutation(
+    ({
+      task,
+      info,
+      content,
+      move_to,
+      post_id,
+      config_id,
+      rule_id,
+      check_combination_id,
+      check_id,
+    }: Props) =>
+      request({
+        url: '/log/',
+        method: 'POST',
+        data: {
+          task,
+          info,
+          content,
+          move_to,
+          post_id,
+          config_id,
+          rule_id,
+          check_combination_id,
+          check_id,
+        },
+      })
   );
 }

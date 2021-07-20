@@ -79,11 +79,18 @@ function PostItem({
     });
 
   const deletePostFromTestCaseMutation = useMutation(deletePostFromTestCase, {
-    onSuccess: (_, { place }) => {
+    onSuccess: (_, { id, place }) => {
       invalidatePostQueries(place);
       if (place.includes('target') && order === 'fpfn') {
         sortFpFnMutation.mutate();
       }
+      logMutation.mutate({
+        task,
+        info: 'delete post',
+        content: `title: ${post.title}\nbody: ${post.body}`,
+        move_to: place,
+        post_id: id,
+      });
     },
   });
 
@@ -115,7 +122,7 @@ function PostItem({
     });
 
   const addCustomPostMutation = useMutation(addCustomPost, {
-    onSuccess: (_, { place }) => {
+    onSuccess: (_, { place, title, body }) => {
       if (place === 'target') {
         queryClient.invalidateQueries('target');
         if (order === 'fpfn') {
@@ -124,6 +131,12 @@ function PostItem({
       } else {
         queryClient.invalidateQueries('except');
       }
+      logMutation.mutate({
+        task,
+        info: 'add post',
+        content: `title: ${title}\nbody: ${body}`,
+        move_to: place,
+      });
     },
   });
 
@@ -142,7 +155,13 @@ function PostItem({
       if (place.includes('target') && order === 'fpfn') {
         sortFpFnMutation.mutate();
       }
-      // logMutation.mutate({ task, info: 'move', move_to: place, post_id: post.id });
+      logMutation.mutate({
+        task,
+        info: searchQuery ? 'move searched' : 'move',
+        move_to: place,
+        post_id: post.id,
+        content: `title: ${post.title}\nbody: ${post.body}`,
+      });
     },
   });
 

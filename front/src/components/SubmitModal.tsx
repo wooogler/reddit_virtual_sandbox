@@ -9,6 +9,7 @@ import 'ace-builds/src-noconflict/theme-tomorrow';
 import { useStore } from '@utils/store';
 import { useHistory, useParams } from 'react-router-dom';
 import { Condition, Task } from '@typings/types';
+import useLogMutation from '@hooks/useLogMutation';
 
 interface Props {
   onCancel: () => void;
@@ -18,6 +19,7 @@ interface Props {
 function SubmitModal({ onCancel, visible }: Props): ReactElement {
   const queryClient = useQueryClient();
   const { task, condition } = useParams<{ task: Task; condition: Condition }>();
+  const logMutation = useLogMutation();
   const history = useHistory();
   const [code, setCode] = useState('');
   const { clearConfigId } = useStore();
@@ -30,7 +32,15 @@ function SubmitModal({ onCancel, visible }: Props): ReactElement {
     });
 
   const submitConfigMutation = useMutation(submitConfig, {
-    onSuccess: () => setIsVisibleConfirmModal(true),
+    onSuccess: (res, { code }) => {
+      setIsVisibleConfirmModal(true);
+      logMutation.mutate({
+        task,
+        info: 'submit config',
+        content: code,
+        config_id: res.data.id,
+      });
+    },
   });
 
   const storedCode = useStore().code;
@@ -79,6 +89,7 @@ function SubmitModal({ onCancel, visible }: Props): ReactElement {
   );
 
   const onFinishExperiment = useCallback(() => {
+    logMutation.mutate({ task, info: 'finish' });
     if (task === 'A1' || task === 'B2') {
       setIsVisibleConfirmModal(false);
       onCancel();
@@ -103,6 +114,7 @@ function SubmitModal({ onCancel, visible }: Props): ReactElement {
     deleteExceptPostsMutation,
     deleteTargetPostsMutation,
     history,
+    logMutation,
     onCancel,
     onLogOut,
     task,

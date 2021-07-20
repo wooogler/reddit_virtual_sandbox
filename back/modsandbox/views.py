@@ -22,7 +22,7 @@ from modsandbox.ml import process_embedding
 from modsandbox.pinecone_handler import create_index_pinecone, get_index_pinecone
 from modsandbox.post_handler import create_posts, get_filtered_posts, get_unfiltered_posts, get_df_posts_vector, \
     get_average_vector, get_embedding_post, create_test_posts
-from modsandbox.models import Post, User, Rule, Config, Log
+from modsandbox.models import Post, User, Rule, Config, Log, CheckCombination, Check
 from modsandbox.paginations import PostPagination
 from modsandbox.reddit_handler import RedditHandler
 from modsandbox.rule_handler import apply_config
@@ -470,17 +470,17 @@ class LogViewSet(viewsets.ModelViewSet):
         info = request.data.get('info')
         content = request.data.get('content')
         move_to = request.data.get('move_to')
-        post_id = request.data.get('post')
-        config_id = request.data.get('config')
-        rule_id = request.data.get('rule')
-        check_combination_id = request.data.get('check_combination')
-        check_id = request.data.get('check')
+        post_id = request.data.get('post_id')
+        config_id = request.data.get('config_id')
+        rule_id = request.data.get('rule_id')
+        check_combination_id = request.data.get('check_combination_id')
+        check_id = request.data.get('check_id')
 
-        post = Post.objects.get(pk=post_id)
-        config = Post.objects.get(pk=config_id)
-        rule = Post.objects.get(pk=rule_id)
-        check_combination = Post.objects.get(pk=check_combination_id)
-        check = Post.objects.get(pk=check_id)
+        post = Post.objects.filter(pk=post_id).first()
+        config = Config.objects.filter(pk=config_id).first()
+        rule = Rule.objects.filter(pk=rule_id).first()
+        check_combination = CheckCombination.objects.filter(pk=check_combination_id).first()
+        check = Check.objects.filter(pk=check_id).first()
 
         Log.objects.create(user=request.user, task=task, info=info, content=content, move_to=move_to, post=post,
                            config=config, rule=rule, check_combination=check_combination, _check=check)

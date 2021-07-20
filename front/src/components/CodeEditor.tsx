@@ -19,6 +19,7 @@ import {
 import { invalidatePostQueries } from '@utils/util';
 import { useParams } from 'react-router-dom';
 import { Condition, Task } from '@typings/types';
+import useLogMutation from '@hooks/useLogMutation';
 
 interface Props {
   placeholder: string;
@@ -28,6 +29,7 @@ function CodeEditor({ placeholder }: Props): ReactElement {
   const queryClient = useQueryClient();
   const [code, setCode] = useState('');
   const [visibleGuideModal, setVisibleGuideModal] = useState(false);
+  const logMutation = useLogMutation();
   const { condition, task } = useParams<{ condition: Condition; task: Task }>();
 
   const [isSaved, setIsSaved] = useState(false);
@@ -50,6 +52,12 @@ function CodeEditor({ placeholder }: Props): ReactElement {
       changeCode(code);
       invalidatePostQueries(queryClient);
       changeConfigId(res.data.id);
+      logMutation.mutate({
+        task,
+        info: 'apply config',
+        content: code,
+        config_id: res.data.id,
+      });
     },
   });
 

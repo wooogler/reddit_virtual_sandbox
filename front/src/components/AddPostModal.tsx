@@ -1,3 +1,4 @@
+import useLogMutation from '@hooks/useLogMutation';
 import { IPost, IUser } from '@typings/db';
 import request from '@utils/request';
 import { useStore } from '@utils/store';
@@ -6,6 +7,7 @@ import TextArea from 'antd/lib/input/TextArea';
 import { useFormik } from 'formik';
 import React, { ReactElement } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useParams } from 'react-router-dom';
 
 interface Props {
   visible: boolean;
@@ -32,6 +34,8 @@ export type NewPost = Omit<
 
 function AddPostModal({ visible, onCancel, place }: Props): ReactElement {
   const queryClient = useQueryClient();
+  const logMutation = useLogMutation();
+  const { task } = useParams<{ task: string }>();
 
   const { data: userData } = useQuery<IUser | false>('me');
   const { order } = useStore();
@@ -79,7 +83,7 @@ function AddPostModal({ visible, onCancel, place }: Props): ReactElement {
   );
 
   const addCustomPostMutation = useMutation(addCustomPost, {
-    onSuccess: (_, { place }) => {
+    onSuccess: (_, { place, title, body }) => {
       if (place === 'target') {
         queryClient.invalidateQueries('target');
         if (order === 'fpfn') {
@@ -90,6 +94,12 @@ function AddPostModal({ visible, onCancel, place }: Props): ReactElement {
         queryClient.invalidateQueries('except');
         onCancel();
       }
+      logMutation.mutate({
+        task,
+        info: 'add post',
+        content: `title: ${title}\nbody: ${body}`,
+        move_to: place,
+      });
     },
   });
 

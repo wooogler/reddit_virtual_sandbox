@@ -8,6 +8,8 @@ import OverlayLoading from './OverlayLoading';
 import PostItem from './PostItem';
 
 import request from '@utils/request';
+import useLogMutation from '@hooks/useLogMutation';
+import { useParams } from 'react-router-dom';
 
 interface Props {
   visible: boolean;
@@ -17,6 +19,8 @@ interface Props {
 
 function SearchModal({ visible, onCancel, query }: Props): ReactElement {
   const [sort, setSort] = useState<'relevance' | 'new' | 'top'>('relevance');
+  const logMutation = useLogMutation();
+  const { task } = useParams<{ task: string }>();
   const searchQuery = useQuery(
     ['search', { query, sort }],
     async () => {
@@ -49,7 +53,14 @@ function SearchModal({ visible, onCancel, query }: Props): ReactElement {
         <div>SORT BY</div>
         <Select
           value={sort}
-          onChange={(value) => setSort(value)}
+          onChange={(value) => {
+            setSort(value);
+            logMutation.mutate({
+              task,
+              info: 'change search sort',
+              content: value,
+            });
+          }}
           dropdownMatchSelectWidth={false}
           bordered={false}
         >

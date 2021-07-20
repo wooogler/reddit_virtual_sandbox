@@ -1,3 +1,4 @@
+import useLogMutation from '@hooks/useLogMutation';
 import { IStat } from '@typings/db';
 import request from '@utils/request';
 import { useStore } from '@utils/store';
@@ -6,6 +7,7 @@ import dayjs from 'dayjs';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import React, { ReactElement, useCallback, useEffect } from 'react';
 import { useQuery } from 'react-query';
+import { useParams } from 'react-router-dom';
 
 import {
   createContainer,
@@ -40,6 +42,9 @@ function PostChart(): ReactElement {
     end_date,
     changeDateRange,
   } = useStore();
+
+  const logMutation = useLogMutation();
+  const { task } = useParams<{ task: string }>();
 
   const { data: filteredStat } = useQuery<IStat[], AxiosError>(
     [
@@ -114,8 +119,13 @@ function PostChart(): ReactElement {
   const onBrush = useCallback(
     (domain: any) => {
       changeDateRange(dayjs(domain.x[0]), dayjs(domain.x[1]));
+      logMutation.mutate({
+        task,
+        info: 'change range',
+        content: `${domain.x[0]} - ${domain.x[1]}`,
+      });
     },
-    [changeDateRange]
+    [changeDateRange, logMutation, task]
   );
 
   const filteredData = filteredStat?.map((datum) => ({

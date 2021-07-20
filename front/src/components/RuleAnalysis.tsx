@@ -8,11 +8,10 @@ import RuleItem from './RuleItem';
 import './collapse.css';
 import OverlayLoading from './OverlayLoading';
 import { useParams } from 'react-router-dom';
-import { Task } from '@typings/types';
 
 function RuleAnalysis(): ReactElement {
   const { Panel } = Collapse;
-  const { task } = useParams<{ task: Task }>();
+  const { task } = useParams<{ task: string }>();
 
   const {
     config_id,

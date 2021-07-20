@@ -20,6 +20,7 @@ import {
 import { Split } from '@geoffcox/react-splitter';
 import { useParams } from 'react-router-dom';
 import { Condition, Task } from '@typings/types';
+import useLogMutation from '@hooks/useLogMutation';
 
 function PostViewerLayout(): ReactElement {
   const queryClient = useQueryClient();
@@ -43,6 +44,7 @@ function PostViewerLayout(): ReactElement {
     changeTotalCount,
     totalCount,
   } = useStore();
+  const logMutation = useLogMutation();
   const { condition, task } = useParams<{ condition: Condition; task: Task }>();
 
   const [isSearchVisible, setIsSearchVisible] = useState(false);
@@ -183,6 +185,10 @@ function PostViewerLayout(): ReactElement {
       refetchInterval: refetching ? 2000 : false,
       onSuccess: (data) => {
         changeTotalCount({ filteredCount: data.pages[0].count });
+        // logMutation.mutate({
+        //   task,
+        //   info: 'load filtered',
+        // });
       },
     }
   );
@@ -227,6 +233,10 @@ function PostViewerLayout(): ReactElement {
       refetchInterval: refetching ? 2000 : false,
       onSuccess: (data) => {
         changeTotalCount({ notFilteredCount: data.pages[0].count });
+        // logMutation.mutate({
+        //   task,
+        //   info: 'load not filtered',
+        // });
       },
     }
   );
@@ -237,8 +247,13 @@ function PostViewerLayout(): ReactElement {
       if (e.target.value === 'fpfn') {
         sortFpFnMutation.mutate();
       }
+      logMutation.mutate({
+        task,
+        info: 'change order',
+        content: e.target.value,
+      });
     },
-    [changeOrder, sortFpFnMutation]
+    [changeOrder, logMutation, sortFpFnMutation, task]
   );
 
   // const onChangePostType = useCallback(
@@ -297,6 +312,7 @@ function PostViewerLayout(): ReactElement {
       queryClient.invalidateQueries('not filtered');
       queryClient.invalidateQueries('stats/filtered');
       queryClient.invalidateQueries('stats/not_filtered');
+      logMutation.mutate({ task, info: 'import' });
     },
   });
 
@@ -309,7 +325,8 @@ function PostViewerLayout(): ReactElement {
   const onCancelSearch = useCallback(() => {
     setIsSearchVisible(false);
     queryClient.removeQueries('search');
-  }, [queryClient]);
+    logMutation.mutate({ task, info: 'cancel search' });
+  }, [logMutation, queryClient, task]);
 
   const notFilteredCount = notFilteredQuery.data?.pages[0].count;
 
@@ -340,6 +357,7 @@ function PostViewerLayout(): ReactElement {
               onPressEnter={() => {
                 setIsSearchVisible(true);
                 setSearchQuery(query);
+                logMutation.mutate({ task, info: 'search', content: query });
               }}
               placeholder='Search'
               value={query}

@@ -6,11 +6,13 @@ import RuleAnalysis from '@components/RuleAnalysis';
 import PostChart from '@components/PostChart';
 import clsx from 'clsx';
 import { useParams } from 'react-router-dom';
-import { Condition } from '@typings/types';
+import { Condition, Task } from '@typings/types';
+import useLogMutation from '@hooks/useLogMutation';
 
 function AnalysisLayout(): ReactElement {
-  const [isViewChart, setIsViewChart] = useState(false);
-  const { condition } = useParams<{ condition: Condition }>();
+  const [isViewChart, setIsViewChart] = useState(true);
+  const { condition, task } = useParams<{ condition: Condition; task: Task }>();
+  const logMutation = useLogMutation();
 
   return (
     <div className='h-full flex flex-col'>
@@ -20,7 +22,7 @@ function AnalysisLayout(): ReactElement {
           `${condition === 'modsandbox' ? 'h-1/4' : 'h-full'}`
         )}
       >
-        <CodeEditor placeholder=''  />
+        <CodeEditor placeholder='' />
       </div>
       {condition === 'modsandbox' && (
         <div
@@ -37,7 +39,14 @@ function AnalysisLayout(): ReactElement {
             <PanelName>Time series Post Chart</PanelName>
             <div
               className='ml-auto cursor-pointer text-blue-400 mr-2'
-              onClick={() => setIsViewChart((prev) => !prev)}
+              onClick={() => {
+                setIsViewChart((prev) => !prev);
+                if (isViewChart === true) {
+                  logMutation.mutate({ task, info: 'open chart' });
+                } else {
+                  logMutation.mutate({ task, info: 'close chart' });
+                }
+              }}
             >
               {isViewChart ? 'Close' : 'Open'}
             </div>

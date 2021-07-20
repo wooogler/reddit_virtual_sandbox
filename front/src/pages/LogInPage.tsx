@@ -12,10 +12,15 @@ interface LogInForm {
 }
 
 function LogInPage(): ReactElement {
-  const { data, refetch } = useQuery('me', async () => {
-    const { data } = await request<IUser | false>({ url: '/rest-auth/user/' });
-    return data;
-  });
+  const { data, refetch } = useQuery(
+    'me',
+    async () => {
+      const { data } = await request<IUser | false>({
+        url: '/rest-auth/user/',
+      });
+      return data;
+    },
+  );
 
   const availableCondition = ['baseline', 'sandbox', 'modsandbox'];
 
