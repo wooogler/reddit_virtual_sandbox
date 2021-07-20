@@ -60,6 +60,8 @@ function SearchModal({ visible, onCancel, query }: Props): ReactElement {
         matching_not_checks: [],
         sim: 0,
         score: post.score,
+        rule_1: 0,
+        rule_2: 0,
       };
     });
     return data;

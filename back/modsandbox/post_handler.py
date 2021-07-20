@@ -37,7 +37,9 @@ def create_test_posts(posts, user, place):
                             comment_karma=post.author.comment_karma,
                             account_created_utc=datetime.fromtimestamp(post.author.created_utc, tz=timezone.utc),
                             reports=post.num_reports if post.num_reports is not None else None,
-                            score=post.score)
+                            score=post.score,
+                            rule_1=post.rule_1,
+                            rule_2=post.rule_2)
 
     posts = Post.objects.filter(created_at__gte=now)
     return posts

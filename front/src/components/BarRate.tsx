@@ -29,8 +29,13 @@ function BarRate({ total, part, className, place }: Props): ReactElement {
       }
       placement='topLeft'
     >
-      <div className='flex bg-gray-100 border-gray-300 relative w-1/3 h-full items-end hover:border-gray-400 border-2'>
+      <div className='bg-gray-100 border-gray-300 relative w-1/3 h-full hover:border-gray-400 border-2 flex items-end'>
         <PartDiv rate={(part / total) * 100} className={className} />
+        {part / total < 0.1 && (
+          <NumberDiv className={className.replace('bg', 'text')}>
+            {part}
+          </NumberDiv>
+        )}
       </div>
     </Tooltip>
   );
@@ -39,6 +44,19 @@ function BarRate({ total, part, className, place }: Props): ReactElement {
 const PartDiv = styled.div<{ rate: number }>`
   width: 100%;
   height: ${(props) => props.rate}%;
+`;
+
+const NumberDiv = styled.div`
+  position: absolute;
+  font-size: 0.7rem;
+  font-weight: bold;
+  font-family: Arial, Helvetica, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  text-align: center;
 `;
 
 export default BarRate;

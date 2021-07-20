@@ -14,6 +14,7 @@ import Highlighter from 'react-highlight-words';
 import { NewPost } from './AddPostModal';
 import { useParams } from 'react-router-dom';
 import { Condition } from '@typings/types';
+import useLogMutation from '@hooks/useLogMutation';
 
 dayjs.extend(relativeTime);
 dayjs.extend(utc);
@@ -32,8 +33,10 @@ function PostItem({
   searchQuery,
 }: Props): ReactElement {
   const queryClient = useQueryClient();
+  const logMutation = useLogMutation();
   const { config_id, rule_id, check_combination_id, check_id, order } =
     useStore();
+  const { task } = useParams<{ task: string }>();
 
   const { condition } = useParams<{ condition: Condition }>();
 
@@ -139,6 +142,7 @@ function PostItem({
       if (place.includes('target') && order === 'fpfn') {
         sortFpFnMutation.mutate();
       }
+      // logMutation.mutate({ task, info: 'move', move_to: place, post_id: post.id });
     },
   });
 
@@ -344,6 +348,11 @@ function PostItem({
           {post.source === 'Spam' && (
             <div className='text-red-600 text-xs'>
               Removed by {post.banned_by}
+            </div>
+          )}
+          {process.env.NODE_ENV === 'development' && (
+            <div className='ml-2'>
+              sim: {post.sim.toFixed(2)} ({post.rule_1} , {post.rule_2})
             </div>
           )}
         </div>

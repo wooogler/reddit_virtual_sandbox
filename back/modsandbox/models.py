@@ -65,10 +65,9 @@ class Post(models.Model):
     account_created_utc = models.DateTimeField(null=True)
     reports = models.IntegerField(null=True)
     score = models.IntegerField(default=0)
+    rule_1 = models.IntegerField(default=0)
+    rule_2 = models.IntegerField(default=0)
 
-    # # for FP, FN
-    # sim_fp = models.FloatField(default=None, null=True)
-    # sim_fn = models.FloatField(default=None, null=True)
     # for FP, FN
     sim = models.FloatField(default=0)
 
@@ -107,3 +106,17 @@ class NotMatch(models.Model):
     field = models.CharField(max_length=50, null=True)
     start = models.IntegerField(null=True)
     end = models.IntegerField(null=True)
+
+
+class Log(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User, related_name='logs', on_delete=models.CASCADE)
+    task = models.CharField(max_length=50, null=True)
+    info = models.CharField(max_length=50, null=True)
+    content = models.TextField(null=True)
+    move_to = models.CharField(max_length=20, null=True)
+    post = models.ForeignKey(Post, related_name='logs', on_delete=models.CASCADE, null=True)
+    config = models.ForeignKey(Config, related_name='logs', on_delete=models.CASCADE, null=True)
+    rule = models.ForeignKey(Rule, related_name='logs', on_delete=models.CASCADE, null=True)
+    check_combination = models.ForeignKey(CheckCombination, related_name='logs', on_delete=models.CASCADE, null=True)
+    _check = models.ForeignKey(Check, related_name='logs', on_delete=models.CASCADE, null=True)

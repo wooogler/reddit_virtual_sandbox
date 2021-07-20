@@ -26,6 +26,8 @@ export type NewPost = Omit<
   | 'matching_configs'
   | 'sim'
   | 'score'
+  | 'rule_1'
+  | 'rule_2'
 >;
 
 function AddPostModal({ visible, onCancel, place }: Props): ReactElement {
@@ -110,7 +112,11 @@ function AddPostModal({ visible, onCancel, place }: Props): ReactElement {
 
   return (
     <Modal
-      title={`Create your post in ${place==='target' ? '"Posts that should be filtered"' : '"Posts to avoid being filtered"'}`}
+      title={`Create your post in ${
+        place === 'target'
+          ? '"Posts that should be filtered"'
+          : '"Posts to avoid being filtered"'
+      }`}
       visible={visible}
       onCancel={onCancel}
       maskClosable={false}

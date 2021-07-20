@@ -19,7 +19,7 @@ from django.urls import path, include
 from rest_framework import routers
 
 from modsandbox.views import TargetViewSet, ExceptViewSet, PostViewSet, RedditViewSet, StatViewSet, \
-    ConfigViewSet, FpFnViewSet
+    ConfigViewSet, FpFnViewSet, LogViewSet
 
 router = routers.DefaultRouter()
 router.register(r'posts/target', TargetViewSet)
@@ -29,10 +29,12 @@ router.register(r'posts', PostViewSet)
 router.register(r'reddit', RedditViewSet)
 router.register(r'configs', ConfigViewSet)
 router.register(r'stats', StatViewSet)
+router.register(r'log', LogViewSet)
 urlpatterns = [
     path('', include(router.urls)),
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
     url(r'^rest-auth/', include('rest_auth.urls')),
-    url(r'^rest-auth/registration/', include('rest_auth.registration.urls'))
+    url(r'^rest-auth/registration/', include('rest_auth.registration.urls')),
+
 ]

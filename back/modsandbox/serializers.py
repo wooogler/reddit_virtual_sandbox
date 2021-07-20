@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from rest_auth.serializers import UserDetailsSerializer
-from .models import Post, User, Rule, Check, CheckCombination, Match, Config, NotMatch
+from .models import Post, User, Rule, Check, CheckCombination, Match, Config, NotMatch, Log
 from .rule_handler import create_config
 
 
@@ -252,3 +252,9 @@ class StatSerializer(serializers.ModelSerializer):
         fields = [
             'created_utc'
         ]
+
+
+class LogSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Log
+        fields = "__all__"

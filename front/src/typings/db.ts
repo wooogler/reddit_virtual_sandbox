@@ -23,6 +23,8 @@ export interface IPost {
   matching_not_checks: MatchingCheck[];
   sim: number;
   score: number;
+  rule_1: number;
+  rule_2: number;
 }
 
 export interface MatchingCheck {

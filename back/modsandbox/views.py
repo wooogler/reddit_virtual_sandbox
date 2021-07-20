@@ -22,11 +22,11 @@ from modsandbox.ml import process_embedding
 from modsandbox.pinecone_handler import create_index_pinecone, get_index_pinecone
 from modsandbox.post_handler import create_posts, get_filtered_posts, get_unfiltered_posts, get_df_posts_vector, \
     get_average_vector, get_embedding_post, create_test_posts
-from modsandbox.models import Post, User, Rule, Config
+from modsandbox.models import Post, User, Rule, Config, Log
 from modsandbox.paginations import PostPagination
 from modsandbox.reddit_handler import RedditHandler
 from modsandbox.rule_handler import apply_config
-from modsandbox.serializers import PostSerializer, RuleSerializer, StatSerializer, ConfigSerializer
+from modsandbox.serializers import PostSerializer, RuleSerializer, StatSerializer, ConfigSerializer, LogSerializer
 from modsandbox.stat_handler import after_to_time_interval, get_time_interval
 
 logger = logging.getLogger(__name__)
@@ -134,7 +134,7 @@ class PostViewSet(viewsets.ModelViewSet):
 
         else:  # for lab study
             with open(os.path.join(os.path.dirname(__file__),
-                                   'test_data/submission_cscareerquestions_may_1st.json')) as normal_json:
+                                   'test_data/submission_cscareerquestions_may_1st_labeled.json')) as normal_json:
                 normal = json.load(normal_json)
                 normal_json.close()
 
@@ -156,6 +156,8 @@ class PostViewSet(viewsets.ModelViewSet):
                         'num_reports': None,
                         'permalink': post['permalink'],
                         'score': post['score'],
+                        'rule_1': post['rule_1'],
+                        'rule_2': post['rule_2'],
                     })
                 for post in normal])
 
@@ -213,8 +215,9 @@ class PostViewSet(viewsets.ModelViewSet):
             for post in normal_posts:
                 post_vector = post_vectors[post_vectors.id == post.id].vector
                 post.sim = np.inner(post_vector.tolist(), target_vector.tolist())[0]
+                post.save()
 
-            Post.objects.bulk_update(normal_posts, ['sim'])
+            # Post.objects.bulk_update(normal_posts, ['sim'])
         else:
             posts.update(sim=0)
 
@@ -453,3 +456,33 @@ class StatViewSet(PostViewSet):
             "spam_sub_count": spam_submissions.count(),
             "spam_com_count": spam_comments.count(),
         })
+
+
+class LogViewSet(viewsets.ModelViewSet):
+    queryset = Log.objects.all()
+    serializer_class = LogSerializer
+
+    def get_queryset(self):
+        return self.queryset.filter(user=self.request.user)
+
+    def create(self, request, *args, **kwargs):
+        task = request.data.get('task')
+        info = request.data.get('info')
+        content = request.data.get('content')
+        move_to = request.data.get('move_to')
+        post_id = request.data.get('post')
+        config_id = request.data.get('config')
+        rule_id = request.data.get('rule')
+        check_combination_id = request.data.get('check_combination')
+        check_id = request.data.get('check')
+
+        post = Post.objects.get(pk=post_id)
+        config = Post.objects.get(pk=config_id)
+        rule = Post.objects.get(pk=rule_id)
+        check_combination = Post.objects.get(pk=check_combination_id)
+        check = Post.objects.get(pk=check_id)
+
+        Log.objects.create(user=request.user, task=task, info=info, content=content, move_to=move_to, post=post,
+                           config=config, rule=rule, check_combination=check_combination, _check=check)
+
+        return Response(status=status.HTTP_201_CREATED)

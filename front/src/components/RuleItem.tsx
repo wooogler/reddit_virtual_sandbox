@@ -110,6 +110,7 @@ function RuleItem({
 
         // </Popconfirm>
       )}
+
       <div className='ml-auto w-12 h-8 flex mr-2'>
         <BarRate
           total={total}

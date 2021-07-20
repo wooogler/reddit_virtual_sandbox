@@ -1,4 +1,4 @@
-import { Alert, Modal, Tabs } from 'antd';
+import { Modal, Tabs } from 'antd';
 import React, { ReactElement } from 'react';
 import styled from 'styled-components';
 
@@ -21,160 +21,144 @@ function GuideModal({ visible, onCancel }: Props): ReactElement {
     >
       <GuideDiv>
         <Tabs defaultActiveKey='0' centered>
-          <TabPane tab='Search Checks' key='0'>
+          <TabPane tab='Syntax' key='0'>
+            <div className='category'>Syntax</div>
+            <div className='text'>
+              Rules must be separated by a line starting with exactly 3 hyphens{' '}
+              <code>---</code>
+            </div>
+            <div className='text'>
+              Comments(explanatory text or information embedded in the rules)
+              can be added by using the # symbol. Generally everything after a #
+              on a line will be treated as a comment and ignored, unless the #
+              is inside a string or otherwise part of actual syntax.
+            </div>
+            <div className='text'>
+              Strings need to be single-quoted. For example,
+            </div>
+            <div className='code'>title: [‘red’, ‘blue’, ‘green’]</div>
+            <div className='text'>
+              Note that if you need to include a single quote inside a
+              single-quoted string, the way to do so is by typing two single
+              quotes in a row, not with a backslash. For example:
+            </div>
+            <div className='code'>'it''s done like this'</div>
+            <div className='text'>
+              Lists of items can be defined in two different ways. The most
+              compact method is inside square brackets, comma-separated:
+            </div>
+            <div className='code'>title: [‘red’, ‘blue’, ‘green’]</div>
+            <div className='text'>
+              The other method is by indenting the list of items below, with a
+              hyphen at the start of each line. This format is often better for
+              longer or more complex items, or if you want to add a comment on
+              individual items:
+            </div>
+            <div className='code'>
+              title:
+              <br />
+              - ‘red’ # like apples
+              <br />
+              - ‘green’ # like grapes
+              <br />- ‘blue’ # like raspberries
+            </div>
+            <div className='text'>
+              Both formats are exactly the same from AutoModerator's
+              perspective, but one can often be far easier to read than the
+              other.
+            </div>
+          </TabPane>
+          <TabPane tab='Search Checks' key='1'>
             <div className='category'>Search Checks</div>
             <div className='text'>
-              If you want to filter posts with "keyword1" in{' '}
-              <strong>"title"</strong>
-            </div>
-            <div className='code'>
-              <strong>title</strong>: ['keyword1']
+              These checks can be used to look for words/phrases/patterns in
+              different fields.
             </div>
             <div className='text'>
-              If you want to filter posts with "keyword2" in{' '}
-              <strong>"body"</strong>
+              <ul className='list'>
+                <li>
+                  Search checks can be reversed by starting the name with{' '}
+                  <code>~</code>. If this is done, the check will only be
+                  satisfied if the fields being searched do <strong>NOT</strong>{' '}
+                  contain any of the options.
+                </li>
+                <li>
+                  Search checks can be combined by joining them with{' '}
+                  <code>+</code>. If this is done, the check will be satisfied
+                  if <strong>ANY</strong> of the fields joined together contain
+                  one of the options.
+                </li>
+                <li>
+                  Search checks are <strong>case-insensitive</strong> by
+                  default.
+                </li>
+                <li>
+                  Same search checks can be applied by adding{' '}
+                  <code>#(number)</code> behind the checks. If you filter a post
+                  with ‘red’ <strong>AND</strong> ‘blue’ in the title:
+                </li>
+              </ul>
             </div>
             <div className='code'>
-              <strong>body</strong>: ['keyword2']
+              title#1: [‘red’] <br />
+              title#2: [‘blue’]
             </div>
-            <div className='text'>
-              If you want to filter posts with "keyword3" in title{' '}
-              <strong>OR</strong> body
-            </div>
-            <div className='code'>
-              <strong>title+body</strong>: ['keyword3']
-            </div>
-            <Alert
-              message={
-                <div>
-                  Keyword filters are <strong>case-insensitive</strong> by
-                  default
-                </div>
-              }
-              type='warning'
-              showIcon
-              className='my-1'
-            />
-            <Alert
-              message={
-                <div>
-                  "Don't forget a <strong>space</strong> after colon!"
-                </div>
-              }
-              type='warning'
-              showIcon
-              className='my-1'
-            />
+            <div className='text'>Available fields to check against</div>
+            <ul>
+              <li>
+                <code>title</code> - the post's title
+              </li>
+              <li>
+                <code>body</code> - the full text of the post
+              </li>
+            </ul>
           </TabPane>
-          <TabPane tab='Logics' key='1'>
-            <div className='category'>Logics</div>
+          <TabPane tab='Matching Modifiers' key='2'>
+            <div className='category'>Matching Modifiers</div>
             <div className='text'>
-              If you want to filter posts with “keyword1” <strong>OR</strong>{' '}
-              “keyword2”
+              These modifiers change how a search check behaves. They can be
+              used to ensure that the field being searched starts with the
+              word/phrase instead of just including it, allow you to define
+              regular expressions, etc. To specify modifiers for a check, put
+              the modifiers in parentheses after the check's name. For example,
+              a body+title check with the includes and regex modifiers would
+              look like:
             </div>
             <div className='code'>
-              body: [‘keyword1’<strong>,</strong> ‘keyword2’]
+              body+title (includes, regex): [‘whatever’, ‘who cares?’]
             </div>
-            <div className='text'>
-              If you want to filter posts with “keyword1” <strong>AND</strong>{' '}
-              “keyword2”
-            </div>
-            <div className='code'>
-              <div>
-                body<strong>#1</strong>: ['keyword1']
-              </div>
-              <div>
-                body<strong>#2</strong>: ['keyword2']
-              </div>
-            </div>
-            <div className='text'>
-              If you want to filter posts <strong>without</strong> “keyword3”
-            </div>
-            <div className='code'>
-              <strong>~</strong>body: [‘keyword3’]
-            </div>
-            <div className='text'>
-              If you want to filter posts with “keyword1” <strong>OR</strong>{' '}
-              “keyword2” <strong>AND without</strong> “keyword3”
-            </div>
-            <div className='code'>
-              <div>
-                body<strong>#1</strong>: ['keyword1', 'keyword2']
-              </div>
-              <div>
-                <strong>~</strong>body<strong>#2</strong>: ['keyword3']
-              </div>
-            </div>
+            <ul>
+              <li>
+                <code>includes</code> - searches for the text, regardless of
+                whether it is included inside other words
+              </li>
+              <li>
+                <code>regex</code> - considers the text being searched for to be
+                a regular expression (using{' '}
+                <a
+                  href='https://docs.python.org/2/library/re.html#regular-expression-syntax'
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                >
+                  standard Python regex syntax
+                </a>
+                ), instead of literal text to find
+              </li>
+              <li>
+                <code>case-sensitive</code> - makes the search case-sensitive,
+                so text with different capitalization than the search value(s)
+                will not be considered a match
+              </li>
+            </ul>
           </TabPane>
-          <TabPane tab='Modifiers' key='2'>
-            <div className='category'>Modifiers</div>
-            <div className='text'>
-              Modifiers change how the keyword filter behaves.
-            </div>
-
-            <div className='code'>
-              body (<i>Modifier 1</i>, <i>Modifier 2</i>) : [‘keyword1’]
-            </div>
-            <div>
-              <code>includes</code> : searches for the text, regardless of
-              whether it is included inside other words
-            </div>
-
-            <div>
-              <code>case-sensitive</code> : makes the filter case-sensitive
-            </div>
-            <div>
-              <code>regex</code> : considers the text being searched for to be a
-              regular expression
-            </div>
-            <Alert
-              message={
-                <div>
-                  Keyword filters are <strong>case-insensitive</strong> by
-                  default
-                </div>
-              }
-              type='warning'
-              showIcon
-              className='my-1'
-            />
-            <div className='text'>
-              If you filter the posts with words that includes “Sunny”.
-            </div>
-            <div className='code'>
-              body (includes, case-sensitive) : [‘Sunny’]
-            </div>
-          </TabPane>
-          <TabPane tab='Multiple filters' key='3'>
-            <div className='category'>Multiple rules</div>
-            <div className='text'>
-              You can set <strong>multiple rules</strong> in a configuration.
-            </div>
-            <div className='mt-2'>
-              <code>---</code> : line separating two rules
-            </div>
-            <div>
-              <code>#</code> : everything after a # on a line will be ignored
-            </div>
-            <div className='text'>
-              This configuration can filter posts with colors{' '}
-              <strong>OR</strong> animals
-            </div>
-            <div className='code'>
-              <div>
-                <i># for filtering colors</i>
-              </div>
-              <div>body: ['red', 'blue', 'green']</div>
-              <div>---</div>
-              <div>
-                <i># for filtering animals</i>
-              </div>
-              <div>body: ['lion', 'tiger', 'elephant']</div>
-              <div>---</div>
-            </div>
-          </TabPane>
-          <TabPane tab='Regex Cheatsheet' key='4'>
+          <TabPane tab='Regex' key='3'>
             <div className='category'>Regular Expression (Regex)</div>
+            <div className='text'>
+              Useful regular expressions for filtering patterns
+            </div>
             <div className='sub'>Wildcards</div>
 
             <table className='table-auto border-collapse border'>
@@ -355,14 +339,17 @@ const GuideDiv = styled.div`
     font-style: italic;
     text-decoration: underline;
   }
-  strong {
-    color: red;
-  }
+
   i {
     color: gray;
   }
   code {
     background-color: #edeff1;
+    padding: 0rem 0.25rem;
+  }
+  ul {
+    padding-left: 2rem;
+    list-style-type: disc;
   }
   td {
     border: 1px solid gray;

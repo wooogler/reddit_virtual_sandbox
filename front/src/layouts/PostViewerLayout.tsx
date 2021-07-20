@@ -525,7 +525,7 @@ function PostViewerLayout(): ReactElement {
                   ? 'asking how to work as a software engineer without a CS relevant degree.'
                   : task.startsWith('B')
                   ? 'that are related to or mention covid-19.'
-                  : 'stress in your working space'}
+                  : 'about stress in your working space'}
               </div>
             </div>
           </div>
