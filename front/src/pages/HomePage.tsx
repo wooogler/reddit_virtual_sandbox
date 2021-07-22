@@ -29,7 +29,8 @@ function HomePage(): ReactElement {
 
   useEffect(() => {
     logMutation.mutate({ task, info: 'access system' });
-  }, [task])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [task]);
 
   useEffect(() => {
     const fetchGraph = async () => {

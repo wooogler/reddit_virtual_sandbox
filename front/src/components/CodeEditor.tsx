@@ -8,11 +8,9 @@ import request from '@utils/request';
 import { useMutation, useQueryClient } from 'react-query';
 import { Config } from '@typings/db';
 import { useStore } from '@utils/store';
-import GuideModal from './GuideModal';
 import {
   ClearOutlined,
   EditOutlined,
-  InfoCircleOutlined,
   PlayCircleOutlined,
   SaveOutlined,
 } from '@ant-design/icons';
