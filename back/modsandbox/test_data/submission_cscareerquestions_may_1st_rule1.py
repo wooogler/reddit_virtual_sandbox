@@ -1,0 +1,50 @@
+[
+  {
+    "id":"n3odxx",
+    "author_name":"NationalTechnician7",
+    "title":"Is it still \"a thing\" for physics students to transition to CS?",
+    "body":"Greetings from the brutal but beautiful world of physics where starry-eyed dreamers soon find out that 100s of people compete for one academic position and that the transition to industry is hard because for every one of you, there are 5 trained engineers with specific engineering degrees! \n\nIn all seriousness, I'm a bit worried about the job outlook I will have with a physics\/econ BS and it's too late to now change my major. I'm an international student and as such my school limits me in how much time I can take. I'm thus thinking about how I might be able to get into CS as an alternative career option, despite having majored in physics. \n\nI know that physicists used to easily Segway into CS, but today, there are more than enough applicants who bring CS degrees to the table. Thus, I'm wondering how common \/ possible it is for a physics BS to go into a CS master's. \n\nHow possible is that? Any suggestion? (I'm currently minoring in CS but don't know if that's enough...)",
+    "created_utc":1620018298,
+    "name":"t3_n3odxx",
+    "permalink":"\/r\/cscareerquestions\/comments\/n3odxx\/is_it_still_a_thing_for_physics_students_to\/",
+    "author_link_karma":534,
+    "author_comment_karma":390,
+    "score":0,
+    "author_created_utc":1586727248,
+    "rule_1":1,
+    "rule_2":0,
+    "author":"NationalTechnician7"
+  },
+  {
+    "id":"n4fyeh",
+    "author_name":"Different-Quiet-4818",
+    "title":"Found passion in CS in Senior Year",
+    "body":"Current college senior with a trimester left to graduate. I took my first CS class in my senior year and have now completed the data structures class in addition to another applied coding class.\n\nI think CS is pretty fun and I'm rather certain that I'd like to be a SWE. I've started leetcoding and have now about \\~25 easy question and think they are a tad fun albeit struggle through it.\n\nWhat should I do to be a SWE? Do I go for a masters in CS? Should I try to delay my graduation by a trimester (i.e. grad by end of 2021), do a minor in CS? Will companies even bother with someone with no CS internships and little CS classes under the belt?",
+    "created_utc":1620102605,
+    "name":"t3_n4fyeh",
+    "permalink":"\/r\/cscareerquestions\/comments\/n4fyeh\/found_passion_in_cs_in_senior_year\/",
+    "author_link_karma":1,
+    "author_comment_karma":0,
+    "score":2,
+    "author_created_utc":1620102169,
+    "rule_1":1,
+    "rule_2":0,
+    "author":"Different-Quiet-4818"
+  },
+  {
+    "id":"n47rmf",
+    "author_name":"yvalent",
+    "title":"What to self-learn to get a job?",
+    "body":"I have just graduated with an engineering degree (not software) but I took a couple of programming courses (Intro to Programming and DS&Algos). I decided I wanted to go into software as a career rather than what I studied towards as I have a knack for it and enjoy it.\n\nI\u2019m currently doing this [Udemy course on Web Development](https:\/\/www.udemy.com\/course\/the-ultimate-fullstack-web-development-bootcamp\/) which claims to be enough to land a job.\nI\u2019m hoping for some unbiased opinions, is this enough to get an entry level job? It has a couple of trivial projects too and I\u2019m willing to make one or two personal ones afterwards to boost my resume if needed.\n\n\nI hope to later learn more through my job or at least find more guidance as to what to learn by being in the industry, but I really just want to get my foot in the door. If that course is not enough, what else would you recommend? I really enjoy problem solving and the like so I\u2019m more than willing to learn more technical\/theoretical stuff too that isn\u2019t a part of web dev.\n\nP.S. I\u2019m based in Canada if that changes anything",
+    "created_utc":1620077035,
+    "name":"t3_n47rmf",
+    "permalink":"\/r\/cscareerquestions\/comments\/n47rmf\/what_to_selflearn_to_get_a_job\/",
+    "author_link_karma":4,
+    "author_comment_karma":9,
+    "score":0,
+    "author_created_utc":1543187413,
+    "rule_1":1,
+    "rule_2":0,
+    "author":"yvalent"
+  }
+]
