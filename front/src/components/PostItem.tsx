@@ -157,7 +157,7 @@ function PostItem({
       }
       logMutation.mutate({
         task,
-        info: searchQuery ? 'move searched' : 'move',
+        info: searchQuery ? 'move searched' : 'move post',
         move_to: place,
         post_id: post.id,
         content: `title: ${post.title}\nbody: ${post.body}`,

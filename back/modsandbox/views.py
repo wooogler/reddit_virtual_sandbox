@@ -134,7 +134,7 @@ class PostViewSet(viewsets.ModelViewSet):
 
         else:  # for lab study
             with open(os.path.join(os.path.dirname(__file__),
-                                   'test_data/submission_cscareerquestions_may_1st_labeled.json')) as normal_json:
+                                   'test_data/submission_cscareerquestions_may_1st_rest.json')) as normal_json:
                 normal = json.load(normal_json)
                 normal_json.close()
 
@@ -399,6 +399,13 @@ class ConfigViewSet(viewsets.ModelViewSet):
     def all(self, request):
         self.queryset.filter(user=request.user).delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @action(methods=['post'], detail=False)
+    def submit(self, request):
+        code = request.data.get('code')
+        task = request.data.get('task')
+        Config.objects.create(user=request.user, code=code, task=task)
+        return Response(status=status.HTTP_201_CREATED)
 
 
 class StatViewSet(PostViewSet):

@@ -26,7 +26,7 @@ function SubmitModal({ onCancel, visible }: Props): ReactElement {
   const [isVisibleConfirmModal, setIsVisibleConfirmModal] = useState(false);
   const submitConfig = ({ code }: { code: string }) =>
     request<Config>({
-      url: '/configs/',
+      url: '/configs/submit/',
       method: 'POST',
       data: { code, task },
     });
@@ -38,7 +38,6 @@ function SubmitModal({ onCancel, visible }: Props): ReactElement {
         task,
         info: 'submit config',
         content: code,
-        config_id: res.data.id,
       });
     },
   });

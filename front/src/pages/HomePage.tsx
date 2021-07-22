@@ -7,6 +7,7 @@ import PostViewerLayout from '@layouts/PostViewerLayout';
 import AnalysisLayout from '@layouts/AnalysisLayout';
 import { useStore } from '@utils/store';
 import dayjs from 'dayjs';
+import useLogMutation from '@hooks/useLogMutation';
 
 function HomePage(): ReactElement {
   const availableCondition = ['baseline', 'sandbox', 'modsandbox'];
@@ -24,6 +25,11 @@ function HomePage(): ReactElement {
   // const username = data && data.username;
 
   const { changeDateRange } = useStore();
+  const logMutation = useLogMutation();
+
+  useEffect(() => {
+    logMutation.mutate({ task, info: 'access system' });
+  }, [task])
 
   useEffect(() => {
     const fetchGraph = async () => {

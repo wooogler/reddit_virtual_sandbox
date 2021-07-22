@@ -28,7 +28,7 @@ interface Props {
 function CodeEditor({ placeholder }: Props): ReactElement {
   const queryClient = useQueryClient();
   const [code, setCode] = useState('');
-  const [visibleGuideModal, setVisibleGuideModal] = useState(false);
+  
   const logMutation = useLogMutation();
   const { condition, task } = useParams<{ condition: Condition; task: Task }>();
 
@@ -117,19 +117,6 @@ function CodeEditor({ placeholder }: Props): ReactElement {
       <div className='flex mb-2 items-center flex-wrap'>
         <PanelName>AutoMod Configuration</PanelName>
         <div className='flex ml-auto'>
-          <Button
-            icon={<InfoCircleOutlined />}
-            className='mr-2'
-            onClick={() => setVisibleGuideModal(true)}
-            size='small'
-            data-tour='guide'
-          >
-            Guide
-          </Button>
-          <GuideModal
-            visible={visibleGuideModal}
-            onCancel={() => setVisibleGuideModal(false)}
-          />
           {condition !== 'baseline' ? (
             <div className='flex'>
               <Button

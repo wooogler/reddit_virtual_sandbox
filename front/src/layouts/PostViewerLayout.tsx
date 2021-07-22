@@ -1,4 +1,8 @@
-import { RedditOutlined, SearchOutlined } from '@ant-design/icons';
+import {
+  InfoCircleOutlined,
+  RedditOutlined,
+  SearchOutlined,
+} from '@ant-design/icons';
 
 import PostList from '@components/PostList';
 import SearchModal from '@components/SearchModal';
@@ -21,6 +25,7 @@ import { Split } from '@geoffcox/react-splitter';
 import { useParams } from 'react-router-dom';
 import { Condition, Task } from '@typings/types';
 import useLogMutation from '@hooks/useLogMutation';
+import GuideModal from '@components/GuideModal';
 
 function PostViewerLayout(): ReactElement {
   const queryClient = useQueryClient();
@@ -49,6 +54,7 @@ function PostViewerLayout(): ReactElement {
 
   const [isSearchVisible, setIsSearchVisible] = useState(false);
   const [isSubmitVisible, setIsSubmitVisible] = useState(false);
+  const [visibleGuideModal, setVisibleGuideModal] = useState(false);
   const targetQuery = useQuery<IPost[], AxiosError>(
     [
       'target',
@@ -312,7 +318,6 @@ function PostViewerLayout(): ReactElement {
       queryClient.invalidateQueries('not filtered');
       queryClient.invalidateQueries('stats/filtered');
       queryClient.invalidateQueries('stats/not_filtered');
-      logMutation.mutate({ task, info: 'import' });
     },
   });
 
@@ -350,7 +355,7 @@ function PostViewerLayout(): ReactElement {
         <div className='w-full flex items-center flex-wrap '>
           <div className='text-2xl ml-2 flex items-center'>
             <RedditOutlined style={{ color: 'orangered' }} />
-            <div className='ml-2'>Posts on r/cscareerquestions</div>
+            <div className='ml-2'>Posts on Subreddits</div>
             {/* <div className='text-sm ml-2'>in May 2021</div> */}
             <Input
               prefix={<SearchOutlined />}
@@ -432,6 +437,18 @@ function PostViewerLayout(): ReactElement {
               </Radio.Group>
             </div>
             <div className='flex'>
+              <Button
+                icon={<InfoCircleOutlined />}
+                className='ml-2'
+                onClick={() => setVisibleGuideModal(true)}
+                data-tour='guide'
+              >
+                Guide
+              </Button>
+              <GuideModal
+                visible={visibleGuideModal}
+                onCancel={() => setVisibleGuideModal(false)}
+              />
               {process.env.NODE_ENV === 'development' &&
                 (totalCount.notFilteredCount !== 0 ? (
                   <Button
@@ -481,7 +498,7 @@ function PostViewerLayout(): ReactElement {
               label={
                 totalCount.filteredCount !== 0
                   ? 'Not filtered by AutoMod'
-                  : 'Posts in Subreddits'
+                  : 'Posts on Subreddits'
               }
               description={
                 order === '-created_utc'
