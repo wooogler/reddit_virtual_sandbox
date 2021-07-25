@@ -31,11 +31,7 @@ function BarRate({ total, part, className, place }: Props): ReactElement {
     >
       <div className='bg-gray-100 border-gray-300 relative w-1/3 h-full hover:border-gray-400 border-2 flex items-end'>
         <PartDiv rate={(part / total) * 100} className={className} />
-        {part / total < 0.1 && (
-          <NumberDiv className={className.replace('bg', 'text')}>
-            {part}
-          </NumberDiv>
-        )}
+        <NumberDiv className='text-gray-500'>{part}</NumberDiv>
       </div>
     </Tooltip>
   );

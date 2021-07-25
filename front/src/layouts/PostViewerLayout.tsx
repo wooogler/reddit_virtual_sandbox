@@ -11,7 +11,7 @@ import TargetList from '@components/TargetList';
 import { IPost, PaginatedPosts } from '@typings/db';
 import request from '@utils/request';
 import { useStore } from '@utils/store';
-import { invalidatePostQueries } from '@utils/util';
+import { invalidatePostQueries, isFiltered } from '@utils/util';
 import { Button, Input, Radio, RadioChangeEvent, Tooltip } from 'antd';
 import { AxiosError } from 'axios';
 import { ReactElement, useCallback, useEffect, useState } from 'react';
@@ -228,7 +228,7 @@ function PostViewerLayout(): ReactElement {
           start_date: start_date?.toDate(),
           end_date: end_date?.toDate(),
           post_type: post_type === 'all' ? undefined : post_type,
-          filtered: condition !== 'baseline' ? false : undefined,
+          // filtered: condition !== 'baseline' ? false : undefined,
           source: source === 'all' ? undefined : source,
         },
       });
@@ -510,6 +510,7 @@ function PostViewerLayout(): ReactElement {
               query={notFilteredQuery}
               isLoading={
                 notFilteredQuery.isLoading ||
+                filteredQuery.isLoading ||
                 !!queryClient.isMutating({ mutationKey: 'fpfn' }) ||
                 importTestPostsMutation.isLoading
               }
@@ -528,6 +529,7 @@ function PostViewerLayout(): ReactElement {
                 }
                 query={filteredQuery}
                 isLoading={
+                  notFilteredQuery.isLoading ||
                   filteredQuery.isLoading ||
                   !!queryClient.isMutating({ mutationKey: 'fpfn' })
                 }
@@ -553,13 +555,13 @@ function PostViewerLayout(): ReactElement {
             </div>
             <div className='flex text-sm flex-wrap ml-auto'>
               <div>
-                Goal: Create AutoMod configuration to only filter every posts
+                Task: Create AutoMod configuration to detect any and every posts
               </div>
               <div className='font-bold ml-1 text-red-500'>
                 {task.startsWith('A')
-                  ? 'asking how to work as a software engineer without a CS relevant degree.'
+                  ? 'asking "how to work as a software engineer without a CS relevant degree?"'
                   : task.startsWith('B')
-                  ? 'that are related to or mention covid-19.'
+                  ? 'that are related to or mention covid.'
                   : 'about stress in your working space'}
               </div>
             </div>
@@ -577,7 +579,7 @@ function PostViewerLayout(): ReactElement {
             posts={
               condition === 'sandbox'
                 ? targetQuery.data?.filter(
-                    (post) => post.matching_configs.length === 0
+                    (post) => !isFiltered(post, config_id)
                   )
                 : targetQuery.data
             }
@@ -601,8 +603,8 @@ function PostViewerLayout(): ReactElement {
               posts={
                 condition === 'modsandbox'
                   ? exceptQuery.data
-                  : targetQuery.data?.filter(
-                      (post) => post.matching_configs.length !== 0
+                  : targetQuery.data?.filter((post) =>
+                      isFiltered(post, config_id)
                     )
               }
               isLoading={addTestCaseMutation.isLoading}

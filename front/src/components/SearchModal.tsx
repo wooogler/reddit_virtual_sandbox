@@ -47,7 +47,8 @@ function SearchModal({ visible, onCancel, query }: Props): ReactElement {
     >
       <div className='text-2xl font-bold'>{query}</div>
       <div>
-        Search results on <b>r/cscareerquestions</b>
+        <b>{searchQuery.data ? searchQuery.data.length : 0}</b> results on the
+        system
       </div>
       <div className='flex text-xs items-center'>
         <div>SORT BY</div>

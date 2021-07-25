@@ -298,6 +298,7 @@ class TargetViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         full_name = request.data.get('full_name')
         use_author = request.data.get('use_author')
+        task = request.data.get('task')
         if full_name:
             r = RedditHandler(request.user)
             target_post = r.get_post_with_id(full_name)
@@ -308,7 +309,7 @@ class TargetViewSet(viewsets.ModelViewSet):
             if serializer.is_valid(raise_exception=True):
                 new_post = serializer.save()
                 posts = Post.objects.filter(id=new_post.id)
-        configs = Config.objects.filter(user=request.user)
+        configs = Config.objects.filter(user=request.user, task=task)
         for config in configs:
             apply_config(config, posts, False)
         return Response(status=status.HTTP_200_OK)

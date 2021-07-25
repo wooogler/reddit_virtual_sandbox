@@ -26,7 +26,7 @@ interface Props {
 function CodeEditor({ placeholder }: Props): ReactElement {
   const queryClient = useQueryClient();
   const [code, setCode] = useState('');
-  
+
   const logMutation = useLogMutation();
   const { condition, task } = useParams<{ condition: Condition; task: Task }>();
 
@@ -38,6 +38,10 @@ function CodeEditor({ placeholder }: Props): ReactElement {
   useEffect(() => {
     setCode(storedCode);
   }, [storedCode]);
+
+  useEffect(() => {
+    setCode('');
+  }, [task]);
 
   const addConfig = ({ code }: { code: string }) =>
     request<Config>({
@@ -173,7 +177,7 @@ function CodeEditor({ placeholder }: Props): ReactElement {
           setOptions={{
             showGutter: true,
             fontFamily: 'Courier',
-            fontSize: '18px',
+            fontSize: '15px',
           }}
           placeholder={placeholder}
           readOnly={isSaved}

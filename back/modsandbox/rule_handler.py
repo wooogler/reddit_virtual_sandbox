@@ -88,7 +88,7 @@ def apply_config(config, posts, check_create):
         if check_create:
             rule = Rule.objects.create(user=config.user, config=config, code=section)
         else:
-            rule = Rule.objects.get(user=config.user, config=config, code=section)
+            rule = Rule.objects.get(user=config.user, config=config)
         try:
             rules = yaml.safe_load(section)
         except Exception as e:
@@ -104,6 +104,8 @@ def apply_config(config, posts, check_create):
             ], 
         }
         """
+        if rules is None:
+            continue
         match_patterns = get_match_patterns(rules)
         checks = []
         for i, (key, match_patterns) in enumerate(match_patterns.items()):
@@ -142,14 +144,13 @@ def apply_config(config, posts, check_create):
             """
             for field in parsed_key["fields"]:
                 key = compose_key(field, parsed_key["match"], parsed_key["other"], parsed_key["not"])
-
                 if check_create:
                     check_object = Check.objects.create(
                         rule=rule,
                         fields=key,
                         word=check["word"],
                         line=check["line"],
-                        code=check["key"] + ": ['" + check["word"] + "']",
+                        code=key + ": ['" + check["word"] + "']",
                     )
                 else:
                     check_object = Check.objects.get(
@@ -265,6 +266,7 @@ def get_match_patterns(rules):
     # rules = {'~body+title#1 (includes, regex)': ['hello'], '~body#2': ['hi']}
     match_fields = set()
     match_patterns = {}
+    print(rules)
 
     for key in rules:
         parsed_key = parse_fields_key(key)

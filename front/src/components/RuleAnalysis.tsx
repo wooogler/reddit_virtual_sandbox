@@ -53,87 +53,95 @@ function RuleAnalysis(): ReactElement {
     <div className='flex flex-col p-2 relative'>
       <OverlayLoading isLoading={configLoading} description='loading...' />
       <Collapse accordion activeKey={config_id} bordered={false}>
-        {configData?.map((config) => (
-          <React.Fragment key={config.id}>
-            {config.id === config_id && (
-              <div className='font-bold'>Current Configuration</div>
-            )}
-            <Panel
-              showArrow={false}
-              key={config.id}
-              header={
-                <RuleItem
-                  rule={config}
+        {configData &&
+          configData
+            .filter((config, index) => index === 0)
+            .map((config) => (
+              <React.Fragment key={config.id}>
+                {/* {config.id === config_id && (
+                <div className='font-bold'>Current Configuration</div>
+              )} */}
+                <Panel
+                  showArrow={false}
                   key={config.id}
-                  ruleType='config'
-                  checked={checkedConfig(config.id)}
-                  selectedIds={selectedHighlights.map((item) => item.config_id)}
-                />
-              }
-            >
-              <div className='ml-4'>
-                <Collapse accordion activeKey={rule_id} bordered={false}>
-                  <div className='font-bold'>Rules - Click for Details</div>
-                  {config.rules.map((rule) => (
-                    <Panel
-                      key={rule.id}
-                      showArrow={false}
-                      header={
-                        <RuleItem
-                          rule={rule}
+                  header={
+                    <RuleItem
+                      rule={config}
+                      key={config.id}
+                      ruleType='config'
+                      checked={checkedConfig(config.id)}
+                      selectedIds={selectedHighlights.map(
+                        (item) => item.config_id
+                      )}
+                    />
+                  }
+                >
+                  <div className='ml-4'>
+                    <Collapse accordion activeKey={rule_id} bordered={false}>
+                      <div className='font-bold'>Rules - Click for Details</div>
+                      {config.rules.map((rule) => (
+                        <Panel
                           key={rule.id}
-                          ruleType='rule'
-                          checked={checkedRule(rule.id)}
-                          selectedIds={selectedHighlights.map(
-                            (item) => item.rule_id
-                          )}
-                        />
-                      }
-                      className='custom'
-                    >
-                      <div className='ml-8'>
-                        <div className='font-bold'>Keywords</div>
-                        {rule.checks.map((check) => (
-                          <RuleItem
-                            rule={check}
-                            key={check.id}
-                            className='my-1'
-                            ruleType='check'
-                            checked={check.id === check_id}
-                            selectedIds={selectedHighlights.map(
-                              (item) => item.check_id
-                            )}
-                          />
-                        ))}
-                        {rule.check_combinations.length !== 1 && (
-                          <>
-                            <div className='font-bold'>
-                              Keyword Combintations
-                            </div>
-                            {rule.check_combinations.map((checkCombination) => (
+                          showArrow={false}
+                          header={
+                            <RuleItem
+                              rule={rule}
+                              key={rule.id}
+                              ruleType='rule'
+                              checked={checkedRule(rule.id)}
+                              selectedIds={selectedHighlights.map(
+                                (item) => item.rule_id
+                              )}
+                            />
+                          }
+                          className='custom'
+                        >
+                          <div className='ml-8'>
+                            <div className='font-bold'>Keywords</div>
+                            {rule.checks.map((check) => (
                               <RuleItem
-                                rule={checkCombination}
-                                key={checkCombination.id}
+                                rule={check}
+                                key={check.id}
                                 className='my-1'
-                                ruleType='checkCombination'
-                                checked={
-                                  checkCombination.id === check_combination_id
-                                }
-                                selectedIdsArray={selectedHighlights.map(
-                                  (item) => item.check_combination_ids
+                                ruleType='check'
+                                checked={check.id === check_id}
+                                selectedIds={selectedHighlights.map(
+                                  (item) => item.check_id
                                 )}
                               />
                             ))}
-                          </>
-                        )}
-                      </div>
-                    </Panel>
-                  ))}
-                </Collapse>
-              </div>
-            </Panel>
-          </React.Fragment>
-        ))}
+                            {rule.check_combinations.length !== 1 && (
+                              <>
+                                <div className='font-bold'>
+                                  Keyword Combintations
+                                </div>
+                                {rule.check_combinations.map(
+                                  (checkCombination) => (
+                                    <RuleItem
+                                      rule={checkCombination}
+                                      key={checkCombination.id}
+                                      className='my-1'
+                                      ruleType='checkCombination'
+                                      checked={
+                                        checkCombination.id ===
+                                        check_combination_id
+                                      }
+                                      selectedIdsArray={selectedHighlights.map(
+                                        (item) => item.check_combination_ids
+                                      )}
+                                    />
+                                  )
+                                )}
+                              </>
+                            )}
+                          </div>
+                        </Panel>
+                      ))}
+                    </Collapse>
+                  </div>
+                </Panel>
+              </React.Fragment>
+            ))}
       </Collapse>
     </div>
   );

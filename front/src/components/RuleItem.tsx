@@ -129,10 +129,10 @@ function RuleItem({
       }}
       onClick={() => onClickRadio()}
     >
-      <div className={clsx('flex-1 font-mono whitespace-pre-wrap ml-2')}>
+      <div className={clsx('flex-1 font-mono whitespace-pre-wrap ml-2 text-xs')}>
         {rule.code}
       </div>
-      {ruleType === 'config' && (
+      {process.env.NODE_ENV === 'development' && ruleType === 'config' && (
         // <Popconfirm title='Are you sure?' onConfirm={onClickDelete}>
         <Button
           icon={<DeleteOutlined />}

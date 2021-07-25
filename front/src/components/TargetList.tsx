@@ -84,8 +84,10 @@ function TargetList({
       <div className='flex items-center flex-wrap'>
         <PanelName>{label}</PanelName>
         <div className='text-sm text-gray-400'>
-          {condition !== 'baseline'
+          {condition === 'modsandbox'
             ? `(${stat.part}/${stat.total}) ${(rate * 100).toFixed(2)} %`
+            : condition === 'sandbox'
+            ? `${posts ? posts.length : 0} Posts`
             : `${stat.total} Posts`}
         </div>
         {onSubmit && place && (

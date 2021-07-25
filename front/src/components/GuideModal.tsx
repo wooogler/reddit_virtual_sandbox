@@ -1,7 +1,8 @@
-import { Alert, Modal, Tabs } from 'antd';
+import { Modal, Tabs } from 'antd';
 import React, { ReactElement } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
+import './collapse.css';
 
 interface Props {
   visible: boolean;
@@ -15,7 +16,7 @@ function GuideModal({ visible, onCancel }: Props): ReactElement {
 
   return (
     <Modal
-      title='Configuration Guide'
+      title='Guide'
       visible={visible}
       onCancel={onCancel}
       centered
@@ -23,167 +24,144 @@ function GuideModal({ visible, onCancel }: Props): ReactElement {
       width={800}
     >
       <GuideDiv>
-        <Tabs defaultActiveKey='configuration' centered>
+        <Tabs defaultActiveKey='configuration' centered size='small'>
           <TabPane tab='Configuration Guide' key='configuration'>
-            <Tabs defaultActiveKey='0' centered>
-              <TabPane tab='Search Checks' key='0'>
-                <div className='category'>Search Checks</div>
-                <div className='text'>
-                  If you want to filter posts with "keyword1" in{' '}
-                  <strong>"title"</strong>
-                </div>
-                <div className='code'>
-                  <strong>title</strong>: ['keyword1']
+            <Tabs defaultActiveKey='0' centered size='small'>
+              <TabPane tab='1. Detection of posts (1)' key='0'>
+                <div className='category'>
+                  1. Detection of posts containing particular keywords (1)
                 </div>
                 <div className='text'>
-                  If you want to filter posts with "keyword2" in{' '}
-                  <strong>"body"</strong>
+                  1) Posts with a <code>"title"</code> that contains{' '}
+                  <code>"keyword1"</code>:
+                </div>
+                <div className='code'>title: ['keyword1']</div>
+                <div className='text'>
+                  2) Posts with a <code>"title"</code> that contains{' '}
+                  <code>"keyword2"</code>:
+                </div>
+                <div className='code'>title: ['keyword2']</div>
+                <div className='text'>
+                  3) Posts with a <code>"title"</code> <strong>OR</strong> a{' '}
+                  <code>"body"</code> that contains <code>"keyword3"</code>:
+                </div>
+                <div className='code'>title+body: ['keyword3']</div>
+                <div className='text'>
+                  4) Posts with a <code>"body"</code> that contains{' '}
+                  <code>"keyword1"</code> <strong>OR</strong>{' '}
+                  <code>"keyword2"</code>:
+                </div>
+                <div className='code'>body: ['keyword1', 'keyword2']</div>
+                <div className='text'>
+                  5) Posts with a <code>"body"</code> that contains{' '}
+                  <code>"keyword1"</code> <strong>AND</strong>{' '}
+                  <code>"keyword2"</code>:
                 </div>
                 <div className='code'>
-                  <strong>body</strong>: ['keyword2']
+                  <div>body#1: ['keyword1']</div>
+                  <div>body#2: ['keyword2']</div>
                 </div>
                 <div className='text'>
-                  If you want to filter posts with "keyword3" in title{' '}
-                  <strong>OR</strong> body
+                  6) Posts with a <code>"body"</code> that does{' '}
+                  <strong>NOT</strong> contain <code>"keyword3"</code>:
                 </div>
-                <div className='code'>
-                  <strong>title+body</strong>: ['keyword3']
-                </div>
-                <Alert
-                  message={
-                    <div>
-                      Keyword filters are <strong>case-insensitive</strong> by
-                      default
-                    </div>
-                  }
-                  type='warning'
-                  showIcon
-                  className='my-1'
-                />
-                <Alert
-                  message={
-                    <div>
-                      "Don't forget a <strong>space</strong> after colon!"
-                    </div>
-                  }
-                  type='warning'
-                  showIcon
-                  className='my-1'
-                />
+                <div className='code'>~body: ['keyword3']</div>
               </TabPane>
-              <TabPane tab='Logics' key='1'>
-                <div className='category'>Logics</div>
-                <div className='text'>
-                  If you want to filter posts with “keyword1”{' '}
-                  <strong>OR</strong> “keyword2”
-                </div>
-                <div className='code'>
-                  body: [‘keyword1’<strong>,</strong> ‘keyword2’]
+              <TabPane tab='1. Detection of posts (2)' key='1'>
+                <div className='category'>
+                  1. Detection of posts containing particular keywords (2)
                 </div>
                 <div className='text'>
-                  If you want to filter posts with “keyword1”{' '}
-                  <strong>AND</strong> “keyword2”
+                  7) Posts with a <code>"body"</code> that contains{' '}
+                  <code>"keyword1"</code> <strong>OR</strong>{' '}
+                  <code>"keyword2"</code>
+                  <strong>BUT NOT</strong> <code>"keyword3"</code>:
                 </div>
                 <div className='code'>
-                  <div>
-                    body<strong>#1</strong>: ['keyword1']
-                  </div>
-                  <div>
-                    body<strong>#2</strong>: ['keyword2']
-                  </div>
+                  <div>body#1: ['keyword1', 'keyword2']</div>
+                  <div>~body#2: ['keyword3']</div>
                 </div>
                 <div className='text'>
-                  If you want to filter posts <strong>without</strong>{' '}
-                  “keyword3”
+                  8) Note that all the operations are{' '}
+                  <strong>case-insensitive</strong> by default. The following
+                  two are the same:
                 </div>
                 <div className='code'>
-                  <strong>~</strong>body: [‘keyword3’]
+                  <div>title+body: ['ASAP']</div>
+                  <div>title+body: ['asap']</div>
                 </div>
                 <div className='text'>
-                  If you want to filter posts with “keyword1”{' '}
-                  <strong>OR</strong> “keyword2” <strong>AND without</strong>{' '}
-                  “keyword3”
+                  9) Rules must be separated by a line starting with exactly{' '}
+                  <strong>3 hyphens</strong>:
                 </div>
                 <div className='code'>
-                  <div>
-                    body<strong>#1</strong>: ['keyword1', 'keyword2']
-                  </div>
-                  <div>
-                    <strong>~</strong>body<strong>#2</strong>: ['keyword3']
-                  </div>
+                  <div>title: ['hello']</div>
+                  <div>---</div>
+                  <div>body: ['hello']</div>
+                </div>
+                <div className='text'>
+                  10) Comments can be added by using <code>#</code> symbol:
+                </div>
+                <div className='code'>title+body: ['ASAP'] # correct</div>
+                <div className='text'>
+                  11) Be careful to add <strong>space</strong> after every colon
+                  (:). Otherwise, it will cause an error:
+                </div>
+                <div className='code'>
+                  <div>title+body: ['ASAP'] # correct </div>
+                  <div>title+body:['ASAP'] # incorrect</div>
                 </div>
               </TabPane>
-              <TabPane tab='Modifiers' key='2'>
-                <div className='category'>Modifiers</div>
-                <div className='text'>
-                  Modifiers change how the keyword filter behaves.
-                </div>
 
+              <TabPane tab='2. Modifiers' key='2'>
+                <div className='category'>2. Modifiers</div>
+                <div className='text'>
+                  You can also user Modifiers, which change how your
+                  configuration behave. This can be used in the following way:
+                </div>
                 <div className='code'>
                   body (<i>Modifier 1</i>, <i>Modifier 2</i>) : [‘keyword1’]
                 </div>
-                <div>
-                  <code>includes</code> : searches for the text, regardless of
-                  whether it is included inside other words
-                </div>
-
-                <div>
-                  <code>case-sensitive</code> : makes the filter case-sensitive
-                </div>
-                <div>
-                  <code>regex</code> : considers the text being searched for to
-                  be a regular expression
-                </div>
-                <Alert
-                  message={
-                    <div>
-                      Keyword filters are <strong>case-insensitive</strong> by
-                      default
-                    </div>
-                  }
-                  type='warning'
-                  showIcon
-                  className='my-1'
-                />
                 <div className='text'>
-                  If you filter the posts with words that includes “Sunny”.
-                </div>
-                <div className='code'>
-                  body (includes, case-sensitive) : [‘Sunny’]
-                </div>
-              </TabPane>
-              <TabPane tab='Multiple filters' key='3'>
-                <div className='category'>Multiple rules</div>
-                <div className='text'>
-                  You can set <strong>multiple rules</strong> in a
+                  Here are some of the modifiers you can use to write AutoMod
                   configuration.
                 </div>
-                <div className='mt-2'>
-                  <code>---</code> : line separating two rules
-                </div>
-                <div>
-                  <code>#</code> : everything after a # on a line will be
-                  ignored
+                <div className='text'>
+                  1) <code>includes</code>
                 </div>
                 <div className='text'>
-                  This configuration can filter posts with colors{' '}
-                  <strong>OR</strong> animals
+                  This is used to search for particular texts, for example, the
+                  following rule will detect a post with a body containing "an
+                  <strong>swe</strong>r".
+                </div>
+                <div className='code'>body (includes): ['swe']</div>
+                <div className='text'>
+                  2) <code>case-sensitive</code>
+                </div>
+                <div className='text'>
+                  This is used to specify <strong>case-sensitivity</strong> of
+                  operations, for example, the following rule will not detect a
+                  post with a body containing <code>"sunny"</code>.
+                </div>
+                <div className='code'>body (case-sensitive): ['Sunny']</div>
+                <div className='text'>
+                  3) <code>regex</code>
+                </div>
+                <div className='text'>
+                  You can use <code>regex</code> if you want to make your rule
+                  more sophisticated:
                 </div>
                 <div className='code'>
-                  <div>
-                    <i># for filtering colors</i>
-                  </div>
-                  <div>body: ['red', 'blue', 'green']</div>
-                  <div>---</div>
-                  <div>
-                    <i># for filtering animals</i>
-                  </div>
-                  <div>body: ['lion', 'tiger', 'elephant']</div>
-                  <div>---</div>
+                  body (regex): ['admin(istrator)?s?', 'announcements?']
                 </div>
               </TabPane>
-              <TabPane tab='Regex Cheatsheet' key='4'>
-                <div className='category'>Regular Expression (Regex)</div>
+
+              <TabPane tab='Regex Cheatsheet' key='3'>
+                <div className='category'>3. Regular Expression (Regex)</div>
+                <div>
+                  source:
+                  https://support.google.com/searchads/answer/7025149?hl=en
+                </div>
                 <div className='sub'>Wildcards</div>
 
                 <table className='table-auto border-collapse border'>
@@ -335,31 +313,48 @@ function GuideModal({ visible, onCancel }: Props): ReactElement {
             </Tabs>
           </TabPane>
           <TabPane tab='Task Guide' key='task'>
-            <Tabs defaultActiveKey='goal' centered>
-              <TabPane tab='Goal' key='goal'>
-                <div className='category'>Goal</div>
-                <div>
-                  {task === 'example'
-                    ? 'Goal Example'
-                    : task.startsWith('A')
-                    ? 'Goal A'
-                    : 'Goal B'}
-                </div>
-              </TabPane>
-              <TabPane tab='Scenario' key='scenario'>
-                <div className='category'>Scenario</div>
-                <div>
-                  {task === 'example'
-                    ? 'Scenraio Example'
-                    : task.startsWith('A')
-                    ? 'Scenario A'
-                    : 'Scenario B'}
-                </div>
+            <Tabs defaultActiveKey='task' centered size='small'>
+              <TabPane tab='Task Details' key='task details'>
+                <div className='category'>Task Details</div>
+                {task === 'example' ? (
+                  <div>Task Details</div>
+                ) : task.startsWith('A') ? (
+                  <div className='text-xl'>
+                    <div className='mt-4'>Community Rule:</div>
+                    <div className='font-bold'>
+                      Do not post questions asking “how to work as a software
+                      engineer without a CS relevant degree?” because they are
+                      asked too often and they are hard to answer questions.{' '}
+                    </div>
+                    <div className='mt-4'>
+                      Your Task: As a new moderator,{' '}
+                      <b>
+                        create an AutoMod configuration to detect any and every
+                        posts that violates above rule.
+                      </b>
+                    </div>
+                  </div>
+                ) : (
+                  <div className='text-xl'>
+                    <div className='mt-4'>Community Rule:</div>
+                    <div className='font-bold'>
+                      Add a [covid] flag to each and every post that is
+                      related to or mention covid.
+                    </div>
+                    <div className='mt-4'>
+                      Your Task: As a new moderator,{' '}
+                      <b>
+                        create an AutoMod configuration to detect any and every
+                        posts that are related to or mention covid.
+                      </b>
+                    </div>
+                  </div>
+                )}
               </TabPane>
               <TabPane tab='Example Posts' key='example'>
                 <div className='category'>Example Posts</div>
                 {task === 'example' ? (
-                  <div></div>
+                  <div>3 Example Posts</div>
                 ) : task.startsWith('A') ? (
                   <div>
                     <div className='text-base font-semibold mt-2'>
@@ -434,7 +429,6 @@ function GuideModal({ visible, onCancel }: Props): ReactElement {
 
 const GuideDiv = styled.div`
   background-color: white;
-  padding: 1rem;
   width: 100%;
   height: 80vh;
   overflow: auto;
@@ -461,6 +455,7 @@ const GuideDiv = styled.div`
     font-size: 1rem;
     font-style: italic;
     text-decoration: underline;
+    margin-top: 1rem;
   }
   strong {
     color: red;
@@ -480,6 +475,9 @@ const GuideDiv = styled.div`
       text-align: center;
       width: 2rem;
     }
+  }
+  div.ant-tabs-nav {
+    margin-bottom: 0;
   }
 `;
 

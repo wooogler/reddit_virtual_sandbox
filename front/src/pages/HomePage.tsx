@@ -24,12 +24,12 @@ function HomePage(): ReactElement {
 
   // const username = data && data.username;
 
-  const { changeDateRange } = useStore();
+  const { changeDateRange, imported } = useStore();
   const logMutation = useLogMutation();
 
   useEffect(() => {
     logMutation.mutate({ task, info: 'access system' });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [task]);
 
   useEffect(() => {
@@ -57,8 +57,10 @@ function HomePage(): ReactElement {
         }
       });
     };
-    fetchGraph();
-  }, [changeDateRange]);
+    if (imported === true) {
+      fetchGraph();
+    }
+  }, [changeDateRange, imported]);
 
   if (!data) {
     return (

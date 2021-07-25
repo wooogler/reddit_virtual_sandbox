@@ -64,6 +64,7 @@ function AddPostModal({ visible, onCancel, place }: Props): ReactElement {
         created_utc,
         url,
         source,
+        task,
       },
     });
 

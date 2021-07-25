@@ -376,7 +376,7 @@ function PostItem({
           )}
         </div>
         <div>
-          <div className='text-sm'>
+          <div className='text-sm whitespace-pre-line break-words'>
             {searchQuery ? (
               <Highlighter
                 searchWords={[searchQuery]}

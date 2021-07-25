@@ -81,15 +81,15 @@ function LogInPage(): ReactElement {
   }
 
   const layout = {
-    labelCol: { span: 8 },
-    wrapperCol: { span: 16 },
+    labelCol: { span: 10 },
+    wrapperCol: { span: 14 },
   };
 
   return (
     <PageLayout title='Join'>
       <Form {...layout} onFinish={onFinish}>
         <Form.Item
-          label='Username'
+          label='Discord Room Name'
           name='username'
           rules={[{ required: true, message: 'Please input your username' }]}
         >
