@@ -12,15 +12,12 @@ interface LogInForm {
 }
 
 function LogInPage(): ReactElement {
-  const { data, refetch } = useQuery(
-    'me',
-    async () => {
-      const { data } = await request<IUser | false>({
-        url: '/rest-auth/user/',
-      });
-      return data;
-    },
-  );
+  const { data, refetch } = useQuery('me', async () => {
+    const { data } = await request<IUser | false>({
+      url: '/rest-auth/user/',
+    });
+    return data;
+  });
 
   const availableCondition = ['baseline', 'sandbox', 'modsandbox'];
 
@@ -70,6 +67,9 @@ function LogInPage(): ReactElement {
   }
 
   if (data) {
+    if (data.username === 'eval') {
+      return <Redirect to='/eval/modsandbox/example' />;
+    }
     if (order === '1') {
       return <Redirect to={`/home/${condition}/A1`} />;
     } else if (order === '2') {
@@ -97,7 +97,7 @@ function LogInPage(): ReactElement {
         </Form.Item>
         <div className='flex justify-center'>
           <Button type='primary' htmlType='submit'>
-            Join
+            Start Example Task
           </Button>
         </div>
       </Form>

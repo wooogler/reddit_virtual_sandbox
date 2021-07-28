@@ -8,6 +8,7 @@ import { ReactElement, useCallback, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import AddPostModal from './AddPostModal';
+import BarRateHorizontal from './BarRateHorizontal';
 import OverlayLoading from './OverlayLoading';
 import PanelName from './PanelName';
 import PostItem from './PostItem';
@@ -76,7 +77,6 @@ function TargetList({
       : 0,
     total: totalTarget ?? (posts ? posts.length : 0),
   };
-  const rate = stat.total === 0 ? 0 : stat.part / stat.total;
 
   return (
     <div className='relative flex flex-col h-full p-2 w-1/2 overflow-y-auto'>
@@ -84,12 +84,27 @@ function TargetList({
       <div className='flex items-center flex-wrap'>
         <PanelName>{label}</PanelName>
         <div className='text-sm text-gray-400'>
-          {condition === 'modsandbox'
-            ? `(${stat.part}/${stat.total}) ${(rate * 100).toFixed(2)} %`
-            : condition === 'sandbox'
-            ? `${posts ? posts.length : 0} Posts`
-            : `${stat.total} Posts`}
+          {condition === 'modsandbox' ? (
+            <BarRateHorizontal
+              part={stat.part}
+              total={stat.total}
+              place={
+                place === 'target'
+                  ? 'Posts that should be filtered'
+                  : 'Posts to avoid being filtered'
+              }
+            />
+          ) : place === 'except' ? (
+            <BarRateHorizontal
+              part={stat.part}
+              total={stat.total}
+              place='Posts on subreddit'
+            />
+          ) : (
+            `${posts ? posts.length : 0} Posts`
+          )}
         </div>
+
         {onSubmit && place && (
           <>
             <div className='ml-auto flex items-center'>

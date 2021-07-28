@@ -19,7 +19,7 @@ from django.urls import path, include
 from rest_framework import routers
 
 from modsandbox.views import TargetViewSet, ExceptViewSet, PostViewSet, RedditViewSet, StatViewSet, \
-    ConfigViewSet, FpFnViewSet, LogViewSet
+    ConfigViewSet, FpFnViewSet, LogViewSet, EvalViewSet, SurveyViewSet, DemoViewSet
 
 router = routers.DefaultRouter()
 router.register(r'posts/target', TargetViewSet)
@@ -30,6 +30,9 @@ router.register(r'reddit', RedditViewSet)
 router.register(r'configs', ConfigViewSet)
 router.register(r'stats', StatViewSet)
 router.register(r'log', LogViewSet)
+router.register(r'eval', EvalViewSet)
+router.register(r'survey', SurveyViewSet)
+router.register(r'demo', DemoViewSet)
 urlpatterns = [
     path('', include(router.urls)),
     path('admin/', admin.site.urls),

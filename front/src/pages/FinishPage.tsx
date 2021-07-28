@@ -4,7 +4,7 @@ import React, { ReactElement } from 'react';
 function FinishPage(): ReactElement {
   return (
     <PageLayout title='Finish!'>
-      <div className='text-lg'>Please, close the window.</div>
+      <div className='text-lg'>Thank you for your participation!</div>
     </PageLayout>
   );
 }

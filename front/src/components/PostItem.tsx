@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { ReactElement } from 'react';
+import { ReactElement, useState } from 'react';
 import clsx from 'clsx';
 import { IPost, MatchingCheck } from '@typings/db';
 import { Dropdown, Menu, Tooltip } from 'antd';
@@ -32,9 +32,10 @@ function PostItem({
   isTested,
   searchQuery,
 }: Props): ReactElement {
+  const [isCollapse, setIsCollapse] = useState(isTested);
   const queryClient = useQueryClient();
   const logMutation = useLogMutation();
-  const { config_id, rule_id, check_combination_id, check_id, order } =
+  const { config_id, rule_id, check_combination_id, check_id, fpfn } =
     useStore();
   const { task } = useParams<{ task: string }>();
 
@@ -81,7 +82,7 @@ function PostItem({
   const deletePostFromTestCaseMutation = useMutation(deletePostFromTestCase, {
     onSuccess: (_, { id, place }) => {
       invalidatePostQueries(place);
-      if (place.includes('target') && order === 'fpfn') {
+      if (place.includes('target') && fpfn) {
         sortFpFnMutation.mutate();
       }
       logMutation.mutate({
@@ -125,7 +126,7 @@ function PostItem({
     onSuccess: (_, { place, title, body }) => {
       if (place === 'target') {
         queryClient.invalidateQueries('target');
-        if (order === 'fpfn') {
+        if (fpfn) {
           sortFpFnMutation.mutate();
         }
       } else {
@@ -152,7 +153,7 @@ function PostItem({
   const movePostMutation = useMutation(movePost, {
     onSuccess: (_, { place }) => {
       invalidatePostQueries(place);
-      if (place.includes('target') && order === 'fpfn') {
+      if (place.includes('target') && fpfn) {
         sortFpFnMutation.mutate();
       }
       logMutation.mutate({
@@ -376,7 +377,12 @@ function PostItem({
           )}
         </div>
         <div>
-          <div className='text-sm whitespace-pre-line break-words'>
+          <div
+            className={clsx(
+              'text-sm whitespace-pre-line break-words overflow-hidden',
+              `${isCollapse && 'h-5'}`
+            )}
+          >
             {searchQuery ? (
               <Highlighter
                 searchWords={[searchQuery]}
@@ -395,6 +401,12 @@ function PostItem({
             )}
           </div>
           <div className='flex items-center'>
+            <div
+              className='text-xs underline mr-2 cursor-pointer text-gray-500'
+              onClick={() => setIsCollapse((state) => !state)}
+            >
+              {isCollapse ? '▽ Expand' : '△ Collapse'}
+            </div>
             {post.post_id !== 'ffffff' && (
               <a
                 href={post.url}

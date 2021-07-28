@@ -5,10 +5,9 @@ import { devtools } from 'zustand/middleware';
 import { persist } from 'zustand/middleware';
 import { afterToDate } from './util';
 
-export type Order = 'created_utc' | '-created_utc' | 'fpfn' | '-score';
+export type Order = '-created_utc' | '-score';
 type PostType = 'Submission' | 'Comment' | 'all';
 type Source = 'Subreddit' | 'Spam' | 'all';
-
 
 type SelectedHighlight = {
   config_id?: number;
@@ -19,7 +18,7 @@ type SelectedHighlight = {
 
 type TotalCount = {
   filteredCount: number;
-  notFilteredCount: number;
+  totalCount: number;
   targetCount: number;
   exceptCount: number;
 };
@@ -34,12 +33,14 @@ type State = {
   post_type: PostType;
   source: Source;
   order: Order;
+  filteredOrder: Order;
   after: ImportSetting['after'];
   refetching: boolean;
   code: string;
   imported: boolean;
   selectedHighlights: SelectedHighlight[];
   totalCount: TotalCount;
+  fpfn: boolean;
   changeConfigId: (configId: number) => void;
   changeRuleId: (ruleId: number) => void;
   changeCheckId: (checkId: number) => void;
@@ -49,6 +50,7 @@ type State = {
   changeSource: (source: Source) => void;
   changePostType: (post_type: PostType) => void;
   changeOrder: (order: Order) => void;
+  changeFilteredOrder: (order: Order) => void;
   changeAfter: (after: ImportSetting['after']) => void;
   changeRefetching: (refetching: boolean) => void;
   changeCode: (code: string) => void;
@@ -56,6 +58,7 @@ type State = {
   changeSelectedHighlights: (selected: SelectedHighlight[]) => void;
   clearSelectedHighlight: () => void;
   changeTotalCount: (totalCount: Partial<TotalCount>) => void;
+  changeFpFn: (fpfn: boolean) => void;
 };
 
 const nowDayStart = dayjs().startOf('day');
@@ -75,6 +78,7 @@ export const useStore = create<State>(
         post_type: 'Submission',
         source: 'Subreddit',
         order: '-created_utc',
+        filteredOrder: '-created_utc',
         after: 'week',
         refetching: false,
         code: '',
@@ -82,10 +86,11 @@ export const useStore = create<State>(
         selectedHighlights: [],
         totalCount: {
           filteredCount: 0,
-          notFilteredCount: 0,
+          totalCount: 0,
           targetCount: 0,
           exceptCount: 0,
         },
+        fpfn: false,
         changeConfigId: (id: number) =>
           set((state) => ({
             config_id: id,
@@ -130,6 +135,8 @@ export const useStore = create<State>(
         changePostType: (post_type: PostType) =>
           set((state) => ({ post_type })),
         changeOrder: (order: Order) => set((state) => ({ order })),
+        changeFilteredOrder: (order: Order) =>
+          set((state) => ({ filteredOrder: order })),
         changeAfter: (after: ImportSetting['after']) =>
           set((state) => ({
             start_date: afterToDate(after, nowDayStart),
@@ -156,6 +163,9 @@ export const useStore = create<State>(
           set((state) => ({
             totalCount: { ...state.totalCount, ...count },
           }));
+        },
+        changeFpFn: (fpfn: boolean) => {
+          set((state) => ({ fpfn }));
         },
       }),
       {

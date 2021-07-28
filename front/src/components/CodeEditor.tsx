@@ -3,12 +3,14 @@ import AceEditor from 'react-ace';
 import 'ace-builds/src-noconflict/mode-yaml';
 import 'ace-builds/src-noconflict/theme-tomorrow';
 import PanelName from './PanelName';
-import { Button } from 'antd';
+import { Button, Tooltip } from 'antd';
 import request from '@utils/request';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { Config } from '@typings/db';
 import { useStore } from '@utils/store';
 import {
+  ArrowLeftOutlined,
+  ArrowRightOutlined,
   ClearOutlined,
   EditOutlined,
   PlayCircleOutlined,
@@ -31,7 +33,14 @@ function CodeEditor({ placeholder }: Props): ReactElement {
   const { condition, task } = useParams<{ condition: Condition; task: Task }>();
 
   const [isSaved, setIsSaved] = useState(false);
-  const { changeConfigId, clearConfigId, config_id, changeCode } = useStore();
+  const {
+    changeConfigId,
+    clearConfigId,
+    config_id,
+    changeCode,
+    start_date,
+    end_date,
+  } = useStore();
 
   const storedCode = useStore().code;
 
@@ -109,6 +118,58 @@ function CodeEditor({ placeholder }: Props): ReactElement {
     },
   });
 
+  const { data: configData } = useQuery(
+    ['configs', { start_date, end_date, task }],
+    async () => {
+      const { data } = await request<Config[]>({
+        url: '/configs/',
+        params: {
+          start_date: start_date?.toDate(),
+          end_date: end_date?.toDate(),
+          task,
+        },
+      });
+      return data;
+    }
+  );
+  const configIds = configData?.map((config) => config.id);
+
+  const onClickUndo = () => {
+    if (configIds && configData) {
+      const prevIndex =
+        configIds.findIndex((configId) => configId === config_id) + 1;
+      const prevConfigId = configIds[prevIndex];
+      changeConfigId(prevConfigId);
+      changeCode(configData[prevIndex].code);
+    }
+  };
+  const prevConfigCode = () => {
+    if (configIds && configData) {
+      const prevIndex =
+        configIds.findIndex((configId) => configId === config_id) + 1;
+      if (prevIndex in configIds) return configData[prevIndex].code;
+    }
+    return false;
+  };
+
+  const onClickRedo = () => {
+    if (configIds && configData) {
+      const nextIndex =
+        configIds.findIndex((configId) => configId === config_id) - 1;
+      const nextConfigId = configIds[nextIndex];
+      changeConfigId(nextConfigId);
+      changeCode(configData[nextIndex].code);
+    }
+  };
+  const nextConfigCode = () => {
+    if (configIds && configData) {
+      const nextIndex =
+        configIds.findIndex((configId) => configId === config_id) - 1;
+      if (nextIndex in configIds) return configData[nextIndex].code;
+    }
+    return false;
+  };
+
   const onClickClear = () => {
     setCode('');
     changeCode('');
@@ -119,6 +180,36 @@ function CodeEditor({ placeholder }: Props): ReactElement {
       <div className='flex mb-2 items-center flex-wrap'>
         <PanelName>AutoMod Configuration</PanelName>
         <div className='flex ml-auto'>
+          <Tooltip
+            title={
+              <div className='whitespace-pre'>
+                {prevConfigCode() ? prevConfigCode() : 'No Code'}
+              </div>
+            }
+          >
+            <Button
+              type='link'
+              size='small'
+              icon={<ArrowLeftOutlined />}
+              onClick={onClickUndo}
+              disabled={!prevConfigCode()}
+            />
+          </Tooltip>
+          <Tooltip
+            title={
+              <div className='whitespace-pre'>
+                {nextConfigCode() ? nextConfigCode() : 'No Code'}
+              </div>
+            }
+          >
+            <Button
+              type='link'
+              size='small'
+              icon={<ArrowRightOutlined />}
+              onClick={onClickRedo}
+              disabled={!nextConfigCode()}
+            />
+          </Tooltip>
           {condition !== 'baseline' ? (
             <div className='flex'>
               <Button

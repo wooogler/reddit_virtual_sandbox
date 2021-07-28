@@ -1,7 +1,7 @@
-import React, { ReactElement, useEffect } from 'react';
+import React, { ReactElement, useCallback, useEffect } from 'react';
 
 import { PaginatedPosts } from '@typings/db';
-import { AutoModStat, Condition } from '@typings/types';
+import { AutoModStat, Condition, Task } from '@typings/types';
 import PanelName from './PanelName';
 import PostItem from './PostItem';
 
@@ -11,26 +11,34 @@ import { AxiosError } from 'axios';
 import { useInView } from 'react-intersection-observer';
 import { useStore } from '@utils/store';
 import { isFiltered } from '@utils/util';
-import { Empty } from 'antd';
+import { Empty, Radio, RadioChangeEvent } from 'antd';
 import { useParams } from 'react-router-dom';
+import BarRateHorizontal from './BarRateHorizontal';
+import useLogMutation from '@hooks/useLogMutation';
 
 interface Props {
   label: string;
   stat?: AutoModStat;
   query: UseInfiniteQueryResult<PaginatedPosts, AxiosError<any>>;
   isLoading?: boolean;
-  description: string;
+
+  filtered?: boolean;
 }
 
-function PostList({
-  label,
-  query,
-  isLoading,
-  description,
-}: Props): ReactElement {
+function PostList({ label, query, isLoading, filtered }: Props): ReactElement {
   const [ref, inView] = useInView({ threshold: 0 });
-  const { config_id, rule_id, check_combination_id, check_id, totalCount } =
-    useStore();
+  const {
+    config_id,
+    rule_id,
+    check_combination_id,
+    check_id,
+    totalCount,
+    order,
+    filteredOrder,
+    changeFilteredOrder,
+    changeOrder,
+    fpfn,
+  } = useStore();
 
   const { fetchNextPage } = query;
   useEffect(() => {
@@ -38,51 +46,97 @@ function PostList({
       fetchNextPage();
     }
   }, [inView, fetchNextPage]);
-  const { condition } = useParams<{ condition: Condition }>();
+  const { condition, task } = useParams<{ condition: Condition; task: Task }>();
+  const logMutation = useLogMutation();
 
-  const queryCount = query.data?.pages[0].count;
+  const total = totalCount.totalCount;
+  const part = totalCount.filteredCount;
 
-  const total = totalCount.filteredCount + totalCount.notFilteredCount;
+  const onChangeOrder = useCallback(
+    (e: RadioChangeEvent) => {
+      if (filtered) {
+        changeFilteredOrder(e.target.value);
+      } else {
+        changeOrder(e.target.value);
+      }
+      logMutation.mutate({
+        task,
+        info: 'change order',
+        content: `${filtered ? 'filtered' : 'subreddit'}: ${e.target.value}`,
+      });
+    },
+    [changeFilteredOrder, changeOrder, filtered, logMutation, task]
+  );
 
   return (
     <div className='relative flex flex-col h-full p-2 w-1/2'>
       <OverlayLoading isLoading={isLoading} description='loading...' />
       <div className='flex items-center flex-wrap'>
         <PanelName>{label}</PanelName>
-        <div className='text-sm mr-4'>{description}</div>
+        {/* <div className='text-sm mr-4'>{description}</div> */}
+
         <div className='text-sm text-gray-400'>
-          {condition !== 'baseline'
-            ? `(${queryCount} / ${total}) 
-            ${
-              queryCount &&
-              totalCount &&
-              ((queryCount / total) * 100).toFixed(2)
-            } %`
-            : `${totalCount.notFilteredCount} Posts`}
+          {condition === 'baseline' ? (
+            `${total} Posts`
+          ) : filtered ? (
+            `${part} Posts`
+          ) : (
+            <BarRateHorizontal
+              part={part}
+              total={total}
+              place='Posts on subreddit'
+            />
+          )}
         </div>
+        {!fpfn && (
+          <div className='ml-auto'>
+            <Radio.Group
+              onChange={onChangeOrder}
+              value={filtered ? filteredOrder : order}
+              buttonStyle='solid'
+              size='small'
+            >
+              <Radio.Button value='-created_utc'>New</Radio.Button>
+              <Radio.Button value='-score'>Top</Radio.Button>
+            </Radio.Group>
+          </div>
+        )}
       </div>
       {query.data?.pages[0].count !== 0 ? (
         <div className='overflow-y-auto post-scroll'>
           {query.data?.pages.map((page, id) => (
             <React.Fragment key={id}>
-              {page.results.map((post) => (
-                <PostItem
-                  key={post.id}
-                  post={post}
-                  isFiltered={
-                    condition !== 'baseline'
-                      ? isFiltered(
-                          post,
-                          config_id,
-                          rule_id,
-                          check_combination_id,
-                          check_id
-                        )
-                      : false
+              {page.results
+                .filter((post) => {
+                  if (fpfn && !filtered) {
+                    return !isFiltered(
+                      post,
+                      config_id,
+                      rule_id,
+                      check_combination_id,
+                      check_id
+                    );
                   }
-                  isTested={false}
-                />
-              ))}
+                  return true;
+                })
+                .map((post) => (
+                  <PostItem
+                    key={post.id}
+                    post={post}
+                    isFiltered={
+                      condition !== 'baseline'
+                        ? isFiltered(
+                            post,
+                            config_id,
+                            rule_id,
+                            check_combination_id,
+                            check_id
+                          )
+                        : false
+                    }
+                    isTested={false}
+                  />
+                ))}
             </React.Fragment>
           ))}
           {!isLoading && query.hasNextPage && <div ref={ref}>loading...</div>}

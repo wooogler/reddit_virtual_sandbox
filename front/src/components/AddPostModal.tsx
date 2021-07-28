@@ -38,7 +38,7 @@ function AddPostModal({ visible, onCancel, place }: Props): ReactElement {
   const { task } = useParams<{ task: string }>();
 
   const { data: userData } = useQuery<IUser | false>('me');
-  const { order } = useStore();
+  const { fpfn } = useStore();
 
   const addCustomPost = ({
     post_id,
@@ -87,7 +87,7 @@ function AddPostModal({ visible, onCancel, place }: Props): ReactElement {
     onSuccess: (_, { place, title, body }) => {
       if (place === 'target') {
         queryClient.invalidateQueries('target');
-        if (order === 'fpfn') {
+        if (fpfn) {
           sortFpFnMutation.mutate();
         }
         onCancel();

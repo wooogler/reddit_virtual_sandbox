@@ -1,8 +1,8 @@
-import { Config, IUser } from '@typings/db';
+import { Config } from '@typings/db';
 import request from '@utils/request';
 import { Modal } from 'antd';
-import React, { ReactElement, useCallback, useEffect, useState } from 'react';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { ReactElement, useCallback, useEffect, useState } from 'react';
+import { useMutation, useQueryClient } from 'react-query';
 import AceEditor from 'react-ace';
 import 'ace-builds/src-noconflict/mode-yaml';
 import 'ace-builds/src-noconflict/theme-tomorrow';
@@ -48,20 +48,6 @@ function SubmitModal({ onCancel, visible }: Props): ReactElement {
     setCode(storedCode);
   }, [storedCode]);
 
-  const { refetch } = useQuery<IUser | false>('me');
-
-  const onLogOut = useCallback(() => {
-    request({ url: '/rest-auth/logout/', method: 'POST' })
-      .then(() => {
-        localStorage.clear();
-        refetch();
-        history.push('/finish');
-      })
-      .catch((error) => {
-        console.dir(error);
-      });
-  }, [history, refetch]);
-
   const deleteTargetPostsMutation = useMutation(
     () =>
       request({
@@ -89,23 +75,16 @@ function SubmitModal({ onCancel, visible }: Props): ReactElement {
 
   const onFinishExperiment = useCallback(() => {
     logMutation.mutate({ task, info: 'finish' });
-    if (task === 'A1' || task === 'B2') {
-      setIsVisibleConfirmModal(false);
-      onCancel();
-      clearConfigId();
-      deleteTargetPostsMutation.mutate();
-      deleteExceptPostsMutation.mutate();
-    }
-    if (task === 'A1') {
-      history.push(`/home/${condition}/B1`);
-    } else if (task === 'B1') {
-      onLogOut();
-    } else if (task === 'B2') {
-      history.push(`/home/${condition}/A2`);
-    } else if (task === 'A2') {
-      onLogOut();
+    setIsVisibleConfirmModal(false);
+    onCancel();
+    clearConfigId();
+    deleteTargetPostsMutation.mutate();
+    deleteExceptPostsMutation.mutate();
+    if (task === 'example') {
+      // history.push(`/home/${condition}/${_.random(1, 2) === 1 ? 'A1' : 'B2'}`);
+      history.push(`/check/${condition}/`);
     } else {
-      onLogOut();
+      history.push(`/survey/${condition}/${task}`);
     }
   }, [
     clearConfigId,
@@ -115,7 +94,6 @@ function SubmitModal({ onCancel, visible }: Props): ReactElement {
     history,
     logMutation,
     onCancel,
-    onLogOut,
     task,
   ]);
 

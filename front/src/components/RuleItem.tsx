@@ -38,7 +38,7 @@ function RuleItem({
     clearConfigId,
     changeCode,
   } = useStore();
-  const total = totalCount.notFilteredCount + totalCount.filteredCount;
+  const total = totalCount.totalCount;
   const logMutation = useLogMutation();
   const { task } = useParams<{ task: string }>();
 
@@ -129,7 +129,9 @@ function RuleItem({
       }}
       onClick={() => onClickRadio()}
     >
-      <div className={clsx('flex-1 font-mono whitespace-pre-wrap ml-2 text-xs')}>
+      <div
+        className={clsx('flex-1 font-mono whitespace-pre-wrap ml-2 text-xs')}
+      >
         {rule.code}
       </div>
       {process.env.NODE_ENV === 'development' && ruleType === 'config' && (

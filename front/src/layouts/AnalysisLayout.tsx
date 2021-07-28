@@ -1,64 +1,74 @@
 import PanelName from '@components/PanelName';
-import { ReactElement, useState } from 'react';
+import { ReactElement } from 'react';
 import CodeEditor from '@components/CodeEditor';
 import './table.css';
-import RuleAnalysis from '@components/RuleAnalysis';
-import PostChart from '@components/PostChart';
-import clsx from 'clsx';
+import ConfigurationAnalysis from '@components/ConfigurationAnalysis';
 import { useParams } from 'react-router-dom';
 import { Condition, Task } from '@typings/types';
-import useLogMutation from '@hooks/useLogMutation';
+import { Split } from '@geoffcox/react-splitter';
+import ConfusionMatrix from '@components/ConfusionMatrix';
 
-function AnalysisLayout(): ReactElement {
-  const [isViewChart, setIsViewChart] = useState(true);
-  const { condition, task } = useParams<{ condition: Condition; task: Task }>();
-  const logMutation = useLogMutation();
+interface Props {
+  evaluation?: boolean;
+}
+
+function AnalysisLayout({ evaluation }: Props): ReactElement {
+  // const [isViewChart, setIsViewChart] = useState(true);
+  const { condition } = useParams<{ condition: Condition; task: Task }>();
+  // const logMutation = useLogMutation();
 
   return (
-    <div className='h-full flex flex-col'>
-      <div
-        className={clsx(
-          'flex flex-col p-2',
-          `${condition === 'modsandbox' ? 'h-1/4' : 'h-full'}`
-        )}
-      >
+    <Split
+      horizontal
+      initialPrimarySize='30%'
+      minPrimarySize='10%'
+      minSecondarySize='50%'
+    >
+      <div className={'flex flex-col p-2 h-full'}>
         <CodeEditor placeholder='' />
       </div>
       {condition === 'modsandbox' && (
         <div
-          className='flex flex-col p-2 h-3/4'
+          className='flex flex-col p-2 h-full'
           data-tour='configuration-analysis'
         >
           <div className='flex items-center border-t-2 border-gray-300'>
             <PanelName>Configuration Analysis</PanelName>
           </div>
           <div className='flex-1 overflow-y-auto'>
-            <RuleAnalysis />
+            <ConfigurationAnalysis />
           </div>
-          <div className='flex items-center border-t-2 border-gray-300'>
-            <PanelName>Time series Post Chart</PanelName>
-            <div
-              className='ml-auto cursor-pointer text-blue-400 mr-2'
-              onClick={() => {
-                setIsViewChart((prev) => !prev);
-                if (isViewChart === true) {
-                  logMutation.mutate({ task, info: 'open chart' });
-                } else {
-                  logMutation.mutate({ task, info: 'close chart' });
-                }
-              }}
-            >
-              {isViewChart ? 'Close' : 'Open'}
+          {evaluation && <ConfusionMatrix />}
+          {/* {evaluation ? (
+            <ConfusionMatrix />
+          ) : (
+            <div>
+              <div className='flex items-center border-t-2 border-gray-300'>
+                <PanelName>Time series Post Chart</PanelName>
+                <div
+                  className='ml-auto cursor-pointer text-blue-400 mr-2'
+                  onClick={() => {
+                    setIsViewChart((prev) => !prev);
+                    if (isViewChart === true) {
+                      logMutation.mutate({ task, info: 'open chart' });
+                    } else {
+                      logMutation.mutate({ task, info: 'close chart' });
+                    }
+                  }}
+                >
+                  {isViewChart ? 'Close' : 'Open'}
+                </div>
+              </div>
+              {isViewChart && (
+                <div className='h-72'>
+                  <PostChart />
+                </div>
+              )}
             </div>
-          </div>
-          {isViewChart && (
-            <div className='h-1/2'>
-              <PostChart />
-            </div>
-          )}
+          )} */}
         </div>
       )}
-    </div>
+    </Split>
   );
 }
 

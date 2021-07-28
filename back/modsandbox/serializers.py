@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from rest_auth.serializers import UserDetailsSerializer
-from .models import Post, User, Rule, Check, CheckCombination, Match, Config, NotMatch, Log
+from .models import Post, User, Rule, Check, CheckCombination, Match, Config, NotMatch, Log, Survey, Demo
 from .rule_handler import create_config
 
 
@@ -258,3 +258,23 @@ class LogSerializer(serializers.ModelSerializer):
     class Meta:
         model = Log
         fields = "__all__"
+
+
+class SurveySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Survey
+        fields = "__all__"
+        read_only_fields = ('user',)
+
+    def create(self, validated_data):
+        return Survey.objects.create(user=self.context['request'].user, **validated_data)
+
+
+class DemoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Demo
+        fields = "__all__"
+        read_only_fields = ('user',)
+
+    def create(self, validated_data):
+        return Demo.objects.create(user=self.context['request'].user, **validated_data)

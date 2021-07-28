@@ -12,7 +12,7 @@ import { IPost, PaginatedPosts } from '@typings/db';
 import request from '@utils/request';
 import { useStore } from '@utils/store';
 import { invalidatePostQueries, isFiltered } from '@utils/util';
-import { Button, Input, Radio, RadioChangeEvent, Tooltip } from 'antd';
+import { Button, Input, Switch } from 'antd';
 import { AxiosError } from 'axios';
 import { ReactElement, useCallback, useEffect, useState } from 'react';
 import {
@@ -44,10 +44,13 @@ function PostViewerLayout(): ReactElement {
     refetching,
     // changePostType,
     // changeSource,
-    changeOrder,
+
     changeImported,
     changeTotalCount,
     totalCount,
+    filteredOrder,
+    fpfn,
+    changeFpFn,
   } = useStore();
   const logMutation = useLogMutation();
   const { condition, task } = useParams<{ condition: Condition; task: Task }>();
@@ -79,8 +82,8 @@ function PostViewerLayout(): ReactElement {
     },
     {
       onSuccess: (data) => {
-        if (data.length === 0 && order === 'fpfn') {
-          changeOrder('-created_utc');
+        if (data.length === 0 && fpfn) {
+          changeFpFn(false);
         }
         changeTotalCount({ targetCount: data.length });
       },
@@ -142,7 +145,7 @@ function PostViewerLayout(): ReactElement {
     onSuccess: (_, { place }) => {
       if (place === 'target') {
         queryClient.invalidateQueries('target');
-        if (order === 'fpfn') {
+        if (fpfn) {
           sortFpFnMutation.mutate();
         }
       } else {
@@ -162,16 +165,17 @@ function PostViewerLayout(): ReactElement {
         start_date,
         end_date,
         post_type,
-        order,
+        filteredOrder,
         source,
         task,
+        fpfn,
       },
     ],
     async ({ pageParam = 1 }) => {
       const { data } = await request<PaginatedPosts>({
         url: '/posts/',
         params: {
-          ordering: order === 'fpfn' ? 'sim' : order,
+          ordering: fpfn ? 'sim' : filteredOrder,
           page: pageParam,
           config_id,
           rule_id,
@@ -203,32 +207,24 @@ function PostViewerLayout(): ReactElement {
     [
       'not filtered',
       {
-        config_id,
-        rule_id,
-        check_combination_id,
-        check_id,
         start_date,
         end_date,
         post_type,
         order,
         source,
         task,
+        fpfn,
       },
     ],
     async ({ pageParam = 1 }) => {
       const { data } = await request<PaginatedPosts>({
         url: '/posts/',
         params: {
-          ordering: order === 'fpfn' ? '-sim' : order,
-          config_id,
-          rule_id,
-          check_combination_id,
-          check_id,
+          ordering: fpfn ? '-sim' : order,
           page: pageParam,
           start_date: start_date?.toDate(),
           end_date: end_date?.toDate(),
           post_type: post_type === 'all' ? undefined : post_type,
-          // filtered: condition !== 'baseline' ? false : undefined,
           source: source === 'all' ? undefined : source,
         },
       });
@@ -238,28 +234,13 @@ function PostViewerLayout(): ReactElement {
       getNextPageParam: (lastPage) => lastPage.nextPage ?? undefined,
       refetchInterval: refetching ? 2000 : false,
       onSuccess: (data) => {
-        changeTotalCount({ notFilteredCount: data.pages[0].count });
+        changeTotalCount({ totalCount: data.pages[0].count });
         // logMutation.mutate({
         //   task,
         //   info: 'load not filtered',
         // });
       },
     }
-  );
-
-  const onChangeOrder = useCallback(
-    (e: RadioChangeEvent) => {
-      changeOrder(e.target.value);
-      if (e.target.value === 'fpfn') {
-        sortFpFnMutation.mutate();
-      }
-      logMutation.mutate({
-        task,
-        info: 'change order',
-        content: e.target.value,
-      });
-    },
-    [changeOrder, logMutation, sortFpFnMutation, task]
   );
 
   // const onChangePostType = useCallback(
@@ -342,6 +323,11 @@ function PostViewerLayout(): ReactElement {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [notFilteredCount]);
 
+  const onChangeFpFn = useCallback(() => {
+    changeFpFn(!fpfn);
+    sortFpFnMutation.mutate();
+  }, [changeFpFn, fpfn, sortFpFnMutation]);
+
   const [query, setQuery] = useState('');
 
   return (
@@ -411,32 +397,16 @@ function PostViewerLayout(): ReactElement {
 
             <div className='flex items-center' data-tour='sort'>
               {/* <div className='mr-2'>Hello, {userData && userData.username}!</div> */}
-
-              <Radio.Group
-                onChange={onChangeOrder}
-                value={order}
-                buttonStyle='solid'
-              >
-                <Radio.Button value='-created_utc'>New</Radio.Button>
-                <Radio.Button value='-score'>Top</Radio.Button>
-                {condition === 'modsandbox' && (
-                  <Radio.Button
-                    value='fpfn'
-                    disabled={totalCount.targetCount === 0}
-                    data-tour='sort-smart'
-                  >
-                    {totalCount.targetCount === 0 ? (
-                      <Tooltip title='Add a post in your collections'>
-                        Smart
-                      </Tooltip>
-                    ) : (
-                      'Smart'
-                    )}
-                  </Radio.Button>
-                )}
-              </Radio.Group>
             </div>
-            <div className='flex'>
+            <div className='flex items-center'>
+              <div className='text-xs text-gray-500 mr-2'>
+                Find possible misses & false alarms
+              </div>
+              <Switch
+                checked={fpfn}
+                onChange={onChangeFpFn}
+                disabled={targetQuery.data?.length === 0}
+              />
               <Button
                 icon={<InfoCircleOutlined />}
                 className='ml-2'
@@ -450,7 +420,7 @@ function PostViewerLayout(): ReactElement {
                 onCancel={() => setVisibleGuideModal(false)}
               />
               {process.env.NODE_ENV === 'development' &&
-                (totalCount.notFilteredCount !== 0 ? (
+                (totalCount.totalCount !== 0 ? (
                   <Button
                     onClick={() => {
                       deleteAllPostsMutation.mutate();
@@ -495,18 +465,7 @@ function PostViewerLayout(): ReactElement {
         <div className='flex overflow-y-auto flex-1'>
           <>
             <PostList
-              label={
-                totalCount.filteredCount !== 0
-                  ? 'Not filtered by AutoMod'
-                  : 'Posts on Subreddits'
-              }
-              description={
-                order === '-created_utc'
-                  ? '(Recent Posts)'
-                  : order === '-score'
-                  ? '(Popular Posts)'
-                  : '(Missed Posts)'
-              }
+              label={fpfn ? 'Possible Misses' : 'Posts on Subreddits'}
               query={notFilteredQuery}
               isLoading={
                 notFilteredQuery.isLoading ||
@@ -519,14 +478,8 @@ function PostViewerLayout(): ReactElement {
 
             {condition !== 'baseline' && (
               <PostList
-                label='Filtered by AutoMod'
-                description={
-                  order === '-created_utc'
-                    ? '(Recent Posts)'
-                    : order === '-score'
-                    ? '(Popular Posts)'
-                    : '(False Alarms)'
-                }
+                label={fpfn ? 'Possible False Alarms' : 'Filtered by AutoMod'}
+                filtered
                 query={filteredQuery}
                 isLoading={
                   notFilteredQuery.isLoading ||
@@ -572,17 +525,9 @@ function PostViewerLayout(): ReactElement {
             label={
               condition === 'modsandbox'
                 ? 'Posts that should be filtered'
-                : condition === 'sandbox'
-                ? 'Not Filtered by AutoMod'
                 : 'Posts on Testing Subreddit'
             }
-            posts={
-              condition === 'sandbox'
-                ? targetQuery.data?.filter(
-                    (post) => !isFiltered(post, config_id)
-                  )
-                : targetQuery.data
-            }
+            posts={targetQuery.data}
             isLoading={addTestCaseMutation.isLoading}
             onSubmit={(postId) =>
               addTestCaseMutation.mutate({ postId, place: 'target' })

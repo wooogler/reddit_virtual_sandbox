@@ -120,3 +120,31 @@ class Log(models.Model):
     rule = models.ForeignKey(Rule, related_name='logs', on_delete=models.CASCADE, null=True)
     check_combination = models.ForeignKey(CheckCombination, related_name='logs', on_delete=models.CASCADE, null=True)
     _check = models.ForeignKey(Check, related_name='logs', on_delete=models.CASCADE, null=True)
+
+
+class Survey(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    task = models.CharField(max_length=50, null=True)
+    condition = models.CharField(max_length=50, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    Q1 = models.IntegerField(null=True)
+    Q2 = models.IntegerField(null=True)
+    Q3 = models.IntegerField(null=True)
+    Q4 = models.IntegerField(null=True)
+    Q5 = models.IntegerField(null=True)
+    Q6 = models.IntegerField(null=True)
+    Q7 = models.TextField(null=True)
+
+
+class Demo(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    condition = models.CharField(max_length=50, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    Q1 = models.IntegerField(null=True)
+    Q2 = models.IntegerField(null=True)
+    Q3 = models.IntegerField(null=True)
+    Q4 = models.IntegerField(null=True)
+    Q5 = models.CharField(max_length=10, null=True)
+    gender = models.CharField(max_length=10, null=True)
+    age = models.CharField(max_length=10, null=True)
+    degree = models.CharField(max_length=10, null=True)

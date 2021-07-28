@@ -22,11 +22,12 @@ from modsandbox.ml import process_embedding
 from modsandbox.pinecone_handler import create_index_pinecone, get_index_pinecone
 from modsandbox.post_handler import create_posts, get_filtered_posts, get_unfiltered_posts, get_df_posts_vector, \
     get_average_vector, get_embedding_post, create_test_posts
-from modsandbox.models import Post, User, Rule, Config, Log, CheckCombination, Check
+from modsandbox.models import Post, User, Rule, Config, Log, CheckCombination, Check, Survey, Demo
 from modsandbox.paginations import PostPagination
 from modsandbox.reddit_handler import RedditHandler
 from modsandbox.rule_handler import apply_config
-from modsandbox.serializers import PostSerializer, RuleSerializer, StatSerializer, ConfigSerializer, LogSerializer
+from modsandbox.serializers import PostSerializer, RuleSerializer, StatSerializer, ConfigSerializer, LogSerializer, \
+    SurveySerializer, DemoSerializer
 from modsandbox.stat_handler import after_to_time_interval, get_time_interval
 
 logger = logging.getLogger(__name__)
@@ -107,6 +108,7 @@ class PostViewSet(viewsets.ModelViewSet):
             queryset = get_filtered_posts(queryset, config_id, rule_id, check_combination_id, check_id)
 
         elif filtered == 'false':
+            print(config_id)
             queryset = get_unfiltered_posts(queryset, config_id, rule_id, check_combination_id, check_id)
 
         return queryset
@@ -132,9 +134,14 @@ class PostViewSet(viewsets.ModelViewSet):
             praw_spams = r.get_spams_from_praw(subreddit, after, type)
             posts = create_posts(praw_spams, request.user, "normal", use_author)
 
-        else:  # for lab study
+        elif where == 'Test':  # for lab study
             with open(os.path.join(os.path.dirname(__file__),
                                    'test_data/submission_cscareerquestions_may_1st_rest.json')) as normal_json:
+                normal = json.load(normal_json)
+                normal_json.close()
+        else:
+            with open(os.path.join(os.path.dirname(__file__),
+                                   'test_data/submission_cscareerquestions_may_2nd_labeled.json')) as normal_json:
                 normal = json.load(normal_json)
                 normal_json.close()
 
@@ -494,3 +501,50 @@ class LogViewSet(viewsets.ModelViewSet):
                            config=config, rule=rule, check_combination=check_combination, _check=check)
 
         return Response(status=status.HTTP_201_CREATED)
+
+
+class EvalViewSet(viewsets.ModelViewSet):
+    queryset = Post.objects.filter(place__startswith='normal')
+    serializer_class = PostSerializer
+
+    @action(methods=['get'], detail=False)
+    def confusion(self, request):
+        config_id = self.request.query_params.get("config_id")
+        posts = self.queryset.filter(user=request.user)
+
+        filtered_posts = get_filtered_posts(posts, config_id, None, None, None)
+        unfiltered_posts = get_unfiltered_posts(posts, config_id, None, None, None)
+        tp_rule_1 = filtered_posts.filter(rule_1=1).count()
+        fp_rule_1 = filtered_posts.filter(rule_1=0).count()
+        fn_rule_1 = unfiltered_posts.filter(rule_1=1).count()
+        tn_rule_1 = unfiltered_posts.filter(rule_1=0).count()
+
+        tp_rule_2 = filtered_posts.filter(rule_2=1).count()
+        fp_rule_2 = filtered_posts.filter(rule_2=0).count()
+        fn_rule_2 = unfiltered_posts.filter(rule_2=1).count()
+        tn_rule_2 = unfiltered_posts.filter(rule_2=0).count()
+
+        return Response({
+            'rule_1': {
+                'tp': tp_rule_1,
+                'fp': fp_rule_1,
+                'fn': fn_rule_1,
+                'tn': tn_rule_1
+            },
+            'rule_2': {
+                'tp': tp_rule_2,
+                'fp': fp_rule_2,
+                'fn': fn_rule_2,
+                'tn': tn_rule_2
+            }
+        })
+
+
+class SurveyViewSet(viewsets.ModelViewSet):
+    queryset = Survey.objects.all()
+    serializer_class = SurveySerializer
+
+
+class DemoViewSet(viewsets.ModelViewSet):
+    queryset = Demo.objects.all()
+    serializer_class = DemoSerializer
