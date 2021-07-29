@@ -33,7 +33,7 @@ function CheckPage(): ReactElement {
             />
           </span>
         </li>
-        <li className='mb-2'>
+        <li>
           I have understood a “think-aloud” protocol
           <span className='ml-2'>
             <Checkbox
@@ -43,6 +43,7 @@ function CheckPage(): ReactElement {
           </span>
         </li>
       </ul>
+      <div className='mb-2 text-red-400'>If you have any problems, please contact the instructor in the Discord Channel.</div>
       <Button
         type='primary'
         onClick={onClickNext}

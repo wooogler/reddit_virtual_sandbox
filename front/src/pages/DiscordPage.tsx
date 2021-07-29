@@ -1,16 +1,12 @@
 import PageLayout from '@layouts/PageLayout';
-import { Button } from 'antd';
-import Checkbox, { CheckboxChangeEvent } from 'antd/lib/checkbox';
+import { Button, Input } from 'antd';
 import React, { ReactElement, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
 function DiscordPage(): ReactElement {
-  const [checked, setChecked] = useState(false);
+  const [passcode, setPasscode] = useState('');
   const { condition } = useParams<{ condition: string }>();
   const history = useHistory();
-  const onChange = (e: CheckboxChangeEvent) => {
-    setChecked(e.target.checked);
-  };
   const onClickNext = () => {
     history.push(`/quiz/${condition}`);
   };
@@ -18,19 +14,22 @@ function DiscordPage(): ReactElement {
     <PageLayout title='Orientation'>
       <div>Please Join the Discord Server to participate the study.</div>
       <a
-        className='mt-2 mb-8'
+        className='mt-2 mb-8 underline'
         href='https://discord.gg/wXXM8XX9VC'
         target='_blank'
         rel='noreferrer'
       >
         Discord Link
       </a>
-      <div className='my-2'>
-        <Checkbox checked={checked} onChange={onChange}>
-          Please check after the orientation
-        </Checkbox>
+      <div className='my-2 flex items-center'>
+        <div className='mr-2'>Passcode:</div>
+        <Input value={passcode} onChange={(e) => setPasscode(e.target.value)} />
       </div>
-      <Button type='primary' onClick={onClickNext} disabled={!checked}>
+      <Button
+        type='primary'
+        onClick={onClickNext}
+        disabled={passcode !== 'qwerty'}
+      >
         Next
       </Button>
     </PageLayout>

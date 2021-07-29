@@ -16,13 +16,11 @@ function ConfigurationGuide(): ReactElement {
           className='w-4/5'
         />
         <div className='text'>
-          1) Posts with a <code>"title"</code> that contains <code>"ears"</code>
-          :
+          1) Posts with a <code>title</code> that contains <code>ears</code>:
         </div>
         <div className='code'>title: ['ears']</div>
         <div className='text'>
-          2) Posts with a <code>"body"</code> that contains <code>"right"</code>
-          :
+          2) Posts with a <code>body</code> that contains <code>right</code>:
         </div>
         <div className='code'>title: ['right']</div>
         <div className='text'>
@@ -32,7 +30,7 @@ function ConfigurationGuide(): ReactElement {
           <li>
             AutoMod checks an <strong>entire word</strong> matching text
             <div>
-              ex) <code>title: ['ar']</code> cannot catch the post above.{' '}
+              ex) <code>title: ['ar']</code> will not detect the above post.{' '}
             </div>
           </li>
           <li>
@@ -45,61 +43,46 @@ function ConfigurationGuide(): ReactElement {
             Note that all the operations are <strong>case-insensitive</strong>{' '}
             by default.
             <div>
-              ex) <code>body: ['RiGht']</code> can catch the post above.{' '}
+              ex) <code>body: ['RiGht']</code> and <code>body: ['right']</code>{' '}
+              are the same
             </div>
           </li>
         </ul>
         <div className='text'>
-          3) Posts with a <code>"title"</code> that contains <code>"ears"</code>{' '}
-          <strong>OR</strong> <code>"eyes"</code> <strong>OR</strong>{' '}
-          <code>"nose"</code>:
+          3) Posts with a <code>title</code> that contains <code>ears</code>{' '}
+          <strong>OR</strong> <code>eyes</code> <strong>OR</strong>{' '}
+          <code>nose</code>:
         </div>
-        <div className='flex'>
-          <div className='code mr-4'>body: ['ears', 'eyes', 'nose']</div>
-          <div className='code'>
-            body: <br />
-            &nbsp; &nbsp; - 'ears'
-            <br />
-            &nbsp; &nbsp; - 'eyes'
-            <br />
-            &nbsp; &nbsp; - 'nose'
-          </div>
-        </div>
+
+        <div className='code'>title: ['ears', 'eyes', 'nose']</div>
+
         <div className='text'>
-          4) Comments can be added by using <code>#</code> symbol:
+          4) Use a symbol <code>#</code> to write a single-line comment.
         </div>
-        <div className='flex'>
-          <div className='code mr-4'>
-            body: ['ears', 'eyes', 'nose']
-            <br /># It is ignored by AutoMod
-          </div>
-          <div className='code'>
-            body: <br />
-            &nbsp; &nbsp; - 'ears' # hello
-            <br />
-            &nbsp; &nbsp; - 'eyes' # Reddit
-            <br />
-            &nbsp; &nbsp; - 'nose' # AutoMod
-          </div>
+
+        <div className='code mr-4'>
+          body: ['ears', 'eyes', 'nose']
+          <br /># It is ignored by AutoMod
         </div>
+
         <div className='text'>
-          5) Posts with a <code>"title"</code> <strong>OR</strong> a{' '}
-          <code>"body"</code> that contains <code>"ears"</code> or{' '}
-          <code>"eyes"</code>:
+          5) Posts with a <code>title</code> <strong>OR</strong> a{' '}
+          <code>body</code> that contains <code>ears</code> or <code>eyes</code>
+          :
         </div>
         <div className='code'>title+body: ['ears', 'eyes']</div>
         <div className='text'>
-          6) Posts with a <code>"body"</code> that contains{' '}
-          <code>"ears" or "eyes"</code> <strong>AND</strong> <code>"face"</code>
-          :
+          6) Posts with a <code>body</code> that contains <code>ears</code> or{' '}
+          <code>eyes</code> <strong>AND</strong> <code>face</code>:
         </div>
         <div className='code'>
           <div>body#1: ['ears', 'eyes'] # Add #(number) after "body"</div>
           <div>body#2: ['face'] # if codes check a same field.</div>
         </div>
         <div className='text'>
-          7) Posts with a <code>"title"</code> that contains "amazon, but{' '}
-          <strong>NOT</strong> contain <code>"river"</code>:
+          7) Posts with a <code>title</code> that contains <code>amazon</code>,
+          but <strong>NOT</strong>
+          <code>river</code>:
         </div>
         <div className='code'>
           title: ['amazon']
@@ -135,7 +118,7 @@ function ConfigurationGuide(): ReactElement {
         <div className='text'>
           This is used to specify <strong>case-sensitivity</strong> of
           operations, for example, the following rule will <strong>NOT</strong>{' '}
-          detect a post with a body containing <code>"right"</code>.
+          detect a post with a body containing <code>right</code>.
         </div>
         <div className='code'>body (case-sensitive): ['RiGht']</div>
         <div className='category'>Rules</div>
@@ -152,7 +135,10 @@ function ConfigurationGuide(): ReactElement {
           <br />
           body: [‘ears’, ‘eyes’, ‘nose’]
         </div>
-        <div className='text'>This code is exactly working same as:</div>
+        <div className='text'>
+          Note that the above configuration is working in the same way as the
+          following one.{' '}
+        </div>
         <div className='code'>title+body: ['ears', ‘eyes’, ‘nose’]</div>
         <div className='category'>Example Configuration</div>
         <div className='code'>
@@ -166,19 +152,11 @@ function ConfigurationGuide(): ReactElement {
           <br />
           ---
           <br />
-          body#1:
-          <br />
-          &nbsp; &nbsp; - ‘yellow’
-          <br />
-          &nbsp; &nbsp; - ‘green’
-          <br />
-          &nbsp; &nbsp; - ‘blue’
+          body#1: ['yellow']
           <br />
           body#2 (includes): [‘grey’, ‘purple’]
           <br />
           title (case-sensitive): [‘RainBow’]
-          <br />
-          ---
         </div>
       </TabPane>
     </GuideTabs>
@@ -204,7 +182,7 @@ const GuideTabs = styled(Tabs)`
     background-color: #edeff1;
     padding: 0.25rem 0.5rem;
     font-family: Noto Mono, Menlo, Monaco, Consolas, monospace;
-    margin: 0.5rem 0.5rem;
+    margin: 0.5rem 0;
   }
   .sub {
     font-size: 1rem;
@@ -219,7 +197,9 @@ const GuideTabs = styled(Tabs)`
     color: gray;
   }
   code {
+    font-size: 0.8rem;
     background-color: #edeff1;
+    padding: 0 0.2rem;
   }
   td {
     border: 1px solid gray;

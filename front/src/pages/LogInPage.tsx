@@ -81,7 +81,7 @@ function LogInPage(): ReactElement {
   }
 
   const layout = {
-    labelCol: { span: 10 },
+    labelCol: { span: 12 },
     wrapperCol: { span: 14 },
   };
 

@@ -10,6 +10,7 @@ import { useStore } from '@utils/store';
 import { useHistory, useParams } from 'react-router-dom';
 import { Condition, Task } from '@typings/types';
 import useLogMutation from '@hooks/useLogMutation';
+import { invalidatePostQueries } from '@utils/util';
 
 interface Props {
   onCancel: () => void;
@@ -22,7 +23,7 @@ function SubmitModal({ onCancel, visible }: Props): ReactElement {
   const logMutation = useLogMutation();
   const history = useHistory();
   const [code, setCode] = useState('');
-  const { clearConfigId } = useStore();
+  const { clearConfigId, changeImported } = useStore();
   const [isVisibleConfirmModal, setIsVisibleConfirmModal] = useState(false);
   const submitConfig = ({ code }: { code: string }) =>
     request<Config>({
@@ -73,6 +74,33 @@ function SubmitModal({ onCancel, visible }: Props): ReactElement {
     }
   );
 
+  const deleteAllPostsMutation = useMutation(
+    () =>
+      request({
+        url: 'posts/all/',
+        method: 'DELETE',
+      }),
+    {
+      onSuccess: () => {
+        invalidatePostQueries(queryClient);
+        changeImported(false);
+      },
+    }
+  );
+
+  const deleteAllRulesMutation = useMutation(
+    () =>
+      request({
+        url: 'configs/all/',
+        method: 'DELETE',
+      }),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('configs');
+      },
+    }
+  );
+
   const onFinishExperiment = useCallback(() => {
     logMutation.mutate({ task, info: 'finish' });
     setIsVisibleConfirmModal(false);
@@ -82,6 +110,8 @@ function SubmitModal({ onCancel, visible }: Props): ReactElement {
     deleteExceptPostsMutation.mutate();
     if (task === 'example') {
       // history.push(`/home/${condition}/${_.random(1, 2) === 1 ? 'A1' : 'B2'}`);
+      deleteAllPostsMutation.mutate();
+      deleteAllRulesMutation.mutate();
       history.push(`/check/${condition}/`);
     } else {
       history.push(`/survey/${condition}/${task}`);
@@ -89,6 +119,8 @@ function SubmitModal({ onCancel, visible }: Props): ReactElement {
   }, [
     clearConfigId,
     condition,
+    deleteAllPostsMutation,
+    deleteAllRulesMutation,
     deleteExceptPostsMutation,
     deleteTargetPostsMutation,
     history,
@@ -127,6 +159,7 @@ function SubmitModal({ onCancel, visible }: Props): ReactElement {
           fontSize: '18px',
         }}
         placeholder=''
+        wrapEnabled={true}
       />
       <Modal
         visible={isVisibleConfirmModal}

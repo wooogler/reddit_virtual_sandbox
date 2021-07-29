@@ -24,6 +24,7 @@
     "lodash": "^4.17.21",
     "react": "^17.0.2",
     "react-ace": "^9.4.0",
+    "react-autosave": "^0.2.2",
     "react-dom": "^17.0.2",
     "react-highlight-words": "^0.17.0",
     "react-interactive-highlighter": "^0.3.1",
@@ -62,7 +63,8 @@
     "start": "craco start",
     "build": "craco build",
     "test": "craco test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "deploy": "craco build && aws s3 sync ./build s3://modsandbox --profile=sangwook"
   },
   "eslintConfig": {
     "extends": [

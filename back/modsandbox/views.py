@@ -119,6 +119,7 @@ class PostViewSet(viewsets.ModelViewSet):
         where = request.data.get('where')
         type = request.data.get('type')
         use_author = request.data.get('use_author')
+        task = request.data.get('task')
 
         if subreddit == '':
             return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -139,38 +140,45 @@ class PostViewSet(viewsets.ModelViewSet):
                                    'test_data/submission_cscareerquestions_may_1st_rest.json')) as normal_json:
                 normal = json.load(normal_json)
                 normal_json.close()
+
+        elif where == 'Example':  # for lab study example
+            with open(os.path.join(os.path.dirname(__file__),
+                                   'test_data/submission_cscareerquestions_april_1st.json')) as normal_json:
+                normal = json.load(normal_json)
+                normal_json.close()
+
         else:
             with open(os.path.join(os.path.dirname(__file__),
                                    'test_data/submission_cscareerquestions_may_2nd_labeled.json')) as normal_json:
                 normal = json.load(normal_json)
                 normal_json.close()
 
-            normal_posts = ([
-                SimpleNamespace(
-                    **{
-                        'id': post['id'],
-                        'author': SimpleNamespace(**{
-                            'name': post['author_name'],
-                            'link_karma': post['author_link_karma'],
-                            'comment_karma': post['author_comment_karma'],
-                            'created_utc': post['author_created_utc'],
-                        }),
-                        'title': post['title'],
-                        'name': post['name'],
-                        'selftext': post['body'],
-                        'created_utc': post['created_utc'],
-                        'banned_by': None,
-                        'num_reports': None,
-                        'permalink': post['permalink'],
-                        'score': post['score'],
-                        'rule_1': post['rule_1'],
-                        'rule_2': post['rule_2'],
-                    })
-                for post in normal])
+        normal_posts = ([
+            SimpleNamespace(
+                **{
+                    'id': post['id'],
+                    'author': SimpleNamespace(**{
+                        'name': post['author_name'],
+                        'link_karma': post['author_link_karma'],
+                        'comment_karma': post['author_comment_karma'],
+                        'created_utc': post['author_created_utc'],
+                    }),
+                    'title': post['title'],
+                    'name': post['name'],
+                    'selftext': post['body'],
+                    'created_utc': post['created_utc'],
+                    'banned_by': None,
+                    'num_reports': None,
+                    'permalink': post['permalink'],
+                    'score': post['score'],
+                    'rule_1': post['rule_1'] if 'rule_1' in post else 0,
+                    'rule_2': post['rule_2'] if 'rule_2' in post else 0,
+                })
+            for post in normal])
 
-            posts = create_test_posts(normal_posts, request.user, 'normal')
+        posts = create_test_posts(normal_posts, request.user, 'normal')
 
-        configs = Config.objects.filter(user=request.user)
+        configs = Config.objects.filter(user=request.user, task=task)
         for config in configs:
             apply_config(config, posts, False)
 

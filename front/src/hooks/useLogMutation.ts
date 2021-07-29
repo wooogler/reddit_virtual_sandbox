@@ -27,7 +27,7 @@ export default function useLogMutation() {
       check_id,
     }: Props) =>
       request({
-        url: '/log/',
+        url: task === 'example' ? '/trash/' : '/log/',
         method: 'POST',
         data: {
           task,

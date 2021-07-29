@@ -1,4 +1,4 @@
-import { ReactElement, useEffect, useState } from 'react';
+import { ReactElement, useCallback, useEffect, useState } from 'react';
 import AceEditor from 'react-ace';
 import 'ace-builds/src-noconflict/mode-yaml';
 import 'ace-builds/src-noconflict/theme-tomorrow';
@@ -20,6 +20,7 @@ import { invalidatePostQueries } from '@utils/util';
 import { useParams } from 'react-router-dom';
 import { Condition, Task } from '@typings/types';
 import useLogMutation from '@hooks/useLogMutation';
+import { useAutosave } from 'react-autosave';
 
 interface Props {
   placeholder: string;
@@ -28,9 +29,26 @@ interface Props {
 function CodeEditor({ placeholder }: Props): ReactElement {
   const queryClient = useQueryClient();
   const [code, setCode] = useState('');
-
   const logMutation = useLogMutation();
   const { condition, task } = useParams<{ condition: Condition; task: Task }>();
+
+  const autoSaveConfig = useCallback((code: string) => {
+    request({
+      url: task === 'example' ? '/trash/' : '/log/',
+      method: 'POST',
+      data: {
+        task,
+        info: 'autosave config',
+        content: code,
+      },
+    });
+  }, [task]);
+
+  useAutosave({
+    data: code,
+    onSave: autoSaveConfig,
+    interval: 2000,
+  });
 
   const [isSaved, setIsSaved] = useState(false);
   const {
@@ -272,6 +290,7 @@ function CodeEditor({ placeholder }: Props): ReactElement {
           }}
           placeholder={placeholder}
           readOnly={isSaved}
+          wrapEnabled={true}
         />
       </div>
     </>

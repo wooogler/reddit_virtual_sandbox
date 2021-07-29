@@ -289,6 +289,7 @@ function PostViewerLayout(): ReactElement {
       method: 'POST',
       data: {
         where: 'Test',
+        task: task,
       },
     });
 
@@ -301,6 +302,27 @@ function PostViewerLayout(): ReactElement {
       queryClient.invalidateQueries('stats/not_filtered');
     },
   });
+
+  const importExamplePostsMutation = useMutation(
+    () =>
+      request({
+        url: '/posts/',
+        method: 'POST',
+        data: {
+          where: 'Example',
+          task: task,
+        },
+      }),
+    {
+      onSuccess: () => {
+        changeImported(true);
+        queryClient.invalidateQueries('filtered');
+        queryClient.invalidateQueries('not filtered');
+        queryClient.invalidateQueries('stats/filtered');
+        queryClient.invalidateQueries('stats/not_filtered');
+      },
+    }
+  );
 
   const onClickImport = useCallback(() => {
     // setIsModalVisible(true);
@@ -318,10 +340,15 @@ function PostViewerLayout(): ReactElement {
 
   useEffect(() => {
     if (notFilteredCount === 0) {
-      importTestPostsMutation.mutate();
+      if (task === 'example') {
+        importExamplePostsMutation.mutate();
+      } else {
+        importTestPostsMutation.mutate();
+      }
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [notFilteredCount]);
+  }, [notFilteredCount, task]);
 
   const onChangeFpFn = useCallback(() => {
     changeFpFn(!fpfn);
@@ -341,7 +368,7 @@ function PostViewerLayout(): ReactElement {
         <div className='w-full flex items-center flex-wrap '>
           <div className='text-2xl ml-2 flex items-center'>
             <RedditOutlined style={{ color: 'orangered' }} />
-            <div className='ml-2'>Posts on Subreddits</div>
+            {/* <div className='ml-2'>Posts on Subreddits</div> */}
             {/* <div className='text-sm ml-2'>in May 2021</div> */}
             <Input
               prefix={<SearchOutlined />}
@@ -423,8 +450,8 @@ function PostViewerLayout(): ReactElement {
                 (totalCount.totalCount !== 0 ? (
                   <Button
                     onClick={() => {
-                      deleteAllPostsMutation.mutate();
                       deleteAllRulesMutation.mutate();
+                      deleteAllPostsMutation.mutate();
                     }}
                     loading={
                       deleteAllPostsMutation.isLoading ||
@@ -440,7 +467,10 @@ function PostViewerLayout(): ReactElement {
                     type='primary'
                     className='ml-2'
                     onClick={onClickImport}
-                    loading={importTestPostsMutation.isLoading}
+                    loading={
+                      importTestPostsMutation.isLoading ||
+                      importExamplePostsMutation.isLoading
+                    }
                   >
                     Import
                   </Button>

@@ -10219,6 +10219,11 @@ react-app-polyfill@^2.0.0:
     regenerator-runtime "^0.13.7"
     whatwg-fetch "^3.4.1"
 
+react-autosave@^0.2.2:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/react-autosave/-/react-autosave-0.2.2.tgz#af4141cb4b3c1acaafa2f5b2cb7707d5f6f53f02"
+  integrity sha512-sx6wvVGlCNIS8H20q69SKag5GxYZ7sF63cMyB0rY1EkMl9vdutdApgmOQIkNFzVZA8EIJiQwkcXFBWHFSa18kg==
+
 react-clientside-effect@^1.2.5:
   version "1.2.5"
   resolved "https://registry.yarnpkg.com/react-clientside-effect/-/react-clientside-effect-1.2.5.tgz#e2c4dc3c9ee109f642fac4f5b6e9bf5bcd2219a3"

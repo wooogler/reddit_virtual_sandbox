@@ -47,8 +47,8 @@ function SearchModal({ visible, onCancel, query }: Props): ReactElement {
     >
       <div className='text-2xl font-bold'>{query}</div>
       <div>
-        <b>{searchQuery.data ? searchQuery.data.length : 0}</b> results on the
-        system
+        <b>{searchQuery.data ? searchQuery.data.length : 0}</b> was found from
+        Posts on Subreddits
       </div>
       <div className='flex text-xs items-center'>
         <div>SORT BY</div>

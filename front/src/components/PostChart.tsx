@@ -1,3 +1,4 @@
+import useInitDateRange from '@hooks/useInitDateRange';
 import useLogMutation from '@hooks/useLogMutation';
 import { IStat } from '@typings/db';
 import request from '@utils/request';
@@ -159,33 +160,7 @@ function PostChart(): ReactElement {
   //     : 'Spam/Reports'
   // }`;
 
-  useEffect(() => {
-    const fetchGraph = async () => {
-      await request<IStat[]>({
-        url: '/stats/graph/',
-        params: {
-          post_type: 'all',
-          filtered: false,
-          source: 'all',
-        },
-      }).then(({ data }) => {
-        if (data.length !== 0) {
-          const startDate = data
-            .map((item) => item.x0)
-            .reduce((min, cur) => {
-              return cur < min ? cur : min;
-            });
-          const endDate = data
-            .map((item) => item.x1)
-            .reduce((min, cur) => {
-              return cur > min ? cur : min;
-            });
-          changeDateRange(dayjs(startDate), dayjs(endDate));
-        }
-      });
-    };
-    fetchGraph();
-  }, [changeDateRange]);
+
 
   const selectedTimeLabel = start_date
     ? `Selected time range: ${start_date?.format('lll')} - ${end_date?.format(

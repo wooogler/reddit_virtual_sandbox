@@ -72,7 +72,7 @@ function ConfigurationAnalysis(): ReactElement {
                   }
                 >
                   <div className='ml-4'>
-                    <RuleAnalysis config={config}/>
+                    <RuleAnalysis config={config} />
                   </div>
                 </Panel>
               </React.Fragment>
