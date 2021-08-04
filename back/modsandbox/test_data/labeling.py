@@ -20,5 +20,9 @@ _labeled_sub2 = labeled_sub2.drop(columns=['title_y', 'body_y', 'Unnamed: 0', 'i
 print(_labeled_sub1)
 print(_labeled_sub2)
 
-_labeled_sub1.to_json('./submission_cscareerquestions_may_1st_labeled.json', orient='records')
-_labeled_sub2.to_json('./submission_cscareerquestions_may_2nd_labeled.json', orient='records')
+_labeled_sub1.to_json('./submission_cscareerquestions_may_1st_labeled.json', orient='records', indent=2)
+_labeled_sub2.to_json('./submission_cscareerquestions_may_2nd_labeled.json', orient='records', indent=2)
+
+_labeled_sub1[_labeled_sub1['rule_1']==1].to_csv('rule1.csv')
+_labeled_sub1[_labeled_sub1['rule_2']==1].to_csv('rule2.csv')
+

@@ -1,172 +1,173 @@
-import { Tabs } from 'antd';
 import React, { ReactElement } from 'react';
 import styled from 'styled-components';
 
 function ConfigurationGuide(): ReactElement {
-  const { TabPane } = Tabs;
   return (
-    <GuideTabs defaultActiveKey='0' centered size='small'>
-      <TabPane tab='Detection of posts' key='0'>
-        <div className='category mb-2'>
-          Detection of posts containing particular keywords
-        </div>
-        <img
-          src='/images/post_example.png'
-          alt='post-example'
-          className='w-4/5'
-        />
-        <div className='text'>
-          1) Posts with a <code>title</code> that contains <code>ears</code>:
-        </div>
-        <div className='code'>title: ['ears']</div>
-        <div className='text'>
-          2) Posts with a <code>body</code> that contains <code>right</code>:
-        </div>
-        <div className='code'>title: ['right']</div>
-        <div className='text'>
-          <strong>Warning!</strong>
-        </div>
-        <ul>
-          <li>
-            AutoMod checks an <strong>entire word</strong> matching text
-            <div>
-              ex) <code>title: ['ar']</code> will not detect the above post.{' '}
-            </div>
-          </li>
-          <li>
-            Be careful to add <strong>space</strong> after every colon (:).
-            <div>
-              ex) <code>body:['right']</code> will cause an error.
-            </div>
-          </li>
-          <li>
-            Note that all the operations are <strong>case-insensitive</strong>{' '}
-            by default.
-            <div>
-              ex) <code>body: ['RiGht']</code> and <code>body: ['right']</code>{' '}
-              are the same
-            </div>
-          </li>
-        </ul>
-        <div className='text'>
-          3) Posts with a <code>title</code> that contains <code>ears</code>{' '}
-          <strong>OR</strong> <code>eyes</code> <strong>OR</strong>{' '}
-          <code>nose</code>:
-        </div>
+    <GuideDiv>
+      <div className='category mb-2'>
+        Detection of posts with a single line of the configuration
+      </div>
+      <img
+        src='/images/post_example.png'
+        alt='post-example'
+        className='w-4/5'
+      />
+      <div className='text'>
+        1) Posts with a <code>title</code> that contains <code>ears</code>:
+      </div>
+      <div className='code'>title: ['ears']</div>
+      <div className='text'>
+        2) Posts with a <code>body</code> that contains <code>right</code>:
+      </div>
+      <div className='code'>body: ['right']</div>
+      <div className='text-lg'>
+        <strong>Warning</strong>
+      </div>
+      <ul>
+        <li>
+          Be careful to add <strong>space</strong> after every colon (:).
+          <div>
+            ex) <code>body:['right']</code> will cause an error.
+          </div>
+        </li>
+        <li>
+          AutoMod checks an <strong>entire word</strong> matching text by
+          default.
+          <div>
+            ex) <code>title: ['ar']</code> will not detect the above post.{' '}
+          </div>
+        </li>
 
-        <div className='code'>title: ['ears', 'eyes', 'nose']</div>
+        <li>
+          Note that all the operations are <strong>case-insensitive</strong> by
+          default.
+          <div>
+            ex) <code>body: ['RiGht']</code> and <code>body: ['right']</code>{' '}
+            are the same
+          </div>
+        </li>
+      </ul>
+      <div className='text'>
+        3) Posts with a <code>title</code> that contains the particular text{' '}
+        <code>ar</code>, regardless of whether it is{' '}
+        <strong>included inside</strong> other words
+      </div>
+      <div className='code'>title (includes): ['ar']</div>
+      <div className='text'>
+        4) Posts with a <code>body</code> that contains <code>RiGht</code> with{' '}
+        <strong>case sensitivity</strong>
+      </div>
+      <div className='code'>body (includes, case-sensitive): ['RiGht']</div>
+      <div className='text'>
+        5) Posts with a <code>title</code> that contains the particular text{' '}
+        <code>Ar</code>, regardless of whether it is{' '}
+        <strong>included inside</strong> other words with{' '}
+        <strong>case sensitivy</strong>
+      </div>
+      <div className='code'>title (includes, case-sensitive): ['Ar']</div>
+      <div className='text'>
+        6) Posts with a <code>title</code> that contains <code>ears</code>{' '}
+        <strong>OR</strong> <code>eyes</code> <strong>OR</strong>{' '}
+        <code>nose</code>:
+      </div>
+      <div className='code'>title: ['ears', 'eyes', 'nose']</div>
+      <div className='text'>
+        7) Posts with a <code>title</code> <strong>OR</strong> a{' '}
+        <code>body</code> that contains <code>ears</code> or <code>eyes</code>:
+      </div>
+      <div className='code'>title+body: ['ears', 'eyes']</div>
+      <div className='text'>
+        8) Posts with a <code>title</code> or a <code>body</code> that does{' '}
+        <strong>NOT</strong> contain <code>red</code> or <code>purple</code>:
+      </div>
+      <div className='code'>~title+body: [‘red’, 'purple']</div>
 
-        <div className='text'>
-          4) Use a symbol <code>#</code> to write a single-line comment.
-        </div>
+      <div className='category'>
+        Detection of posts with multiple "lines" of the configuration
+      </div>
+      <div className='text'>9) Posts that meet all conditions below.</div>
+      <ul className='list-disc'>
+        <li>
+          Posts with a <code>title</code> that contains <code>not</code> or{' '}
+          <code>red</code> or <code>my</code>
+        </li>
+        <li>
+          Posts with a <code>title</code> or a <code>body</code> that contains{' '}
+          <code>fair</code> or <code>small</code>
+        </li>
+        <li>
+          Posts with a <code>body</code> that does not contain{' '}
+          <code>shoes</code>
+        </li>
+      </ul>
+      <div className='code'>
+        title: [‘not’, ‘red’, ‘my’]
+        <br />
+        title+body: [‘fair’, ‘small’]
+        <br />
+        ~body: [‘shoes’]
+      </div>
+      <div className='text-lg'>
+        <strong>Warning</strong>
+      </div>
+      <div className='text'>
+        If there are same texts before colon, put{' '}
+        <strong>a sharp and a different number</strong> (ex. <code>#1</code>,{' '}
+        <code>#2</code>) behind the texts
+      </div>
+      <div className='code'>
+        title#1: ['ears']
+        <br />
+        title#2: [‘face’]
+      </div>
+      <div className='category mt-6'>
+        Detection of posts with multiple "rules" of the configuration
+      </div>
+      <div className='text'>
+        A configuration can have multiple rules, and AutoMod applies each rule
+        sequentially. <br />
+        The rules must be separated by a line starting with exactly{' '}
+        <strong>3 hyphens</strong> (<code>---</code>).
+      </div>
+      <div className='text'>
+        Posts that meet all conditions below <strong>OR</strong> posts with a
+        body contains <code>fly</code>
+      </div>
+      <ul className='list-disc'>
+        <li>
+          Posts with a <code>title</code> that contains <code>not</code> or{' '}
+          <code>red</code> or <code>my</code>
+        </li>
+        <li>
+          Posts with a <code>title</code> or a <code>body</code> that contains{' '}
+          <code>fair</code> or <code>small</code>
+        </li>
+        <li>
+          Posts with a <code>body</code> that does not contain{' '}
+          <code>shoes</code>
+        </li>
+      </ul>
 
-        <div className='code mr-4'>
-          body: ['ears', 'eyes', 'nose']
-          <br /># It is ignored by AutoMod
-        </div>
-
-        <div className='text'>
-          5) Posts with a <code>title</code> <strong>OR</strong> a{' '}
-          <code>body</code> that contains <code>ears</code> or <code>eyes</code>
-          :
-        </div>
-        <div className='code'>title+body: ['ears', 'eyes']</div>
-        <div className='text'>
-          6) Posts with a <code>body</code> that contains <code>ears</code> or{' '}
-          <code>eyes</code> <strong>AND</strong> <code>face</code>:
-        </div>
-        <div className='code'>
-          <div>body#1: ['ears', 'eyes'] # Add #(number) after "body"</div>
-          <div>body#2: ['face'] # if codes check a same field.</div>
-        </div>
-        <div className='text'>
-          7) Posts with a <code>title</code> that contains <code>amazon</code>,
-          but <strong>NOT</strong>
-          <code>river</code>:
-        </div>
-        <div className='code'>
-          title: ['amazon']
-          <br /> ~title: [‘river’]
-        </div>
-      </TabPane>
-      <TabPane tab='Modifiers / Rules' key='1'>
-        <div className='category'>Modifiers</div>
-        <div className='text'>
-          You can use Modifiers, which change how your configuration behave.{' '}
-          <br />
-          This can be used in the following way:
-        </div>
-        <div className='code'>
-          body (<i>Modifier 1</i>, <i>Modifier 2</i>) : [‘keyword1’]
-        </div>
-        <div className='text'>
-          Here are some of the modifiers you can use to write AutoMod
-          configuration.
-        </div>
-        <div className='text'>
-          1) <code>includes</code>
-        </div>
-        <div className='text'>
-          This is used to search for particular texts, for example, the
-          following rule will detect a post with a title containing "e
-          <strong>ar</strong>s".
-        </div>
-        <div className='code'>title (includes): ['ar']</div>
-        <div className='text'>
-          2) <code>case-sensitive</code>
-        </div>
-        <div className='text'>
-          This is used to specify <strong>case-sensitivity</strong> of
-          operations, for example, the following rule will <strong>NOT</strong>{' '}
-          detect a post with a body containing <code>right</code>.
-        </div>
-        <div className='code'>body (case-sensitive): ['RiGht']</div>
-        <div className='category'>Rules</div>
-        <div className='text'>
-          A configuration can have multiple rules, and AutoMod apply each rule
-          sequentially. <br />
-          The rules must be separated by a line starting with exactly{' '}
-          <strong>3 hyphens</strong>:
-        </div>
-        <div className='code'>
-          title: ['ears', ‘eyes’, ‘nose’]
-          <br />
-          ---
-          <br />
-          body: [‘ears’, ‘eyes’, ‘nose’]
-        </div>
-        <div className='text'>
-          Note that the above configuration is working in the same way as the
-          following one.{' '}
-        </div>
-        <div className='code'>title+body: ['ears', ‘eyes’, ‘nose’]</div>
-        <div className='category'>Example Configuration</div>
-        <div className='code'>
-          title: ['red']
-          <br />
-          body: [‘orange’]
-          <br />
-          body+title: [‘rainbow’]
-          <br />
-          ~body: [‘color’]
-          <br />
-          ---
-          <br />
-          body#1: ['yellow']
-          <br />
-          body#2 (includes): [‘grey’, ‘purple’]
-          <br />
-          title (case-sensitive): [‘RainBow’]
-        </div>
-      </TabPane>
-    </GuideTabs>
+      <div className='code'>
+        title: [‘not’, ‘red’, ‘my’]
+        <br />
+        title+body: [‘fair’, ‘small’]
+        <br />
+        ~body: [‘shoes’]
+        <br />
+        ---
+        <br />
+        body: [‘fly’]
+      </div>
+    </GuideDiv>
   );
 }
 
-const GuideTabs = styled(Tabs)`
+const GuideDiv = styled.div`
   width: 100%;
   .category {
     font-size: 1.2rem;
+    font-weight: bold;
   }
   .group {
     font-size: 1.1rem;

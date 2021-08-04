@@ -27,7 +27,7 @@ function RuleAnalysis({ config }: Props): ReactElement {
     if (config.rules.length === 1) {
       changeRuleId(config.rules[0].id);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [config.rules.length]);
 
   return (
@@ -60,9 +60,10 @@ function RuleAnalysis({ config }: Props): ReactElement {
                 selectedIds={selectedHighlights.map((item) => item.check_id)}
               />
             ))}
-            {rule.check_combinations.find(
-              (checkCombination) => checkCombination.checks.length > 1
-            ) && (
+            {(process.env.NODE_ENV === 'development' ||
+              rule.check_combinations.find(
+                (checkCombination) => checkCombination.checks.length > 1
+              )) && (
               <>
                 <div className='font-bold'>Keyword Combintations</div>
                 {rule.check_combinations

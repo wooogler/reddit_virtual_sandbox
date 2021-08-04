@@ -176,6 +176,7 @@ export const useStore = create<State>(
           'refetching',
           'selectedHighlights',
           'totalCount',
+          'imported',
         ],
       }
     )

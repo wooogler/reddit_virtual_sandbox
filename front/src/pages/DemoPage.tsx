@@ -13,11 +13,11 @@ const demoJSON = {
       elements: [
         {
           type: 'panel',
-          name: 'panel1',
+          name: 'background',
           elements: [
             {
               type: 'rating',
-              name: 'Q1',
+              name: 'reddit_mod',
               title:
                 'Which of the following best describes your familiarity with "Reddit Moderation" before the task?',
               isRequired: true,
@@ -27,7 +27,7 @@ const demoJSON = {
             },
             {
               type: 'rating',
-              name: 'Q2',
+              name: 'community_mod',
               title:
                 'Which of the following best describes your familiarity with "Online Community Moderation" before the task?',
               isRequired: true,
@@ -36,28 +36,8 @@ const demoJSON = {
               maxRateDescription: 'Very much familiar',
             },
             {
-              type: 'rating',
-              name: 'Q3',
-              title:
-                'Which of the following best describes your familiarity with "Regular Expressions (Regex)" before the task?',
-              isRequired: true,
-              rateMax: 7,
-              minRateDescription: 'Not familiar at all',
-              maxRateDescription: 'Very much familiar',
-            },
-            {
-              type: 'rating',
-              name: 'Q4',
-              title:
-                'Which of the following best describes your familiarity with "YAML" before the task?',
-              isRequired: true,
-              rateMax: 7,
-              minRateDescription: 'Not familiar at all',
-              maxRateDescription: 'Very much familiar',
-            },
-            {
               type: 'radiogroup',
-              name: 'Q5',
+              name: 'programming',
               title: 'How much programming knowledge do you have?',
               isRequired: true,
               choices: [
@@ -81,7 +61,7 @@ const demoJSON = {
             },
             {
               type: 'panel',
-              name: 'demo',
+              name: 'demographic',
               elements: [
                 {
                   type: 'radiogroup',

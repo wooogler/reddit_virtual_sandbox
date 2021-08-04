@@ -8,76 +8,221 @@ import * as Survey from 'survey-react';
 const surveyJSON = {
   pages: [
     {
-      name: 'Post Survey',
+      name: 'Feature0',
       elements: [
         {
-          type: 'rating',
-          name: 'Q1',
-          title: 'How mentally demanding was the task?',
-          isRequired: true,
-          rateMax: 7,
-          minRateDescription: 'Very Low',
-          maxRateDescription: 'Very High',
+          type: 'image',
+          name: 'feature0_pic',
+          imageLink:
+            'https://api.surveyjs.io/private/Surveys/files?name=065ad098-aaf0-45f8-a762-efb80c3e8d87',
         },
         {
-          type: 'rating',
-          name: 'Q2',
-          title: 'How physically demanding was the task?',
-          isRequired: true,
-          rateMax: 7,
-          minRateDescription: 'Very Low',
-          maxRateDescription: 'Very High',
-        },
-        {
-          type: 'rating',
-          name: 'Q3',
-          title: 'How hurried or rushed was the pace of the task?',
-          isRequired: true,
-          rateMax: 7,
-          minRateDescription: 'Very Low',
-          maxRateDescription: 'Very High',
-        },
-        {
-          type: 'rating',
-          name: 'Q4',
-          title:
-            'How successful were you in accomplishing what you were asked to do?',
-          isRequired: true,
-          rateMax: 7,
-          minRateDescription: 'Perfect',
-          maxRateDescription: 'Failure',
-        },
-        {
-          type: 'rating',
-          name: 'Q5',
-          title:
-            'How hard did you have to work to accomplish your level of performance?',
-          isRequired: true,
-          rateMax: 7,
-          minRateDescription: 'Very Low',
-          maxRateDescription: 'Very High',
-        },
-        {
-          type: 'rating',
-          name: 'Q6',
-          title:
-            'How insecure, discouraged, irritated, stressed, and annoyed were you during the task?',
-          isRequired: true,
-          rateMax: 7,
-          minRateDescription: 'Very Low',
-          maxRateDescription: 'Very High',
+          type: 'radiogroup',
+          name: 'feature0_useful',
+          title: 'How useful was Feature 0: Sandbox in the main task 1?',
+          choices: [
+            {
+              value: '1',
+              text: 'Extremely useless ',
+            },
+            {
+              value: '2',
+              text: 'Somewhat useless',
+            },
+            {
+              value: '3',
+              text: 'Slightly useless',
+            },
+            {
+              value: '4',
+              text: 'Neither useful nor useless ',
+            },
+            {
+              value: '5',
+              text: 'Slightly useful ',
+            },
+            {
+              value: '6',
+              text: 'Somewhat useful ',
+            },
+            {
+              value: '7',
+              text: 'Extremely useful ',
+            },
+          ],
         },
         {
           type: 'comment',
-          name: 'Q7',
-          title: 'Feedback',
+          name: 'feature0_essay',
+          title:
+            'What aspects of the Feature 0: Sandbox led to your answer to the above question?',
         },
       ],
-      description:
-        'Thank you for your participation. You will be required to answer the following questions. Your responses are anonymous and confidential, and are collected only for research purposes.',
+      title: 'Feature 0: Sandbox',
+    },
+    {
+      name: 'Feature1',
+      elements: [
+        {
+          type: 'image',
+          name: 'feature1_pic',
+          imageLink:
+            'https://api.surveyjs.io/private/Surveys/files?name=065ad098-aaf0-45f8-a762-efb80c3e8d87',
+        },
+        {
+          type: 'radiogroup',
+          name: 'feature1_useful',
+          title:
+            'How useful was Feature 1: Configuration Analysis in the main task 1?',
+          choices: [
+            {
+              value: '1',
+              text: 'Extremely useless ',
+            },
+            {
+              value: '2',
+              text: 'Somewhat useless',
+            },
+            {
+              value: '3',
+              text: 'Slightly useless',
+            },
+            {
+              value: '4',
+              text: 'Neither useful nor useless ',
+            },
+            {
+              value: '5',
+              text: 'Slightly useful ',
+            },
+            {
+              value: '6',
+              text: 'Somewhat useful ',
+            },
+            {
+              value: '7',
+              text: 'Extremely useful ',
+            },
+          ],
+        },
+        {
+          type: 'comment',
+          name: 'feature1_essay',
+          title:
+            'What aspects of the Feature 1: Configuration Analysis led to your answer to the above question?',
+        },
+      ],
+      title: 'Feature 1: Configuration Analysis',
+    },
+    {
+      name: 'Feature2',
+      elements: [
+        {
+          type: 'image',
+          name: 'feature2_pic',
+          imageLink:
+            'https://api.surveyjs.io/private/Surveys/files?name=065ad098-aaf0-45f8-a762-efb80c3e8d87',
+        },
+        {
+          type: 'radiogroup',
+          name: 'feature2_useful',
+          title:
+            'How useful was Feature 2: Post Collections in the main task 1?',
+          choices: [
+            {
+              value: '1',
+              text: 'Extremely useless ',
+            },
+            {
+              value: '2',
+              text: 'Somewhat useless',
+            },
+            {
+              value: '3',
+              text: 'Slightly useless',
+            },
+            {
+              value: '4',
+              text: 'Neither useful nor useless ',
+            },
+            {
+              value: '5',
+              text: 'Slightly useful ',
+            },
+            {
+              value: '6',
+              text: 'Somewhat useful ',
+            },
+            {
+              value: '7',
+              text: 'Extremely useful ',
+            },
+          ],
+        },
+        {
+          type: 'comment',
+          name: 'question9',
+          title:
+            'What aspects of the Feature 2: Post Collections led to your answer to the above question?',
+        },
+      ],
+      title: 'Feature 2: Post Collections',
+    },
+    {
+      name: 'Feature3',
+      elements: [
+        {
+          type: 'image',
+          name: 'feature3_useful',
+          imageLink:
+            'https://api.surveyjs.io/private/Surveys/files?name=065ad098-aaf0-45f8-a762-efb80c3e8d87',
+        },
+        {
+          type: 'radiogroup',
+          name: 'question11',
+          title:
+            'How useful was Feature 3: Possible Misses & False Alarms in the main task 1?',
+          choices: [
+            {
+              value: '1',
+              text: 'Extremely useless ',
+            },
+            {
+              value: '2',
+              text: 'Somewhat useless',
+            },
+            {
+              value: '3',
+              text: 'Slightly useless',
+            },
+            {
+              value: '4',
+              text: 'Neither useful nor useless ',
+            },
+            {
+              value: '5',
+              text: 'Slightly useful ',
+            },
+            {
+              value: '6',
+              text: 'Somewhat useful ',
+            },
+            {
+              value: '7',
+              text: 'Extremely useful ',
+            },
+          ],
+        },
+        {
+          type: 'comment',
+          name: 'feature3_essay',
+          title:
+            'What aspects of the Feature 3: Possible Misses & False Alarms to the above question?',
+        },
+      ],
+      title: 'Feature 3: Possible Misses & False Alarms',
     },
   ],
-  completeText: 'Next',
 };
 
 function PostSurveyPage(): ReactElement {
@@ -100,13 +245,13 @@ function PostSurveyPage(): ReactElement {
         if (task === 'A1') {
           history.push(`/home/${condition}/B1`);
         } else if (task === 'B1') {
-          history.push(`/demo/${condition}`)
+          history.push(`/demo/${condition}`);
         } else if (task === 'B2') {
           history.push(`/home/${condition}/A2`);
         } else if (task === 'A2') {
-          history.push(`/demo/${condition}`)
+          history.push(`/demo/${condition}`);
         } else {
-          history.push(`/demo/${condition}`)
+          history.push(`/demo/${condition}`);
         }
       },
     }

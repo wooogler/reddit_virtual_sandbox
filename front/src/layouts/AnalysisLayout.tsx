@@ -18,28 +18,34 @@ function AnalysisLayout({ evaluation }: Props): ReactElement {
   // const logMutation = useLogMutation();
 
   return (
-    <Split
-      horizontal
-      initialPrimarySize='30%'
-      minPrimarySize='10%'
-      minSecondarySize='50%'
-    >
-      <div className={'flex flex-col p-2 h-full'}>
-        <CodeEditor placeholder='' />
-      </div>
-      {condition === 'modsandbox' && (
-        <div
-          className='flex flex-col p-2 h-full'
-          data-tour='configuration-analysis'
+    <>
+      {condition !== 'modsandbox' ? (
+        <div className={'flex flex-col p-2 h-full'}>
+          <CodeEditor placeholder='' />
+        </div>
+      ) : (
+        <Split
+          horizontal
+          initialPrimarySize='30%'
+          minPrimarySize='10%'
+          minSecondarySize='50%'
         >
-          <div className='flex items-center border-t-2 border-gray-300'>
-            <PanelName>Configuration Analysis</PanelName>
+          <div className={'flex flex-col p-2 h-full'}>
+            <CodeEditor placeholder='' />
           </div>
-          <div className='flex-1 overflow-y-auto'>
-            <ConfigurationAnalysis />
-          </div>
-          {evaluation && <ConfusionMatrix />}
-          {/* {evaluation ? (
+
+          <div
+            className='flex flex-col p-2 h-full'
+            data-tour='configuration-analysis'
+          >
+            <div className='flex items-center border-t-2 border-gray-300'>
+              <PanelName>Configuration Analysis</PanelName>
+            </div>
+            <div className='flex-1 overflow-y-auto'>
+              <ConfigurationAnalysis />
+            </div>
+            {evaluation && <ConfusionMatrix />}
+            {/* {evaluation ? (
             <ConfusionMatrix />
           ) : (
             <div>
@@ -66,9 +72,10 @@ function AnalysisLayout({ evaluation }: Props): ReactElement {
               )}
             </div>
           )} */}
-        </div>
+          </div>
+        </Split>
       )}
-    </Split>
+    </>
   );
 }
 

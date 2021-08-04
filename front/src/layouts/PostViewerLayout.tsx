@@ -339,12 +339,15 @@ function PostViewerLayout(): ReactElement {
   const notFilteredCount = notFilteredQuery.data?.pages[0].count;
 
   useEffect(() => {
+    changeImported(false);
     if (notFilteredCount === 0) {
       if (task === 'example') {
         importExamplePostsMutation.mutate();
       } else {
         importTestPostsMutation.mutate();
       }
+    } else {
+      changeImported(true);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -370,7 +373,7 @@ function PostViewerLayout(): ReactElement {
             <RedditOutlined style={{ color: 'orangered' }} />
             {/* <div className='ml-2'>Posts on Subreddits</div> */}
             {/* <div className='text-sm ml-2'>in May 2021</div> */}
-            <Input
+            <Input.Search
               prefix={<SearchOutlined />}
               onPressEnter={() => {
                 setIsSearchVisible(true);
@@ -426,14 +429,19 @@ function PostViewerLayout(): ReactElement {
               {/* <div className='mr-2'>Hello, {userData && userData.username}!</div> */}
             </div>
             <div className='flex items-center'>
-              <div className='text-xs text-gray-500 mr-2'>
-                Find possible misses & false alarms
-              </div>
-              <Switch
-                checked={fpfn}
-                onChange={onChangeFpFn}
-                disabled={targetQuery.data?.length === 0}
-              />
+              {condition === 'modsandbox' && (
+                <>
+                  <div className='text-xs text-gray-500 mr-2'>
+                    View possible misses & false alarms
+                  </div>
+                  <Switch
+                    checked={fpfn}
+                    onChange={onChangeFpFn}
+                    disabled={targetQuery.data?.length === 0}
+                  />
+                </>
+              )}
+
               <Button
                 icon={<InfoCircleOutlined />}
                 className='ml-2'
@@ -501,7 +509,8 @@ function PostViewerLayout(): ReactElement {
                 notFilteredQuery.isLoading ||
                 filteredQuery.isLoading ||
                 !!queryClient.isMutating({ mutationKey: 'fpfn' }) ||
-                importTestPostsMutation.isLoading
+                importTestPostsMutation.isLoading ||
+                importExamplePostsMutation.isLoading
               }
             />
             <div className='border-gray-200 border-r-2' />
@@ -532,9 +541,7 @@ function PostViewerLayout(): ReactElement {
           <div className='text-2xl ml-2 flex items-center flex-wrap'>
             <RedditOutlined style={{ color: 'orangered' }} />
             <div className='mx-2 flex items-center'>
-              {condition === 'modsandbox'
-                ? 'Your Post Collections'
-                : 'Testing Subreddit'}
+              {condition === 'modsandbox' && 'Post Collections'}
             </div>
             <div className='flex text-sm flex-wrap ml-auto'>
               <div>
@@ -555,7 +562,7 @@ function PostViewerLayout(): ReactElement {
             label={
               condition === 'modsandbox'
                 ? 'Posts that should be filtered'
-                : 'Posts on Testing Subreddit'
+                : 'Test cases'
             }
             posts={targetQuery.data}
             isLoading={addTestCaseMutation.isLoading}
@@ -568,35 +575,33 @@ function PostViewerLayout(): ReactElement {
             }
           />
           <div className='border-gray-200 border-r-2' />
-          {condition !== 'baseline' && (
-            <TargetList
-              label={
-                condition === 'modsandbox'
-                  ? 'Posts to avoid being filtered'
-                  : 'Filtered by AutoMod'
-              }
-              posts={
-                condition === 'modsandbox'
-                  ? exceptQuery.data
-                  : targetQuery.data?.filter((post) =>
-                      isFiltered(post, config_id)
-                    )
-              }
-              isLoading={addTestCaseMutation.isLoading}
-              onSubmit={
-                condition === 'modsandbox'
-                  ? (postId) =>
-                      addTestCaseMutation.mutate({ postId, place: 'except' })
-                  : undefined
-              }
-              totalTarget={
-                condition === 'modsandbox'
-                  ? undefined
-                  : targetQuery.data?.length
-              }
-              place='except'
-            />
-          )}
+          <TargetList
+            label={
+              condition === 'modsandbox'
+                ? 'Posts to avoid being filtered'
+                : condition === 'sandbox'
+                ? 'Filtered by AutoMod'
+                : 'Posts that should be filtered'
+            }
+            posts={
+              condition === 'modsandbox'
+                ? exceptQuery.data
+                : targetQuery.data?.filter((post) =>
+                    isFiltered(post, config_id)
+                  )
+            }
+            isLoading={addTestCaseMutation.isLoading}
+            onSubmit={
+              condition === 'modsandbox'
+                ? (postId) =>
+                    addTestCaseMutation.mutate({ postId, place: 'except' })
+                : undefined
+            }
+            totalTarget={
+              condition === 'modsandbox' ? undefined : targetQuery.data?.length
+            }
+            place='except'
+          />
         </div>
       </div>
     </Split>

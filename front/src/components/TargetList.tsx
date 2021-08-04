@@ -94,7 +94,7 @@ function TargetList({
                   : 'Posts to avoid being filtered'
               }
             />
-          ) : place === 'except' ? (
+          ) : place === 'target' ? (
             <BarRateHorizontal
               part={stat.part}
               total={stat.total}
