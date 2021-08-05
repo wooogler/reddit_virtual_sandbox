@@ -14,7 +14,7 @@ import BarRate from './BarRate';
 interface Props {
   rule: Config | Rule | CheckCombination | Check;
   className?: string;
-  ruleType: 'config' | 'rule' | 'checkCombination' | 'check';
+  ruleType: 'config' | 'rule' | 'checkCombination' | 'check' | 'line';
   checked: boolean;
   selectedIds?: (number | undefined)[];
   selectedIdsArray?: (number[] | undefined)[];
@@ -33,8 +33,8 @@ function RuleItem({
     config_id,
     changeConfigId,
     changeRuleId,
-    changeCheckCombinationId,
     changeCheckId,
+    changeLineId,
     clearConfigId,
     changeCode,
   } = useStore();
@@ -60,13 +60,13 @@ function RuleItem({
         content: rule.code,
         rule_id: rule.id,
       });
-    } else if (ruleType === 'checkCombination') {
-      changeCheckCombinationId(rule.id);
+    } else if (ruleType === 'line') {
+      changeLineId(rule.id);
       logMutation.mutate({
         task,
         info: 'select',
         content: rule.code,
-        check_combination_id: rule.id,
+        line_id: rule.id,
       });
     } else if (ruleType === 'check') {
       changeCheckId(rule.id);

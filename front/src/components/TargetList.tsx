@@ -34,7 +34,7 @@ function TargetList({
   // const [urlHelp, setUrlHelp] = useState<any>('');
   // const [visible, setVisible] = useState(false);
   const [openAddModal, setOpenAddModal] = useState(false);
-  const { rule_id, check_combination_id, check_id, config_id } = useStore();
+  const { rule_id, check_id, config_id, line_id } = useStore();
   const { condition } = useParams<{ condition: Condition }>();
   const [form] = useForm();
   const onClickAdd = useCallback(() => {
@@ -72,7 +72,7 @@ function TargetList({
   const stat: AutoModStat = {
     part: posts
       ? posts?.filter((post) =>
-          isFiltered(post, config_id, rule_id, check_combination_id, check_id)
+          isFiltered(post, config_id, rule_id, line_id, check_id)
         ).length
       : 0,
     total: totalTarget ?? (posts ? posts.length : 0),
@@ -94,7 +94,7 @@ function TargetList({
                   : 'Posts to avoid being filtered'
               }
             />
-          ) : place === 'target' ? (
+          ) : place === 'target' && condition === 'sandbox' ? (
             <BarRateHorizontal
               part={stat.part}
               total={stat.total}
@@ -158,13 +158,11 @@ function TargetList({
               <PostItem
                 key={post.id}
                 post={post}
-                isFiltered={isFiltered(
-                  post,
-                  config_id,
-                  rule_id,
-                  check_combination_id,
-                  check_id
-                )}
+                isFiltered={
+                  condition !== 'baseline' || place === 'target'
+                    ? isFiltered(post, config_id, rule_id, line_id, check_id)
+                    : false
+                }
                 isTested={true}
               />
             ))}
@@ -174,7 +172,7 @@ function TargetList({
           <Empty
             image={Empty.PRESENTED_IMAGE_SIMPLE}
             description={
-              condition !== 'baseline'
+              condition === 'modsandbox'
                 ? 'Add a post in your collection'
                 : 'Empty'
             }

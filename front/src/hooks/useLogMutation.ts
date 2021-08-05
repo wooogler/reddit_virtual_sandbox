@@ -9,7 +9,7 @@ interface Props {
   post_id?: string;
   config_id?: number;
   rule_id?: number;
-  check_combination_id?: number;
+  line_id?: number;
   check_id?: number;
 }
 
@@ -23,7 +23,7 @@ export default function useLogMutation() {
       post_id,
       config_id,
       rule_id,
-      check_combination_id,
+      line_id,
       check_id,
     }: Props) =>
       request({
@@ -37,7 +37,7 @@ export default function useLogMutation() {
           post_id,
           config_id,
           rule_id,
-          check_combination_id,
+          line_id,
           check_id,
         },
       })

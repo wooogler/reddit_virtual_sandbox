@@ -22,7 +22,7 @@ from modsandbox.ml import process_embedding
 from modsandbox.pinecone_handler import create_index_pinecone, get_index_pinecone
 from modsandbox.post_handler import create_posts, get_filtered_posts, get_unfiltered_posts, get_df_posts_vector, \
     get_average_vector, get_embedding_post, create_test_posts
-from modsandbox.models import Post, User, Rule, Config, Log, CheckCombination, Check, Survey, Demo
+from modsandbox.models import Post, User, Rule, Config, Log, Line, Check, Survey, Demo
 from modsandbox.paginations import PostPagination
 from modsandbox.reddit_handler import RedditHandler
 from modsandbox.rule_handler import apply_config
@@ -98,18 +98,17 @@ class PostViewSet(viewsets.ModelViewSet):
             rule_id = self.request.query_params.get("rule_id")
             check_id = self.request.query_params.get("check_id")
             config_id = self.request.query_params.get("config_id")
-            check_combination_id = self.request.query_params.get("check_combination_id")
+            line_id = self.request.query_params.get('line_id')
             filtered = self.request.query_params.get("filtered")
         except Exception as e:
             logger.error(e)
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         if filtered == 'true':
-            queryset = get_filtered_posts(queryset, config_id, rule_id, check_combination_id, check_id)
+            queryset = get_filtered_posts(queryset, config_id, rule_id, line_id, check_id)
 
         elif filtered == 'false':
-            print(config_id)
-            queryset = get_unfiltered_posts(queryset, config_id, rule_id, check_combination_id, check_id)
+            queryset = get_unfiltered_posts(queryset, config_id, rule_id, line_id, check_id)
 
         return queryset
 
@@ -177,6 +176,8 @@ class PostViewSet(viewsets.ModelViewSet):
             for post in normal])
 
         posts = create_test_posts(normal_posts, request.user, 'normal')
+        target_example_ids = ["mkwaep", "mkq1j8", "mhrw80"]
+        posts.filter(post_id__in=target_example_ids).update(place='normal-target')
 
         configs = Config.objects.filter(user=request.user, task=task)
         for config in configs:
@@ -239,81 +240,19 @@ class PostViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_200_OK)
 
 
-class FpFnViewSet(viewsets.ModelViewSet):
-    queryset = Post.objects.filter(place__startswith='normal')
-    serializer_class = PostSerializer
-    pagination_class = PostPagination
-    permission_classes = [IsAuthenticatedOrReadOnly]
-    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
-    filterset_class = PostFilter
-    ordering_fields = ['sim_fp', 'sim_fn']
-    ordering = ['sim_fp']
-
-    def get_queryset(self):
-        queryset = self.queryset.filter(user=self.request.user)
-        try:
-            filtered = self.request.query_params.get("filtered")
-        except Exception as e:
-            logger.error(e)
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-
-        if filtered == 'true':
-            queryset = queryset.filter(sim_fp__isnull=False)
-        else:
-            queryset = queryset.filter(sim_fn__isnull=False)
-        return queryset
-
-    def create(self, request, *args, **kwargs):
-        posts = self.queryset.filter(user=self.request.user)
-        posts.update(sim_fp=None, sim_fn=None)
-        target_posts = posts.filter(place__in=['target', 'normal-target'])
-
-        rule_id = self.request.data.get("rule_id")
-        check_id = self.request.data.get("check_id")
-        config_id = self.request.data.get("config_id")
-        check_combination_id = self.request.data.get("check_combination_id")
-
-        filtered_posts = get_filtered_posts(posts, config_id, rule_id, check_combination_id, check_id)
-        df_filtered_vector = get_df_posts_vector(filtered_posts)
-
-        index = get_index_pinecone(request.user.username)
-        index.delete(ids=df_filtered_vector.id, namespace='fn')
-        index.upsert(items=zip(df_filtered_vector.id, df_filtered_vector.vector), namespace='fp', batch_size=1000)
-        print(index.info(namespace='fp'), index.info(namespace='fn'))
-        target_vector = get_average_vector([get_embedding_post(post) for post in target_posts])
-        fn_result = index.query(queries=[target_vector], top_k=500, namespace='fn')
-        fp_result = index.query(queries=[(target_vector * -1)], top_k=500, namespace='fp')
-        if fn_result:
-            for i, post_id in enumerate(fn_result[0].ids):
-                fn_post = posts.get(id=post_id)
-                fn_post.sim_fn = fn_result[0].scores[i]
-                fn_post.save()
-        if fp_result:
-            for i, post_id in enumerate(fp_result[0].ids):
-                fp_post = posts.get(id=post_id)
-                fp_post.sim_fp = fp_result[0].scores[i]
-                fp_post.save()
-
-        index.delete(ids=df_filtered_vector.id, namespace='fp')
-        index.upsert(items=zip(df_filtered_vector.id, df_filtered_vector.vector), namespace='fn', batch_size=1000)
-        print(index.info(namespace='fp'), index.info(namespace='fn'))
-
-        return Response(status=status.HTTP_201_CREATED)
-
-
 class TargetViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.filter(place__in=['target', 'normal-target'])
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
-    ordering = ['created_utc']
 
     def get_queryset(self):
-        return self.queryset.filter(user=self.request.user)
+        return self.queryset.filter(user=self.request.user).order_by('-updated_at')
 
     def create(self, request, *args, **kwargs):
         full_name = request.data.get('full_name')
         use_author = request.data.get('use_author')
         task = request.data.get('task')
+        condition = request.data.get('condition')
         if full_name:
             r = RedditHandler(request.user)
             target_post = r.get_post_with_id(full_name)
@@ -324,6 +263,11 @@ class TargetViewSet(viewsets.ModelViewSet):
             if serializer.is_valid(raise_exception=True):
                 new_post = serializer.save()
                 posts = Post.objects.filter(id=new_post.id)
+        # if condition == 'baseline':
+        #     return Response(status=status.HTTP_200_OK)
+        #     config = Config.objects.filter(user=request.user, task=task).latest('created_at')
+        #     apply_config(config, posts, False)
+
         configs = Config.objects.filter(user=request.user, task=task)
         for config in configs:
             apply_config(config, posts, False)
@@ -349,10 +293,9 @@ class ExceptViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.filter(place__in=['except', 'normal-except'])
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
-    ordering = ['created_utc']
 
     def get_queryset(self):
-        return self.queryset.filter(user=self.request.user)
+        return self.queryset.filter(user=self.request.user).order_by('-updated_at')
 
     def create(self, request, *args, **kwargs):
         full_name = request.data.get('full_name')
@@ -411,6 +354,18 @@ class ConfigViewSet(viewsets.ModelViewSet):
 
         return Response(serializer.data)
 
+    def create(self, request, *args, **kwargs):
+        code = request.data.get('code')
+        task = request.data.get('task')
+        condition = request.data.get('condition')
+        config = Config.objects.create(user=request.user, code=code, task=task)
+        posts = Post.objects.filter(user=request.user)
+        if condition == 'baseline':
+            posts = posts.exclude(place='target')
+        serializer = self.get_serializer(apply_config(config, posts, True))
+
+        return Response(serializer.data)
+
     @action(methods=['delete'], detail=False)
     def all(self, request):
         self.queryset.filter(user=request.user).delete()
@@ -422,6 +377,18 @@ class ConfigViewSet(viewsets.ModelViewSet):
         task = request.data.get('task')
         Config.objects.create(user=request.user, code=code, task=task)
         return Response(status=status.HTTP_201_CREATED)
+
+    @action(methods=['delete'], detail=False)
+    def target(self, request):
+        target_posts = Post.objects.filter(user=request.user, place='target')
+        for post in target_posts:
+            post.matching_configs.clear()
+            post.matching_rules.clear()
+            post.matching_lines.clear()
+            post.matching_checks.clear()
+            post.matching_not_checks.clear()
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class StatViewSet(PostViewSet):
@@ -495,18 +462,18 @@ class LogViewSet(viewsets.ModelViewSet):
         move_to = request.data.get('move_to')
         post_id = request.data.get('post_id')
         config_id = request.data.get('config_id')
+        line_id = request.data.get('line_id')
         rule_id = request.data.get('rule_id')
-        check_combination_id = request.data.get('check_combination_id')
         check_id = request.data.get('check_id')
 
         post = Post.objects.filter(pk=post_id).first()
         config = Config.objects.filter(pk=config_id).first()
         rule = Rule.objects.filter(pk=rule_id).first()
-        check_combination = CheckCombination.objects.filter(pk=check_combination_id).first()
+        line = Line.objects.filter(pk=line_id).first()
         check = Check.objects.filter(pk=check_id).first()
 
         Log.objects.create(user=request.user, task=task, info=info, content=content, move_to=move_to, post=post,
-                           config=config, rule=rule, check_combination=check_combination, _check=check)
+                           config=config, rule=rule, line=line, _check=check)
 
         return Response(status=status.HTTP_201_CREATED)
 
@@ -556,3 +523,64 @@ class SurveyViewSet(viewsets.ModelViewSet):
 class DemoViewSet(viewsets.ModelViewSet):
     queryset = Demo.objects.all()
     serializer_class = DemoSerializer
+
+# class FpFnViewSet(viewsets.ModelViewSet):
+#     queryset = Post.objects.filter(place__startswith='normal')
+#     serializer_class = PostSerializer
+#     pagination_class = PostPagination
+#     permission_classes = [IsAuthenticatedOrReadOnly]
+#     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
+#     filterset_class = PostFilter
+#     ordering_fields = ['sim_fp', 'sim_fn']
+#     ordering = ['sim_fp']
+#
+#     def get_queryset(self):
+#         queryset = self.queryset.filter(user=self.request.user)
+#         try:
+#             filtered = self.request.query_params.get("filtered")
+#         except Exception as e:
+#             logger.error(e)
+#             return Response(status=status.HTTP_400_BAD_REQUEST)
+#
+#         if filtered == 'true':
+#             queryset = queryset.filter(sim_fp__isnull=False)
+#         else:
+#             queryset = queryset.filter(sim_fn__isnull=False)
+#         return queryset
+#
+#     def create(self, request, *args, **kwargs):
+#         posts = self.queryset.filter(user=self.request.user)
+#         posts.update(sim_fp=None, sim_fn=None)
+#         target_posts = posts.filter(place__in=['target', 'normal-target'])
+#
+#         rule_id = self.request.data.get("rule_id")
+#         check_id = self.request.data.get("check_id")
+#         config_id = self.request.data.get("config_id")
+#         check_combination_id = self.request.data.get("check_combination_id")
+#
+#         filtered_posts = get_filtered_posts(posts, config_id, rule_id, check_combination_id, check_id)
+#         df_filtered_vector = get_df_posts_vector(filtered_posts)
+#
+#         index = get_index_pinecone(request.user.username)
+#         index.delete(ids=df_filtered_vector.id, namespace='fn')
+#         index.upsert(items=zip(df_filtered_vector.id, df_filtered_vector.vector), namespace='fp', batch_size=1000)
+#         print(index.info(namespace='fp'), index.info(namespace='fn'))
+#         target_vector = get_average_vector([get_embedding_post(post) for post in target_posts])
+#         fn_result = index.query(queries=[target_vector], top_k=500, namespace='fn')
+#         fp_result = index.query(queries=[(target_vector * -1)], top_k=500, namespace='fp')
+#         if fn_result:
+#             for i, post_id in enumerate(fn_result[0].ids):
+#                 fn_post = posts.get(id=post_id)
+#                 fn_post.sim_fn = fn_result[0].scores[i]
+#                 fn_post.save()
+#         if fp_result:
+#             for i, post_id in enumerate(fp_result[0].ids):
+#                 fp_post = posts.get(id=post_id)
+#                 fp_post.sim_fp = fp_result[0].scores[i]
+#                 fp_post.save()
+#
+#         index.delete(ids=df_filtered_vector.id, namespace='fp')
+#         index.upsert(items=zip(df_filtered_vector.id, df_filtered_vector.vector), namespace='fn', batch_size=1000)
+#         print(index.info(namespace='fp'), index.info(namespace='fn'))
+#
+#         return Response(status=status.HTTP_201_CREATED)

@@ -17,8 +17,8 @@ function ConfigurationAnalysis(): ReactElement {
   const {
     config_id,
     rule_id,
-    check_combination_id,
     check_id,
+    line_id,
     start_date,
     end_date,
     selectedHighlights,
@@ -38,7 +38,7 @@ function ConfigurationAnalysis(): ReactElement {
     }
   );
   const checkedConfig = (id: number) => {
-    if (rule_id || check_id || check_combination_id) {
+    if (rule_id || check_id || line_id) {
       return false;
     }
     return id === config_id;

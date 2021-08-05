@@ -61,6 +61,7 @@
   },
   "scripts": {
     "start": "craco start",
+    "start-prod": "NODE_ENV=prod craco start",
     "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject",

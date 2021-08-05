@@ -14,7 +14,7 @@ interface Props {
 }
 
 function FpFnList({ label, isLoading, posts }: Props): ReactElement {
-  const { config_id, rule_id, check_combination_id, check_id } = useStore();
+  const { config_id, rule_id, check_id } = useStore();
   return (
     <div className='relative flex flex-col h-full p-2 w-1/2 overflow-y-auto'>
       <OverlayLoading isLoading={isLoading} description='loading...' />
@@ -31,7 +31,6 @@ function FpFnList({ label, isLoading, posts }: Props): ReactElement {
                   post,
                   config_id,
                   rule_id,
-                  check_combination_id,
                   check_id
                 )}
                 post={post}

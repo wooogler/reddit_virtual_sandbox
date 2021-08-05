@@ -5,7 +5,7 @@ from collections import defaultdict
 from rest_framework import exceptions
 import yaml
 
-from modsandbox.models import Config, Rule, Check, Post, CheckCombination
+from modsandbox.models import Config, Rule, Check, Post, Line
 from time import time
 
 _match_fields_by_type = {
@@ -58,16 +58,18 @@ _match_modifiers = set(_match_regexes.keys()) | {
 }
 
 
-def create_config(code, user, task):
-    config = Config.objects.create(user=user, code=code, task=task)
-    posts = Post.objects.filter(user=user)
-    return apply_config(config, posts, True)
+# def create_config(code, user, task, condition):
+#     config = Config.objects.create(user=user, code=code, task=task)
+#     posts = Post.objects.filter(user=user)
+#     if condition == 'baseline':
+#         posts = Post.objects.exclude(place='target')
+#     return apply_config(config, posts, True)
 
 
 def compose_key(field, match, other, op):
     key = field
     if match:
-        key = key + ' (' + match
+        key = key + '(' + match
         if other:
             key = key + ', ' + other
         key = key + ')'
@@ -76,19 +78,32 @@ def compose_key(field, match, other, op):
     return key
 
 
+def compose_line(key, match_patterns):
+    list = [value['word'] for value in match_patterns]
+    return key + ": " + str(list)
+
+
 def apply_config(config, posts, check_create):
     code = config.code
 
     yaml_sections = [
         section.strip("\r\n") for section in re.split("^---", code, flags=re.MULTILINE) if section
     ]
-    post_config_set = set([])
-    for section_num, section in enumerate(yaml_sections, 1):
 
-        if check_create:
-            rule = Rule.objects.create(user=config.user, config=config, code=section)
-        else:
-            rule = Rule.objects.get(user=config.user, config=config)
+    post_to_check_links = []
+    post_to_not_check_links = []
+    post_to_line_links = []
+    post_to_rule_links = []
+    post_to_config_links = []
+
+    post_config_set = set()
+
+    for section_num, section in enumerate(yaml_sections, 1):
+        # if check_create:
+        #     rule = Rule.objects.create(user=config.user, config=config, code=section)
+        # else:
+        #     rule = Rule.objects.get(user=config.user, config=config)
+        rule, _ = Rule.objects.get_or_create(user=config.user, config=config, code=section)
         try:
             rules = yaml.safe_load(section)
         except Exception as e:
@@ -96,159 +111,77 @@ def apply_config(config, posts, check_create):
                 "YAML parsing error in section %s: %s" % (section_num, e)
             )
 
-        """
-        match_patterns = 
-        {
-            '~body+title#1 (includes, regex)': [
-                {"regex": re.compile('(hello)', re.IGNORECASE|re.DOTALL), "word": "hello"}, 
-            ], 
-        }
-        """
         if rules is None:
             continue
         match_patterns = get_match_patterns(rules)
-        checks = []
-        for i, (key, match_patterns) in enumerate(match_patterns.items()):
+        """
+        {
+            '~body+title': [
+                {'regex': re.compile('(?:^|\\W|\\b)(complete)(?:$|\\W|\\b)', re.IGNORECASE|re.DOTALL), 'word': 'complete'}, 
+                {'regex': re.compile('(?:^|\\W|\\b)(hello)(?:$|\\W|\\b)', re.IGNORECASE|re.DOTALL), 'word': 'hello'}
+            ], 
+            'body': [
+                {'regex': re.compile('(?:^|\\W|\\b)(employment)(?:$|\\W|\\b)', re.IGNORECASE|re.DOTALL), 'word': 'employment'}
+            ]
+        }
+        """
+
+        for (key, match_patterns) in match_patterns.items():
+            parsed_key = parse_fields_key(key)
+            print(parsed_key)
+            line, _ = Line.objects.get_or_create(rule=rule, code=compose_line(key, match_patterns),
+                                                 reverse=parsed_key['not'])
             for match_pattern in match_patterns:
-                checks.append({
-                    "line": i,
-                    "key": key,
-                    "regex": match_pattern["regex"],
-                    "word": match_pattern["word"]
-                })
+                for field in parsed_key['fields']:
+                    fields = compose_key(field, parsed_key['match'], parsed_key['other'], parsed_key['not'])
+                    Check.objects.get_or_create(rule=rule, fields=key, field=field, word=match_pattern['word'],
+                                                line=line,
+                                                code=fields + ": ['" + match_pattern["word"] + "']", )
 
-        """
-        checks = 
-        [
-            {'key': '~body+title#1 (includes, regex)', 'pattern': {"regex": re.compile('(hello)', re.IGNORECASE|re.DOTALL), "word": hello}}, 
-        ]
-        """
-        # keys = [check["key"] for check in checks]
-        post_to_check_links = []
-        post_to_not_check_links = []
-        arr = []
-
-        post_with_check_ids = set()
-
-        # assign check ids to each posts
-        for check in checks:
-            parsed_key = parse_fields_key(check["key"])
-            # check: {'key': 'body+title', 'regex': re.compile('(?:^|\\W|\\b)(violin)(?:$|\\W|\\b)', re.IGNORECASE|re.DOTALL), 'word': 'violin'}
-            # parsed_key : {'fields': {'title', 'body'}, 'match': None, 'other': None, 'not': False}
-
-            """
-            parsed_key
-            {'fields': {'title'}, 'match': None, 'other': None, 'not': False}
-            {'fields': {'title'}, 'match': None, 'other': None, 'not': False}
-            {'fields': {'body'}, 'match': 'includes', 'other': None, 'not': False}
-            """
-            for field in parsed_key["fields"]:
-                key = compose_key(field, parsed_key["match"], parsed_key["other"], parsed_key["not"])
-                if check_create:
-                    check_object = Check.objects.create(
-                        rule=rule,
-                        fields=key,
-                        word=check["word"],
-                        line=check["line"],
-                        code=key + ": ['" + check["word"] + "']",
-                    )
-                else:
-                    check_object = Check.objects.get(
-                        rule=rule,
-                        fields=key,
-                        word=check["word"],
-                        line=check["line"],
-                    )
-
-                arr.append((check["line"], check_object.id))
-                for post in posts:
-                    post_value = get_field_value_from_post(post, field)
-                    match = check["regex"].search(post_value)
-
-                    if bool(match) == parsed_key["not"]:
-                        if match:
+        for post in posts:
+            rule_match = True
+            for line in rule.lines.all():
+                line_match = line.reverse
+                for check in line.checks.all():
+                    post_value = get_field_value_from_post(post, check.field)
+                    match_pattern = get_match_patterns(yaml.safe_load(check.code)).values()
+                    regex = list(match_pattern)[0][0]['regex']
+                    match = regex.search(post_value)
+                    if bool(match):
+                        if line.reverse:
+                            line_match = False
                             post_to_not_check_links.append(
-                                Post.matching_not_checks.through(post_id=post.id, _check_id=check_object.id,
-                                                                 field=field,
+                                Post.matching_not_checks.through(post_id=post.id, _check_id=check.id,
+                                                                 field=check.field,
                                                                  start=match.start(), end=match.end())
                             )
-
-                    if bool(match) != parsed_key["not"]:
-                        post_with_check_ids.add(post.id)
-                        if match:
-                            post_to_check_links.append(
-                                Post.matching_checks.through(post_id=post.id, _check_id=check_object.id, field=field,
-                                                             start=match.start(), end=match.end()))
                         else:
+                            line_match = True
                             post_to_check_links.append(
-                                Post.matching_checks.through(post_id=post.id, _check_id=check_object.id,
-                                                             field='~' + field))
-
-        Post.matching_checks.through.objects.bulk_create(post_to_check_links)
-        Post.matching_not_checks.through.objects.bulk_create(post_to_not_check_links)
-
-        check_dict = defaultdict(list)
-        for line, check_id in arr:
-            check_dict[line].append(check_id)
-        check_combinations = list(product(*check_dict.values()))
-
-        post_to_check_combination_links = []
-        post_to_rule_links = []
-
-        if check_create:
-            check_to_check_combination_link = []
-            for check_combination in check_combinations:
-                checks_in_combination = Check.objects.filter(id__in=list(check_combination))
-                # code_line = [check.fields + ": ['" + check.word + "']" for check in checks_in_combination]
-                if check_create:
-                    check_combination_object = CheckCombination.objects.create(
-                        rule=rule,
-                        code="\n".join([check.code for check in checks_in_combination])
-                    )
-                    for check in checks_in_combination:
-                        check_to_check_combination_link.append(
-                            CheckCombination.checks.through(check_id=check.id,
-                                                            checkcombination_id=check_combination_object.id))
-
-            CheckCombination.checks.through.objects.bulk_create(check_to_check_combination_link)
-
-        checked_posts = posts.filter(id__in=list(post_with_check_ids))
-        checked_array = [False] * len(checked_posts)
-        start_time = time()
-        for check_combination in CheckCombination.objects.filter(rule=rule):
-            check_combination_set = set(check_combination.checks.values_list('id', flat=True))
-
-            for (i, post) in enumerate(checked_posts):
-                post_set = set(post.matching_checks.values_list('id', flat=True))
-                if check_combination_set.issubset(post_set):
-                    checked_array[i] = True
-                    post_to_check_combination_links.append(
-                        Post.matching_check_combinations.through(post_id=post.id,
-                                                                 checkcombination_id=check_combination.id))
-
-        print(time() - start_time)
-        Post.matching_check_combinations.through.objects.bulk_create(post_to_check_combination_links)
-        for (i, post) in enumerate(checked_posts):
-            if checked_array[i]:
+                                Post.matching_checks.through(post_id=post.id, _check_id=check.id,
+                                                             field=check.field,
+                                                             start=match.start(), end=match.end()))
+                    else:
+                        if line.reverse:
+                            post_to_check_links.append(
+                                Post.matching_checks.through(post_id=post.id, _check_id=check.id,
+                                                             field=check.field))
+                if line_match:
+                    post_to_line_links.append(Post.matching_lines.through(post_id=post.id, line_id=line.id))
+                else:
+                    rule_match = False
+            if rule_match:
                 post_config_set.add(post.id)
-                post_to_rule_links.append(
-                    Post.matching_rules.through(
-                        post_id=post.id,
-                        rule_id=rule.id,
-                    )
-                )
+                post_to_rule_links.append(Post.matching_rules.through(post_id=post.id, rule_id=rule.id))
 
-        Post.matching_rules.through.objects.bulk_create(post_to_rule_links)
-
-    post_to_config_links = []
-    if check_create:
-        Post.matching_configs.through.objects.filter(config_id=config.id).delete()
     for post in posts:
         if post.id in post_config_set:
             post_to_config_links.append(Post.matching_configs.through(post_id=post.id, config_id=config.id))
-
+    Post.matching_checks.through.objects.bulk_create(post_to_check_links)
+    Post.matching_not_checks.through.objects.bulk_create(post_to_not_check_links)
+    Post.matching_lines.through.objects.bulk_create(post_to_line_links)
+    Post.matching_rules.through.objects.bulk_create(post_to_rule_links)
     Post.matching_configs.through.objects.bulk_create(post_to_config_links)
-
     return config
 
 
@@ -266,7 +199,6 @@ def get_match_patterns(rules):
     # rules = {'~body+title#1 (includes, regex)': ['hello'], '~body#2': ['hi']}
     match_fields = set()
     match_patterns = {}
-    print(rules)
 
     for key in rules:
         parsed_key = parse_fields_key(key)

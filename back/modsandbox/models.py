@@ -31,6 +31,13 @@ class Rule(models.Model):
         return self.code
 
 
+class Line(models.Model):
+    rule = models.ForeignKey(Rule, related_name='lines', on_delete=models.CASCADE)
+    # checks = models.ForeignKey(Check, related_name='lines', on_delete=models.CASCADE)
+    code = models.TextField(default='')
+    reverse = models.BooleanField(default='False')
+
+
 class Check(models.Model):
     """
     Check Model
@@ -38,14 +45,9 @@ class Check(models.Model):
     rule = models.ForeignKey(Rule, related_name='checks', on_delete=models.CASCADE)
     fields = models.CharField(max_length=50)
     word = models.TextField()
-    line = models.IntegerField()
+    line = models.ForeignKey(Line, related_name='checks', on_delete=models.CASCADE)
     code = models.TextField(default='')
-
-
-class CheckCombination(models.Model):
-    rule = models.ForeignKey(Rule, related_name='check_combinations', on_delete=models.CASCADE)
-    checks = models.ManyToManyField(Check, blank=True)
-    code = models.TextField(default='')
+    field = models.CharField(max_length=50)
 
 
 class Post(models.Model):
@@ -58,6 +60,7 @@ class Post(models.Model):
     body = models.TextField(default='')
     created_utc = models.DateTimeField()
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     url = models.TextField(default='')
     banned_by = models.CharField(max_length=300, null=True)
     post_karma = models.IntegerField(default=0)
@@ -86,7 +89,7 @@ class Post(models.Model):
     matching_rules = models.ManyToManyField(Rule, blank=True)
     matching_checks = models.ManyToManyField(Check, blank=True, through='Match')
     matching_not_checks = models.ManyToManyField(Check, blank=True, through='NotMatch', related_name='not_check')
-    matching_check_combinations = models.ManyToManyField(CheckCombination, blank=True)
+    matching_lines = models.ManyToManyField(Line, blank=True)
 
     def __str__(self):
         return self.post_id
@@ -118,7 +121,7 @@ class Log(models.Model):
     post = models.ForeignKey(Post, related_name='logs', on_delete=models.CASCADE, null=True)
     config = models.ForeignKey(Config, related_name='logs', on_delete=models.CASCADE, null=True)
     rule = models.ForeignKey(Rule, related_name='logs', on_delete=models.CASCADE, null=True)
-    check_combination = models.ForeignKey(CheckCombination, related_name='logs', on_delete=models.CASCADE, null=True)
+    line = models.ForeignKey(Line, related_name='logs', on_delete=models.CASCADE, null=True)
     _check = models.ForeignKey(Check, related_name='logs', on_delete=models.CASCADE, null=True)
 
 

@@ -7,7 +7,7 @@ interface Match {
   end: number;
   config_id?: number;
   rule_id?: number;
-  check_combination_ids?: number[];
+  line_id?: number;
   check_id: number;
 }
 
@@ -32,11 +32,11 @@ function HighlightText({ text, match }: Props): ReactElement {
       const end = a;
       const ids = match
         .filter((d) => d.start <= start && end <= d.end)
-        .map(({ config_id, rule_id, check_combination_ids, check_id }) => ({
+        .map(({ config_id, rule_id, check_id, line_id }) => ({
           config_id,
           rule_id,
-          check_combination_ids,
           check_id,
+          line_id,
         }));
       return { start, end, ids };
     })

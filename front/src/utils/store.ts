@@ -13,7 +13,7 @@ type SelectedHighlight = {
   config_id?: number;
   rule_id?: number;
   check_id?: number;
-  check_combination_ids?: number[];
+  line_id?: number;
 };
 
 type TotalCount = {
@@ -27,7 +27,8 @@ type State = {
   config_id: number | undefined;
   rule_id: number | undefined;
   check_id: number | undefined;
-  check_combination_id: number | undefined;
+
+  line_id: number | undefined;
   start_date?: Dayjs;
   end_date?: Dayjs;
   post_type: PostType;
@@ -44,7 +45,8 @@ type State = {
   changeConfigId: (configId: number) => void;
   changeRuleId: (ruleId: number) => void;
   changeCheckId: (checkId: number) => void;
-  changeCheckCombinationId: (checkCombinationId: number) => void;
+
+  changeLineId: (lindId: number) => void;
   clearConfigId: () => void;
   changeDateRange: (start_date: Dayjs, end_date: Dayjs) => void;
   changeSource: (source: Source) => void;
@@ -70,7 +72,7 @@ export const useStore = create<State>(
         config_id: undefined,
         rule_id: undefined,
         check_id: undefined,
-        check_combination_id: undefined,
+        line_id: undefined,
         // start_date: afterToDate('week', nowDayStart),
         // end_date: nowDayStart,
         start_date: undefined,
@@ -96,35 +98,30 @@ export const useStore = create<State>(
             config_id: id,
             rule_id: undefined,
             check_id: undefined,
-            check_combination_id: undefined,
+            line_id: undefined,
           })),
         changeRuleId: (id: number) =>
           set((state) => ({
             // config_id: undefined,
             rule_id: id,
+            line_id: undefined,
             check_id: undefined,
-            check_combination_id: undefined,
           })),
         changeCheckId: (id: number) =>
           set((state) => ({
-            // config_id: undefined,
-            // rule_id: undefined,
             check_id: id,
-            check_combination_id: undefined,
           })),
-        changeCheckCombinationId: (id: number) =>
+        changeLineId: (id: number) =>
           set((state) => ({
-            // config_id: undefined,
-            // rule_id: undefined,
             check_id: undefined,
-            check_combination_id: id,
+            line_id: id,
           })),
         clearConfigId: () =>
           set((state) => ({
             config_id: undefined,
             rule_id: undefined,
             check_id: undefined,
-            check_combination_id: undefined,
+            line_id: undefined,
           })),
         changeDateRange: (start_date: Dayjs, end_date: Dayjs) =>
           set((state) => ({

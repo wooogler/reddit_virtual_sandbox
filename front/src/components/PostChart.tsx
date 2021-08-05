@@ -34,7 +34,6 @@ function PostChart(): ReactElement {
     after,
     config_id,
     rule_id,
-    check_combination_id,
     check_id,
     post_type,
     refetching,
@@ -53,7 +52,6 @@ function PostChart(): ReactElement {
       {
         config_id,
         rule_id,
-        check_combination_id,
         check_id,
         post_type,
         after,
@@ -68,7 +66,6 @@ function PostChart(): ReactElement {
           config_id,
           rule_id,
           check_id,
-          check_combination_id,
           post_type: post_type === 'all' ? undefined : post_type,
           after,
           filtered: true,
@@ -87,7 +84,6 @@ function PostChart(): ReactElement {
       'stats/not_filtered',
       {
         rule_id,
-        check_combination_id,
         check_id,
         config_id,
         post_type,
@@ -102,7 +98,6 @@ function PostChart(): ReactElement {
         params: {
           rule_id,
           check_id,
-          check_combination_id,
           config_id,
           post_type: post_type === 'all' ? undefined : post_type,
           after,
@@ -159,8 +154,6 @@ function PostChart(): ReactElement {
   //     ? 'Subreddit'
   //     : 'Spam/Reports'
   // }`;
-
-
 
   const selectedTimeLabel = start_date
     ? `Selected time range: ${start_date?.format('lll')} - ${end_date?.format(

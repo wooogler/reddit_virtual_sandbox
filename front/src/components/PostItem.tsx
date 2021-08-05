@@ -9,7 +9,6 @@ import utc from 'dayjs/plugin/utc';
 import HighlightText from './HighlightText';
 import { useMutation, useQueryClient } from 'react-query';
 import { useStore } from '@utils/store';
-import _ from 'lodash';
 import Highlighter from 'react-highlight-words';
 import { NewPost } from './AddPostModal';
 import { useParams } from 'react-router-dom';
@@ -35,8 +34,7 @@ function PostItem({
   const [isCollapse, setIsCollapse] = useState(isTested);
   const queryClient = useQueryClient();
   const logMutation = useLogMutation();
-  const { config_id, rule_id, check_combination_id, check_id, fpfn } =
-    useStore();
+  const { config_id, rule_id, check_id, fpfn, line_id } = useStore();
   const { task } = useParams<{ task: string }>();
 
   const { condition } = useParams<{ condition: Condition }>();
@@ -181,11 +179,13 @@ function PostItem({
 
   const makeMatch = (matchingChecks: MatchingCheck[]) => {
     const matchingCheck = matchingChecks.filter((check) => {
-      if (check_id || check_combination_id) {
-        if (
-          check._check_id === check_id ||
-          _.includes(check.check_combination_ids, check_combination_id)
-        ) {
+      if (check_id) {
+        if (check._check_id === check_id) {
+          return true;
+        }
+        return false;
+      } else if (line_id) {
+        if (check.line_id === line_id) {
           return true;
         }
         return false;
@@ -203,20 +203,13 @@ function PostItem({
       return false;
     });
     return matchingCheck.map((check) => {
-      const {
-        start,
-        end,
-        config_id,
-        rule_id,
-        check_combination_ids,
-        _check_id,
-      } = check;
+      const { start, end, config_id, rule_id, line_id, _check_id } = check;
       return {
         start,
         end,
         config_id,
         rule_id,
-        check_combination_ids,
+        line_id,
         check_id: _check_id,
       };
     });
@@ -350,7 +343,7 @@ function PostItem({
               </Dropdown>
             )
           ) : (
-            isTested && (
+            isTested && ['target', 'except'].includes(post.place) &&(
               <div
                 className='cursor-pointer text-red-500 underline'
                 onClick={() =>

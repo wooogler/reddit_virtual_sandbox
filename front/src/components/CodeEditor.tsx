@@ -32,17 +32,20 @@ function CodeEditor({ placeholder }: Props): ReactElement {
   const logMutation = useLogMutation();
   const { condition, task } = useParams<{ condition: Condition; task: Task }>();
 
-  const autoSaveConfig = useCallback((code: string) => {
-    request({
-      url: task === 'example' ? '/trash/' : '/log/',
-      method: 'POST',
-      data: {
-        task,
-        info: 'autosave config',
-        content: code,
-      },
-    });
-  }, [task]);
+  const autoSaveConfig = useCallback(
+    (code: string) => {
+      request({
+        url: task === 'example' ? '/trash/' : '/log/',
+        method: 'POST',
+        data: {
+          task,
+          info: 'autosave config',
+          content: code,
+        },
+      });
+    },
+    [task]
+  );
 
   useAutosave({
     data: code,
@@ -74,7 +77,7 @@ function CodeEditor({ placeholder }: Props): ReactElement {
     request<Config>({
       url: '/configs/',
       method: 'POST',
-      data: { code, task },
+      data: { code, task, condition },
     });
   const addConfigMutation = useMutation(addConfig, {
     onSuccess: (res, { code }) => {
@@ -97,44 +100,50 @@ function CodeEditor({ placeholder }: Props): ReactElement {
     addConfigMutation.mutate({ code });
   };
 
-  const deleteTargetPostsMutation = useMutation(
-    () =>
-      request({
-        url: 'posts/target/all/',
-        method: 'DELETE',
-      }),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries('target');
-      },
-    }
-  );
-  const deleteExceptPostsMutation = useMutation(
-    () =>
-      request({
-        url: 'posts/except/all/',
-        method: 'DELETE',
-      }),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries('except');
-      },
-    }
-  );
+  // const deleteTargetPostsMutation = useMutation(
+  //   () =>
+  //     request({
+  //       url: 'posts/target/all/',
+  //       method: 'DELETE',
+  //     }),
+  //   {
+  //     onSuccess: () => {
+  //       queryClient.invalidateQueries('target');
+  //     },
+  //   }
+  // );
+  // const deleteExceptPostsMutation = useMutation(
+  //   () =>
+  //     request({
+  //       url: 'posts/except/all/',
+  //       method: 'DELETE',
+  //     }),
+  //   {
+  //     onSuccess: () => {
+  //       queryClient.invalidateQueries('except');
+  //     },
+  //   }
+  // );
 
-  const deleteConfig = ({ configId }: { configId: number }) =>
-    request({ url: `/configs/${configId}/`, method: 'DELETE' });
+  // const deleteConfig = ({ configId }: { configId: number }) =>
+  //   request({ url: `/configs/${configId}/`, method: 'DELETE' });
 
-  const deleteConfigMutation = useMutation(deleteConfig, {
-    onSuccess: (_, { configId }) => {
-      invalidatePostQueries(queryClient);
-      if (configId === config_id) {
-        clearConfigId();
-      }
-      deleteTargetPostsMutation.mutate();
-      deleteExceptPostsMutation.mutate();
-    },
-  });
+  // const deleteConfigMutation = useMutation(deleteConfig, {
+  //   onSuccess: (_, { configId }) => {
+  //     invalidatePostQueries(queryClient);
+  //     if (configId === config_id) {
+  //       clearConfigId();
+  //     }
+  //     // deleteTargetPostsMutation.mutate();
+  //     // deleteExceptPostsMutation.mutate();
+  //   },
+  // });
+
+  const deleteTargetConfigMutation = useMutation(() => request({url: '/configs/target', method: 'DELETE'}),{
+    onSuccess: () => {
+      queryClient.invalidateQueries('target');
+    }
+  })
 
   const { data: configData } = useQuery(
     ['configs', { start_date, end_date, task }],
@@ -254,7 +263,9 @@ function CodeEditor({ placeholder }: Props): ReactElement {
               type='link'
               icon={<EditOutlined />}
               onClick={() => {
-                deleteConfigMutation.mutate({ configId: config_id as number });
+                // deleteConfigMutation.mutate({ configId: config_id as number });
+                deleteTargetConfigMutation.mutate();
+                clearConfigId();
                 setIsSaved(false);
               }}
               loading={addConfigMutation.isLoading}

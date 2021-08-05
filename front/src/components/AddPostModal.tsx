@@ -5,7 +5,7 @@ import { useStore } from '@utils/store';
 import { Form, Input, Modal } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import { useFormik } from 'formik';
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useCallback } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useParams } from 'react-router-dom';
 
@@ -22,6 +22,7 @@ export type NewPost = Omit<
   | 'matching_checks'
   | 'matching_check_combinations'
   | 'matching_not_checks'
+  | 'matching_lines'
   | 'id'
   | 'banned_by'
   | 'isFiltered'
@@ -35,10 +36,28 @@ export type NewPost = Omit<
 function AddPostModal({ visible, onCancel, place }: Props): ReactElement {
   const queryClient = useQueryClient();
   const logMutation = useLogMutation();
-  const { task } = useParams<{ task: string }>();
+  const { task, condition } = useParams<{ task: string; condition: string }>();
 
   const { data: userData } = useQuery<IUser | false>('me');
   const { fpfn } = useStore();
+
+  const formInitialValues: NewPost = {
+    post_id: 'ffffff',
+    post_type: 'Submission',
+    title: '',
+    body: '',
+    author: userData ? userData.username : 'fake_user',
+    place,
+    created_utc: new Date(),
+    url: 'self.modsandbox',
+    source: 'Subreddit',
+  };
+
+  const onCloseModal = useCallback(() => {
+    formik.resetForm();
+    onCancel();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [onCancel]);
 
   const addCustomPost = ({
     post_id,
@@ -65,6 +84,7 @@ function AddPostModal({ visible, onCancel, place }: Props): ReactElement {
         url,
         source,
         task,
+        condition,
       },
     });
 
@@ -85,6 +105,7 @@ function AddPostModal({ visible, onCancel, place }: Props): ReactElement {
 
   const addCustomPostMutation = useMutation(addCustomPost, {
     onSuccess: (_, { place, title, body }) => {
+      formik.resetForm();
       if (place === 'target') {
         queryClient.invalidateQueries('target');
         if (fpfn) {
@@ -105,17 +126,7 @@ function AddPostModal({ visible, onCancel, place }: Props): ReactElement {
   });
 
   const formik = useFormik<NewPost>({
-    initialValues: {
-      post_id: 'ffffff',
-      post_type: 'Submission',
-      title: '',
-      body: '',
-      author: userData ? userData.username : 'fake_user',
-      place,
-      created_utc: new Date(),
-      url: 'self.modsandbox',
-      source: 'Subreddit',
-    },
+    initialValues: formInitialValues,
     onSubmit: (values) => {
       addCustomPostMutation.mutate(values);
     },
@@ -124,12 +135,14 @@ function AddPostModal({ visible, onCancel, place }: Props): ReactElement {
   return (
     <Modal
       title={`Create your post in ${
-        place === 'target'
+        condition !== 'modsandbox'
+          ? 'Test cases'
+          : place === 'target'
           ? '"Posts that should be filtered"'
           : '"Posts to avoid being filtered"'
       }`}
       visible={visible}
-      onCancel={onCancel}
+      onCancel={onCloseModal}
       maskClosable={false}
       centered
       destroyOnClose

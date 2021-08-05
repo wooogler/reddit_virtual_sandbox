@@ -7,7 +7,7 @@ export const isFiltered = (
   post: IPost,
   config_id?: number,
   rule_id?: number,
-  check_combination_id?: number,
+  line_id?: number,
   check_id?: number
 ) => {
   // if (rule_id) {
@@ -34,8 +34,8 @@ export const isFiltered = (
     }
     return false;
   }
-  if (check_combination_id) {
-    if (post.matching_check_combinations.includes(check_combination_id)) {
+  if (line_id) {
+    if (post.matching_lines.includes(line_id)) {
       return true;
     }
     return false;

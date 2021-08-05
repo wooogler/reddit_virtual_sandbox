@@ -19,6 +19,7 @@ export interface IPost {
   matching_configs: number[];
   matching_rules: number[];
   matching_check_combinations: number[];
+  matching_lines: number[];
   matching_checks: MatchingCheck[];
   matching_not_checks: MatchingCheck[];
   sim: number;
@@ -33,7 +34,7 @@ export interface MatchingCheck {
   start: number;
   end: number;
   _check_id: number;
-  check_combination_ids: number[];
+  line_id: number;
   rule_id: number;
   config_id: number;
 }
@@ -63,6 +64,17 @@ export interface Rule {
   except_count: number;
   checks: Check[];
   check_combinations: CheckCombination[];
+  lines: Line[];
+}
+
+export interface Line {
+  id: number;
+  code: string;
+  subreddit_count: number;
+  spam_count: number;
+  target_count: number;
+  except_count: number;
+  checks: Check[];
 }
 
 export interface CheckCombination {

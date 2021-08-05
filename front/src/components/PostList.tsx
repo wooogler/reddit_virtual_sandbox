@@ -30,8 +30,8 @@ function PostList({ label, query, isLoading, filtered }: Props): ReactElement {
   const {
     config_id,
     rule_id,
-    check_combination_id,
     check_id,
+    line_id,
     totalCount,
     order,
     filteredOrder,
@@ -113,7 +113,7 @@ function PostList({ label, query, isLoading, filtered }: Props): ReactElement {
                       post,
                       config_id,
                       rule_id,
-                      check_combination_id,
+                      line_id,
                       check_id
                     );
                   }
@@ -129,7 +129,7 @@ function PostList({ label, query, isLoading, filtered }: Props): ReactElement {
                             post,
                             config_id,
                             rule_id,
-                            check_combination_id,
+                            line_id,
                             check_id
                           )
                         : false

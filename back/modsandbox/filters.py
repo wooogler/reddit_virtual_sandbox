@@ -28,7 +28,7 @@ class PostFilter(django_filters.FilterSet):
             "end_date",
             "matching_rules",
             "matching_checks",
-            "matching_check_combinations",
+            "matching_lines",
             "source",
             "place",
             "post_type",

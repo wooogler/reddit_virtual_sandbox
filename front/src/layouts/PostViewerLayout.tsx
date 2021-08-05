@@ -34,8 +34,8 @@ function PostViewerLayout(): ReactElement {
   const {
     config_id,
     rule_id,
-    check_combination_id,
     check_id,
+    line_id,
     start_date,
     end_date,
     post_type,
@@ -64,8 +64,8 @@ function PostViewerLayout(): ReactElement {
       {
         config_id,
         rule_id,
-        check_combination_id,
         check_id,
+        line_id,
         start_date,
         end_date,
         post_type,
@@ -96,8 +96,8 @@ function PostViewerLayout(): ReactElement {
       {
         config_id,
         rule_id,
-        check_combination_id,
         check_id,
+        line_id,
         start_date,
         end_date,
         post_type,
@@ -160,7 +160,7 @@ function PostViewerLayout(): ReactElement {
       {
         config_id,
         rule_id,
-        check_combination_id,
+        line_id,
         check_id,
         start_date,
         end_date,
@@ -179,7 +179,7 @@ function PostViewerLayout(): ReactElement {
           page: pageParam,
           config_id,
           rule_id,
-          check_combination_id,
+          line_id,
           check_id,
           start_date: start_date?.toDate(),
           end_date: end_date?.toDate(),
@@ -300,6 +300,8 @@ function PostViewerLayout(): ReactElement {
       queryClient.invalidateQueries('not filtered');
       queryClient.invalidateQueries('stats/filtered');
       queryClient.invalidateQueries('stats/not_filtered');
+      queryClient.invalidateQueries('target');
+      queryClient.invalidateQueries('except');
     },
   });
 
@@ -320,6 +322,8 @@ function PostViewerLayout(): ReactElement {
         queryClient.invalidateQueries('not filtered');
         queryClient.invalidateQueries('stats/filtered');
         queryClient.invalidateQueries('stats/not_filtered');
+        queryClient.invalidateQueries('target');
+        queryClient.invalidateQueries('except');
       },
     }
   );
@@ -564,7 +568,13 @@ function PostViewerLayout(): ReactElement {
                 ? 'Posts that should be filtered'
                 : 'Test cases'
             }
-            posts={targetQuery.data}
+            posts={
+              condition !== 'baseline'
+                ? targetQuery.data
+                : targetQuery.data?.filter(
+                    (post) => post.place !== 'normal-target'
+                  )
+            }
             isLoading={addTestCaseMutation.isLoading}
             onSubmit={(postId) =>
               addTestCaseMutation.mutate({ postId, place: 'target' })
@@ -586,8 +596,12 @@ function PostViewerLayout(): ReactElement {
             posts={
               condition === 'modsandbox'
                 ? exceptQuery.data
-                : targetQuery.data?.filter((post) =>
+                : condition === 'sandbox'
+                ? targetQuery.data?.filter((post) =>
                     isFiltered(post, config_id)
+                  )
+                : targetQuery.data?.filter(
+                    (post) => post.place === 'normal-target'
                   )
             }
             isLoading={addTestCaseMutation.isLoading}

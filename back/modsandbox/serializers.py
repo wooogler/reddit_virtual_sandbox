@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from rest_auth.serializers import UserDetailsSerializer
-from .models import Post, User, Rule, Check, CheckCombination, Match, Config, NotMatch, Log, Survey, Demo
-from .rule_handler import create_config
+from .models import Post, User, Rule, Check, Match, Config, NotMatch, Log, Survey, Demo, Line
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
@@ -12,8 +11,8 @@ class CustomUserSerializer(serializers.ModelSerializer):
 
 class MatchSerializer(serializers.ModelSerializer):
     rule_id = serializers.SerializerMethodField()
-    check_combination_ids = serializers.SerializerMethodField()
     config_id = serializers.SerializerMethodField()
+    line_id = serializers.SerializerMethodField()
 
     def get_config_id(self, obj):
         return obj._check.rule.config.id
@@ -21,18 +20,19 @@ class MatchSerializer(serializers.ModelSerializer):
     def get_rule_id(self, obj):
         return obj._check.rule.id
 
-    def get_check_combination_ids(self, obj):
-        return obj._check.checkcombination_set.values_list('id', flat=True)
+    def get_line_id(self, obj):
+        return obj._check.line.id
 
     class Meta:
         model = Match
-        fields = ('id', 'field', 'start', 'end', '_check_id', 'rule_id', 'check_combination_ids', 'config_id')
+        fields = (
+            'id', 'field', 'start', 'end', '_check_id', 'rule_id', 'line_id', 'config_id')
 
 
 class NotMatchSerializer(serializers.ModelSerializer):
     rule_id = serializers.SerializerMethodField()
-    check_combination_ids = serializers.SerializerMethodField()
     config_id = serializers.SerializerMethodField()
+    line_id = serializers.SerializerMethodField()
 
     def get_config_id(self, obj):
         return obj._check.rule.config.id
@@ -40,12 +40,13 @@ class NotMatchSerializer(serializers.ModelSerializer):
     def get_rule_id(self, obj):
         return obj._check.rule.id
 
-    def get_check_combination_ids(self, obj):
-        return obj._check.checkcombination_set.values_list('id', flat=True)
+    def get_line_id(self, obj):
+        return obj._check.line.id
 
     class Meta:
         model = NotMatch
-        fields = ('id', 'field', 'start', 'end', '_check_id', 'rule_id', 'check_combination_ids', 'config_id')
+        fields = (
+            'id', 'field', 'start', 'end', '_check_id', 'line_id', 'rule_id', 'config_id')
 
 
 class PostSerializer(serializers.ModelSerializer):
@@ -104,12 +105,11 @@ class CheckSerializer(serializers.ModelSerializer):
         ]
 
 
-class CheckCombinationSerializer(serializers.ModelSerializer):
+class LineSerializer(serializers.ModelSerializer):
     subreddit_count = serializers.SerializerMethodField()
     spam_count = serializers.SerializerMethodField()
     target_count = serializers.SerializerMethodField()
     except_count = serializers.SerializerMethodField()
-    # code = serializers.SerializerMethodField()
     checks = CheckSerializer(many=True, read_only=True)
 
     def get_subreddit_count(self, obj):
@@ -134,15 +134,8 @@ class CheckCombinationSerializer(serializers.ModelSerializer):
         return obj.post_set.filter(place__in=['except', 'normal-except'],
                                    created_utc__range=(start_date, end_date)).count()
 
-    # def get_code(self, obj):
-    #     checks = obj.checks.all()
-    #     codes = []
-    #     for check in checks:
-    #         codes.append(check.fields + ': ' + "[ '" + check.word + "' ]")
-    #     return "\n".join(codes)
-
     class Meta:
-        model = CheckCombination
+        model = Line
         fields = [
             'id',
             'checks',
@@ -160,7 +153,7 @@ class RuleSerializer(serializers.ModelSerializer):
     target_count = serializers.SerializerMethodField()
     except_count = serializers.SerializerMethodField()
     checks = CheckSerializer(many=True, read_only=True)
-    check_combinations = CheckCombinationSerializer(many=True, read_only=True)
+    lines = LineSerializer(many=True, read_only=True)
 
     def get_subreddit_count(self, obj):
         start_date = self.context['request'].query_params.get('start_date')
@@ -190,7 +183,7 @@ class RuleSerializer(serializers.ModelSerializer):
             'id',
             'code',
             'checks',
-            'check_combinations',
+            'lines',
             'subreddit_count',
             'spam_count',
             'target_count',
@@ -240,10 +233,6 @@ class ConfigSerializer(serializers.ModelSerializer):
             'target_count',
             'except_count',
         ]
-
-    def create(self, validated_data):
-        config = create_config(validated_data['code'], self.context['request'].user, validated_data['task'])
-        return config
 
 
 class StatSerializer(serializers.ModelSerializer):
