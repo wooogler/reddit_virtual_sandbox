@@ -15,7 +15,7 @@ function DiscordPage(): ReactElement {
       <div>Please Join the Discord Server to participate the study.</div>
       <a
         className='mt-2 mb-8 underline'
-        href='https://discord.gg/wXXM8XX9VC'
+        href='https://discord.gg/zaSzyH9Gye'
         target='_blank'
         rel='noreferrer'
       >

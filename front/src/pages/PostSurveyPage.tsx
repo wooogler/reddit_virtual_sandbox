@@ -8,72 +8,18 @@ import * as Survey from 'survey-react';
 const surveyJSON = {
   pages: [
     {
-      name: 'Feature0',
-      elements: [
-        {
-          type: 'image',
-          name: 'feature0_pic',
-          imageLink:
-            'https://api.surveyjs.io/private/Surveys/files?name=065ad098-aaf0-45f8-a762-efb80c3e8d87',
-        },
-        {
-          type: 'radiogroup',
-          name: 'feature0_useful',
-          title: 'How useful was Feature 0: Sandbox in the main task 1?',
-          choices: [
-            {
-              value: '1',
-              text: 'Extremely useless ',
-            },
-            {
-              value: '2',
-              text: 'Somewhat useless',
-            },
-            {
-              value: '3',
-              text: 'Slightly useless',
-            },
-            {
-              value: '4',
-              text: 'Neither useful nor useless ',
-            },
-            {
-              value: '5',
-              text: 'Slightly useful ',
-            },
-            {
-              value: '6',
-              text: 'Somewhat useful ',
-            },
-            {
-              value: '7',
-              text: 'Extremely useful ',
-            },
-          ],
-        },
-        {
-          type: 'comment',
-          name: 'feature0_essay',
-          title:
-            'What aspects of the Feature 0: Sandbox led to your answer to the above question?',
-        },
-      ],
-      title: 'Feature 0: Sandbox',
-    },
-    {
       name: 'Feature1',
       elements: [
         {
           type: 'image',
           name: 'feature1_pic',
-          imageLink:
-            'https://api.surveyjs.io/private/Surveys/files?name=065ad098-aaf0-45f8-a762-efb80c3e8d87',
+          imageLink: '/images/sandbox.png',
+          imageWidth: '1000px',
         },
         {
           type: 'radiogroup',
           name: 'feature1_useful',
-          title:
-            'How useful was Feature 1: Configuration Analysis in the main task 1?',
+          title: 'How useful was "Feature 1: Sandbox" in the main task 1?',
           choices: [
             {
               value: '1',
@@ -109,10 +55,10 @@ const surveyJSON = {
           type: 'comment',
           name: 'feature1_essay',
           title:
-            'What aspects of the Feature 1: Configuration Analysis led to your answer to the above question?',
+            'What aspects of the "Feature 1: Sandbox" led to your answer to the above question?',
         },
       ],
-      title: 'Feature 1: Configuration Analysis',
+      title: 'Feature 1: Sandbox',
     },
     {
       name: 'Feature2',
@@ -120,14 +66,14 @@ const surveyJSON = {
         {
           type: 'image',
           name: 'feature2_pic',
-          imageLink:
-            'https://api.surveyjs.io/private/Surveys/files?name=065ad098-aaf0-45f8-a762-efb80c3e8d87',
+          imageLink: '/images/post_collections_1.png',
+          imageWidth: '1000px',
         },
         {
           type: 'radiogroup',
           name: 'feature2_useful',
           title:
-            'How useful was Feature 2: Post Collections in the main task 1?',
+            'How useful was "Feature 2: Post Collections" in the main task 1?',
           choices: [
             {
               value: '1',
@@ -161,9 +107,9 @@ const surveyJSON = {
         },
         {
           type: 'comment',
-          name: 'question9',
+          name: 'feature2_essay',
           title:
-            'What aspects of the Feature 2: Post Collections led to your answer to the above question?',
+            'What aspects of the "Feature 2: Post Collections" led to your answer to the above question?',
         },
       ],
       title: 'Feature 2: Post Collections',
@@ -173,15 +119,15 @@ const surveyJSON = {
       elements: [
         {
           type: 'image',
-          name: 'feature3_useful',
-          imageLink:
-            'https://api.surveyjs.io/private/Surveys/files?name=065ad098-aaf0-45f8-a762-efb80c3e8d87',
+          name: 'feature3_pic',
+          imageLink: '/images/smart_sorting.png',
+          imageWidth: '1000px',
         },
         {
           type: 'radiogroup',
-          name: 'question11',
+          name: 'feature3_useful',
           title:
-            'How useful was Feature 3: Possible Misses & False Alarms in the main task 1?',
+            'How useful was "Feature 3: View Possible Misses & False Alarms" in the main task 1?',
           choices: [
             {
               value: '1',
@@ -217,10 +163,64 @@ const surveyJSON = {
           type: 'comment',
           name: 'feature3_essay',
           title:
-            'What aspects of the Feature 3: Possible Misses & False Alarms to the above question?',
+            'What aspects of the "Feature 3: View Possible Misses & False Alarms" led to your answer to the above question?',
         },
       ],
-      title: 'Feature 3: Possible Misses & False Alarms',
+      title: 'Feature 3: View Possible Misses & False Alarms',
+    },
+    {
+      name: 'Feature4',
+      elements: [
+        {
+          type: 'image',
+          name: 'feature4_pic',
+          imageLink: '/images/conf_analysis_1.png',
+          imageWidth: '1000px',
+        },
+        {
+          type: 'radiogroup',
+          name: 'feature4_useful',
+          title:
+            'How useful was "Feature 4: Configuration Analysis & Highlights" led to your answer in the main task 1?',
+          choices: [
+            {
+              value: '1',
+              text: 'Extremely useless ',
+            },
+            {
+              value: '2',
+              text: 'Somewhat useless',
+            },
+            {
+              value: '3',
+              text: 'Slightly useless',
+            },
+            {
+              value: '4',
+              text: 'Neither useful nor useless ',
+            },
+            {
+              value: '5',
+              text: 'Slightly useful ',
+            },
+            {
+              value: '6',
+              text: 'Somewhat useful ',
+            },
+            {
+              value: '7',
+              text: 'Extremely useful ',
+            },
+          ],
+        },
+        {
+          type: 'comment',
+          name: 'feature4_essay',
+          title:
+            'What aspects of the "Feature 4: Configuration Analysis & Highlights" led to your answer to the above question?',
+        },
+      ],
+      title: 'Feature 4: Configuration Analysis & Highlights',
     },
   ],
 };

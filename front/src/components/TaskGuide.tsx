@@ -49,7 +49,7 @@ function TaskGuide(): ReactElement {
           </b>
         </div>
       )}
-      <div className='category mt-6'>3 Example Posts</div>
+      {/* <div className='category mt-6'>3 Example Posts</div>
       {task === 'example' ? (
         <div>The example posts will be given in the main tasks.</div>
       ) : task.startsWith('A') ? (
@@ -110,7 +110,7 @@ function TaskGuide(): ReactElement {
             }
           </div>
         </div>
-      )}
+      )} */}
     </>
   );
 }

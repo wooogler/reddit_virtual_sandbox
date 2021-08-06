@@ -9,6 +9,33 @@ import { Survey } from 'survey-react';
 const demoJSON = {
   pages: [
     {
+      name: 'Overall System',
+      elements: [
+        {
+          type: 'rating',
+          name: 'will',
+          title:
+            'Are you willing to use this system if you are given a similar task next time?',
+          rateMax: 7,
+          minRateDescription: 'Not at all',
+          maxRateDescription: 'Of course',
+        },
+        {
+          type: 'comment',
+          name: 'process',
+          title:
+            "Please describe the strategy or process you've taken to make the AutoMod rule.",
+        },
+        {
+          type: 'comment',
+          name: 'feedback',
+          title:
+            'If there is any direction to improve further in the system, please give us feedback.',
+        },
+      ],
+      title: 'System Evaluation',
+    },
+    {
       name: 'Background&Demographic',
       elements: [
         {

@@ -24,7 +24,7 @@ function CheckPage(): ReactElement {
             />
           </span>
         </li>
-        <li className='mb-2'>
+        {/* <li className='mb-2'>
           I have enabled microphone.
           <span className='ml-2'>
             <Checkbox
@@ -41,14 +41,13 @@ function CheckPage(): ReactElement {
               onChange={() => setThinkCheck(!thinkCheck)}
             />
           </span>
-        </li>
+        </li> */}
       </ul>
-      <div className='mb-2 text-red-400'>If you have any problems, please contact the instructor in the Discord Channel.</div>
-      <Button
-        type='primary'
-        onClick={onClickNext}
-        disabled={!(micCheck && thinkCheck && recordCheck)}
-      >
+      <div className='mb-2 text-red-400'>
+        If you have any problems, please contact the instructor in the Discord
+        Channel.
+      </div>
+      <Button type='primary' onClick={onClickNext} disabled={!recordCheck}>
         Start Main Tasks
       </Button>
     </PageLayout>

@@ -136,7 +136,7 @@ class PostViewSet(viewsets.ModelViewSet):
 
         elif where == 'Test':  # for lab study
             with open(os.path.join(os.path.dirname(__file__),
-                                   'test_data/submission_cscareerquestions_may_1st_rest.json')) as normal_json:
+                                   'test_data/submission_cscareerquestions_may_1st_labeled.json')) as normal_json:
                 normal = json.load(normal_json)
                 normal_json.close()
 
@@ -177,7 +177,14 @@ class PostViewSet(viewsets.ModelViewSet):
 
         posts = create_test_posts(normal_posts, request.user, 'normal')
         target_example_ids = ["mkwaep", "mkq1j8", "mhrw80"]
-        posts.filter(post_id__in=target_example_ids).update(place='normal-target')
+        target_taskA_ids = ['n47rmf', 'n3p158', 'n58oqh', 'n6aozu', 'n5yp3k']
+        target_taskB_ids = ['n67he2', 'n5jc1q', 'n4e5z3']
+        if task == 'example':
+            posts.filter(post_id__in=target_example_ids).update(place='normal-target')
+        elif task == 'A1' or task == 'A2':
+            posts.filter(post_id__in=target_taskA_ids).update(place='normal-target')
+        elif task == 'B1' or task == 'B2':
+            posts.filter(post_id__in=target_taskB_ids).update(place='normal-target')
 
         configs = Config.objects.filter(user=request.user, task=task)
         for config in configs:

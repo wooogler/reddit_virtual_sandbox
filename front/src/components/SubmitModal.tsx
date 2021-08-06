@@ -111,16 +111,15 @@ function SubmitModal({ onCancel, visible }: Props): ReactElement {
     if (task === 'example') {
       // history.push(`/home/${condition}/${_.random(1, 2) === 1 ? 'A1' : 'B2'}`);
       deleteAllPostsMutation.mutate();
-      deleteAllRulesMutation.mutate();
       history.push(`/check/${condition}/`);
     } else {
+      deleteAllPostsMutation.mutate();
       history.push(`/survey/${condition}/${task}`);
     }
   }, [
     clearConfigId,
     condition,
     deleteAllPostsMutation,
-    deleteAllRulesMutation,
     deleteExceptPostsMutation,
     deleteTargetPostsMutation,
     history,

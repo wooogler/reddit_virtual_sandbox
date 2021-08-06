@@ -1,5 +1,5 @@
 import { Modal, Tabs } from 'antd';
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useState } from 'react';
 import styled from 'styled-components';
 import './collapse.css';
 
@@ -15,6 +15,7 @@ interface Props {
 const { TabPane } = Tabs;
 
 function GuideModal({ visible, onCancel }: Props): ReactElement {
+  const [tab, setTab] = useState('');
   return (
     <Modal
       title='Guide'
@@ -22,10 +23,15 @@ function GuideModal({ visible, onCancel }: Props): ReactElement {
       onCancel={onCancel}
       centered
       footer={false}
-      width={600}
+      width={tab === 'system' ? 1000 : 600}
     >
       <GuideDiv>
-        <Tabs defaultActiveKey='configuration' centered size='small'>
+        <Tabs
+          defaultActiveKey='configuration'
+          centered
+          size='small'
+          onChange={(key) => setTab(key)}
+        >
           <TabPane tab='Configuration Guide' key='configuration'>
             <ConfigurationGuide />
           </TabPane>

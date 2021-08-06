@@ -23,21 +23,21 @@ function OverviewPage(): ReactElement {
           main task, (3) main task, and (4) post-survey.{' '}
         </div>
         <div className='mt-2'>
-          The whole study will take approximately <b>90 minutes</b> to complete.
+          The whole study will take approximately <b>120~180 minutes</b> to complete.
         </div>
         <div className='mt-2'>
           When you finish the main task and a post survey, you will earn{' '}
-          <b>15,000 KRW</b>. There will be a bonus compensation up to{' '}
-          <b>10,000 KRW</b> depending on your performance in the main task.
+          <b>40,000 KRW</b>. There will be a bonus compensation up to{' '}
+          <b>5,000 KRW</b> depending on your performance in the main task.
         </div>
-        <div className='mt-2'>
+        {/* <div className='mt-2'>
           During the main task, you will be asked to follow a “think-aloud”
           protocol, which is simply saying out loud what you think while doing
           the task, e.g., this function is cool, this feature is hard to
           understand, etc.
-        </div>
+        </div> */}
         <div className='mt-2'>
-          Therefore, you need to record your voice and screen by yourself.
+          In the main task, you need to record your screen by yourself.
         </div>
         <div className='mt-2'>(IRB Content...)</div>
         <div className='mt-2'>

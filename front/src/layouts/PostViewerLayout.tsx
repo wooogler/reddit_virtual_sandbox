@@ -519,7 +519,7 @@ function PostViewerLayout(): ReactElement {
             />
             <div className='border-gray-200 border-r-2' />
 
-            {condition !== 'baseline' && (
+            {condition !== 'baseline' ? (
               <PostList
                 label={fpfn ? 'Possible False Alarms' : 'Filtered by AutoMod'}
                 filtered
@@ -529,6 +529,17 @@ function PostViewerLayout(): ReactElement {
                   filteredQuery.isLoading ||
                   !!queryClient.isMutating({ mutationKey: 'fpfn' })
                 }
+              />
+            ) : (
+              <TargetList
+                label={'Posts that should be filtered'}
+                posts={targetQuery.data?.filter(
+                  (post) => post.place === 'normal-target'
+                )}
+                isLoading={addTestCaseMutation.isLoading}
+                onSubmit={undefined}
+                totalTarget={targetQuery.data?.length}
+                place='except'
               />
             )}
           </>
@@ -585,37 +596,41 @@ function PostViewerLayout(): ReactElement {
             }
           />
           <div className='border-gray-200 border-r-2' />
-          <TargetList
-            label={
-              condition === 'modsandbox'
-                ? 'Posts to avoid being filtered'
-                : condition === 'sandbox'
-                ? 'Filtered by AutoMod'
-                : 'Posts that should be filtered'
-            }
-            posts={
-              condition === 'modsandbox'
-                ? exceptQuery.data
-                : condition === 'sandbox'
-                ? targetQuery.data?.filter((post) =>
-                    isFiltered(post, config_id)
-                  )
-                : targetQuery.data?.filter(
-                    (post) => post.place === 'normal-target'
-                  )
-            }
-            isLoading={addTestCaseMutation.isLoading}
-            onSubmit={
-              condition === 'modsandbox'
-                ? (postId) =>
-                    addTestCaseMutation.mutate({ postId, place: 'except' })
-                : undefined
-            }
-            totalTarget={
-              condition === 'modsandbox' ? undefined : targetQuery.data?.length
-            }
-            place='except'
-          />
+          {condition !== 'baseline' && (
+            <TargetList
+              label={
+                condition === 'modsandbox'
+                  ? 'Posts to avoid being filtered'
+                  : condition === 'sandbox'
+                  ? 'Filtered by AutoMod'
+                  : 'Posts that should be filtered'
+              }
+              posts={
+                condition === 'modsandbox'
+                  ? exceptQuery.data
+                  : condition === 'sandbox'
+                  ? targetQuery.data?.filter((post) =>
+                      isFiltered(post, config_id)
+                    )
+                  : targetQuery.data?.filter(
+                      (post) => post.place === 'normal-target'
+                    )
+              }
+              isLoading={addTestCaseMutation.isLoading}
+              onSubmit={
+                condition === 'modsandbox'
+                  ? (postId) =>
+                      addTestCaseMutation.mutate({ postId, place: 'except' })
+                  : undefined
+              }
+              totalTarget={
+                condition === 'modsandbox'
+                  ? undefined
+                  : targetQuery.data?.length
+              }
+              place='except'
+            />
+          )}
         </div>
       </div>
     </Split>

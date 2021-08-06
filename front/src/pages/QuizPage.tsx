@@ -16,7 +16,7 @@ const quizJSON = {
           type: 'radiogroup',
           name: 'Q1',
           title:
-            "If you want to detect posts with body that contains 'hello' and 'hi', which is the right configuration?",
+            "If you want to detect posts with body that contains both 'hello' and 'hi', which is the right configuration?",
           correctAnswer: 'item4',
           isRequired: true,
           validators: [
@@ -78,15 +78,15 @@ const quizJSON = {
             },
             {
               value: 'item2',
-              text: 'It detects a post with body contains "red orange"',
+              text: 'It detects a post whose body contains "red orange"',
             },
             {
               value: 'item3',
-              text: 'It detects a post with title contains "blue whale"',
+              text: 'It detects a post whose title contains "blue whale"',
             },
             {
               value: 'item4',
-              text: 'If you remove middle "---" in the configuration, it will detect a post with "red orange"',
+              text: 'If you remove middle "---" in the configuration, it will detect a post whose body contains "red orange"',
             },
           ],
         },
@@ -133,30 +133,30 @@ const quizJSON = {
         },
       ],
     },
-    {
-      name: 'Quiz4',
-      elements: [
-        {
-          type: 'comment',
-          name: 'question3',
-          title: '다음과 같이 동작하는 설정을 아래에 적어주세요.',
-          description:
-            "설정에는 총 세 개의 룰이 존재합니다.<br/>첫번째 룰은 body에 대소문자 구분없이 'apple' 혹은 'banana'가 있으면 잡아내지만 첫 글자가 대문자인 'Apple'이 body에 있는 글은 제외합니다.<br/>두번째 룰은 title이나 body에 대소문자 구분없이 'mac'이라는 텍스트가 포함된 단어(ex. macbook)를 가지고 있으면 잡아냅니다. 하지만 body에 소문자로 이루어진 'apple'이라는 단어가 있는 글은 제외합니다.<br/>세번째 룰은 body에 대소문자 구분하여 'iPhone'과 'Apple'이라는 단어를 둘 다 가지는 글을 잡아냅니다. ",
-          isRequired: true,
-          requiredErrorText: 'Please read the guide carefully!',
-          validators: [
-            {
-              type: 'regex',
-              text: 'Please read the guide carefully!',
-              regex:
-                "\\n*body:\\s?\\['apple',\\s?'banana']\\s*\\n+~body\\s?\\(case-sensitive\\): \\['Apple']\\s*\\n+---\\s*\\n+title\\+body\\s?\\(includes\\): \\['mac'\\]\\s*\\n+~body\\s?\\(case-sensitive\\): \\['apple'\\]\\s*\\n+---\\s*\\n+body#1\\s?\\(case-sensitive\\): \\['iPhone'\\]\\s*\\n+body#2\\s?\\(case-sensitive\\): \\['Apple'\\]\\s*\\n*",
-            },
-          ],
-          rows: 8,
-          placeHolder: 'body: (...)',
-        },
-      ],
-    },
+    // {
+    //   name: 'Quiz4',
+    //   elements: [
+    //     {
+    //       type: 'comment',
+    //       name: 'question3',
+    //       title: '다음과 같이 동작하는 설정을 아래에 적어주세요.',
+    //       description:
+    //         "설정에는 총 세 개의 룰이 존재합니다.<br/>첫번째 룰은 body에 대소문자 구분없이 'apple' 혹은 'banana'가 있으면 잡아내지만 첫 글자가 대문자인 'Apple'이 body에 있는 글은 제외합니다.<br/>두번째 룰은 title이나 body에 대소문자 구분없이 'mac'이라는 텍스트가 포함된 단어(ex. macbook)를 가지고 있으면 잡아냅니다. 하지만 body에 소문자로 이루어진 'apple'이라는 단어가 있는 글은 제외합니다.<br/>세번째 룰은 body에 대소문자 구분하여 'iPhone'과 'Apple'이라는 단어를 둘 다 가지는 글을 잡아냅니다. ",
+    //       isRequired: true,
+    //       requiredErrorText: 'Please read the guide carefully!',
+    //       validators: [
+    //         {
+    //           type: 'regex',
+    //           text: 'Please read the guide carefully!',
+    //           regex:
+    //             "\\n*body:\\s?\\['apple',\\s?'banana']\\s*\\n+~body\\s?\\(case-sensitive\\): \\['Apple']\\s*\\n+---\\s*\\n+title\\+body\\s?\\(includes\\): \\['mac'\\]\\s*\\n+~body\\s?\\(case-sensitive\\): \\['apple'\\]\\s*\\n+---\\s*\\n+body#1\\s?\\(case-sensitive\\): \\['iPhone'\\]\\s*\\n+body#2\\s?\\(case-sensitive\\): \\['Apple'\\]\\s*\\n*",
+    //         },
+    //       ],
+    //       rows: 8,
+    //       placeHolder: 'body: (...)',
+    //     },
+    //   ],
+    // },
   ],
   completeText: 'Finish',
 };

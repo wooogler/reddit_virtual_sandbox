@@ -130,20 +130,24 @@ class Survey(models.Model):
     task = models.CharField(max_length=50, null=True)
     condition = models.CharField(max_length=50, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    feature0_useful = models.IntegerField(null=True)
-    feature0_essay = models.TextField(null=True)
+
     feature1_useful = models.IntegerField(null=True)
     feature1_essay = models.TextField(null=True)
     feature2_useful = models.IntegerField(null=True)
     feature2_essay = models.TextField(null=True)
     feature3_useful = models.IntegerField(null=True)
     feature3_essay = models.TextField(null=True)
+    feature4_useful = models.IntegerField(null=True)
+    feature4_essay = models.TextField(null=True)
 
 
 class Demo(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     condition = models.CharField(max_length=50, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    will = models.IntegerField(null=True)
+    process = models.TextField(null=True)
+    feedback = models.TextField(null=True)
     reddit_mod = models.IntegerField(null=True)
     community_mod = models.IntegerField(null=True)
     programming = models.CharField(max_length=10, null=True)
