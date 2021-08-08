@@ -1,6 +1,6 @@
 import { ReactElement, useCallback, useEffect, useState } from 'react';
 import AceEditor from 'react-ace';
-import 'ace-builds/src-noconflict/mode-yaml';
+import 'ace-builds/src-noconflict/mode-lua';
 import 'ace-builds/src-noconflict/theme-tomorrow';
 import PanelName from './PanelName';
 import { Button, Tooltip } from 'antd';
@@ -35,7 +35,7 @@ function CodeEditor({ placeholder }: Props): ReactElement {
   const autoSaveConfig = useCallback(
     (code: string) => {
       request({
-        url: task === 'example' ? '/trash/' : '/log/',
+        url: '/log/',
         method: 'POST',
         data: {
           task,
@@ -139,11 +139,14 @@ function CodeEditor({ placeholder }: Props): ReactElement {
   //   },
   // });
 
-  const deleteTargetConfigMutation = useMutation(() => request({url: '/configs/target', method: 'DELETE'}),{
-    onSuccess: () => {
-      queryClient.invalidateQueries('target');
+  const deleteTargetConfigMutation = useMutation(
+    () => request({ url: '/configs/target', method: 'DELETE' }),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('target');
+      },
     }
-  })
+  );
 
   const { data: configData } = useQuery(
     ['configs', { start_date, end_date, task }],
@@ -288,7 +291,7 @@ function CodeEditor({ placeholder }: Props): ReactElement {
       </div>
       <div className='flex-1' data-tour='configuration'>
         <AceEditor
-          mode='yaml'
+          mode='lua'
           theme='tomorrow'
           onChange={(code) => setCode(code)}
           value={code}

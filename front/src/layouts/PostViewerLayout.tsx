@@ -21,11 +21,13 @@ import {
   useQuery,
   useQueryClient,
 } from 'react-query';
+import NewWindow from 'react-new-window';
 import { Split } from '@geoffcox/react-splitter';
 import { useParams } from 'react-router-dom';
 import { Condition, Task } from '@typings/types';
 import useLogMutation from '@hooks/useLogMutation';
 import GuideModal from '@components/GuideModal';
+import GuideWindow from '@components/GuideWindow';
 
 function PostViewerLayout(): ReactElement {
   const queryClient = useQueryClient();
@@ -57,7 +59,7 @@ function PostViewerLayout(): ReactElement {
 
   const [isSearchVisible, setIsSearchVisible] = useState(false);
   const [isSubmitVisible, setIsSubmitVisible] = useState(false);
-  const [visibleGuideModal, setVisibleGuideModal] = useState(false);
+  const [visibleGuide, setVisibleGuide] = useState(false);
   const targetQuery = useQuery<IPost[], AxiosError>(
     [
       'target',
@@ -446,18 +448,28 @@ function PostViewerLayout(): ReactElement {
                 </>
               )}
 
-              <Button
+              {/* <Button
                 icon={<InfoCircleOutlined />}
                 className='ml-2'
-                onClick={() => setVisibleGuideModal(true)}
+                onClick={() => setVisibleGuide(true)}
                 data-tour='guide'
+                disabled={visibleGuide}
               >
-                Guide
+                {visibleGuide ? 'Opened' : 'Guide'}
               </Button>
-              <GuideModal
+              {visibleGuide && (
+                <NewWindow
+                  onUnload={() => setVisibleGuide(false)}
+                  center='screen'
+                  title='Guide'
+                  name='Guide'
+                  url={`/guide/${condition}/${task}`}
+                />
+              )} */}
+              {/* <GuideModal
                 visible={visibleGuideModal}
                 onCancel={() => setVisibleGuideModal(false)}
-              />
+              /> */}
               {process.env.NODE_ENV === 'development' &&
                 (totalCount.totalCount !== 0 ? (
                   <Button

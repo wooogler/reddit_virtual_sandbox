@@ -123,7 +123,7 @@ const quizJSON = {
             },
             {
               value: 'item3',
-              text: "body: (case-sensitive) ['Upgrade']",
+              text: "body : (case-sensitive) ['Upgrade']",
             },
             {
               value: 'item4',

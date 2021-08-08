@@ -19,7 +19,7 @@ const surveyJSON = {
         {
           type: 'radiogroup',
           name: 'feature1_useful',
-          title: 'How useful was "Feature 1: Sandbox" in the main task 1?',
+          title: `How useful was "Feature 1: Sandbox" in the main task?`,
           choices: [
             {
               value: '1',
@@ -73,7 +73,7 @@ const surveyJSON = {
           type: 'radiogroup',
           name: 'feature2_useful',
           title:
-            'How useful was "Feature 2: Post Collections" in the main task 1?',
+            'How useful was "Feature 2: Post Collections" in the main task?',
           choices: [
             {
               value: '1',
@@ -127,7 +127,7 @@ const surveyJSON = {
           type: 'radiogroup',
           name: 'feature3_useful',
           title:
-            'How useful was "Feature 3: View Possible Misses & False Alarms" in the main task 1?',
+            'How useful was "Feature 3: View Possible Misses & False Alarms" in the main task?',
           choices: [
             {
               value: '1',
@@ -181,7 +181,7 @@ const surveyJSON = {
           type: 'radiogroup',
           name: 'feature4_useful',
           title:
-            'How useful was "Feature 4: Configuration Analysis & Highlights" led to your answer in the main task 1?',
+            'How useful was "Feature 4: Configuration Analysis & Highlights" led to your answer in the main task?',
           choices: [
             {
               value: '1',

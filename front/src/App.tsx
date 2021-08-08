@@ -11,6 +11,7 @@ import QuizPage from '@pages/QuizPage';
 import PostSurveyPage from '@pages/PostSurveyPage';
 import DemoPage from '@pages/DemoPage';
 import CheckPage from '@pages/CheckPage';
+import GuideWindow from '@components/GuideWindow';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
       <Route path='/demo/:condition' component={DemoPage} />
       <Route path='/finish' component={FinishPage} />
       <Route path='/eval/:condition/:task' component={EvalPage} />
+      <Route path='/guide/:condition/:task' component={GuideWindow} />
       {/* <Route path='/signup' component={SignUpPage} /> */}
     </Switch>
   );
