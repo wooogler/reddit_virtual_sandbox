@@ -98,14 +98,21 @@ function EvalPage(): ReactElement {
       },
     }
   );
-  const importEvalPostsMutation = useMutation(() =>
-    request({
-      url: '/posts/',
-      method: 'POST',
-      data: {
-        where: 'Eval',
+  const importEvalPostsMutation = useMutation(
+    () =>
+      request({
+        url: '/posts/',
+        method: 'POST',
+        data: {
+          where: 'Eval',
+        },
+      }),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('filtered');
+        queryClient.invalidateQueries('not filtered');
       },
-    })
+    }
   );
   return (
     <div className='h-screen w-screen flex flex-col'>

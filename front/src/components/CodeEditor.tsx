@@ -44,6 +44,7 @@ function CodeEditor({ placeholder }: Props): ReactElement {
         },
       });
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [task]
   );
 
@@ -61,9 +62,8 @@ function CodeEditor({ placeholder }: Props): ReactElement {
     changeCode,
     start_date,
     end_date,
+    code: storedCode,
   } = useStore();
-
-  const storedCode = useStore().code;
 
   useEffect(() => {
     setCode(storedCode);

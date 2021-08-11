@@ -1,4 +1,4 @@
-import { ConsoleSqlOutlined, DeleteOutlined } from '@ant-design/icons';
+import { DeleteOutlined } from '@ant-design/icons';
 import useLogMutation from '@hooks/useLogMutation';
 import { Check, CheckCombination, Config, Rule } from '@typings/db';
 import request from '@utils/request';
@@ -18,7 +18,7 @@ interface Props {
   ruleType: 'config' | 'rule' | 'checkCombination' | 'check' | 'line';
   checked: boolean;
   selectedIds?: (number | undefined)[];
-  selectedNotIds?: (number | undefined)[];
+  selectedIdsArray?: (number[] | undefined)[];
 }
 
 function RuleItem({
@@ -28,7 +28,7 @@ function RuleItem({
   ruleType,
   checked,
   selectedIds,
-  selectedNotIds,
+  selectedIdsArray,
 }: Props): ReactElement {
   const {
     totalCount,
@@ -46,7 +46,38 @@ function RuleItem({
 
   const onClickRadio = () => {
     if (ruleType === 'config') {
+      changeConfigId(rule.id);
       changeCode(rule.code);
+      logMutation.mutate({
+        task,
+        info: 'select',
+        content: rule.code,
+        config_id: rule.id,
+      });
+    } else if (ruleType === 'rule') {
+      changeRuleId(rule.id);
+      logMutation.mutate({
+        task,
+        info: 'select',
+        content: rule.code,
+        rule_id: rule.id,
+      });
+    } else if (ruleType === 'line') {
+      changeLineId(rule.id);
+      logMutation.mutate({
+        task,
+        info: 'select',
+        content: rule.code,
+        line_id: rule.id,
+      });
+    } else if (ruleType === 'check') {
+      changeCheckId(rule.id);
+      logMutation.mutate({
+        task,
+        info: 'select',
+        content: rule.code,
+        check_id: rule.id,
+      });
     }
   };
   const queryClient = useQueryClient();
@@ -78,10 +109,9 @@ function RuleItem({
 
   const bgSelectedColor = () => {
     if (selectedIds && selectedIds.includes(rule.id)) {
-      return `rgba(255,255,0,${selectedIds.length * 0.4})`;
-    }
-    if (selectedNotIds && selectedNotIds.includes(rule.id)) {
-      return `rgba(255,0,0,${selectedNotIds.length * 0.4})`;
+      return `rgba(255,255,0,${selectedIds.length * 0.5})`;
+    } else if (selectedIdsArray && selectedIdsArray.flat().includes(rule.id)) {
+      return `rgba(255,255,0,${selectedIdsArray.length * 0.5})`;
     }
     return undefined;
   };
@@ -89,11 +119,17 @@ function RuleItem({
   return (
     <div
       className={clsx(
-        'flex items-center p-1 rounded-md border-gray-300 border',
+        'flex items-center cursor-pointer hover:bg-gray-300 p-1 rounded-md border-gray-300 border',
         className
       )}
-      style={{ backgroundColor: bgSelectedColor() }}
-      onClick={onClickRadio}
+      style={{
+        backgroundColor: bgSelectedColor()
+          ? bgSelectedColor()
+          : checked
+          ? 'rgba(219, 234, 254, 1)'
+          : undefined,
+      }}
+      onClick={() => onClickRadio()}
     >
       <div
         className={clsx('flex-1 font-mono whitespace-pre-wrap ml-2 text-xs')}

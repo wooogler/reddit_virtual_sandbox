@@ -40,6 +40,7 @@ type State = {
   code: string;
   imported: boolean;
   selectedHighlights: SelectedHighlight[];
+  selectedNotHighlights: SelectedHighlight[];
   totalCount: TotalCount;
   fpfn: boolean;
   changeConfigId: (configId: number) => void;
@@ -58,6 +59,7 @@ type State = {
   changeCode: (code: string) => void;
   changeImported: (imported: boolean) => void;
   changeSelectedHighlights: (selected: SelectedHighlight[]) => void;
+  changeSelectedNotHighlights: (selected: SelectedHighlight[]) => void;
   clearSelectedHighlight: () => void;
   changeTotalCount: (totalCount: Partial<TotalCount>) => void;
   changeFpFn: (fpfn: boolean) => void;
@@ -86,6 +88,7 @@ export const useStore = create<State>(
         code: '',
         imported: false,
         selectedHighlights: [],
+        selectedNotHighlights: [],
         totalCount: {
           filteredCount: 0,
           totalCount: 0,
@@ -151,9 +154,13 @@ export const useStore = create<State>(
         changeSelectedHighlights: (selected: SelectedHighlight[]) => {
           set((state) => ({ selectedHighlights: selected }));
         },
+        changeSelectedNotHighlights: (selected: SelectedHighlight[]) => {
+          set((state) => ({ selectedNotHighlights: selected }));
+        },
         clearSelectedHighlight: () => {
           set((state) => ({
             selectedHighlights: [],
+            selectedNotHighlights: [],
           }));
         },
         changeTotalCount: (count: Partial<TotalCount>) => {

@@ -14,13 +14,32 @@ interface Match {
 interface Props {
   text: string;
   match: Match[];
+  notMatch: Match[];
 }
 
-function HighlightText({ text, match }: Props): ReactElement {
-  const { changeSelectedHighlights, clearSelectedHighlight } = useStore();
+function HighlightText({ text, match, notMatch }: Props): ReactElement {
+  const { changeSelectedHighlights, changeSelectedNotHighlights, clearSelectedHighlight } = useStore();
 
   let rangeSet = new Set<number>();
-  match.forEach((item) => {
+  // let rangeObject: {index: number, not: boolean}[] = [];
+  // match.forEach((item) => {
+  //   if (rangeObject.map((item) => item.index).includes(item.start)) {
+  //     rangeObject.push({index: item.start, not: false})
+  //   }
+  //   if (rangeObject.map((item) => item.index).includes(item.end)) {
+  //     rangeObject.push({index: item.end, not: false})
+  //   }
+  // })
+  // notMatch.forEach((item) => {
+  //   if (rangeObject.map((item) => item.index).includes(item.start)) {
+  //     rangeObject.push({index: item.start, not: true})
+  //   }
+  //   if (rangeObject.map((item) => item.index).includes(item.end)) {
+  //     rangeObject.push({index: item.end, not: true})
+  //   }
+  // })
+  // const ranges = rangeObject.sort((a,b) => a.index - b.index)
+  match.concat(notMatch).forEach((item) => {
     rangeSet.add(item.start);
     rangeSet.add(item.end);
   });
@@ -30,17 +49,15 @@ function HighlightText({ text, match }: Props): ReactElement {
     .map((a, i, aa) => {
       const start = i ? aa[i - 1] : ranges[0];
       const end = a;
-      const ids = match
-        .filter((d) => d.start <= start && end <= d.end)
-        .map(({ config_id, rule_id, check_id, line_id }) => ({
-          config_id,
-          rule_id,
-          check_id,
-          line_id,
-        }));
-      return { start, end, ids };
+      const matchIds = match.filter((d) => d.start <= start && end <= d.end);
+      const notMatchIds = notMatch.filter(
+        (d) => d.start <= start && end <= d.end
+      );
+      return { start, end, matchIds, notMatchIds };
     })
-    .filter((item) => item.ids.length !== 0);
+    .filter(
+      (item) => item.matchIds.length !== 0 || item.notMatchIds.length !== 0
+    );
 
   const matchTextArray = matchArray.reduce<string[]>(
     (acc, index) => {
@@ -60,11 +77,11 @@ function HighlightText({ text, match }: Props): ReactElement {
 
   const onMouseOverHighlight = useCallback(
     (index: number) => {
-      const { ids } = matchArray[(index - 1) / 2];
-      changeSelectedHighlights(ids);
-      console.log(matchArray);
+      const { matchIds, notMatchIds } = matchArray[(index - 1) / 2];
+      changeSelectedHighlights(matchIds);
+      changeSelectedNotHighlights(notMatchIds);
     },
-    [changeSelectedHighlights, matchArray]
+    [changeSelectedHighlights, changeSelectedNotHighlights, matchArray]
   );
 
   const onMouseOutHighlight = useCallback(() => {
@@ -77,12 +94,16 @@ function HighlightText({ text, match }: Props): ReactElement {
         if (index % 2 === 0) {
           return <span key={index}>{part}</span>;
         }
+        const matchLength = matchArray[(index - 1) / 2].matchIds.length;
+        const notMatchLength = matchArray[(index - 1) / 2].notMatchIds.length;
+        const matchRatio =
+          matchLength + notMatchLength === 0
+            ? 0
+            : matchLength / (matchLength + notMatchLength);
         return (
           <span
             style={{
-              backgroundColor: `rgba(255,255,0,${
-                matchArray[(index - 1) / 2].ids.length * 0.5
-              })`,
+              backgroundColor: `rgba(255,${255 * matchRatio},0,${(matchLength + notMatchLength) * 0.4})`,
             }}
             onMouseOver={() => onMouseOverHighlight(index)}
             onMouseOut={onMouseOutHighlight}

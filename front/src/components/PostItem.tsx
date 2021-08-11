@@ -179,26 +179,30 @@ function PostItem({
 
   const makeMatch = (matchingChecks: MatchingCheck[]) => {
     const matchingCheck = matchingChecks.filter((check) => {
-      if (check_id) {
-        if (check._check_id === check_id) {
-          return true;
-        }
-        return false;
-      } else if (line_id) {
-        if (check.line_id === line_id) {
-          return true;
-        }
-        return false;
-      } else if (rule_id) {
-        if (check.rule_id === rule_id) {
-          return true;
-        }
-        return false;
-      } else if (config_id) {
-        if (check.config_id === config_id) {
-          return true;
-        }
-        return false;
+      // if (check_id) {
+      //   if (check._check_id === check_id) {
+      //     return true;
+      //   }
+      //   return false;
+      // } else if (line_id) {
+      //   if (check.line_id === line_id) {
+      //     return true;
+      //   }
+      //   return false;
+      // } else if (rule_id) {
+      //   if (check.rule_id === rule_id) {
+      //     return true;
+      //   }
+      //   return false;
+      // } else if (config_id) {
+      //   if (check.config_id === config_id) {
+      //     return true;
+      //   }
+      //   return false;
+      // }
+      // return false;
+      if (check.config_id === config_id) {
+        return true;
       }
       return false;
     });
@@ -285,9 +289,8 @@ function PostItem({
           ) : condition === 'modsandbox' ? (
             <HighlightText
               text={post.title}
-              match={makeMatch(
-                matchingChecksTitle.concat(matchingNotChecksTitle)
-              )}
+              match={makeMatch(matchingChecksTitle)}
+              notMatch={makeMatch(matchingNotChecksTitle)}
             />
           ) : (
             <div>{post.title}</div>
@@ -343,7 +346,8 @@ function PostItem({
               </Dropdown>
             )
           ) : (
-            isTested && ['target', 'except'].includes(post.place) &&(
+            isTested &&
+            ['target', 'except'].includes(post.place) && (
               <div
                 className='cursor-pointer text-red-500 underline'
                 onClick={() =>
@@ -385,9 +389,8 @@ function PostItem({
             ) : condition === 'modsandbox' ? (
               <HighlightText
                 text={post.body}
-                match={makeMatch(
-                  matchingChecksBody.concat(matchingNotChecksBody)
-                )}
+                match={makeMatch(matchingChecksBody)}
+                notMatch={makeMatch(matchingNotChecksBody)}
               />
             ) : (
               <div>{post.body}</div>

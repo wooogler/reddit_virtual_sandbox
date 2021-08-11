@@ -83,7 +83,7 @@ def compose_line(key, match_patterns):
     return key + ": " + str(list)
 
 
-def apply_config(config, posts, check_create):
+def apply_config(config, _posts, check_create):
     code = config.code
 
     yaml_sections = [
@@ -125,22 +125,24 @@ def apply_config(config, posts, check_create):
             ]
         }
         """
-
         for (key, match_patterns) in match_patterns.items():
             parsed_key = parse_fields_key(key)
-            print(parsed_key)
-            line, _ = Line.objects.get_or_create(rule=rule, code=compose_line(key, match_patterns),
+            line_code = compose_line(key, match_patterns)
+            line, _ = Line.objects.get_or_create(rule=rule, code=line_code,
                                                  reverse=parsed_key['not'])
             for match_pattern in match_patterns:
                 for field in parsed_key['fields']:
                     fields = compose_key(field, parsed_key['match'], parsed_key['other'], parsed_key['not'])
                     Check.objects.get_or_create(rule=rule, fields=key, field=field, word=match_pattern['word'],
                                                 line=line,
-                                                code=fields + ": ['" + match_pattern["word"] + "']", )
+                                                code=fields + ": ['" + match_pattern[
+                                                    "word"] + "']", )
 
-        for post in posts:
-            rule_match = True
-            for line in rule.lines.all():
+        posts = _posts
+        post_rule_ids_set = set()
+        for line in rule.lines.all():
+            post_line_ids_array = []
+            for post in posts:
                 line_match = line.reverse
                 for check in line.checks.all():
                     post_value = get_field_value_from_post(post, check.field)
@@ -166,15 +168,57 @@ def apply_config(config, posts, check_create):
                             post_to_check_links.append(
                                 Post.matching_checks.through(post_id=post.id, _check_id=check.id,
                                                              field=check.field))
+
                 if line_match:
                     post_to_line_links.append(Post.matching_lines.through(post_id=post.id, line_id=line.id))
+                    post_line_ids_array.append(post.id)
                 else:
-                    rule_match = False
-            if rule_match:
-                post_config_set.add(post.id)
-                post_to_rule_links.append(Post.matching_rules.through(post_id=post.id, rule_id=rule.id))
+                    post_rule_ids_set.add(post.id)
 
-    for post in posts:
+            posts = posts.filter(id__in=post_line_ids_array)
+
+        posts_rule = _posts.exclude(id__in=list(post_rule_ids_set))
+        for post in posts_rule:
+            post_to_rule_links.append(Post.matching_rules.through(post_id=post.id, rule_id=rule.id))
+            post_config_set.add(post.id)
+
+        # for post in posts:
+        #     rule_match = True
+        #     for line in rule.lines.all():
+        #         line_match = line.reverse
+        #         for check in line.checks.all():
+        #             post_value = get_field_value_from_post(post, check.field)
+        #             match_pattern = get_match_patterns(yaml.safe_load(check.code)).values()
+        #             regex = list(match_pattern)[0][0]['regex']
+        #             match = regex.search(post_value)
+        #             if bool(match):
+        #                 if line.reverse:
+        #                     line_match = False
+        #                     post_to_not_check_links.append(
+        #                         Post.matching_not_checks.through(post_id=post.id, _check_id=check.id,
+        #                                                          field=check.field,
+        #                                                          start=match.start(), end=match.end())
+        #                     )
+        #                 else:
+        #                     line_match = True
+        #                     post_to_check_links.append(
+        #                         Post.matching_checks.through(post_id=post.id, _check_id=check.id,
+        #                                                      field=check.field,
+        #                                                      start=match.start(), end=match.end()))
+        #             else:
+        #                 if line.reverse:
+        #                     post_to_check_links.append(
+        #                         Post.matching_checks.through(post_id=post.id, _check_id=check.id,
+        #                                                      field=check.field))
+        #         if line_match:
+        #             post_to_line_links.append(Post.matching_lines.through(post_id=post.id, line_id=line.id))
+        #         else:
+        #             rule_match = False
+        #     if rule_match:
+        #         post_config_set.add(post.id)
+        #         post_to_rule_links.append(Post.matching_rules.through(post_id=post.id, rule_id=rule.id))
+
+    for post in _posts:
         if post.id in post_config_set:
             post_to_config_links.append(Post.matching_configs.through(post_id=post.id, config_id=config.id))
     Post.matching_checks.through.objects.bulk_create(post_to_check_links)

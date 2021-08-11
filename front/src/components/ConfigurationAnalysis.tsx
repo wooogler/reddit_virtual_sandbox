@@ -22,6 +22,7 @@ function ConfigurationAnalysis(): ReactElement {
     start_date,
     end_date,
     selectedHighlights,
+    selectedNotHighlights,
   } = useStore();
   const { data: configData, isLoading: configLoading } = useQuery(
     ['configs', { start_date, end_date, task }],
@@ -57,8 +58,8 @@ function ConfigurationAnalysis(): ReactElement {
                 <div className='font-bold'>Current Configuration</div>
               )} */}
                 <Panel
-                  showArrow={false}
                   key={config.id}
+                  showArrow={false}
                   header={
                     <RuleItem
                       rule={config}
@@ -66,6 +67,9 @@ function ConfigurationAnalysis(): ReactElement {
                       ruleType='config'
                       checked={checkedConfig(config.id)}
                       selectedIds={selectedHighlights.map(
+                        (item) => item.config_id
+                      )}
+                      selectedNotIds={selectedNotHighlights.map(
                         (item) => item.config_id
                       )}
                     />
