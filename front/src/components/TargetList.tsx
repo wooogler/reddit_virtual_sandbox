@@ -2,7 +2,7 @@ import { IPost } from '@typings/db';
 import { AutoModStat, Condition } from '@typings/types';
 import { useStore } from '@utils/store';
 import { isFiltered } from '@utils/util';
-import { Button, Empty } from 'antd';
+import { Button, Checkbox, Empty } from 'antd';
 import { useForm } from 'antd/lib/form/Form';
 import { ReactElement, useCallback, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -78,6 +78,8 @@ function TargetList({
     total: totalTarget ?? (posts ? posts.length : 0),
   };
 
+  const [viewOnly, setViewOnly] = useState(false);
+
   return (
     <div className='relative flex flex-col h-full p-2 w-1/2 overflow-y-auto'>
       <OverlayLoading isLoading={isLoading} description='loading...' />
@@ -138,9 +140,24 @@ function TargetList({
                 visible={visible}
                 onVisibleChange={(visible) => setVisible(visible)}
               > */}
-              <Button size='small' onClick={onClickAdd} data-tour='create-post'>
-                Create Post
-              </Button>
+              {condition === 'modsandbox' && (
+                <Checkbox
+                  value={viewOnly}
+                  onChange={() => setViewOnly((state) => !state)}
+                >
+                  {place === 'target' ? 'Non-filtered only' : 'filtered only'}
+                </Checkbox>
+              )}
+              {condition !== 'modsandbox' && (
+                <Button
+                  size='small'
+                  onClick={onClickAdd}
+                  data-tour='create-post'
+                >
+                  Create Post
+                </Button>
+              )}
+
               {/* </Popover> */}
             </div>
             <AddPostModal
@@ -154,18 +171,36 @@ function TargetList({
       {posts?.length !== 0 ? (
         <div className='overflow-auto post-scroll'>
           {posts &&
-            posts.map((post) => (
-              <PostItem
-                key={post.id}
-                post={post}
-                isFiltered={
-                  condition !== 'baseline' || place === 'target'
-                    ? isFiltered(post, config_id, rule_id, line_id, check_id)
-                    : false
+            posts
+              .filter((post) => {
+                const isFilteredPost = isFiltered(
+                  post,
+                  config_id,
+                  rule_id,
+                  line_id,
+                  check_id
+                );
+                if (viewOnly) {
+                  if (place === 'target') {
+                    return !isFilteredPost;
+                  } else {
+                    return isFilteredPost;
+                  }
                 }
-                isTested={true}
-              />
-            ))}
+                return true;
+              })
+              .map((post) => (
+                <PostItem
+                  key={post.id}
+                  post={post}
+                  isFiltered={
+                    condition !== 'baseline' || place === 'target'
+                      ? isFiltered(post, config_id, rule_id, line_id, check_id)
+                      : false
+                  }
+                  isTested={true}
+                />
+              ))}
         </div>
       ) : (
         <div className='flex flex-1 justify-center items-center'>

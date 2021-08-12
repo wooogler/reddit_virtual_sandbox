@@ -46,7 +46,8 @@ function PostList({ label, query, isLoading, filtered }: Props): ReactElement {
       fetchNextPage();
     }
   }, [inView, fetchNextPage]);
-  const { condition, task } = useParams<{ condition: Condition; task: Task }>();
+  const { condition } = useParams<{ condition: Condition; task: Task }>();
+  const task = useParams<{ task: Task }>().task.charAt(0);
   const logMutation = useLogMutation();
 
   const total = totalCount.totalCount;

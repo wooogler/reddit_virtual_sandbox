@@ -1,6 +1,7 @@
 import useInitDateRange from '@hooks/useInitDateRange';
 import useLogMutation from '@hooks/useLogMutation';
 import { IStat } from '@typings/db';
+import { Task } from '@typings/types';
 import request from '@utils/request';
 import { useStore } from '@utils/store';
 import { AxiosError } from 'axios';
@@ -44,7 +45,7 @@ function PostChart(): ReactElement {
   } = useStore();
 
   const logMutation = useLogMutation();
-  const { task } = useParams<{ task: string }>();
+  const task = useParams<{ task: Task }>().task.charAt(0);
 
   const { data: filteredStat } = useQuery<IStat[], AxiosError>(
     [

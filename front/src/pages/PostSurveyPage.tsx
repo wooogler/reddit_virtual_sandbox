@@ -1,4 +1,5 @@
 import PageLayout from '@layouts/PageLayout';
+import { Task } from '@typings/types';
 import request from '@utils/request';
 import React, { ReactElement, useCallback } from 'react';
 import { useMutation } from 'react-query';
@@ -226,7 +227,8 @@ const surveyJSON = {
 };
 
 function PostSurveyPage(): ReactElement {
-  const { condition, task } = useParams<{ condition: string; task: string }>();
+  const { condition } = useParams<{ condition: string; task: string }>();
+  const task = useParams<{ task: Task }>().task;
   const history = useHistory();
 
   const submitSurveyMutation = useMutation(
@@ -236,7 +238,7 @@ function PostSurveyPage(): ReactElement {
         method: 'POST',
         data: {
           ...answers,
-          task: task,
+          task: task.charAt(0),
           condition: condition,
         },
       }),

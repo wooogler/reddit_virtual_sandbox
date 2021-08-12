@@ -19,7 +19,8 @@ interface Props {
 
 function SubmitModal({ onCancel, visible }: Props): ReactElement {
   const queryClient = useQueryClient();
-  const { task, condition } = useParams<{ task: Task; condition: Condition }>();
+  const { condition } = useParams<{ condition: Condition }>();
+  const task = useParams<{ task: Task }>().task.charAt(0);
   const logMutation = useLogMutation();
   const history = useHistory();
   const [code, setCode] = useState('');
@@ -106,27 +107,17 @@ function SubmitModal({ onCancel, visible }: Props): ReactElement {
     setIsVisibleConfirmModal(false);
     onCancel();
     clearConfigId();
-    deleteTargetPostsMutation.mutate();
-    deleteExceptPostsMutation.mutate();
+    // deleteTargetPostsMutation.mutate();
+    // deleteExceptPostsMutation.mutate();
     if (task === 'example') {
       // history.push(`/home/${condition}/${_.random(1, 2) === 1 ? 'A1' : 'B2'}`);
-      deleteAllPostsMutation.mutate();
+      // deleteAllPostsMutation.mutate();
       history.push(`/check/${condition}/`);
     } else {
-      deleteAllPostsMutation.mutate();
+      // deleteAllPostsMutation.mutate();
       history.push(`/survey/${condition}/${task}`);
     }
-  }, [
-    clearConfigId,
-    condition,
-    deleteAllPostsMutation,
-    deleteExceptPostsMutation,
-    deleteTargetPostsMutation,
-    history,
-    logMutation,
-    onCancel,
-    task,
-  ]);
+  }, [clearConfigId, condition, history, logMutation, onCancel, task]);
 
   return (
     <Modal

@@ -1,5 +1,6 @@
 import useLogMutation from '@hooks/useLogMutation';
 import { IPost, IUser } from '@typings/db';
+import { Task } from '@typings/types';
 import request from '@utils/request';
 import { useStore } from '@utils/store';
 import { Form, Input, Modal } from 'antd';
@@ -36,7 +37,8 @@ export type NewPost = Omit<
 function AddPostModal({ visible, onCancel, place }: Props): ReactElement {
   const queryClient = useQueryClient();
   const logMutation = useLogMutation();
-  const { task, condition } = useParams<{ task: string; condition: string }>();
+  const { condition } = useParams<{ task: string; condition: string }>();
+  const task = useParams<{ task: Task }>().task.charAt(0);
 
   const { data: userData } = useQuery<IUser | false>('me');
   const { fpfn } = useStore();

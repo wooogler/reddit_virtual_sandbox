@@ -6,6 +6,7 @@ import { useHistory, useParams } from 'react-router-dom';
 function DiscordPage(): ReactElement {
   const [passcode, setPasscode] = useState('');
   const { condition } = useParams<{ condition: string }>();
+  
   const history = useHistory();
   const onClickNext = () => {
     history.push(`/quiz/${condition}`);

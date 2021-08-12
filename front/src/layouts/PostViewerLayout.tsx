@@ -55,7 +55,8 @@ function PostViewerLayout(): ReactElement {
     changeFpFn,
   } = useStore();
   const logMutation = useLogMutation();
-  const { condition, task } = useParams<{ condition: Condition; task: Task }>();
+  const { condition } = useParams<{ condition: Condition; task: Task }>();
+  const task = useParams<{ task: Task }>().task.charAt(0);
 
   const [isSearchVisible, setIsSearchVisible] = useState(false);
   const [isSubmitVisible, setIsSubmitVisible] = useState(false);
@@ -79,6 +80,9 @@ function PostViewerLayout(): ReactElement {
     async () => {
       const { data } = await request<IPost[]>({
         url: '/posts/target/',
+        params: {
+          task,
+        },
       });
       return data;
     },
@@ -111,6 +115,9 @@ function PostViewerLayout(): ReactElement {
     async () => {
       const { data } = await request<IPost[]>({
         url: '/posts/except/',
+        params: {
+          task,
+        },
       });
       return data;
     },
@@ -186,6 +193,7 @@ function PostViewerLayout(): ReactElement {
           start_date: start_date?.toDate(),
           end_date: end_date?.toDate(),
           filtered: true,
+          task,
           post_type: post_type === 'all' ? undefined : post_type,
           source: source === 'all' ? undefined : source,
         },
@@ -226,6 +234,7 @@ function PostViewerLayout(): ReactElement {
           page: pageParam,
           start_date: start_date?.toDate(),
           end_date: end_date?.toDate(),
+          task,
           post_type: post_type === 'all' ? undefined : post_type,
           source: source === 'all' ? undefined : source,
         },
@@ -263,6 +272,9 @@ function PostViewerLayout(): ReactElement {
       request({
         url: 'posts/all/',
         method: 'DELETE',
+        data: {
+          task,
+        },
       }),
     {
       onSuccess: () => {
@@ -277,6 +289,9 @@ function PostViewerLayout(): ReactElement {
       request({
         url: 'configs/all/',
         method: 'DELETE',
+        data: {
+          task,
+        },
       }),
     {
       onSuccess: () => {
@@ -347,7 +362,7 @@ function PostViewerLayout(): ReactElement {
   useEffect(() => {
     changeImported(false);
     if (notFilteredCount === 0) {
-      if (task === 'example') {
+      if (task === 'e') {
         importExamplePostsMutation.mutate();
       } else {
         importTestPostsMutation.mutate();

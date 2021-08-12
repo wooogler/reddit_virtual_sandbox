@@ -12,7 +12,7 @@ import { useStore } from '@utils/store';
 import Highlighter from 'react-highlight-words';
 import { NewPost } from './AddPostModal';
 import { useParams } from 'react-router-dom';
-import { Condition } from '@typings/types';
+import { Condition, Task } from '@typings/types';
 import useLogMutation from '@hooks/useLogMutation';
 
 dayjs.extend(relativeTime);
@@ -35,7 +35,7 @@ function PostItem({
   const queryClient = useQueryClient();
   const logMutation = useLogMutation();
   const { config_id, rule_id, check_id, fpfn, line_id } = useStore();
-  const { task } = useParams<{ task: string }>();
+  const task = useParams<{ task: Task }>().task.charAt(0);
 
   const { condition } = useParams<{ condition: Condition }>();
 

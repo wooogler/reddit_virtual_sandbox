@@ -1,6 +1,6 @@
 import { ReactElement, useCallback, useEffect, useState } from 'react';
 import AceEditor from 'react-ace';
-import 'ace-builds/src-noconflict/mode-lua';
+import 'ace-builds/src-noconflict/mode-yaml';
 import 'ace-builds/src-noconflict/theme-tomorrow';
 import PanelName from './PanelName';
 import { Button, Tooltip } from 'antd';
@@ -30,7 +30,8 @@ function CodeEditor({ placeholder }: Props): ReactElement {
   const queryClient = useQueryClient();
   const [code, setCode] = useState('');
   const logMutation = useLogMutation();
-  const { condition, task } = useParams<{ condition: Condition; task: Task }>();
+  const { condition } = useParams<{ condition: Condition; task: Task }>();
+  const task = useParams<{ task: Task }>().task.charAt(0);
 
   const autoSaveConfig = useCallback(
     (code: string) => {
@@ -291,7 +292,7 @@ function CodeEditor({ placeholder }: Props): ReactElement {
       </div>
       <div className='flex-1' data-tour='configuration'>
         <AceEditor
-          mode='lua'
+          mode='yaml'
           theme='tomorrow'
           onChange={(code) => setCode(code)}
           value={code}

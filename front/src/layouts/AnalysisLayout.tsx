@@ -14,7 +14,7 @@ interface Props {
 
 function AnalysisLayout({ evaluation }: Props): ReactElement {
   // const [isViewChart, setIsViewChart] = useState(true);
-  const { condition } = useParams<{ condition: Condition; task: Task }>();
+  const { condition } = useParams<{ condition: Condition }>();
   // const logMutation = useLogMutation();
 
   return (

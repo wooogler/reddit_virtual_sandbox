@@ -1,8 +1,9 @@
+import { Task } from '@typings/types';
 import React, { ReactElement } from 'react';
 import { useParams } from 'react-router-dom';
 
 function TaskGuide(): ReactElement {
-  const { task } = useParams<{ task: string }>();
+  const task = useParams<{ task: Task }>().task.charAt(0);
   return (
     <>
       <div className='category'>Community Rule</div>
@@ -11,7 +12,7 @@ function TaskGuide(): ReactElement {
           Do not post questions "about stress in your working space" because
           they are asked too often.
         </div>
-      ) : task.startsWith('A') ? (
+      ) : task === 'A' ? (
         <div>
           Do not post questions asking “how to work as a software engineer
           without a CS relevant degree?” because they are asked too often and
@@ -32,7 +33,7 @@ function TaskGuide(): ReactElement {
             violates above rule.
           </b>
         </div>
-      ) : task.startsWith('A') ? (
+      ) : task ==='A' ? (
         <div>
           As a new moderator,{' '}
           <b>

@@ -176,16 +176,18 @@ class PostViewSet(viewsets.ModelViewSet):
             for post in normal])
 
         posts = create_test_posts(normal_posts, request.user, 'normal')
+        posts.update(task=task)
         target_example_ids = ["mkwaep", "mkq1j8", "mhrw80"]
         target_taskA_ids = ['n47rmf', 'n3p158', 'n58oqh', 'n6aozu', 'n5yp3k']
         target_taskB_ids = ['n67he2', 'n5jc1q', 'n4e5z3']
-        if task == 'example':
+        if task == 'e':
             posts.filter(post_id__in=target_example_ids).update(place='normal-target')
-        elif task == 'A1' or task == 'A2':
-            posts.filter(post_id__in=target_taskA_ids).update(place='normal-target')
-        elif task == 'B1' or task == 'B2':
+        elif task == 'A':
+            # posts.filter(post_id__in=target_taskA_ids).update(place='normal-target')
+            posts.filter(rule_1=1).update(place='normal-target')
+        elif task == 'B':
             posts.filter(post_id__in=target_taskB_ids).update(place='normal-target')
-
+            # posts.filter(rule_2=1).update(place='normal-target')
         configs = Config.objects.filter(user=request.user, task=task)
         for config in configs:
             apply_config(config, posts, False)
@@ -203,7 +205,8 @@ class PostViewSet(viewsets.ModelViewSet):
 
     @action(methods=['delete'], detail=False)
     def all(self, request):
-        Post.objects.filter(user=request.user).delete()
+        task = request.data.get('task')
+        Post.objects.filter(user=request.user, task=task).delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -251,6 +254,8 @@ class TargetViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.filter(place__in=['target', 'normal-target'])
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
+    filterset_class = PostFilter
 
     def get_queryset(self):
         return self.queryset.filter(user=self.request.user).order_by('-updated_at')
@@ -291,7 +296,8 @@ class TargetViewSet(viewsets.ModelViewSet):
 
     @action(methods=['delete'], detail=False)
     def all(self, request):
-        self.queryset.filter(user=request.user).delete()
+        task = request.data.get('task')
+        self.queryset.filter(user=request.user, task=task).delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -300,6 +306,8 @@ class ExceptViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.filter(place__in=['except', 'normal-except'])
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
+    filterset_class = PostFilter
 
     def get_queryset(self):
         return self.queryset.filter(user=self.request.user).order_by('-updated_at')
@@ -333,7 +341,8 @@ class ExceptViewSet(viewsets.ModelViewSet):
 
     @action(methods=['delete'], detail=False)
     def all(self, request):
-        self.queryset.filter(user=request.user).delete()
+        task = request.data.get('task')
+        self.queryset.filter(user=request.user, task=task).delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -375,7 +384,9 @@ class ConfigViewSet(viewsets.ModelViewSet):
 
     @action(methods=['delete'], detail=False)
     def all(self, request):
-        self.queryset.filter(user=request.user).delete()
+        task = request.data.get('task')
+        self.queryset.filter(user=request.user, task=task).delete()
+
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     @action(methods=['post'], detail=False)

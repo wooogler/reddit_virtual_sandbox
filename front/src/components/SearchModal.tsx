@@ -10,6 +10,7 @@ import PostItem from './PostItem';
 import request from '@utils/request';
 import useLogMutation from '@hooks/useLogMutation';
 import { useParams } from 'react-router-dom';
+import { Task } from '@typings/types';
 
 interface Props {
   visible: boolean;
@@ -20,7 +21,7 @@ interface Props {
 function SearchModal({ visible, onCancel, query }: Props): ReactElement {
   const [sort, setSort] = useState<'relevance' | 'new' | 'top'>('relevance');
   const logMutation = useLogMutation();
-  const { task } = useParams<{ task: string }>();
+  const task = useParams<{ task: Task }>().task.charAt(0);
   const searchQuery = useQuery(
     ['search', { query, sort }],
     async () => {

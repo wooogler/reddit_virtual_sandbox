@@ -1,5 +1,6 @@
 import PageLayout from '@layouts/PageLayout';
 import { IUser } from '@typings/db';
+import { Task } from '@typings/types';
 import request from '@utils/request';
 import React, { ReactElement, useCallback } from 'react';
 import { useMutation, useQuery } from 'react-query';
@@ -194,7 +195,8 @@ const demoJSON = {
 };
 
 function DemoPage(): ReactElement {
-  const { condition, task } = useParams<{ condition: string; task: string }>();
+  const { condition} = useParams<{ condition: string; task: string }>();
+  const task = useParams<{ task: Task }>().task.charAt(0);
   const history = useHistory();
 
   const { refetch } = useQuery<IUser | false>('me');

@@ -70,6 +70,7 @@ class Post(models.Model):
     score = models.IntegerField(default=0)
     rule_1 = models.IntegerField(default=0)
     rule_2 = models.IntegerField(default=0)
+    task = models.CharField(max_length=50, null=True)
 
     # for FP, FN
     sim = models.FloatField(default=0)

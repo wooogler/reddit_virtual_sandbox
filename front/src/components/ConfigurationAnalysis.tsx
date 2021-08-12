@@ -9,10 +9,11 @@ import './collapse.css';
 import OverlayLoading from './OverlayLoading';
 import { useParams } from 'react-router-dom';
 import RuleAnalysis from './RuleAnalysis';
+import { Task } from '@typings/types';
 
 function ConfigurationAnalysis(): ReactElement {
   const { Panel } = Collapse;
-  const { task } = useParams<{ task: string }>();
+  const task = useParams<{ task: Task }>().task.charAt(0);
 
   const {
     config_id,

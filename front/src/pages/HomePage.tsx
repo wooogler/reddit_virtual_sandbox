@@ -8,11 +8,12 @@ import { useStore } from '@utils/store';
 import dayjs from 'dayjs';
 import useLogMutation from '@hooks/useLogMutation';
 import { Split } from '@geoffcox/react-splitter';
+import { Task } from '@typings/types';
 
 function HomePage(): ReactElement {
   // const availableCondition = ['baseline', 'sandbox', 'modsandbox'];
   // const availableTask = ['A1', 'B1', 'A2', 'B2', 'example'];
-  const { task } = useParams<{ condition: string; task: string }>();
+  const task = useParams<{ task: Task }>().task.charAt(0);
   // const [isTourOpen, setIsTourOpen] = useState(false);
   // const [isVisible, setIsVisible] = useState(true);
   // const { data } = useQuery('me', async () => {

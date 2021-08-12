@@ -6,7 +6,7 @@ from rest_framework import exceptions
 import yaml
 
 from modsandbox.models import Config, Rule, Check, Post, Line
-from time import time
+import time
 
 _match_fields_by_type = {
     "Link": {
@@ -99,6 +99,7 @@ def apply_config(config, _posts, check_create):
     post_config_set = set()
 
     for section_num, section in enumerate(yaml_sections, 1):
+
         # if check_create:
         #     rule = Rule.objects.create(user=config.user, config=config, code=section)
         # else:
@@ -140,8 +141,10 @@ def apply_config(config, _posts, check_create):
 
         posts = _posts
         post_rule_ids_set = set()
+
         for line in rule.lines.all():
             post_line_ids_array = []
+            start = time.time()
             for post in posts:
                 line_match = line.reverse
                 for check in line.checks.all():
@@ -176,6 +179,7 @@ def apply_config(config, _posts, check_create):
                     post_rule_ids_set.add(post.id)
 
             posts = posts.filter(id__in=post_line_ids_array)
+            print("time :", time.time() - start)
 
         posts_rule = _posts.exclude(id__in=list(post_rule_ids_set))
         for post in posts_rule:

@@ -1,4 +1,5 @@
 import { IStat } from '@typings/db';
+import { Task } from '@typings/types';
 import request from '@utils/request';
 import { useStore } from '@utils/store';
 import dayjs from 'dayjs';
@@ -7,7 +8,7 @@ import { useParams } from 'react-router-dom';
 
 export default function useInitDateRange() {
   const { changeDateRange } = useStore();
-  const { task } = useParams<{ task: string }>();
+  const task = useParams<{ task: Task }>().task.charAt(0);
 
   useEffect(() => {
     console.log(task);

@@ -1,6 +1,7 @@
 import { DeleteOutlined } from '@ant-design/icons';
 import useLogMutation from '@hooks/useLogMutation';
 import { Check, CheckCombination, Config, Rule } from '@typings/db';
+import { Task } from '@typings/types';
 import request from '@utils/request';
 import { useStore } from '@utils/store';
 import { invalidatePostQueries } from '@utils/util';
@@ -42,7 +43,7 @@ function RuleItem({
   } = useStore();
   const total = totalCount.totalCount;
   const logMutation = useLogMutation();
-  const { task } = useParams<{ task: string }>();
+  const task = useParams<{ task: Task }>().task.charAt(0);
 
   const onClickRadio = () => {
     if (ruleType === 'config') {

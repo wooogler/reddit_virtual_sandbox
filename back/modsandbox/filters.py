@@ -32,4 +32,5 @@ class PostFilter(django_filters.FilterSet):
             "source",
             "place",
             "post_type",
+            "task"
         ]
