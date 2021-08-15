@@ -177,7 +177,7 @@ class PostViewSet(viewsets.ModelViewSet):
 
         posts = create_test_posts(normal_posts, request.user, 'normal')
         posts.update(task=task)
-        target_example_ids = ["mkwaep", "mkq1j8", "mhrw80"]
+        target_example_ids = ["mkwaep", "mkq1j8", "mkvzs5"]
         target_taskA_ids = ['n47rmf', 'n3p158', 'n58oqh', 'n6aozu', 'n5yp3k']
         target_taskB_ids = ['n67he2', 'n5jc1q', 'n4e5z3']
         if task == 'e':
@@ -186,8 +186,8 @@ class PostViewSet(viewsets.ModelViewSet):
             # posts.filter(post_id__in=target_taskA_ids).update(place='normal-target')
             posts.filter(rule_1=1).update(place='normal-target')
         elif task == 'B':
-            posts.filter(post_id__in=target_taskB_ids).update(place='normal-target')
-            # posts.filter(rule_2=1).update(place='normal-target')
+            # posts.filter(post_id__in=target_taskB_ids).update(place='normal-target')
+            posts.filter(rule_2=1).update(place='normal-target')
         configs = Config.objects.filter(user=request.user, task=task)
         for config in configs:
             apply_config(config, posts, False)
@@ -218,7 +218,7 @@ class PostViewSet(viewsets.ModelViewSet):
         searched_posts = posts.filter(body__icontains=query) | posts.filter(title__icontains=query)
         # for postgresql
         if sort == 'relevance':
-            search_vector = SearchVector('title', 'body')
+            search_vector = SearchVector('title')
             search_query = SearchQuery(query)
             searched_posts = searched_posts.annotate(rank=SearchRank(search_vector, search_query)).order_by('-rank')
         elif sort == 'new':
@@ -230,7 +230,8 @@ class PostViewSet(viewsets.ModelViewSet):
 
     @action(methods=['post'], detail=False)
     def fpfn(self, request):
-        posts = Post.objects.filter(user=request.user)
+        task = request.data.get('task')
+        posts = Post.objects.filter(user=request.user, task=task)
         normal_posts = posts.filter(place__startswith='normal')
         target_posts = posts.filter(place__in=['target', 'normal-target'])
         target_vector = get_average_vector([get_embedding_post(post) for post in target_posts])
@@ -375,7 +376,7 @@ class ConfigViewSet(viewsets.ModelViewSet):
         task = request.data.get('task')
         condition = request.data.get('condition')
         config = Config.objects.create(user=request.user, code=code, task=task)
-        posts = Post.objects.filter(user=request.user)
+        posts = Post.objects.filter(user=request.user, task=task)
         if condition == 'baseline':
             posts = posts.exclude(place='target')
         serializer = self.get_serializer(apply_config(config, posts, True))
@@ -398,7 +399,8 @@ class ConfigViewSet(viewsets.ModelViewSet):
 
     @action(methods=['delete'], detail=False)
     def target(self, request):
-        target_posts = Post.objects.filter(user=request.user, place='target')
+        task = request.data.get('task')
+        target_posts = Post.objects.filter(user=request.user, place='target', task=task)
         for post in target_posts:
             post.matching_configs.clear()
             post.matching_rules.clear()
@@ -484,7 +486,7 @@ class LogViewSet(viewsets.ModelViewSet):
         rule_id = request.data.get('rule_id')
         check_id = request.data.get('check_id')
 
-        post = Post.objects.filter(pk=post_id).first()
+        post = Post.objects.filter(pk=post_id, task=task).first()
         config = Config.objects.filter(pk=config_id).first()
         rule = Rule.objects.filter(pk=rule_id).first()
         line = Line.objects.filter(pk=line_id).first()
@@ -499,6 +501,8 @@ class LogViewSet(viewsets.ModelViewSet):
 class EvalViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.filter(place__startswith='normal')
     serializer_class = PostSerializer
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
+    filterset_class = PostFilter
 
     @action(methods=['get'], detail=False)
     def confusion(self, request):

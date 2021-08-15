@@ -124,6 +124,7 @@ class Log(models.Model):
     rule = models.ForeignKey(Rule, related_name='logs', on_delete=models.CASCADE, null=True)
     line = models.ForeignKey(Line, related_name='logs', on_delete=models.CASCADE, null=True)
     _check = models.ForeignKey(Check, related_name='logs', on_delete=models.CASCADE, null=True)
+    condition = models.CharField(max_length=20, null=True)
 
 
 class Survey(models.Model):

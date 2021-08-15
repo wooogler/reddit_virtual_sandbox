@@ -120,6 +120,7 @@ function AddPostModal({ visible, onCancel, place }: Props): ReactElement {
       }
       logMutation.mutate({
         task,
+        condition,
         info: 'add post',
         content: `title: ${title}\nbody: ${body}`,
         move_to: place,

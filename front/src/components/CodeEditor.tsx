@@ -70,10 +70,6 @@ function CodeEditor({ placeholder }: Props): ReactElement {
     setCode(storedCode);
   }, [storedCode]);
 
-  useEffect(() => {
-    setCode('');
-  }, [task]);
-
   const addConfig = ({ code }: { code: string }) =>
     request<Config>({
       url: '/configs/',
@@ -87,6 +83,7 @@ function CodeEditor({ placeholder }: Props): ReactElement {
       changeConfigId(res.data.id);
       logMutation.mutate({
         task,
+        condition,
         info: 'apply config',
         content: code,
         config_id: res.data.id,
@@ -95,9 +92,9 @@ function CodeEditor({ placeholder }: Props): ReactElement {
   });
 
   const onClickApply = () => {
-    if (condition === 'baseline') {
-      setIsSaved(true);
-    }
+    // if (condition === 'baseline') {
+    //   setIsSaved(true);
+    // }
     addConfigMutation.mutate({ code });
   };
 
@@ -150,7 +147,7 @@ function CodeEditor({ placeholder }: Props): ReactElement {
   );
 
   const { data: configData } = useQuery(
-    ['configs', { start_date, end_date, task }],
+    ['configs', { start_date, end_date, task, condition }],
     async () => {
       const { data } = await request<Config[]>({
         url: '/configs/',

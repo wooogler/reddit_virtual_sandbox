@@ -1,7 +1,7 @@
 import { ConsoleSqlOutlined, DeleteOutlined } from '@ant-design/icons';
 import useLogMutation from '@hooks/useLogMutation';
 import { Check, CheckCombination, Config, Rule } from '@typings/db';
-import { Task } from '@typings/types';
+import { Condition, Task } from '@typings/types';
 import request from '@utils/request';
 import { useStore } from '@utils/store';
 import { invalidatePostQueries } from '@utils/util';
@@ -44,6 +44,7 @@ function RuleItem({
   const total = totalCount.totalCount;
   const logMutation = useLogMutation();
   const task = useParams<{ task: Task }>().task.charAt(0);
+  const { condition } = useParams<{ condition: Condition }>();
 
   const onClickRadio = () => {
     if (ruleType === 'config') {
@@ -65,6 +66,7 @@ function RuleItem({
         info: 'delete config',
         content: rule.code,
         config_id: configId,
+        condition,
       });
     },
   });

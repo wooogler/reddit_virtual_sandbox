@@ -11,6 +11,7 @@ interface Props {
   rule_id?: number;
   line_id?: number;
   check_id?: number;
+  condition? :string;
 }
 
 export default function useLogMutation() {
@@ -25,6 +26,7 @@ export default function useLogMutation() {
       rule_id,
       line_id,
       check_id,
+      condition
     }: Props) =>
       request({
         url: '/log/',
@@ -39,6 +41,7 @@ export default function useLogMutation() {
           rule_id,
           line_id,
           check_id,
+          condition,
         },
       })
   );

@@ -35,10 +35,10 @@ function AnalysisLayout({ evaluation }: Props): ReactElement {
           </div>
 
           <div
-            className='flex flex-col p-2 h-full'
+            className='flex flex-col p-2 pt-1 h-full'
             data-tour='configuration-analysis'
           >
-            <div className='flex items-center border-t-2 border-gray-300'>
+            <div className='flex items-center '>
               <PanelName>Configuration Analysis</PanelName>
             </div>
             <div className='flex-1 overflow-y-auto'>

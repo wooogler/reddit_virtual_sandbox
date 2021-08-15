@@ -9,11 +9,12 @@ import './collapse.css';
 import OverlayLoading from './OverlayLoading';
 import { useParams } from 'react-router-dom';
 import RuleAnalysis from './RuleAnalysis';
-import { Task } from '@typings/types';
+import { Condition, Task } from '@typings/types';
 
 function ConfigurationAnalysis(): ReactElement {
   const { Panel } = Collapse;
   const task = useParams<{ task: Task }>().task.charAt(0);
+  const { condition } = useParams<{ condition: Condition }>();
 
   const {
     config_id,
@@ -26,7 +27,7 @@ function ConfigurationAnalysis(): ReactElement {
     selectedNotHighlights,
   } = useStore();
   const { data: configData, isLoading: configLoading } = useQuery(
-    ['configs', { start_date, end_date, task }],
+    ['configs', { start_date, end_date, task, condition }],
     async () => {
       const { data } = await request<Config[]>({
         url: '/configs/',
@@ -53,7 +54,7 @@ function ConfigurationAnalysis(): ReactElement {
         {configData &&
           configData
             .filter((config) => config.id === config_id)
-            .map((config) => (
+            .map((config, index) => (
               <React.Fragment key={config.id}>
                 {/* {config.id === config_id && (
                 <div className='font-bold'>Current Configuration</div>
@@ -76,9 +77,7 @@ function ConfigurationAnalysis(): ReactElement {
                     />
                   }
                 >
-                  <div className='ml-4'>
-                    <RuleAnalysis config={config} />
-                  </div>
+                  <RuleAnalysis config={config} index={index} />
                 </Panel>
               </React.Fragment>
             ))}

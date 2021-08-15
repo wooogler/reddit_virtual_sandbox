@@ -1,7 +1,7 @@
 import { DeleteOutlined } from '@ant-design/icons';
 import useLogMutation from '@hooks/useLogMutation';
 import { Check, CheckCombination, Config, Rule } from '@typings/db';
-import { Task } from '@typings/types';
+import { Condition, Task } from '@typings/types';
 import request from '@utils/request';
 import { useStore } from '@utils/store';
 import { invalidatePostQueries } from '@utils/util';
@@ -44,6 +44,7 @@ function RuleItem({
   const total = totalCount.totalCount;
   const logMutation = useLogMutation();
   const task = useParams<{ task: Task }>().task.charAt(0);
+  const {condition} = useParams<{condition: Condition}>();
 
   const onClickRadio = () => {
     if (ruleType === 'config') {
@@ -54,6 +55,7 @@ function RuleItem({
         info: 'select',
         content: rule.code,
         config_id: rule.id,
+        condition,
       });
     } else if (ruleType === 'rule') {
       changeRuleId(rule.id);
@@ -62,6 +64,7 @@ function RuleItem({
         info: 'select',
         content: rule.code,
         rule_id: rule.id,
+        condition,
       });
     } else if (ruleType === 'line') {
       changeLineId(rule.id);
@@ -70,6 +73,7 @@ function RuleItem({
         info: 'select',
         content: rule.code,
         line_id: rule.id,
+        condition
       });
     } else if (ruleType === 'check') {
       changeCheckId(rule.id);
@@ -78,6 +82,7 @@ function RuleItem({
         info: 'select',
         content: rule.code,
         check_id: rule.id,
+        condition
       });
     }
   };
@@ -96,6 +101,7 @@ function RuleItem({
         info: 'delete config',
         content: rule.code,
         config_id: configId,
+        condition
       });
     },
   });

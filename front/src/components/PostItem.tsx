@@ -14,13 +14,17 @@ import { NewPost } from './AddPostModal';
 import { useParams } from 'react-router-dom';
 import { Condition, Task } from '@typings/types';
 import useLogMutation from '@hooks/useLogMutation';
+import styled from 'styled-components';
+import { ReactComponent as UpArrowIcon } from '../assets/up-arrow.svg';
+import { ReactComponent as DownArrowIcon } from '../assets/down-arrow.svg';
+import { NONAME } from 'node:dns';
 
 dayjs.extend(relativeTime);
 dayjs.extend(utc);
 
 interface Props {
   post: IPost;
-  isFiltered?: boolean;
+  isFiltered: boolean;
   isTested: boolean;
   searchQuery?: string;
 }
@@ -31,7 +35,9 @@ function PostItem({
   isTested,
   searchQuery,
 }: Props): ReactElement {
-  const [isCollapse, setIsCollapse] = useState(isTested);
+  const [isCollapse, setIsCollapse] = useState<boolean>(
+    !isTested && !isFiltered
+  );
   const queryClient = useQueryClient();
   const logMutation = useLogMutation();
   const { config_id, rule_id, check_id, fpfn, line_id } = useStore();
@@ -61,6 +67,9 @@ function PostItem({
       request({
         url: `posts/fpfn/`,
         method: 'POST',
+        data: {
+          task
+        }
       }),
     {
       onSuccess: () => {
@@ -89,6 +98,7 @@ function PostItem({
         content: `title: ${post.title}\nbody: ${post.body}`,
         move_to: place,
         post_id: id,
+        condition,
       });
     },
   });
@@ -135,6 +145,7 @@ function PostItem({
         info: 'add post',
         content: `title: ${title}\nbody: ${body}`,
         move_to: place,
+        condition,
       });
     },
   });
@@ -160,6 +171,7 @@ function PostItem({
         move_to: place,
         post_id: post.id,
         content: `title: ${post.title}\nbody: ${post.body}`,
+        condition
       });
     },
   });
@@ -264,7 +276,7 @@ function PostItem({
     <div
       className={clsx(
         isFiltered && 'bg-blue-100',
-        'p-2 border-gray-400 border-b-2 flex flex-1'
+        'p-2 border-gray-400 border-b-2 flex flex-col flex-1'
       )}
       style={{
         borderLeft:
@@ -275,92 +287,148 @@ function PostItem({
             : undefined,
       }}
     >
-      {!post.title && (
-        <div className='border-gray-300 border-l-2 border-dotted'></div>
-      )}
-      <div className={clsx('flex flex-col', !post.title && 'ml-3')}>
-        <div className='text-base font-semibold mb-1'>
-          {searchQuery ? (
-            <Highlighter
-              searchWords={[searchQuery]}
-              textToHighlight={post.title}
-              highlightStyle={{ fontWeight: 'bolder' }}
-            />
-          ) : condition === 'modsandbox' ? (
-            <HighlightText
-              text={post.title}
-              match={makeMatch(matchingChecksTitle)}
-              notMatch={makeMatch(matchingNotChecksTitle)}
-            />
-          ) : (
-            <div>{post.title}</div>
-          )}
+      <div className='flex'>
+        <div className='flex flex-col mr-1 items-center w-4 pt-2'>
+          <UpArrowIcon className='w-3 opacity-20' />
+          <div className='font-display font-bold text-xs text-gray-400'>
+            {post.score}
+          </div>
+          <DownArrowIcon className='w-3 opacity-20' />
         </div>
-        <div className='flex items-center flex-wrap mb-1 text-xs'>
-          <div>{post.author}</div>
-          <Tooltip
-            placement='top'
-            title={dayjs(post.created_utc)
-              .local()
-              .format('ddd MMM D YYYY hh:mm:ss')}
-          >
-            <div className='mx-2'>{dayjs().to(post.created_utc)}</div>
-          </Tooltip>
-          <Tooltip placement='top' title='upvote - downvote'>
+        {!post.title && (
+          <div className='border-gray-300 border-l-2 border-dotted'></div>
+        )}
+        <div className={clsx('flex flex-col', !post.title && 'ml-3')}>
+          <div className='text-base font-semibold mb-1'>
+            {searchQuery ? (
+              <Highlighter
+                searchWords={[searchQuery]}
+                textToHighlight={post.title}
+                highlightStyle={{ fontWeight: 'bolder', background: 'none' }}
+              />
+            ) : condition === 'modsandbox' ? (
+              <HighlightText
+                text={post.title}
+                match={makeMatch(matchingChecksTitle)}
+                notMatch={makeMatch(matchingNotChecksTitle)}
+              />
+            ) : (
+              <div>{post.title}</div>
+            )}
+          </div>
+          <div className='flex items-center'>
+            <IconDiv
+              imgUrl='/images/icon.png'
+              isCollapse={isCollapse}
+              onClick={() => setIsCollapse((state) => !state)}
+            />
+            <div className='flex flex-col mb-1 text-xs'>
+              <div className='flex items-center flex-wrap '>
+                <Tooltip
+                  placement='top'
+                  title={dayjs(post.created_utc)
+                    .local()
+                    .format('ddd MMM D YYYY hh:mm:ss')}
+                >
+                  <div className='mr-1'>
+                    submitted {dayjs().to(post.created_utc)}
+                  </div>
+                </Tooltip>
+                <div className='mr-1'>by</div>
+                <a
+                  href={`https://www.reddit.com/user/${post.author}`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  className='hover:underline'
+                >
+                  {post.author}
+                </a>
+              </div>
+              <div className='flex'>
+                {post.post_id !== 'ffffff' && (
+                  <a
+                    href={post.url}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    className='mr-2'
+                  >
+                    <div
+                      className={clsx(
+                        post.source === 'Spam'
+                          ? 'text-red-600'
+                          : post.source === 'Report' && 'text-yellow-500',
+                        'text-xs underline'
+                      )}
+                    >
+                      View in {post.source}
+                    </div>
+                  </a>
+                )}
+                {condition === 'modsandbox' ? (
+                  post.place === 'normal' ? (
+                    <Dropdown overlay={moveMenu}>
+                      <div
+                        className='underline cursor-pointer text-blue-600'
+                        data-tour='move-to'
+                      >
+                        Move to
+                      </div>
+                    </Dropdown>
+                  ) : isTested ? (
+                    <div
+                      className='cursor-pointer text-red-500 underline'
+                      onClick={() =>
+                        deletePostFromTestCaseMutation.mutate({
+                          id: post.id,
+                          place: post.place,
+                        })
+                      }
+                    >
+                      {['target', 'except'].includes(post.place)
+                        ? 'remove'
+                        : 'revert'}
+                    </div>
+                  ) : (
+                    <Dropdown overlay={revertMenu}>
+                      <div className='text-gray-400 underline cursor-pointer'>
+                        moved in{' '}
+                        {post.place === 'normal-target'
+                          ? 'posts that should be filtered'
+                          : 'posts to avoid being filtered'}
+                      </div>
+                    </Dropdown>
+                  )
+                ) : (
+                  isTested &&
+                  ['target', 'except'].includes(post.place) && (
+                    <div
+                      className='cursor-pointer text-red-500 underline'
+                      onClick={() =>
+                        deletePostFromTestCaseMutation.mutate({
+                          id: post.id,
+                          place: post.place,
+                        })
+                      }
+                    >
+                      remove
+                    </div>
+                  )
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* <Tooltip placement='top' title='upvote - downvote'>
             <div className='mr-2'>
               score: <b>{post.score}</b>
             </div>
-          </Tooltip>
-          {condition === 'modsandbox' ? (
-            post.place === 'normal' ? (
-              <Dropdown overlay={moveMenu}>
-                <div
-                  className='underline cursor-pointer text-blue-600'
-                  data-tour='move-to'
-                >
-                  Move to
-                </div>
-              </Dropdown>
-            ) : isTested ? (
-              <div
-                className='cursor-pointer text-red-500 underline'
-                onClick={() =>
-                  deletePostFromTestCaseMutation.mutate({
-                    id: post.id,
-                    place: post.place,
-                  })
-                }
-              >
-                {['target', 'except'].includes(post.place)
-                  ? 'remove'
-                  : 'revert'}
-              </div>
-            ) : (
-              <Dropdown overlay={revertMenu}>
-                <div className='text-gray-400 underline cursor-pointer'>
-                  moved in{' '}
-                  {post.place === 'normal-target'
-                    ? 'posts that should be filtered'
-                    : 'posts to avoid being filtered'}
-                </div>
-              </Dropdown>
-            )
-          ) : (
-            isTested &&
-            ['target', 'except'].includes(post.place) && (
-              <div
-                className='cursor-pointer text-red-500 underline'
-                onClick={() =>
-                  deletePostFromTestCaseMutation.mutate({
-                    id: post.id,
-                    place: post.place,
-                  })
-                }
-              >
-                remove
-              </div>
-            )
-          )}
+          </Tooltip> */}
 
           {post.source === 'Spam' && (
             <div className='text-red-600 text-xs'>
@@ -373,20 +441,15 @@ function PostItem({
             </div>
           )}
         </div>
-        <div>
+      </div>
+      <div>
+        {!isCollapse && (
           <div
             className={clsx(
-              'text-sm whitespace-pre-line break-words overflow-hidden',
-              `${isCollapse && 'h-5'}`
+              'text-sm whitespace-pre-line break-words overflow-hidden'
             )}
           >
-            {searchQuery ? (
-              <Highlighter
-                searchWords={[searchQuery]}
-                textToHighlight={post.body}
-                highlightStyle={{ fontWeight: 'bolder' }}
-              />
-            ) : condition === 'modsandbox' ? (
+            {condition === 'modsandbox' ? (
               <HighlightText
                 text={post.body}
                 match={makeMatch(matchingChecksBody)}
@@ -396,39 +459,33 @@ function PostItem({
               <div>{post.body}</div>
             )}
           </div>
-          <div className='flex items-center'>
-            <div
+        )}
+        <div className='flex items-center'>
+          {/* <div
               className='text-xs underline mr-2 cursor-pointer text-gray-500'
               onClick={() => setIsCollapse((state) => !state)}
             >
               {isCollapse ? '▽ Expand' : '△ Collapse'}
-            </div>
-            {post.post_id !== 'ffffff' && (
-              <a
-                href={post.url}
-                onClick={(e) => {
-                  e.stopPropagation();
-                }}
-                target='_blank'
-                rel='noopener noreferrer'
-              >
-                <div
-                  className={clsx(
-                    post.source === 'Spam'
-                      ? 'text-red-600'
-                      : post.source === 'Report' && 'text-yellow-500',
-                    'text-xs underline'
-                  )}
-                >
-                  View in {post.source}
-                </div>
-              </a>
-            )}
-          </div>
+            </div> */}
         </div>
       </div>
     </div>
   );
 }
+
+const IconDiv = styled.div<{ imgUrl: string; isCollapse: boolean }>`
+  background: url(${(props) => props.imgUrl});
+  background-position: 0px
+    ${(props) => (props.isCollapse ? '-549px' : '-433px')};
+  cursor: pointer;
+  &:hover {
+    background-position: 0px
+      ${(props) => (props.isCollapse ? '-520px' : '-404px')};
+  }
+  background-repeat: no-repeat;
+  height: 23px;
+  width: 23px;
+  margin: 2px 5px 2px 0;
+`;
 
 export default PostItem;
