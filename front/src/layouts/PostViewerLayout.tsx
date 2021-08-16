@@ -142,7 +142,7 @@ function PostViewerLayout(): ReactElement {
         method: 'POST',
         data: {
           task,
-        }
+        },
       }),
     {
       onSuccess: () => {
@@ -379,8 +379,13 @@ function PostViewerLayout(): ReactElement {
 
   const onChangeFpFn = useCallback(() => {
     changeFpFn(!fpfn);
-    sortFpFnMutation.mutate();
-  }, [changeFpFn, fpfn, sortFpFnMutation]);
+    if (fpfn) {
+      logMutation.mutate({ task: task, info: 'turn on fpfn', condition });
+    } else {
+      logMutation.mutate({ task: task, info: 'turn off fpfn', condition });
+      sortFpFnMutation.mutate();
+    }
+  }, [changeFpFn, condition, fpfn, logMutation, sortFpFnMutation, task]);
 
   const [query, setQuery] = useState('');
 
@@ -388,7 +393,7 @@ function PostViewerLayout(): ReactElement {
     setIsSearchVisible(true);
     setSearchQuery(query);
     logMutation.mutate({ task, info: 'search', content: query, condition });
-  }, [logMutation, query, task]);
+  }, [condition, logMutation, query, task]);
 
   return (
     <Split

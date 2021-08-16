@@ -68,8 +68,8 @@ function PostItem({
         url: `posts/fpfn/`,
         method: 'POST',
         data: {
-          task
-        }
+          task,
+        },
       }),
     {
       onSuccess: () => {
@@ -171,7 +171,7 @@ function PostItem({
         move_to: place,
         post_id: post.id,
         content: `title: ${post.title}\nbody: ${post.body}`,
-        condition
+        condition,
       });
     },
   });

@@ -1,12 +1,13 @@
 import re
 from itertools import product
 from collections import defaultdict
+from types import SimpleNamespace
 
 from rest_framework import exceptions
 import yaml
 
 from modsandbox.models import Config, Rule, Check, Post, Line
-import time
+import timeit
 
 _match_fields_by_type = {
     "Link": {
@@ -97,6 +98,7 @@ def apply_config(config, _posts, check_create):
     post_to_config_links = []
 
     post_config_set = set()
+    reg = re.compile(r"(\S+)\s*:\s\[\'(\S+)\'\]")
 
     for section_num, section in enumerate(yaml_sections, 1):
 
@@ -141,17 +143,24 @@ def apply_config(config, _posts, check_create):
 
         posts = _posts
         post_rule_ids_set = set()
+        print('start')
 
         for line in rule.lines.all():
+
             post_line_ids_array = []
-            start = time.time()
-            for post in posts:
+            posts_values = [SimpleNamespace(**post) for post in posts.values('id', 'title', 'body')]
+            for post in posts_values:
                 line_match = line.reverse
+
                 for check in line.checks.all():
+                    code = check.code
                     post_value = get_field_value_from_post(post, check.field)
-                    match_pattern = get_match_patterns(yaml.safe_load(check.code)).values()
+                    matches = reg.match(code)
+                    obj_code = {matches.group(1): [matches.group(2)]}
+                    match_pattern = get_match_patterns(obj_code).values()
                     regex = list(match_pattern)[0][0]['regex']
                     match = regex.search(post_value)
+
                     if bool(match):
                         if line.reverse:
                             line_match = False
@@ -179,7 +188,6 @@ def apply_config(config, _posts, check_create):
                     post_rule_ids_set.add(post.id)
 
             posts = posts.filter(id__in=post_line_ids_array)
-            print("time :", time.time() - start)
 
         posts_rule = _posts.exclude(id__in=list(post_rule_ids_set))
         for post in posts_rule:

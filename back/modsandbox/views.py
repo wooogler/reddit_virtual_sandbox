@@ -485,6 +485,7 @@ class LogViewSet(viewsets.ModelViewSet):
         line_id = request.data.get('line_id')
         rule_id = request.data.get('rule_id')
         check_id = request.data.get('check_id')
+        condition = request.data.get('condition')
 
         post = Post.objects.filter(pk=post_id, task=task).first()
         config = Config.objects.filter(pk=config_id).first()
@@ -493,7 +494,7 @@ class LogViewSet(viewsets.ModelViewSet):
         check = Check.objects.filter(pk=check_id).first()
 
         Log.objects.create(user=request.user, task=task, info=info, content=content, move_to=move_to, post=post,
-                           config=config, rule=rule, line=line, _check=check)
+                           config=config, rule=rule, line=line, _check=check, condition=condition)
 
         return Response(status=status.HTTP_201_CREATED)
 

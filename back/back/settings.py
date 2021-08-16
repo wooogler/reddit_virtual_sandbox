@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'rest_auth.registration',
     'django_filters',
-    'django.contrib.postgres'
+    'django.contrib.postgres',
 ]
 
 SITE_ID = 1
@@ -118,6 +118,10 @@ DATABASES = {
         },
     }
 }
+
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators

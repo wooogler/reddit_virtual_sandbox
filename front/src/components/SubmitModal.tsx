@@ -39,7 +39,7 @@ function SubmitModal({ onCancel, visible }: Props): ReactElement {
       invalidatePostQueries(queryClient);
       setIsVisibleConfirmModal(true);
       logMutation.mutate({
-        task,
+        task: task.charAt(0),
         condition,
         info: 'submit config',
         content: code,
@@ -55,7 +55,7 @@ function SubmitModal({ onCancel, visible }: Props): ReactElement {
   }, [storedCode]);
 
   const onFinishExperiment = useCallback(() => {
-    logMutation.mutate({ task, info: 'finish', condition });
+    logMutation.mutate({ task: task.charAt(0), info: 'finish', condition });
     setIsVisibleConfirmModal(false);
     onCancel();
 

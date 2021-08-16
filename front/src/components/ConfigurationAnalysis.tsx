@@ -3,7 +3,7 @@ import request from '@utils/request';
 import { useStore } from '@utils/store';
 import { Collapse } from 'antd';
 import React, { ReactElement } from 'react';
-import { useQuery } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
 import RuleItem from './RuleItem';
 import './collapse.css';
 import OverlayLoading from './OverlayLoading';
@@ -11,10 +11,15 @@ import { useParams } from 'react-router-dom';
 import RuleAnalysis from './RuleAnalysis';
 import { Condition, Task } from '@typings/types';
 
-function ConfigurationAnalysis(): ReactElement {
+interface Props {
+  configData?: Config[];
+}
+
+function ConfigurationAnalysis({ configData }: Props): ReactElement {
   const { Panel } = Collapse;
   const task = useParams<{ task: Task }>().task.charAt(0);
   const { condition } = useParams<{ condition: Condition }>();
+  const queryClient = useQueryClient();
 
   const {
     config_id,
@@ -26,20 +31,9 @@ function ConfigurationAnalysis(): ReactElement {
     selectedHighlights,
     selectedNotHighlights,
   } = useStore();
-  const { data: configData, isLoading: configLoading } = useQuery(
-    ['configs', { start_date, end_date, task, condition }],
-    async () => {
-      const { data } = await request<Config[]>({
-        url: '/configs/',
-        params: {
-          start_date: start_date?.toDate(),
-          end_date: end_date?.toDate(),
-          task,
-        },
-      });
-      return data;
-    }
-  );
+
+  
+
   const checkedConfig = (id: number) => {
     if (rule_id || check_id || line_id) {
       return false;
@@ -49,7 +43,7 @@ function ConfigurationAnalysis(): ReactElement {
 
   return (
     <div className='flex flex-col p-2 relative'>
-      <OverlayLoading isLoading={configLoading} description='loading...' />
+      {/* <OverlayLoading isLoading={configLoading} description='loading...' /> */}
       <Collapse accordion activeKey={config_id} bordered={false}>
         {configData &&
           configData

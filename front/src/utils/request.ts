@@ -8,8 +8,8 @@ const request = <T>({
     baseURL:
       process.env.NODE_ENV === 'development'
         ? 'http://localhost:8000/'
-        : 'http://localhost:8000/',
-    // : 'http://143.248.48.96:9890/',
+        // : 'http://localhost:8000/',
+    : 'http://143.248.48.96:9890/',
   });
   const token = localStorage.getItem('token');
   if (token) {
