@@ -178,16 +178,16 @@ class PostViewSet(viewsets.ModelViewSet):
         posts = create_test_posts(normal_posts, request.user, 'normal')
         posts.update(task=task)
         target_example_ids = ["mkwaep", "mkq1j8", "mkvzs5"]
-        target_taskA_ids = ['n47rmf', 'n3p158', 'n58oqh', 'n6aozu', 'n5yp3k']
-        target_taskB_ids = ['n67he2', 'n5jc1q', 'n4e5z3']
+        target_taskA_ids = ['n58oqh', 'n3p158', 'n3u029']
+        target_taskB_ids = ['n5flxe', 'n56vae', 'n623n5']
         if task == 'e':
             posts.filter(post_id__in=target_example_ids).update(place='normal-target')
         elif task == 'A':
-            # posts.filter(post_id__in=target_taskA_ids).update(place='normal-target')
-            posts.filter(rule_1=1).update(place='normal-target')
+            posts.filter(post_id__in=target_taskA_ids).update(place='normal-target')
+            # posts.filter(rule_1=1).update(place='normal-target')
         elif task == 'B':
-            # posts.filter(post_id__in=target_taskB_ids).update(place='normal-target')
-            posts.filter(rule_2=1).update(place='normal-target')
+            posts.filter(post_id__in=target_taskB_ids).update(place='normal-target')
+            # posts.filter(rule_2=1).update(place='normal-target')
         configs = Config.objects.filter(user=request.user, task=task)
         for config in configs:
             apply_config(config, posts, False)
