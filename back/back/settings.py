@@ -123,20 +123,6 @@ INTERNAL_IPS = [
     '127.0.0.1',
 ]
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DB_NAME', ''),
-        'USER': os.getenv('DB_USER', ''),
-        'PASSWORD': os.getenv('DB_PASSWORD', ''),
-        'HOST': os.getenv('DB_HOST', ''),
-        'PORT': '5432',
-        'TEST': {
-            'NAME': os.getenv('DB_TEST', ''),
-        },
-    }
-}
-
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
