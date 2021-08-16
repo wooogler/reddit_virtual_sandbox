@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'rest_auth.registration',
     'django_filters',
-    'django.contrib.postgres'
+    'django.contrib.postgres',
 ]
 
 SITE_ID = 1
@@ -104,6 +104,24 @@ WSGI_APPLICATION = 'back.wsgi.application'
 #         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('DB_NAME', ''),
+        'USER': os.getenv('DB_USER', ''),
+        'PASSWORD': os.getenv('DB_PASSWORD', ''),
+        'HOST': os.getenv('DB_HOST', ''),
+        'PORT': '5432',
+        'TEST': {
+            'NAME': os.getenv('DB_TEST', ''),
+        },
+    }
+}
+
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
 
 DATABASES = {
     'default': {

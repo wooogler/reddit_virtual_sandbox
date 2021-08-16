@@ -65,15 +65,15 @@ function PostViewerLayout(): ReactElement {
     [
       'target',
       {
-        config_id,
-        rule_id,
-        check_id,
-        line_id,
-        start_date,
-        end_date,
-        post_type,
-        order,
-        source,
+        // config_id,
+        // rule_id,
+        // check_id,
+        // line_id,
+        // start_date,
+        // end_date,
+        // post_type,
+        // order,
+        // source,
         task,
       },
     ],
@@ -100,15 +100,15 @@ function PostViewerLayout(): ReactElement {
     [
       'except',
       {
-        config_id,
-        rule_id,
-        check_id,
-        line_id,
-        start_date,
-        end_date,
-        post_type,
-        order,
-        source,
+        // config_id,
+        // rule_id,
+        // check_id,
+        // line_id,
+        // start_date,
+        // end_date,
+        // post_type,
+        // order,
+        // source,
         task,
       },
     ],
@@ -140,6 +140,9 @@ function PostViewerLayout(): ReactElement {
       request({
         url: `posts/fpfn/`,
         method: 'POST',
+        data: {
+          task,
+        },
       }),
     {
       onSuccess: () => {
@@ -354,7 +357,7 @@ function PostViewerLayout(): ReactElement {
   const onCancelSearch = useCallback(() => {
     setIsSearchVisible(false);
     queryClient.removeQueries('search');
-    logMutation.mutate({ task, info: 'cancel search' });
+    logMutation.mutate({ task, info: 'cancel search', condition });
   }, [logMutation, queryClient, task]);
 
   const notFilteredCount = notFilteredQuery.data?.pages[0].count;
@@ -376,17 +379,28 @@ function PostViewerLayout(): ReactElement {
 
   const onChangeFpFn = useCallback(() => {
     changeFpFn(!fpfn);
-    sortFpFnMutation.mutate();
-  }, [changeFpFn, fpfn, sortFpFnMutation]);
+    if (fpfn) {
+      logMutation.mutate({ task: task, info: 'turn on fpfn', condition });
+    } else {
+      logMutation.mutate({ task: task, info: 'turn off fpfn', condition });
+      sortFpFnMutation.mutate();
+    }
+  }, [changeFpFn, condition, fpfn, logMutation, sortFpFnMutation, task]);
 
   const [query, setQuery] = useState('');
+
+  const onSearch = useCallback(() => {
+    setIsSearchVisible(true);
+    setSearchQuery(query);
+    logMutation.mutate({ task, info: 'search', content: query, condition });
+  }, [condition, logMutation, query, task]);
 
   return (
     <Split
       horizontal
-      initialPrimarySize='70%'
+      initialPrimarySize={condition === 'baseline' ? '105%' : '70%'}
       minPrimarySize='10%'
-      minSecondarySize='10%'
+      minSecondarySize={condition !== 'baseline' ? '10%' : undefined}
     >
       <div className='h-full flex flex-col' data-tour='subreddit'>
         <div className='w-full flex items-center flex-wrap '>
@@ -396,11 +410,8 @@ function PostViewerLayout(): ReactElement {
             {/* <div className='text-sm ml-2'>in May 2021</div> */}
             <Input.Search
               prefix={<SearchOutlined />}
-              onPressEnter={() => {
-                setIsSearchVisible(true);
-                setSearchQuery(query);
-                logMutation.mutate({ task, info: 'search', content: query });
-              }}
+              onPressEnter={onSearch}
+              onSearch={onSearch}
               placeholder='Search'
               value={query}
               onChange={(e) => setQuery(e.target.value)}
@@ -414,7 +425,7 @@ function PostViewerLayout(): ReactElement {
               query={searchQuery}
             />
           </div>
-          <div className='flex ml-auto items-center flex-wrap'>
+          <div className='flex ml-auto items-center'>
             {/* <div className='flex'>
             <div className='mx-2'>Type:</div>
             <Select
@@ -445,10 +456,6 @@ function PostViewerLayout(): ReactElement {
               <Select.Option value='Spam'>Only Spam/Reports</Select.Option>
             </Select>
           </div> */}
-
-            <div className='flex items-center' data-tour='sort'>
-              {/* <div className='mr-2'>Hello, {userData && userData.username}!</div> */}
-            </div>
             <div className='flex items-center'>
               {condition === 'modsandbox' && (
                 <>
@@ -530,7 +537,6 @@ function PostViewerLayout(): ReactElement {
           </div>
         </div>
         {/* <ImportModal visible={isModalVisible} onCancel={onCancel} /> */}
-
         <div className='flex overflow-y-auto flex-1'>
           <>
             <PostList
@@ -560,10 +566,8 @@ function PostViewerLayout(): ReactElement {
             ) : (
               <TargetList
                 label={'Posts that should be filtered'}
-                posts={targetQuery.data?.filter(
-                  (post) => post.place === 'normal-target'
-                )}
-                isLoading={addTestCaseMutation.isLoading}
+                posts={targetQuery.data}
+                isLoading={targetQuery.isLoading}
                 onSubmit={undefined}
                 totalTarget={targetQuery.data?.length}
                 place='except'
@@ -573,57 +577,54 @@ function PostViewerLayout(): ReactElement {
         </div>
       </div>
 
-      <div
-        className='h-full flex flex-col'
-        data-tour={
-          condition === 'modsandbox' ? 'post-collection' : 'testing-subreddit'
-        }
-      >
-        <div className='w-full flex items-center'>
-          <div className='text-2xl ml-2 flex items-center flex-wrap'>
-            <RedditOutlined style={{ color: 'orangered' }} />
-            <div className='mx-2 flex items-center'>
-              {condition === 'modsandbox' && 'Post Collections'}
-            </div>
-            <div className='flex text-sm flex-wrap ml-auto'>
-              <div>
-                Task: Create AutoMod configuration to detect any and every posts
+      {condition !== 'baseline' && (
+        <div
+          className='h-full flex flex-col'
+          data-tour={
+            condition === 'modsandbox' ? 'post-collection' : 'testing-subreddit'
+          }
+        >
+          <div className='w-full flex items-center'>
+            <div className='text-2xl ml-2 flex items-center flex-wrap'>
+              <RedditOutlined style={{ color: 'orangered' }} />
+              <div className='mx-2 flex items-center'>
+                {condition === 'modsandbox' && 'Post Collections'}
               </div>
-              <div className='font-bold ml-1 text-red-500'>
-                {task.startsWith('A')
-                  ? 'asking "how to work as a software engineer without a CS relevant degree?"'
-                  : task.startsWith('B')
-                  ? 'that are related to or mention covid.'
-                  : 'about stress in your working space'}
-              </div>
+              {/* <div className='flex text-sm flex-wrap ml-auto'>
+                <div>
+                  Task: Create AutoMod configuration to detect any and every
+                  posts
+                </div>
+                <div className='font-bold ml-1 text-red-500'>
+                  {task.startsWith('A')
+                    ? 'asking "how to work as a software engineer without a CS relevant degree?"'
+                    : task.startsWith('B')
+                    ? 'that are related to or mention covid.'
+                    : 'about stress in your working space'}
+                </div>
+              </div> */}
             </div>
           </div>
-        </div>
-        <div className='flex overflow-y-auto flex-1'>
-          <TargetList
-            label={
-              condition === 'modsandbox'
-                ? 'Posts that should be filtered'
-                : 'Test cases'
-            }
-            posts={
-              condition !== 'baseline'
-                ? targetQuery.data
-                : targetQuery.data?.filter(
-                    (post) => post.place !== 'normal-target'
-                  )
-            }
-            isLoading={addTestCaseMutation.isLoading}
-            onSubmit={(postId) =>
-              addTestCaseMutation.mutate({ postId, place: 'target' })
-            }
-            place='target'
-            totalTarget={
-              condition === 'modsandbox' ? undefined : targetQuery.data?.length
-            }
-          />
-          <div className='border-gray-200 border-r-2' />
-          {condition !== 'baseline' && (
+          <div className='flex overflow-y-auto flex-1'>
+            <TargetList
+              label={
+                condition === 'modsandbox'
+                  ? 'Posts that should be filtered'
+                  : 'Test cases'
+              }
+              posts={targetQuery.data}
+              isLoading={addTestCaseMutation.isLoading || targetQuery.isLoading}
+              onSubmit={(postId) =>
+                addTestCaseMutation.mutate({ postId, place: 'target' })
+              }
+              place='target'
+              totalTarget={
+                condition === 'modsandbox'
+                  ? undefined
+                  : targetQuery.data?.length
+              }
+            />
+            <div className='border-gray-200 border-r-2' />
             <TargetList
               label={
                 condition === 'modsandbox'
@@ -632,18 +633,8 @@ function PostViewerLayout(): ReactElement {
                   ? 'Filtered by AutoMod'
                   : 'Posts that should be filtered'
               }
-              posts={
-                condition === 'modsandbox'
-                  ? exceptQuery.data
-                  : condition === 'sandbox'
-                  ? targetQuery.data?.filter((post) =>
-                      isFiltered(post, config_id)
-                    )
-                  : targetQuery.data?.filter(
-                      (post) => post.place === 'normal-target'
-                    )
-              }
-              isLoading={addTestCaseMutation.isLoading}
+              posts={exceptQuery.data}
+              isLoading={addTestCaseMutation.isLoading || exceptQuery.isLoading}
               onSubmit={
                 condition === 'modsandbox'
                   ? (postId) =>
@@ -657,9 +648,10 @@ function PostViewerLayout(): ReactElement {
               }
               place='except'
             />
-          )}
+            {/* )} */}
+          </div>
         </div>
-      </div>
+      )}
     </Split>
   );
 }

@@ -24,9 +24,10 @@ import { useAutosave } from 'react-autosave';
 
 interface Props {
   placeholder: string;
+  configData?: Config[];
 }
 
-function CodeEditor({ placeholder }: Props): ReactElement {
+function CodeEditor({ placeholder, configData }: Props): ReactElement {
   const queryClient = useQueryClient();
   const [code, setCode] = useState('');
   const logMutation = useLogMutation();
@@ -70,10 +71,6 @@ function CodeEditor({ placeholder }: Props): ReactElement {
     setCode(storedCode);
   }, [storedCode]);
 
-  useEffect(() => {
-    setCode('');
-  }, [task]);
-
   const addConfig = ({ code }: { code: string }) =>
     request<Config>({
       url: '/configs/',
@@ -83,10 +80,14 @@ function CodeEditor({ placeholder }: Props): ReactElement {
   const addConfigMutation = useMutation(addConfig, {
     onSuccess: (res, { code }) => {
       changeCode(code);
-      invalidatePostQueries(queryClient);
+      queryClient.invalidateQueries('not filtered');
+      queryClient.invalidateQueries('configs');
+      queryClient.invalidateQueries('target');
+      queryClient.invalidateQueries('except');
       changeConfigId(res.data.id);
       logMutation.mutate({
         task,
+        condition,
         info: 'apply config',
         content: code,
         config_id: res.data.id,
@@ -95,9 +96,9 @@ function CodeEditor({ placeholder }: Props): ReactElement {
   });
 
   const onClickApply = () => {
-    if (condition === 'baseline') {
-      setIsSaved(true);
-    }
+    // if (condition === 'baseline') {
+    //   setIsSaved(true);
+    // }
     addConfigMutation.mutate({ code });
   };
 
@@ -149,20 +150,6 @@ function CodeEditor({ placeholder }: Props): ReactElement {
     }
   );
 
-  const { data: configData } = useQuery(
-    ['configs', { start_date, end_date, task }],
-    async () => {
-      const { data } = await request<Config[]>({
-        url: '/configs/',
-        params: {
-          start_date: start_date?.toDate(),
-          end_date: end_date?.toDate(),
-          task,
-        },
-      });
-      return data;
-    }
-  );
   const configIds = configData?.map((config) => config.id);
 
   const onClickUndo = () => {
@@ -172,6 +159,12 @@ function CodeEditor({ placeholder }: Props): ReactElement {
       const prevConfigId = configIds[prevIndex];
       changeConfigId(prevConfigId);
       changeCode(configData[prevIndex].code);
+      logMutation.mutate({
+        task,
+        condition,
+        info: 'undo',
+        config_id: prevConfigId,
+      });
     }
   };
   const prevConfigCode = () => {
@@ -190,6 +183,12 @@ function CodeEditor({ placeholder }: Props): ReactElement {
       const nextConfigId = configIds[nextIndex];
       changeConfigId(nextConfigId);
       changeCode(configData[nextIndex].code);
+      logMutation.mutate({
+        task,
+        condition,
+        info: 'redo',
+        config_id: nextConfigId,
+      });
     }
   };
   const nextConfigCode = () => {
@@ -243,7 +242,7 @@ function CodeEditor({ placeholder }: Props): ReactElement {
           </Tooltip>
           {condition !== 'baseline' ? (
             <div className='flex'>
-              <Button
+              {/* <Button
                 type='link'
                 size='small'
                 onClick={onClickClear}
@@ -251,7 +250,7 @@ function CodeEditor({ placeholder }: Props): ReactElement {
                 icon={<ClearOutlined />}
               >
                 Clear
-              </Button>
+              </Button> */}
               <Button
                 type='link'
                 icon={<PlayCircleOutlined />}

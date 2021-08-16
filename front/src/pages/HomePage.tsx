@@ -8,7 +8,7 @@ import { useStore } from '@utils/store';
 import dayjs from 'dayjs';
 import useLogMutation from '@hooks/useLogMutation';
 import { Split } from '@geoffcox/react-splitter';
-import { Task } from '@typings/types';
+import { Condition, Task } from '@typings/types';
 
 function HomePage(): ReactElement {
   // const availableCondition = ['baseline', 'sandbox', 'modsandbox'];
@@ -27,11 +27,12 @@ function HomePage(): ReactElement {
 
   const { changeDateRange, imported } = useStore();
   const logMutation = useLogMutation();
+  const { condition } = useParams<{ condition: Condition }>();
 
   useEffect(() => {
-    logMutation.mutate({ task, info: 'access system' });
+    logMutation.mutate({ task, info: 'access system', condition });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [task]);
+  }, [task, condition]);
 
   useEffect(() => {
     const fetchGraph = async () => {

@@ -19,27 +19,31 @@ interface Props {
 
 function SubmitModal({ onCancel, visible }: Props): ReactElement {
   const queryClient = useQueryClient();
-  const { condition } = useParams<{ condition: Condition }>();
-  const task = useParams<{ task: Task }>().task.charAt(0);
+  const { condition, task } = useParams<{ condition: Condition; task: Task }>();
   const logMutation = useLogMutation();
   const history = useHistory();
   const [code, setCode] = useState('');
   const { clearConfigId, changeImported } = useStore();
   const [isVisibleConfirmModal, setIsVisibleConfirmModal] = useState(false);
-  const submitConfig = ({ code }: { code: string }) =>
+  const { changeCode, changeConfigId } = useStore();
+  const addConfig = ({ code }: { code: string }) =>
     request<Config>({
-      url: '/configs/submit/',
+      url: '/configs/',
       method: 'POST',
-      data: { code, task },
+      data: { code, task: task.charAt(0), condition },
     });
-
-  const submitConfigMutation = useMutation(submitConfig, {
+  const addConfigMutation = useMutation(addConfig, {
     onSuccess: (res, { code }) => {
+      changeCode(code);
+      changeConfigId(res.data.id);
+      invalidatePostQueries(queryClient);
       setIsVisibleConfirmModal(true);
       logMutation.mutate({
-        task,
+        task: task.charAt(0),
+        condition,
         info: 'submit config',
         content: code,
+        config_id: res.data.id,
       });
     },
   });
@@ -50,72 +54,24 @@ function SubmitModal({ onCancel, visible }: Props): ReactElement {
     setCode(storedCode);
   }, [storedCode]);
 
-  const deleteTargetPostsMutation = useMutation(
-    () =>
-      request({
-        url: 'posts/target/all/',
-        method: 'DELETE',
-      }),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries('target');
-      },
-    }
-  );
-  const deleteExceptPostsMutation = useMutation(
-    () =>
-      request({
-        url: 'posts/except/all/',
-        method: 'DELETE',
-      }),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries('except');
-      },
-    }
-  );
-
-  const deleteAllPostsMutation = useMutation(
-    () =>
-      request({
-        url: 'posts/all/',
-        method: 'DELETE',
-      }),
-    {
-      onSuccess: () => {
-        invalidatePostQueries(queryClient);
-        changeImported(false);
-      },
-    }
-  );
-
-  const deleteAllRulesMutation = useMutation(
-    () =>
-      request({
-        url: 'configs/all/',
-        method: 'DELETE',
-      }),
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries('configs');
-      },
-    }
-  );
-
   const onFinishExperiment = useCallback(() => {
-    logMutation.mutate({ task, info: 'finish' });
+    logMutation.mutate({ task: task.charAt(0), info: 'finish', condition });
     setIsVisibleConfirmModal(false);
     onCancel();
-    clearConfigId();
+
     // deleteTargetPostsMutation.mutate();
     // deleteExceptPostsMutation.mutate();
-    if (task === 'example') {
-      // history.push(`/home/${condition}/${_.random(1, 2) === 1 ? 'A1' : 'B2'}`);
-      // deleteAllPostsMutation.mutate();
-      history.push(`/check/${condition}/`);
-    } else {
-      // deleteAllPostsMutation.mutate();
-      history.push(`/survey/${condition}/${task}`);
+    if (condition === 'baseline') {
+      history.push(`/home/modsandbox/${task}`);
+    } else if (condition === 'modsandbox') {
+      clearConfigId();
+      if (task === 'A1') {
+        history.push(`/home/baseline/B1`);
+      } else if (task === 'B2') {
+        history.push(`/home/baseline/A2`);
+      } else {
+        history.push('/finish');
+      }
     }
   }, [clearConfigId, condition, history, logMutation, onCancel, task]);
 
@@ -127,9 +83,9 @@ function SubmitModal({ onCancel, visible }: Props): ReactElement {
       maskClosable={false}
       centered
       destroyOnClose
-      onOk={() => submitConfigMutation.mutate({ code })}
+      onOk={() => addConfigMutation.mutate({ code })}
       okText='Submit & Finish'
-      okButtonProps={{ loading: submitConfigMutation.isLoading }}
+      okButtonProps={{ loading: addConfigMutation.isLoading }}
     >
       <div className='flex flex-col items-center'>
         <div className='text-red-500 font-bold mb-2'>

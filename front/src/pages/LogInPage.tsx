@@ -71,9 +71,9 @@ function LogInPage(): ReactElement {
       return <Redirect to='/eval/modsandbox/example' />;
     }
     if (order === '1') {
-      return <Redirect to={`/home/${condition}/A1`} />;
+      return <Redirect to={`/home/baseline/A1`} />;
     } else if (order === '2') {
-      return <Redirect to={`/home/${condition}/B2`} />;
+      return <Redirect to={`/home/baseline/B2`} />;
     }
     if (order === 'example') {
       return <Redirect to={`/home/${condition}/example`} />;
@@ -89,7 +89,7 @@ function LogInPage(): ReactElement {
     <PageLayout title='Join'>
       <Form {...layout} onFinish={onFinish}>
         <Form.Item
-          label='Discord Room Name'
+          label='Reddit username'
           name='username'
           rules={[{ required: true, message: 'Please input your username' }]}
         >
@@ -97,7 +97,7 @@ function LogInPage(): ReactElement {
         </Form.Item>
         <div className='flex justify-center'>
           <Button type='primary' htmlType='submit'>
-            Start Example Task
+            Start Task
           </Button>
         </div>
       </Form>

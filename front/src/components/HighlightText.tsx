@@ -108,7 +108,7 @@ function HighlightText({ text, match, notMatch }: Props): ReactElement {
             onMouseOver={() => onMouseOverHighlight(index)}
             onMouseOut={onMouseOutHighlight}
             key={index}
-            className='cursor-pointer underline'
+            className='underline font-bold cursor-default'
           >
             {part}
           </span>

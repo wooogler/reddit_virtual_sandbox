@@ -64,9 +64,10 @@ function PostList({ label, query, isLoading, filtered }: Props): ReactElement {
         task,
         info: 'change order',
         content: `${filtered ? 'filtered' : 'subreddit'}: ${e.target.value}`,
+        condition,
       });
     },
-    [changeFilteredOrder, changeOrder, filtered, logMutation, task]
+    [changeFilteredOrder, changeOrder, condition, filtered, logMutation, task]
   );
 
   return (

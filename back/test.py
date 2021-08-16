@@ -1,14 +1,13 @@
-import ast
+# ~body: ['minor']
+# {'~body': ['minor']}
+import re
 
-import pandas as pd
-import numpy as np
+code = "~body: ['minor']"
+reg = re.compile(r"(\S+)\s*:\s\[\'(\S+)\'\]")
 
+matches = reg.match(code)
 
-def stringTolist(value):
-    return value
+obj_code = {}
+obj_code[matches.group(1)] = [matches.group(2)]
 
-
-post_vectors = pd.read_pickle('post_vectors_leesang627.pkl')
-vector1 = post_vectors[post_vectors.id == 20496].vector.tolist()
-vector2 = post_vectors.iloc[2].vector.tolist()
-print(np.inner(vector2, vector1)[0])
+print(obj_code)

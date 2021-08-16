@@ -1,9 +1,9 @@
 import pandas as pd
 
-# gt = pd.read_csv('./gt_or.csv')
-# content = pd.read_json('./submission_cscareerquestions_may_w_index_clip.json')
-# gt_content = pd.merge(gt, content, left_on='index', right_on='index')
-# gt_content.to_csv('./gt_content_or.csv')
+gt = pd.read_csv('./gt_or.csv')
+content = pd.read_json('./submission_cscareerquestions_may_w_index_clip.json')
+gt_content = pd.merge(gt, content, left_on='index', right_on='index')
+gt_content.to_csv('./gt_content_or.csv')
 
 gt_content = pd.read_csv('./gt_content_or.csv')
 

@@ -7,6 +7,11 @@ import { useParams } from 'react-router-dom';
 import { Condition, Task } from '@typings/types';
 import { Split } from '@geoffcox/react-splitter';
 import ConfusionMatrix from '@components/ConfusionMatrix';
+import { useQuery } from 'react-query';
+import { useStore } from '@utils/store';
+import request from '@utils/request';
+import { Config } from '@typings/db';
+import { Spin } from 'antd';
 
 interface Props {
   evaluation?: boolean;
@@ -15,13 +20,30 @@ interface Props {
 function AnalysisLayout({ evaluation }: Props): ReactElement {
   // const [isViewChart, setIsViewChart] = useState(true);
   const { condition } = useParams<{ condition: Condition }>();
+  const task = useParams<{ task: Task }>().task.charAt(0);
   // const logMutation = useLogMutation();
+  const { start_date, end_date } = useStore();
+
+  const { data: configData, isLoading: configLoading } = useQuery(
+    ['configs', { start_date, end_date, task, condition }],
+    async () => {
+      const { data } = await request<Config[]>({
+        url: `/configs/`,
+        params: {
+          start_date: start_date?.toDate(),
+          end_date: end_date?.toDate(),
+          task,
+        },
+      });
+      return data;
+    }
+  );
 
   return (
     <>
       {condition !== 'modsandbox' ? (
         <div className={'flex flex-col p-2 h-full'}>
-          <CodeEditor placeholder='' />
+          <CodeEditor placeholder='' configData={configData} />
         </div>
       ) : (
         <Split
@@ -31,18 +53,24 @@ function AnalysisLayout({ evaluation }: Props): ReactElement {
           minSecondarySize='50%'
         >
           <div className={'flex flex-col p-2 h-full'}>
-            <CodeEditor placeholder='' />
+            <CodeEditor placeholder='' configData={configData} />
           </div>
 
           <div
-            className='flex flex-col p-2 h-full'
+            className='flex flex-col p-2 pt-1 h-full'
             data-tour='configuration-analysis'
           >
-            <div className='flex items-center border-t-2 border-gray-300'>
+            <div className='flex items-center '>
               <PanelName>Configuration Analysis</PanelName>
+              {configLoading && (
+                <>
+                  <Spin className='ml-2' />
+                  <div className='ml-2 text-gray-400'>loading...</div>
+                </>
+              )}
             </div>
             <div className='flex-1 overflow-y-auto'>
-              <ConfigurationAnalysis />
+              <ConfigurationAnalysis configData={configData} />
             </div>
             {evaluation && <ConfusionMatrix />}
             {/* {evaluation ? (
