@@ -112,6 +112,16 @@ class PostViewSet(viewsets.ModelViewSet):
 
         return queryset
 
+    @action(detail=False, methods=['get'])
+    def range(self, request):
+        queryset = self.filter_queryset(self.get_queryset())
+        if queryset:
+            count = queryset.count()
+            end = queryset.latest('created_utc').created_utc
+            start = queryset.earliest('created_utc').created_utc
+            return Response({'start': start, 'end': end, 'count': count})
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
     def create(self, request, *args, **kwargs):
         subreddit = request.data.get('subreddit')
         after = request.data.get('after')
@@ -214,7 +224,7 @@ class PostViewSet(viewsets.ModelViewSet):
     def search(self, request):
         query = self.request.query_params.get("query")
         sort = self.request.query_params.get("sort")
-        posts = self.queryset.filter(user=request.user)
+        posts = self.filter_queryset(self.get_queryset())
         searched_posts = posts.filter(body__icontains=query) | posts.filter(title__icontains=query)
         # for postgresql
         if sort == 'relevance':

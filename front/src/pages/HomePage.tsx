@@ -9,6 +9,7 @@ import dayjs from 'dayjs';
 import useLogMutation from '@hooks/useLogMutation';
 import { Split } from '@geoffcox/react-splitter';
 import { Condition, Task } from '@typings/types';
+import { stringify } from 'node:querystring';
 
 function HomePage(): ReactElement {
   // const availableCondition = ['baseline', 'sandbox', 'modsandbox'];
@@ -34,35 +35,52 @@ function HomePage(): ReactElement {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [task, condition]);
 
+  // useEffect(() => {
+  //   const fetchGraph = async () => {
+  //     await request<IStat[]>({
+  //       url: '/stats/graph/',
+  //       params: {
+  //         post_type: 'all',
+  //         filtered: false,
+  //         source: 'all',
+  //         task,
+  //       },
+  //     }).then(({ data }) => {
+  //       if (data.length !== 0) {
+  //         const startDate = data
+  //           .map((item) => item.x0)
+  //           .reduce((min, cur) => {
+  //             return cur < min ? cur : min;
+  //           });
+  //         const endDate = data
+  //           .map((item) => item.x1)
+  //           .reduce((min, cur) => {
+  //             return cur > min ? cur : min;
+  //           });
+  //         changeDateRange(dayjs(startDate), dayjs(endDate));
+  //       }
+  //     });
+  //   };
+  //   if (imported === true) {
+  //     fetchGraph();
+  //   }
+  // }, [changeDateRange, imported]);
+
   useEffect(() => {
-    const fetchGraph = async () => {
-      await request<IStat[]>({
-        url: '/stats/graph/',
+    const fetchRange = async () => {
+      await request<{start: string, end: string}>({
+        url: '/posts/range/',
         params: {
-          post_type: 'all',
-          filtered: false,
-          source: 'all',
-        },
-      }).then(({ data }) => {
-        if (data.length !== 0) {
-          const startDate = data
-            .map((item) => item.x0)
-            .reduce((min, cur) => {
-              return cur < min ? cur : min;
-            });
-          const endDate = data
-            .map((item) => item.x1)
-            .reduce((min, cur) => {
-              return cur > min ? cur : min;
-            });
-          changeDateRange(dayjs(startDate), dayjs(endDate));
+          task,
         }
-      });
+      }).then(({data}) => {
+        changeDateRange(dayjs(data.start), dayjs(data.end));
+      })
     };
     if (imported === true) {
-      fetchGraph();
+      fetchRange();
     }
-  }, [changeDateRange, imported]);
+  }, [changeDateRange, imported, task])
 
   // if (!data) {
   //   return (

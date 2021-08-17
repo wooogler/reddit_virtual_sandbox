@@ -19,6 +19,7 @@ export default function useInitDateRange() {
           post_type: 'all',
           filtered: false,
           source: 'all',
+          task,
         },
       }).then(({ data }) => {
         if (data.length !== 0) {

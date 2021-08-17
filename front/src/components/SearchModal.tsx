@@ -22,13 +22,13 @@ function SearchModal({ visible, onCancel, query }: Props): ReactElement {
   const [sort, setSort] = useState<'relevance' | 'new' | 'top'>('relevance');
   const logMutation = useLogMutation();
   const task = useParams<{ task: Task }>().task.charAt(0);
-  const {condition} = useParams<{condition: Condition}>();
+  const { condition } = useParams<{ condition: Condition }>();
   const searchQuery = useQuery(
     ['search', { query, sort }],
     async () => {
       const { data } = await request<IPost[]>({
         url: '/posts/search/',
-        params: { query, sort },
+        params: { query, sort, task },
       });
       return data;
     },
