@@ -16,7 +16,7 @@ function LineAnalysis({ rule, index }: Props): ReactElement {
 
   const [activeLineIndex, setActiveLineIndex] = useLocalStorage<
     number[] | number
-  >('activeLineId-'+index, []);
+  >('activeLineId-' + index, []);
   const checkedLine = (id: number) => {
     if (check_id) {
       return false;
@@ -79,7 +79,6 @@ function LineAnalysis({ rule, index }: Props): ReactElement {
                 )}
               />
             }
-            className='custom'
           >
             <div className='ml-12'>
               <div className='font-bold'>Strings</div>

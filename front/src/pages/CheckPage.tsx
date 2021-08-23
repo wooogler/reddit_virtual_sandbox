@@ -4,9 +4,7 @@ import React, { ReactElement, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
 function CheckPage(): ReactElement {
-  const [micCheck, setMicCheck] = useState(false);
   const [recordCheck, setRecordCheck] = useState(false);
-  const [thinkCheck, setThinkCheck] = useState(false);
   const { condition } = useParams<{ condition: string }>();
   const history = useHistory();
   const onClickNext = () => {

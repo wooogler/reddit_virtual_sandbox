@@ -111,7 +111,7 @@ def apply_config(config, _posts, check_create):
             rules = yaml.safe_load(section)
         except Exception as e:
             raise exceptions.ParseError(
-                "YAML parsing error in section %s: %s" % (section_num, e)
+                "YAML parsing error in rule %s: %s" % (section_num, e)
             )
 
         if rules is None:

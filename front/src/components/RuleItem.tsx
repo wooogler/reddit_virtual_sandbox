@@ -1,15 +1,6 @@
-import { ConsoleSqlOutlined, DeleteOutlined } from '@ant-design/icons';
-import useLogMutation from '@hooks/useLogMutation';
 import { Check, CheckCombination, Config, Rule } from '@typings/db';
-import { Condition, Task } from '@typings/types';
-import request from '@utils/request';
 import { useStore } from '@utils/store';
-import { invalidatePostQueries } from '@utils/util';
-import { Button } from 'antd';
-import clsx from 'clsx';
-import { ReactElement, useCallback } from 'react';
-import { useMutation, useQueryClient } from 'react-query';
-import { useParams } from 'react-router-dom';
+import { ReactElement } from 'react';
 import BarRate from './BarRate';
 
 interface Props {
@@ -25,59 +16,46 @@ interface Props {
 function RuleItem({
   prev,
   rule,
-  className,
   ruleType,
-  checked,
   selectedIds,
   selectedNotIds,
 }: Props): ReactElement {
-  const {
-    totalCount,
-    config_id,
-    changeConfigId,
-    changeRuleId,
-    changeCheckId,
-    changeLineId,
-    clearConfigId,
-    changeCode,
-  } = useStore();
+  const { totalCount, changeCode } = useStore();
   const total = totalCount.totalCount;
-  const logMutation = useLogMutation();
-  const task = useParams<{ task: Task }>().task.charAt(0);
-  const { condition } = useParams<{ condition: Condition }>();
+  // const { condition } = useParams<{ condition: Condition }>();
 
   const onClickRadio = () => {
     if (ruleType === 'config') {
       changeCode(rule.code);
     }
   };
-  const queryClient = useQueryClient();
-  const deleteConfig = ({ configId }: { configId: number }) =>
-    request({ url: `/configs/${configId}/`, method: 'DELETE' });
+  // const queryClient = useQueryClient();
+  // const deleteConfig = ({ configId }: { configId: number }) =>
+  //   request({ url: `/configs/${configId}/`, method: 'DELETE' });
 
-  const deleteConfigMutation = useMutation(deleteConfig, {
-    onSuccess: (_, { configId }) => {
-      invalidatePostQueries(queryClient);
-      if (configId === config_id) {
-        clearConfigId();
-      }
-      logMutation.mutate({
-        task,
-        info: 'delete config',
-        content: rule.code,
-        config_id: configId,
-        condition,
-      });
-    },
-  });
+  // const deleteConfigMutation = useMutation(deleteConfig, {
+  //   onSuccess: (_, { configId }) => {
+  //     invalidatePostQueries(queryClient);
+  //     if (configId === config_id) {
+  //       clearConfigId();
+  //     }
+  //     logMutation.mutate({
+  //       task,
+  //       info: 'delete config',
+  //       content: rule.code,
+  //       config_id: configId,
+  //       condition,
+  //     });
+  //   },
+  // });
 
-  const onClickDelete: React.MouseEventHandler<HTMLElement> = useCallback(
-    (e) => {
-      e.stopPropagation();
-      deleteConfigMutation.mutate({ configId: rule.id });
-    },
-    [deleteConfigMutation, rule.id]
-  );
+  // const onClickDelete: React.MouseEventHandler<HTMLElement> = useCallback(
+  //   (e) => {
+  //     e.stopPropagation();
+  //     deleteConfigMutation.mutate({ configId: rule.id });
+  //   },
+  //   [deleteConfigMutation, rule.id]
+  // );
 
   const bgSelectedColor = () => {
     if (selectedIds && selectedIds.includes(rule.id)) {
@@ -91,19 +69,14 @@ function RuleItem({
 
   return (
     <div
-      className={clsx(
-        'flex items-center p-1 rounded-md border-gray-300 border',
-        className
-      )}
+      className='flex items-center p-1 rounded-md border-gray-300 border'
       style={{ backgroundColor: bgSelectedColor() }}
       onClick={onClickRadio}
     >
-      <div
-        className={clsx('flex-1 font-mono whitespace-pre-wrap ml-2 text-xs')}
-      >
-        {prev ? prev + '\n' + rule.code : rule.code}
+      <div className='flex-1 font-mono whitespace-pre-wrap ml-2 text-xs'>
+        {(prev ? prev + '\n' + rule.code : rule.code).replaceAll("','", "', '")}
       </div>
-      {process.env.NODE_ENV === 'development' && ruleType === 'config' && (
+      {/* {process.env.NODE_ENV === 'development' && ruleType === 'config' && (
         // <Popconfirm title='Are you sure?' onConfirm={onClickDelete}>
         <Button
           icon={<DeleteOutlined />}
@@ -114,7 +87,7 @@ function RuleItem({
         />
 
         // </Popconfirm>
-      )}
+      )} */}
 
       <div className='ml-auto w-12 h-8 flex mr-2'>
         <BarRate

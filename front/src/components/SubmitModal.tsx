@@ -11,6 +11,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { Condition, Task } from '@typings/types';
 import useLogMutation from '@hooks/useLogMutation';
 import { invalidatePostQueries } from '@utils/util';
+import _ from 'lodash';
 
 interface Props {
   onCancel: () => void;
@@ -23,7 +24,7 @@ function SubmitModal({ onCancel, visible }: Props): ReactElement {
   const logMutation = useLogMutation();
   const history = useHistory();
   const [code, setCode] = useState('');
-  const { clearConfigId, changeImported } = useStore();
+  const { clearConfigId } = useStore();
   const [isVisibleConfirmModal, setIsVisibleConfirmModal] = useState(false);
   const { changeCode, changeConfigId } = useStore();
   const addConfig = ({ code }: { code: string }) =>
@@ -69,6 +70,8 @@ function SubmitModal({ onCancel, visible }: Props): ReactElement {
         history.push(`/home/baseline/B1`);
       } else if (task === 'B2') {
         history.push(`/home/baseline/A2`);
+      } else if (task === 'example') {
+        history.push(`/login/baseline/${_.random(1, 2)}`);
       } else {
         history.push('/finish');
       }

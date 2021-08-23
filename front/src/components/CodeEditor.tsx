@@ -3,24 +3,23 @@ import AceEditor from 'react-ace';
 import 'ace-builds/src-noconflict/mode-yaml';
 import 'ace-builds/src-noconflict/theme-tomorrow';
 import PanelName from './PanelName';
-import { Button, Tooltip } from 'antd';
+import { Button, notification, Tooltip } from 'antd';
 import request from '@utils/request';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { Config } from '@typings/db';
 import { useStore } from '@utils/store';
 import {
   ArrowLeftOutlined,
   ArrowRightOutlined,
-  ClearOutlined,
   EditOutlined,
   PlayCircleOutlined,
   SaveOutlined,
 } from '@ant-design/icons';
-import { invalidatePostQueries } from '@utils/util';
 import { useParams } from 'react-router-dom';
 import { Condition, Task } from '@typings/types';
 import useLogMutation from '@hooks/useLogMutation';
 import { useAutosave } from 'react-autosave';
+import { AxiosError } from 'axios';
 
 interface Props {
   placeholder: string;
@@ -43,6 +42,7 @@ function CodeEditor({ placeholder, configData }: Props): ReactElement {
           task,
           info: 'autosave config',
           content: code,
+          condition,
         },
       });
     },
@@ -62,8 +62,6 @@ function CodeEditor({ placeholder, configData }: Props): ReactElement {
     clearConfigId,
     config_id,
     changeCode,
-    start_date,
-    end_date,
     code: storedCode,
   } = useStore();
 
@@ -91,6 +89,16 @@ function CodeEditor({ placeholder, configData }: Props): ReactElement {
         info: 'apply config',
         content: code,
         config_id: res.data.id,
+      });
+    },
+    onError: (error: AxiosError<{ detail: string }>) => {
+      notification.open({
+        message: 'AutoMod Error',
+        description: (
+          <div className='text-red-400 whitespace-pre-wrap text-xs'>
+            {error.response?.data.detail}
+          </div>
+        ),
       });
     },
   });
@@ -200,11 +208,11 @@ function CodeEditor({ placeholder, configData }: Props): ReactElement {
     return false;
   };
 
-  const onClickClear = () => {
-    setCode('');
-    changeCode('');
-    clearConfigId();
-  };
+  // const onClickClear = () => {
+  //   setCode('');
+  //   changeCode('');
+  //   clearConfigId();
+  // };
   return (
     <>
       <div className='flex mb-2 items-center flex-wrap'>

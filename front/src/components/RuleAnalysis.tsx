@@ -2,7 +2,7 @@ import { useLocalStorage } from '@hooks/useLocalStorage';
 import { Config } from '@typings/db';
 import { useStore } from '@utils/store';
 import { Collapse } from 'antd';
-import React, { ReactElement, useEffect } from 'react';
+import React, { ReactElement } from 'react';
 import { useCallback } from 'react';
 import LineAnalysis from './LineAnalysis';
 import RuleItem from './RuleItem';
@@ -74,7 +74,6 @@ function RuleAnalysis({ config, index }: Props): ReactElement {
                 )}
               />
             }
-            className='custom'
           >
             <div className='ml-6'>
               <LineAnalysis rule={rule} index={rule_index} />

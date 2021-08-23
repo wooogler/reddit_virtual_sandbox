@@ -17,7 +17,6 @@ import useLogMutation from '@hooks/useLogMutation';
 import styled from 'styled-components';
 import { ReactComponent as UpArrowIcon } from '../assets/up-arrow.svg';
 import { ReactComponent as DownArrowIcon } from '../assets/down-arrow.svg';
-import { NONAME } from 'node:dns';
 
 dayjs.extend(relativeTime);
 dayjs.extend(utc);
@@ -40,7 +39,7 @@ function PostItem({
   );
   const queryClient = useQueryClient();
   const logMutation = useLogMutation();
-  const { config_id, rule_id, check_id, fpfn, line_id } = useStore();
+  const { config_id, fpfn } = useStore();
   const task = useParams<{ task: Task }>().task.charAt(0);
 
   const { condition } = useParams<{ condition: Condition }>();
@@ -150,7 +149,7 @@ function PostItem({
     },
   });
 
-  const movePost = ({ id, place }: Pick<IPost, 'id' | 'place'>) =>
+  const movePost = ({ place }: Pick<IPost, 'id' | 'place'>) =>
     request({
       url: `/posts/${post.id}/`,
       method: 'PATCH',

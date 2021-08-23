@@ -11,7 +11,7 @@ import TargetList from '@components/TargetList';
 import { IPost, PaginatedPosts } from '@typings/db';
 import request from '@utils/request';
 import { useStore } from '@utils/store';
-import { invalidatePostQueries, isFiltered } from '@utils/util';
+import { invalidatePostQueries } from '@utils/util';
 import { Button, Input, Switch } from 'antd';
 import { AxiosError } from 'axios';
 import { ReactElement, useCallback, useEffect, useState } from 'react';
@@ -21,13 +21,12 @@ import {
   useQuery,
   useQueryClient,
 } from 'react-query';
-import NewWindow from 'react-new-window';
 import { Split } from '@geoffcox/react-splitter';
 import { useParams } from 'react-router-dom';
 import { Condition, Task } from '@typings/types';
 import useLogMutation from '@hooks/useLogMutation';
 import GuideModal from '@components/GuideModal';
-import GuideWindow from '@components/GuideWindow';
+import dayjs from 'dayjs';
 
 function PostViewerLayout(): ReactElement {
   const queryClient = useQueryClient();
@@ -46,7 +45,7 @@ function PostViewerLayout(): ReactElement {
     refetching,
     // changePostType,
     // changeSource,
-
+    changeDateRange,
     changeImported,
     changeTotalCount,
     totalCount,
@@ -57,10 +56,28 @@ function PostViewerLayout(): ReactElement {
   const logMutation = useLogMutation();
   const { condition } = useParams<{ condition: Condition; task: Task }>();
   const task = useParams<{ task: Task }>().task.charAt(0);
-
+  const { task: taskRaw } = useParams<{ task: Task }>();
+  const [rangeFetched, setRangeFetched] = useState(false);
   const [isSearchVisible, setIsSearchVisible] = useState(false);
   const [isSubmitVisible, setIsSubmitVisible] = useState(false);
   const [visibleGuide, setVisibleGuide] = useState(false);
+
+  const fetchRange = useCallback(async () => {
+    await request<{ start: string; end: string }>({
+      url: '/posts/range/',
+      params: {
+        task,
+      },
+    }).then(({ data }) => {
+      changeDateRange(dayjs(data.start), dayjs(data.end));
+      setRangeFetched(true);
+    });
+  }, [changeDateRange, task]);
+
+  useEffect(() => {
+    fetchRange();
+  }, [fetchRange]);
+
   const targetQuery = useQuery<IPost[], AxiosError>(
     [
       'target',
@@ -248,11 +265,20 @@ function PostViewerLayout(): ReactElement {
       getNextPageParam: (lastPage) => lastPage.nextPage ?? undefined,
       refetchInterval: refetching ? 2000 : false,
       onSuccess: (data) => {
-        changeTotalCount({ totalCount: data.pages[0].count });
+        const notFilteredCount = data.pages[0].count;
+        changeTotalCount({ totalCount: notFilteredCount });
         // logMutation.mutate({
         //   task,
         //   info: 'load not filtered',
         // });
+        if (rangeFetched && notFilteredCount === 0) {
+          if (task === 'e') {
+            importExamplePostsMutation.mutate();
+          } else {
+            importTestPostsMutation.mutate();
+          }
+        }
+        setRangeFetched(false);
       },
     }
   );
@@ -315,7 +341,7 @@ function PostViewerLayout(): ReactElement {
 
   const importTestPostsMutation = useMutation(importTestPosts, {
     onSuccess: () => {
-      changeImported(true);
+      fetchRange();
       queryClient.invalidateQueries('filtered');
       queryClient.invalidateQueries('not filtered');
       queryClient.invalidateQueries('stats/filtered');
@@ -337,7 +363,7 @@ function PostViewerLayout(): ReactElement {
       }),
     {
       onSuccess: () => {
-        changeImported(true);
+        fetchRange();
         queryClient.invalidateQueries('filtered');
         queryClient.invalidateQueries('not filtered');
         queryClient.invalidateQueries('stats/filtered');
@@ -358,24 +384,7 @@ function PostViewerLayout(): ReactElement {
     setIsSearchVisible(false);
     queryClient.removeQueries('search');
     logMutation.mutate({ task, info: 'cancel search', condition });
-  }, [logMutation, queryClient, task]);
-
-  const notFilteredCount = notFilteredQuery.data?.pages[0].count;
-
-  useEffect(() => {
-    changeImported(false);
-    if (notFilteredCount === 0) {
-      if (task === 'e') {
-        importExamplePostsMutation.mutate();
-      } else {
-        importTestPostsMutation.mutate();
-      }
-    } else {
-      changeImported(true);
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [notFilteredCount, task]);
+  }, [condition, logMutation, queryClient, task]);
 
   const onChangeFpFn = useCallback(() => {
     changeFpFn(!fpfn);
@@ -470,16 +479,24 @@ function PostViewerLayout(): ReactElement {
                 </>
               )}
 
-              {/* <Button
+              <Button
                 icon={<InfoCircleOutlined />}
                 className='ml-2'
                 onClick={() => setVisibleGuide(true)}
                 data-tour='guide'
                 disabled={visibleGuide}
               >
-                {visibleGuide ? 'Opened' : 'Guide'}
+                {`Task objective for ${
+                  task === 'e' ? 'example' : 'main'
+                } task ${
+                  taskRaw === 'A1' || taskRaw === 'B2'
+                    ? '1'
+                    : task === 'e'
+                    ? ''
+                    : '2'
+                }`}
               </Button>
-              {visibleGuide && (
+              {/* {visibleGuide && (
                 <NewWindow
                   onUnload={() => setVisibleGuide(false)}
                   center='screen'
@@ -488,10 +505,10 @@ function PostViewerLayout(): ReactElement {
                   url={`/guide/${condition}/${task}`}
                 />
               )} */}
-              {/* <GuideModal
-                visible={visibleGuideModal}
-                onCancel={() => setVisibleGuideModal(false)}
-              /> */}
+              <GuideModal
+                visible={visibleGuide}
+                onCancel={() => setVisibleGuide(false)}
+              />
               {process.env.NODE_ENV === 'development' &&
                 (totalCount.totalCount !== 0 ? (
                   <Button
@@ -522,7 +539,9 @@ function PostViewerLayout(): ReactElement {
                   </Button>
                 ))}
               <Button
-                onClick={() => setIsSubmitVisible(true)}
+                onClick={() => {
+                  setIsSubmitVisible(true);
+                }}
                 className='mx-2'
                 danger
                 type='primary'

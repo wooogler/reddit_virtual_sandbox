@@ -142,7 +142,7 @@ function TargetList({
               > */}
               {condition === 'modsandbox' && (
                 <Checkbox
-                  value={viewOnly}
+                  checked={viewOnly}
                   onChange={() => setViewOnly((state) => !state)}
                 >
                   {place === 'target' ? 'Not filtered only' : 'filtered only'}

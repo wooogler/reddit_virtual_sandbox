@@ -1,15 +1,10 @@
 import { ReactElement, useEffect } from 'react';
-import { IStat } from '@typings/db';
 import { useParams } from 'react-router-dom';
-import request from '@utils/request';
 import PostViewerLayout from '@layouts/PostViewerLayout';
 import AnalysisLayout from '@layouts/AnalysisLayout';
-import { useStore } from '@utils/store';
-import dayjs from 'dayjs';
 import useLogMutation from '@hooks/useLogMutation';
 import { Split } from '@geoffcox/react-splitter';
 import { Condition, Task } from '@typings/types';
-import { stringify } from 'node:querystring';
 
 function HomePage(): ReactElement {
   // const availableCondition = ['baseline', 'sandbox', 'modsandbox'];
@@ -26,7 +21,6 @@ function HomePage(): ReactElement {
 
   // const username = data && data.username;
 
-  const { changeDateRange, imported } = useStore();
   const logMutation = useLogMutation();
   const { condition } = useParams<{ condition: Condition }>();
 
@@ -65,22 +59,6 @@ function HomePage(): ReactElement {
   //     fetchGraph();
   //   }
   // }, [changeDateRange, imported]);
-
-  useEffect(() => {
-    const fetchRange = async () => {
-      await request<{start: string, end: string}>({
-        url: '/posts/range/',
-        params: {
-          task,
-        }
-      }).then(({data}) => {
-        changeDateRange(dayjs(data.start), dayjs(data.end));
-      })
-    };
-    if (imported === true) {
-      fetchRange();
-    }
-  }, [changeDateRange, imported, task])
 
   // if (!data) {
   //   return (
