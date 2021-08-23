@@ -98,7 +98,7 @@ def apply_config(config, _posts, check_create):
     post_to_config_links = []
 
     post_config_set = set()
-    reg = re.compile(r"(\S+)\s*:\s\[\'(\S+)\'\]")
+    reg = re.compile(r"(.+)\s*:\s\[\'(.+)\'\]")
 
     for section_num, section in enumerate(yaml_sections, 1):
 
