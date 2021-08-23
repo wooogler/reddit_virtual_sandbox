@@ -84,6 +84,90 @@ def compose_line(key, match_patterns):
     return key + ": " + str(list)
 
 
+def apply_dummy_config(config, _posts, check_create):
+    code = config.code
+    yaml_sections = [
+        section.strip("\r\n") for section in re.split("^---", code, flags=re.MULTILINE) if section
+    ]
+
+    post_to_config_links = []
+
+    post_config_set = set()
+    reg = re.compile(r"(.+)\s*:\s\[\'(.+)\'\]")
+
+    for section_num, section in enumerate(yaml_sections, 1):
+        rule, _ = Rule.objects.get_or_create(user=config.user, config=config, code=section)
+        try:
+            rules = yaml.safe_load(section)
+        except Exception as e:
+            raise exceptions.ParseError(
+                "YAML parsing error in rule %s: %s" % (section_num, e)
+            )
+
+        if rules is None:
+            continue
+        match_patterns = get_match_patterns(rules)
+
+        for (key, match_patterns) in match_patterns.items():
+            parsed_key = parse_fields_key(key)
+            line_code = compose_line(key, match_patterns)
+            line, _ = Line.objects.get_or_create(rule=rule, code=line_code,
+                                                 reverse=parsed_key['not'])
+            for match_pattern in match_patterns:
+                for field in parsed_key['fields']:
+                    fields = compose_key(field, parsed_key['match'], parsed_key['other'], parsed_key['not'])
+                    Check.objects.get_or_create(rule=rule, fields=key, field=field, word=match_pattern['word'],
+                                                line=line,
+                                                code=fields + ": ['" + match_pattern[
+                                                    "word"] + "']", )
+
+        posts = _posts
+        post_rule_ids_set = set()
+
+        for line in rule.lines.all():
+
+            post_line_ids_array = []
+            posts_values = [SimpleNamespace(**post) for post in posts.values('id', 'title', 'body')]
+            for post in posts_values:
+                line_match = line.reverse
+
+                for check in line.checks.all():
+                    code = check.code
+                    post_value = get_field_value_from_post(post, check.field)
+                    matches = reg.match(code)
+                    if matches is None:
+                        raise exceptions.ParseError(
+                            "field name error in code %s" % code
+                        )
+                    obj_code = {matches.group(1): [matches.group(2)]}
+                    match_pattern = get_match_patterns(obj_code).values()
+                    regex = list(match_pattern)[0][0]['regex']
+                    match = regex.search(post_value)
+
+                    if bool(match):
+                        if line.reverse:
+                            line_match = False
+                        else:
+                            line_match = True
+
+                if line_match:
+                    post_line_ids_array.append(post.id)
+                else:
+                    post_rule_ids_set.add(post.id)
+
+            posts = posts.filter(id__in=post_line_ids_array)
+
+        posts_rule = _posts.exclude(id__in=list(post_rule_ids_set))
+        for post in posts_rule:
+            post_config_set.add(post.id)
+
+    for post in _posts:
+        if post.id in post_config_set:
+            post_to_config_links.append(Post.matching_configs.through(post_id=post.id, config_id=config.id))
+    Post.matching_configs.through.objects.bulk_create(post_to_config_links)
+    return config
+
+
 def apply_config(config, _posts, check_create):
     code = config.code
 
