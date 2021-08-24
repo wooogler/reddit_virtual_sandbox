@@ -125,6 +125,14 @@ class Log(models.Model):
     line = models.ForeignKey(Line, related_name='logs', on_delete=models.CASCADE, null=True)
     _check = models.ForeignKey(Check, related_name='logs', on_delete=models.CASCADE, null=True)
     condition = models.CharField(max_length=20, null=True)
+    test_tp = models.IntegerField(null=True)
+    test_fn = models.IntegerField(null=True)
+    test_fp = models.IntegerField(null=True)
+    test_tn = models.IntegerField(null=True)
+    eval_tp = models.IntegerField(null=True)
+    eval_fn = models.IntegerField(null=True)
+    eval_fp = models.IntegerField(null=True)
+    eval_tn = models.IntegerField(null=True)
 
 
 class Survey(models.Model):

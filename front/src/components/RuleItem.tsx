@@ -2,9 +2,10 @@ import { Check, CheckCombination, Config, Rule } from '@typings/db';
 import { useStore } from '@utils/store';
 import { ReactElement } from 'react';
 import BarRate from './BarRate';
+import PrevCheck from './PrevCheck';
 
 interface Props {
-  prev?: string;
+  prev?: string[];
   rule: Config | Rule | CheckCombination | Check;
   className?: string;
   ruleType: 'config' | 'rule' | 'checkCombination' | 'check' | 'line';
@@ -73,8 +74,12 @@ function RuleItem({
       style={{ backgroundColor: bgSelectedColor() }}
       onClick={onClickRadio}
     >
-      <div className='flex-1 font-mono whitespace-pre-wrap ml-2 text-xs'>
-        {(prev ? prev + '\n' + rule.code : rule.code).replaceAll("','", "', '")}
+      <div className='flex flex-col flex-1 font-mono ml-2 text-xs min-w-0 whitespace-pre-wrap'>
+        {prev?.map((code, key) => {
+          return <PrevCheck key={key} code={code} />;
+        })}
+        {/* {(prev ? prev + '\n' + rule.code : rule.code).replaceAll("','", "', '")} */}
+        <div>{rule.code}</div>
       </div>
       {/* {process.env.NODE_ENV === 'development' && ruleType === 'config' && (
         // <Popconfirm title='Are you sure?' onConfirm={onClickDelete}>
