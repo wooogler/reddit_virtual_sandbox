@@ -65,10 +65,7 @@ function LineAnalysis({ rule, index }: Props): ReactElement {
             key={line.id}
             header={
               <RuleItem
-                prev={rule
-                  .map((item) => item.code)
-                  .slice(0, line_index)
-                  .join('\n')}
+                prev={rule.map((item) => item.code).slice(0, line_index)}
                 rule={line}
                 key={line.id}
                 ruleType='line'
@@ -84,10 +81,7 @@ function LineAnalysis({ rule, index }: Props): ReactElement {
               <div className='font-bold'>Strings</div>
               {line.checks.map((check) => (
                 <RuleItem
-                  prev={rule
-                    .map((item) => item.code)
-                    .slice(0, line_index)
-                    .join('\n')}
+                  prev={rule.map((item) => item.code).slice(0, line_index)}
                   rule={check}
                   key={check.id}
                   className='my-1'
