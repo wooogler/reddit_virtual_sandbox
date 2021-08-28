@@ -1,0 +1,778 @@
+,id,author_name,title,body,created_utc,name,permalink,author_link_karma,author_comment_karma,score,author_created_utc,annotator-1,annotator-2,author
+6,nckzrq,imhypedforthisgame,I have an irrelevant degree (Not CS). Can I start as a web developer and transition to backend work down the line?,"I essentially want to apply as a web dev first, work as a web developer for about two years before applying for backend work. The fact that my degree is not in the applied field scares me a little though. What do you guys think?",1621032125,t3_nckzrq,/r/cscareerquestions/comments/nckzrq/i_have_an_irrelevant_degree_not_cs_can_i_start_as/,2149,16058,2,1446326152,1,1,imhypedforthisgame
+15,nci7bm,Shipwreck-Siren,Is there any way to find overlaps between non-IT/CS experience and the experience required for IT/CS jobs in order to qualify to apply for them?,"I'm currently in a state government job that I'm miserable in and I'm reaching my breaking point. I have a B.S. in Economics. I've been considering a switch to tech and am working through CS50 and then want to move onto other certifications for Linux, Networking, Systems Admin, etc. Almost every entry-level job that I'm finding is negotiable on degree and certificates, but usually requires at least 1-2 years of experience in IT settings. I know that for many jobs you can find overlaps between experience and get interviewed and even hired without having direct experience. I'm wondering if this is true for IT/CS? I saw this job posted with the state and I'm wondering if any of my experience can be applied. Is saying that I'm working through CS50 enough? What kind of non-IT/CS experience can qualify for the information security field? I feel like a lot of my current experience as a labor market analyst can meet similarities with the other duties, but I don't have direct experience in an IT setting. I've tried writing scripts to make my tasks more efficient in the little time that I have and started learning Linux last year before the pandemic started. I would like to at least try to apply but asking if you have that experience is an initial qualifier/disqualifier. I feel like I'm trapped because of how little I can devote to my certificates/training around this full-time job and it is DRAINING me after 3 years. I'm trying to stay in some level of public sector work so that makes my options more limited.
+
+&#x200B;
+
+Anyway, this is the job posting:
+
+&#x200B;
+
+DESCRIPTION OF JOB:
+
+As our Cyber Security Administrator you will take on a new environments, tools, or networks and address how to operationalize new and existing security policies, ensure new environments are compliant, you will automate scanning and logging in, and design how activities with be implemented. You will have the opportunity to work with existing tools as well as implement new tools. Additionally you will create standard controls and assist with other tasks as necessary.
+
+Some of the day to day duties include:
+
+MONITORING: 
+
+* Monitor different levels of security.
+* Ensure IT environment domains are secure.
+* Address any issues, events, incidents, vulnerabilities, or weaknesses.
+* Review daily SIEM, event detection, and endpoint protection controls logs.
+* Review device configuration change logs for any unknown device modifications.
+
+&#x200B;
+
+IMPLEMENTATION: 
+
+* Implement and follow cyber security policies, standard pools, and best practices.
+* Adjust to changing environments and ensure tools, controls, and monitoring are in place.
+* Implement best practice security controls for agency supported tools and devices.
+
+&#x200B;
+
+REMEDIATION: 
+
+* With audit findings, assist with the remediation of compliance issues and vulnerabilities that have been found via analysis.
+* Provide technical risk assessments that will inform the customer and provide a path for a secure environment. 
+* Conduct security research in keeping abreast of the latest security enclave.
+* Conduct security research in keeping abreast of latest security trends and/or campaigns. 
+
+DESIGN: 
+
+&#x200B;
+
+* Apply new security design to major known threats.
+* Track documentation of the environment and ensure that documents are being reviewed and updated. 
+* Plan, design, implement security tools, controls, and devices.
+* Review security design to ensure best security practices and department policies are being followed.
+
+&#x200B;
+
+MINIMUM QUALIFICATIONS, SUBSTITUTIONS, CONDITIONS OF EMPLOYMENT & APPEAL RIGHTS:
+
+Successful candidates for this position will possess the following skills/experience:
+
+* Two years of increasingly challenging work experience in the information security field.
+* Associates Degree from an accredited college or university in business, management, information technology, computer science, or equivalent practical experience.
+* Additional appropriate education will substitute for the required experience on a year-for-year basis, but cannot completely substitute for these qualifications.
+* Additional, appropriate paid or unpaid experience will substitute for the required education on a year-for-year basis,.
+* Training or Certification related to the work assigned to the position will be assigned credit towards substitution for experience and/or education, but cannot completely substitute for these qualifications.
+
+&#x200B;
+
+Preferred Qualifications:
+
+* Bachelors Degree from an accredited college or university in business management, information technology, computer science or related fields.
+* Strong organizational skills and the ability to handle many tasks simultaneously in a high pressure environment with rapidly changing priorities and deadlines.
+* Excellent relationship management and liaison skills, strong orientation toward collaboration and communication, ability to earn trust and respect from a challenging customer base.
+* Strong leadership, strategy and analysis skills.
+* Strong verbal and written communications skills with the ability to communicate succinctly and to specific audiences including the ability to draft clear and concise employee and customer communications as well as executive summaries.
+* Excellent customer service skills and attitude.
+* At least one professional certification to include: CISSP, CISA, CISM, GSEC, GIAC, etc. or the ability to acquire within 6 months of hire.",1621024209,t3_nci7bm,/r/cscareerquestions/comments/nci7bm/is_there_any_way_to_find_overlaps_between_nonitcs/,418,307,0,1587252919,0,1,Shipwreck-Siren
+16,nci3mb,courtois26,Prospects for STEM PhD dropout going into Industry,"I am currently pursuing a PhD in maths at a top school in the US. However, this might not be the correct path for me, since I don't have the passion for research and academic pursuit that my peers have. Therefore, dropping out and getting a CS (or Finance) job has become a serious consideration for me.
+
+I'm currently finishing up my 2nd year, so ideally I would apply for jobs and dropout before the end of my 3rd year, since I don't want to dropout without an offer already. What do you all think my prospects are? ***I'm specially worried*** that companies won't want me because they might think: ""this person has no perseverance since they committed to a PhD but ended up dropping it"" or ""this person is too dumb for us since they couldn't even exit their PhD program with a Masters"". Is there a standard way of saying you're planning to dropout (in your resumé or during interviews) without sounding like a quitter?
+
+If you are wondering, here is a bit more about my background. I did by undergrad in pure math at a top school in the US and went straight to my current PhD program after that. ***I have no internships*** or previous experience (in CS or finance) except for a quantitative trading internship this summer at a top firm. My coding is decent (Python and C++, I can do LeetCode or CodeForces problems) but I don't have any projects to prove it. Should I focus on doing some coding projects and posting them on my website, to prove that I have the basic hands-on skills required?
+
+Thank you very much for your help!",1621023938,t3_nci3mb,/r/cscareerquestions/comments/nci3mb/prospects_for_stem_phd_dropout_going_into_industry/,2,4,2,1615753834,0,1,courtois26
+25,ncgykz,JWIV06,I want to work while traveling.,I don't want to stay in the same place for an extended period of time. So to me a career in computer science looks like the solution to my problem. I don't really know where to start... at all. What should I know?,1621020849,t3_ncgykz,/r/cscareerquestions/comments/ncgykz/i_want_to_work_while_traveling/,870,2895,0,1569457825,1,0,JWIV06
+40,nccj4b,TerranToplaner,Any tips for selling myself to companies?,"I don't have any formal education nor experience, but I know how to code. I'm going to go ""door by door"" asking companies to give me a chance, offering to work for free for one or two weeks or so while they test me out.
+
+Are there any more things I can do to maximize the possibilities of me getting a job? There's a limited number of companies in my town so I don't want to be wasting chances. Also should I have a big GitHub portfolio? And I don't know what type of companies to go to, I don't think Tires Waldo is going to need a programmer, but in case of a bigger company, I don't think the programmers are going to be here in this town. I could move though, that's not completely out of the question.
+
+I just need an lnterview and a few days to show that I have the skill set.
+
+For reference I live in Spain, last time I asked something like this and I didn't say it one guy got very mad",1621009275,t3_nccj4b,/r/cscareerquestions/comments/nccj4b/any_tips_for_selling_myself_to_companies/,28,6,0,1609441180,1,1,TerranToplaner
+62,nc2vxl,komalmaheshwari,Can a commerce student become software developer?,"Hi everyone!
+
+My brother, who is pursuing his B. Com, is interested in become a front-end developer . He has good knowledge of HTML and CSS and have started with Javascript and React recently. Although, all of this can be learn online and via end to end projects, I was looking for some options available in getting a B. Tech equivalent CS degree as an education qualification as this is one of the mandatory requirements in many companies.
+
+If anyone of you here is aware of the process/path we should follow, please guide us.",1620977540,t3_nc2vxl,/r/cscareerquestions/comments/nc2vxl/can_a_commerce_student_become_software_developer/,1,0,0,1595590808,1,1,komalmaheshwari
+68,nc0pqb,jeun_us,Breaking into CS after first job,"Hello everyone,
+
+I am currently graduating undergrad with a double major in business administration and sustainability. I’m going to work for a large financial institution doing real estate investing; but, this past year I have become extremely interested in comp sci after teaching myself some web dev material and taking a python class both at university and online.
+
+Obviously, my job does not relate to computer science at all, but I am extremely interested in continuing my CS education. How common is it in the industry to enter the field after a few years of working in another, unrelated industry? Is it most common to find a grad school that accepts students without CS backgrounds, or is it best to teach yourself and apply from there?
+
+Any personal experience or advice you have is greatly appreciated! Btw, 
+I am on mobile so please excuse any formatting errors.",1620968190,t3_nc0pqb,/r/cscareerquestions/comments/nc0pqb/breaking_into_cs_after_first_job/,63,58,2,1570311150,1,1,jeun_us
+73,nbzmnl,Single-Man,What does it take to be a quant developer at a company like Citadel And Two Sigma?,"I'm switching from my sys ad job to a Python developer job soon. I figure if I build several years of dev experience under my belt, in a few years I can go back and get an MS in CS. (My bachelors is in economics btw). Down the road I'd love to work as quant developer at a firm like Citadel or Two Sigma. I plan on learning a lot more math along the way along with C++ and perhaps get a CFE as well.
+
+Some grad programs I was looking at :
+
+Columbia MS in CS or MFE (Doubt i can get into tbh), 
+
+NYU MS in CS or MFE
+
+George Washington MS in CS
+
+UT Austin MS in CS
+
+Cornell MS in CS
+
+UVA MS in CS
+
+&#x200B;
+
+Kind of just looking for CS career guidance from you lovely folk of reddit.",1620964158,t3_nbzmnl,/r/cscareerquestions/comments/nbzmnl/what_does_it_take_to_be_a_quant_developer_at_a/,3,0,2,1584572080,0,1,Single-Man
+116,nbndvk,DrSomm,What should my path of education look like with no college degree and no prior coding experience?,"I'm currently in the wine industry and the past year has shown me how volatile my industry can be, so I'm looking to start a career in programming. I've been researching for a few hours and I haven't really gotten anywhere in regards to the most efficient way I should be learning. When I originally taught myself about wine I spent way too much time learning things that weren't relevant at all, like maximum residual sugar levels of obscure wine regions. I want to make sure I don't make that type of mistake again, and it seems easy considering how many free resources are out there.  
+
+
+Potentially relevant information:
+
+* I have no college degree, but I did spend some time attending a tech school for IT-Networking.
+* I'm technologically inclined. I have a relatively firm understanding of how operating systems work and how to utilize some technical features. 
+* I don't have a history of being very good at math, but that could be due to the quality and/or lack of teaching on the subject. 
+* I have a lot of free time.  
+
+
+Questions I have:
+
+* My brother is an IT Director and therefor has friends in the industry, but too busy to answer many questions. From a brief interaction I was told my career path depends on what ""stack"" I want to learn, and whether or not I want to work on the design or engineering side. **What is the most widely desired ""stack""?**
+* I don't want to necessarily limit myself on my journey through education by focusing on either engineering vs. design, but... **Which ""type of programming"" is more in demand with the greatest potential of growth?**
+* **What should my path of education look like, including examples to use in my resume/job interviews that compensates for the lack of degree?**
+* **What kind of entry-level jobs could I expect with the education that is recommended to me by you, including pay range?**
+* If it's possible to answer, **What does an average day look like for you?**
+* **Is remote-work significantly more common, and will it remain that way for the foreseeable future?**  
+
+
+Thanks in advance for your time.",1620929953,t3_nbndvk,/r/cscareerquestions/comments/nbndvk/what_should_my_path_of_education_look_like_with/,470,12439,2,1449246989,1,1,DrSomm
+136,nbhjy2,MrSirDuckDude,Struggling to secure a software engineering job with my mostly self-taught background and looking for advice,"TL;DR: I've been transitioning to programming just from my own self-studying and guidance from my mentor, and I just wanted to get some feedback since I've been getting very antsy about securing a job. I have about 8 months of informal experience working with JavaScript/React, although I've been doing an internship for a month so far at a brand new start-up working on the MVP for a React chat app. Can I get a full-time (ideally tech) job with this kind of background? Any tips on how I can make that happen? I do have a mechanical engineering degree and some years of experience there, but yeah trying to switch to coding, which so far I like a lot better.
+
+Full background:
+
+I started learning JavaScript basics at the beginning of 2020 to get ready for a coding boot camp, but then the whole pandemic thing happened and I felt less inclined to do the boot camp's remote program. Fortunately, I had a close friend who's a Software Engineer and also had prior experience teaching at a boot camp, and he offered to teach me personally as my mentor. He put together his own curriculum tailored for me based on what he thought would be most beneficial, starting with some cs fundamentals, then more web fundamentals, and then finally putting together an actual web application with React. I spent a lot of time building it under his guidance, really making sure to have a polished final product for my portfolio and resume (you can check it out here if you like: [https://www.rolemate.io](https://www.rolemate.io/jobs))
+
+With that experience, I was fortunately able to get a Software Engineering internship at a startup, where we're working on the very early stages of an app creating the MVP for a social app. It's been pretty good React experience as well as I've been working on new features with the guidance of the Senior Software Engineer.
+
+And of course, I've also been practicing with algorithms (my least favorite part) with an online course and just grinding away on different problems and mock interviews. This part is probably my weakest area and I'm still struggling to get solutions consistently.
+
+And that's pretty much where I'm at. I've been sending out a BUNCH of applications but haven't gotten a single response besides the internship. Is there any hope for me with my unconventional background?? I'd appreciate any feedback and insights!",1620915118,t3_nbhjy2,/r/cscareerquestions/comments/nbhjy2/struggling_to_secure_a_software_engineering_job/,40,330,3,1541194639,1,1,MrSirDuckDude
+138,nbhdse,ougly,Late 20s woman looking for advice on switching careers into CS,"Hi all, 
+
+&#x200B;
+
+I've always had an interest in programming but for whatever reason didn't go to school for it. I think when I was younger I just didn't know what I wanted to do with my life and it was hard to choose from all the options available to me. Also, I was terrible at school and ended up dropping out anyway. It's not that I'm dumb, I've just always found it hard to focus in school. I may have some undiagnosed ADHD and other illnesses that I'm going to therapy for now though. 
+
+&#x200B;
+
+Currently I work for a company as their sole Tech Support person. I'm feeling really burnt out lately and realized I don't want to do this for the rest of my life. I'm looking into either going back to school or attending a bootcamp. I'm not sure what to pick. 
+
+&#x200B;
+
+* If I went to a university I'd have to take out a loan (if even possible with my credit score). I'm planning on buying a house soon so that will probably drop my score even more. Not sure if that affects getting school loans at all. 
+* I suck at math. Are there any CS degrees with less complex math or are they all kinda the same? I will 100% try to apply myself regardless but... yea. 
+* What remote-learning schools do people recommend?
+* What bootcamps do people recommend/have had success from? Did you have any prior education before the bootcamp?
+
+&#x200B;
+
+I think that's pretty much it for my questions. Thanks!",1620914638,t3_nbhdse,/r/cscareerquestions/comments/nbhdse/late_20s_woman_looking_for_advice_on_switching/,360,674,3,1548167851,1,1,ougly
+145,nbdc3t,Shlingdill,What ways are there to make money as a undergrad,"Hello, first of all id like to say this is not some unrealistic dream I’m looking for. Rather id like to know about any ways people made money from their coding abilities before actually graduating from uni and getting a full time job. As an undergraduate i find it frustrating that i know so little about the industry in the real world and this makes it genuinely difficult to wrap my head around what consumers are actually willing to pay for when it comes to software development and more importantly how much they will pay.
+
+During my summer break I’d genuinely like to try out ideas to make some coin but at the moment I’m more or less clueless. If people could share stories of how they made money or if you think its even possible without having your degree I’d really like to hear them! Thanks!",1620901024,t3_nbdc3t,/r/cscareerquestions/comments/nbdc3t/what_ways_are_there_to_make_money_as_a_undergrad/,14,0,1,1587931823,0,1,Shlingdill
+146,nbclsr,JM1210,"I'm getting in to programming and I want to have a career in IT. I'm thinking of doing a single-year IT course at uni but I don't know if there are quicker/more effective choices out there, please help! (UK)","Hi everyone,
+
+I have done a year as a business analyst when I took a year-break in the middle of uni; before I completed my degree in economics just a couple weeks ago.
+
+I would like to get another job in IT and I'm moving to an area with a large concentration of them. I wouldn't mind going back in business analysis but if I had the capability I'd be up for becoming a jrdev or a solutions architect. So the past few weks I've been teaching myself python on LinkedIn learning.
+
+I want to have *some* qualification in IT/CS as something official I can show employers. I'm blessed to say money is not an issue, so I'm considering doing another year at an online uni to study IT which will give me a respective accreditation (certificate of higher education).
+
+Is there some other place I can get a respectable enough qualification in IT - more specifically in but not limited to programming - more easily and cheaply that I will be able to put on my CV? Is there anything else I should consider/ is a good shout?
+
+Thank you and please be gentle in your comments. Forgive me for both posting on here and the uk sub which is regretably underused.",1620897906,t3_nbclsr,/r/cscareerquestions/comments/nbclsr/im_getting_in_to_programming_and_i_want_to_have_a/,10073,2632,0,1315078141,0,1,JM1210
+160,nb8ges,Project-Pseudonym,Software Engineer vs Dental Hygienist,"I'm 28 male, almost 29, and I'm having trouble choosing between Software Engineer and Dental Hygienist. I'm at a point in life where I need to choose a career that'll last until retirement. I took software engineering bootcamp so I at least know the basics but never did anything more than entry level. If I pick Dental Hygienist, it'll take about 3 \~ 4 years of schooling (community college) before I earn Associate's Degree so I can start the job. Which one should I pick?
+
+Between More Money vs Less Stress, I much prefer Less Stress even if I get paid less. I heard Software Engineer often have to work overtime or 40+ hours to meet deadline. Whereas Dental Hygienist doesn't have to work Monday \~ Friday or bring the work home. I'm fine with not making as much money so long as I can comfortably live middle income lifestyle but much prefer if I can have time for myself. I just don't want to spend my life chasing after money like a slave and actually spend time with my family and pursuing my hobbies.
+
+How difficult is it being a Software Engineer? How stressful is it? Do you wish to change your career? I hear many people who change their career away from software engineering to something else, why?
+
+Please advise me.",1620880391,t3_nb8ges,/r/cscareerquestions/comments/nb8ges/software_engineer_vs_dental_hygienist/,8,15,0,1613707394,0,1,Project-Pseudonym
+161,nb7yhm,ScrapDraft,Am I out of my depth?,"A bit of backstory. I'm 28 years old with an unrelated bachelor's degree. No prior CS experience, but I'm looking to make the switch to software engineering. I've been taking CE courses for a bit over a year now with the goal of getting a software engineering certification from the university I'm attending.
+
+Everything I've learned so far in the 3-4 classes I've taken has been restricted to a single coding language. I've chosen Python. I've come a long way and it's been a challenge getting as far as I have. I'm confident in my Python skills and know that I can program pretty much anything the language allows me to if I can do a bit of research. 
+
+But then I go to look for requirements for entry-level software engineers. And programming in a single language is 1/10th of the requirements they're looking for. Most want you to be familiar with full-stack design. Comfortable in multiple languages. Familiar with both scripting and compiled languages. Proficient in databases. Networking. Familiar with a bunch of third-party tools that I've never heard of like WireShark or SoapUI.
+
+It's so incredibly demotivating. It feels like I spent the last year and a half checking off ONE of TEN boxes that employers want in an entry-level employee. Is this normal? Should I be approaching it a different way? I'll be out of a job in January and was hoping to make the jump at that time. But it feels like I won't be ready for another ten years.",1620878533,t3_nb7yhm,/r/cscareerquestions/comments/nb7yhm/am_i_out_of_my_depth/,4274,6176,0,1443203282,1,1,ScrapDraft
+169,nb65k0,snowolf96,Is getting a file maker job a bad idea?,"I’ve been teaching myself programming for a couple years now and I have a couple projects on my portfolio. I don’t know if I’m good enough to get a job yet. I was thinking in the mean time I could try working as a FileMaker developer at the company my brother works at. At this point I’ve been trying to learn file maker as well as improving my portfolio. 
+
+Do you guys think getting a file maker job would be a good career choice even though it’s not traditional programming?
+
+My other option would be to continue living off savings until I’m good enough to get a web dev job. 
+
+Or go back to working at a non tech related job, which I really don’t want.",1620872567,t3_nb65k0,/r/cscareerquestions/comments/nb65k0/is_getting_a_file_maker_job_a_bad_idea/,70,77,1,1579378588,0,1,snowolf96
+170,nb5qa8,Faceprint11,Are CSC degrees applicable in practice?,"I have an entry level knowledge of coding through my undergraduate university requirements, but I can only write rudimentary programs and functions. Would a computer science degree give me the education to write apps? Or is formal education just way behind in terms of applicable programming?
+
+I would eventually like to write a personal finance type of app.",1620871319,t3_nb5qa8,/r/cscareerquestions/comments/nb5qa8/are_csc_degrees_applicable_in_practice/,343,4617,1,1508003244,0,1,Faceprint11
+172,nb51zy,Froggin80,Similar Level of Demand between Programming and IT?,"How similar are IT to Computer Science?  I ask because after I completed the Google IT Support Certification last year, I was wrestling a lot with whether to actually transition out of librarianship into IT.  Eventually, I met with one of my pastors to get his advice, and he advised me that if I wanted to be a writer (still do), I should probably stay away from IT because the amount of work required to succeed on Help Desk while trying to advance beyond Help Desk would leave me too drained and burnt out to pursue writing (he said this based on people he knows in the IT field).  I recently stumbled across Free Code Camp and thinking about pursuing their training at least as a hobby, if not as a way to transition into a programming career.  My question: were I to pursue it as a way to transition into a programming career, would I find programming to be just as demanding as IT?  Thanks in advance for your help!",1620869243,t3_nb51zy,/r/cscareerquestions/comments/nb51zy/similar_level_of_demand_between_programming_and_it/,43,1,2,1594688588,0,1,Froggin80
+190,nb0sig,mindthetide,Looking to get out of customer service possibly into CS,I tried to search for anything relevant and I couldn’t quite find anything. I graduated with a business degree in information management and a theatre degree in 2015. My first job was data entry for machine learning systems that had zero tech knowledge or need despite what one may think. I was just teaching the machine how to do it’s job. Had a car accident and had to move home and quit. Which was fine because that job became very boring and repetitive. I became a bartender to pay the bills and be part time. I now have a full time job working at a vacation rental company working with damages to homes and credit card disputes. I answer phones and emails all day and I am sick of being screamed at by the general public and I am just not very into human interaction. I’ve read up and watch videos on coding in general but I have zero ability to code.  I want to move towards a more technical job but I am unsure how to proceed based on my specific background. I am constantly praised as being a top performer in my jobs but the money is always very low pay. I’ve looked at boot camps and masters degrees but I feel my complete lack of knowledge is a barrier. I am very good at following a given course but my ability to self teach is very poor as I want to ask too many questions before I even start. I am asking for advice on my next step to moving into a more technical role using code.,1620857193,t3_nb0sig,/r/cscareerquestions/comments/nb0sig/looking_to_get_out_of_customer_service_possibly/,335,272,0,1385841702,1,1,mindthetide
+197,naz3zg,IllLog6452,QA to Product Manager?,"I want to eventually become a Product Manager. However, I have no CS degree. I have bootcamp experience and I got an offer to be a QA for Epic Systems(Health IT). Should I go take this route, stay a year and then try to enter Product Management? Will taking up the QA position be a good stepping stone to PM?",1620852775,t3_naz3zg,/r/cscareerquestions/comments/naz3zg/qa_to_product_manager/,16,6,3,1608483080,0,1,IllLog6452
+199,nayudk,haladri,"B.S. in Sociology, interested in Front End Development","Hello!
+
+Basically the title. I have an undergrad in Sociology from ASU. I took a couple of web development and UX design courses (but not enough to really know anything). I’m interested in pursuing a career in front end development, but I’m wondering which is a better option to pursue in order to actually find a job.
+
+1) Bootcamp
+2) College certificates in UX and front end development 
+3) Masters degree 
+4) Self-teach.
+
+Money isn’t necessarily a problem, but I want to pursue the option that will allow me to actually get a job (there definitely isn’t a huge field for sociology, lol, at least none I’m interested in).
+
+I will take any advice or recommendations you guys have.
+
+Thanks a ton",1620852081,t3_nayudk,/r/cscareerquestions/comments/nayudk/bs_in_sociology_interested_in_front_end/,53,7,0,1593736066,1,1,haladri
+201,naynr9,swisswatch97,"Internship offer with < 1 year coding experience, will it set me up well going into the future?","I graduated undergrad a year ago with a humanities degree and no coding experience and enrolled in a post-bac program that leads into a masters. Most students in my program do the 2 semesters of post-bac classes and then 2 semesters of masters level classes before pursuing an internship but I was anxious to start getting some enterprise experience before deciding what the focus of my masters degree would be so I pursued an internship earlier and very fortunately received an offer at what seems to be a cool company with decent compensation. 
+
+My programming skills are fairly good but I have spent little time immersed in the CS world so I am not sure what to be looking for in a job. I am of course grateful to receive an offer at all but I am curious what kind of skills I can expect to build and how marketable they might make me in the future based on this job description. 
+
+The company essentially builds software for clients in the industrials space with a broad range in what this means project to project. They are growing rapidly and would like to standardize the development process across teams and projects. To this end, they are developing an app using Microsoft Dynamics 365. I would be working on this project helping to create a suite of tools to aid the development process. During the course of my internship, they said I would gain experience in the following:
+
+\- Using windows power apps
+
+\- Working on the low-code side
+
+\- Working on the JavaScript side
+
+\- Creating high-code solutions
+
+\- Creating documentation to aid in the standardization of the development process
+
+I am excited to begin but I was wondering what other people's thoughts were on the job description.",1620851591,t3_naynr9,/r/cscareerquestions/comments/naynr9/internship_offer_with_1_year_coding_experience/,2568,11671,0,1560979151,0,1,swisswatch97
+211,navbji,micreme,No CS degree. How did you land a job?,"This post is certainly for those who haven’t pursued a degree in CS or a degree at all. 
+ 
+- How did you do it? 
+- Was it easy? 
+- What was so important for you to know in order to get a job? 
+ - What language did you learn? 
+- Do you regret not getting a CS degree?
+
+Share your experience with me!",1620843025,t3_navbji,/r/cscareerquestions/comments/navbji/no_cs_degree_how_did_you_land_a_job/,1,17,0,1620414257,1,1,micreme
+214,nauo77,Professional_Ebb9382,Wealthy NonCS Candidates Getting Top Software Engineering Jobs,"Hi,
+
+So I am low income, first generation about to graduate with a CS BS and the interview market has hit hard. I have a 3.9 GPA from a top 50 CS school and have prepped well but it seems like CS was just a huge waste of time.
+
+I go on LinkedIN and see all of these ""software engineers"" at these top companies and all I see is that they studied at top 10 schools studied a major completely abstract something like Industrial Engineer, Physics, Biology, even seen Art, and I'm assuming that they could not find jobs in their majors so they instead go into the software engineer route. They suddenly go from being a Masters + PhD in biology to a software engineer at FAANG within a year and in a way it frustrates me to know that these wealthy candidates only got into these top companies because they can afford to buy the resources, all the coursera courses they want, pay for a bootcamp, or CS MS, it's truthfully unfair.
+
+I know I shouldn't judge but I truly am passionate about CS and to see wealthy candidates with no passion for CS (otherwise why wouldn't it be their undergrad?) switching to Software Engineering at FAANG companies immediately within a year through different means (e.g. references, family, wealth, buying resources, etc) and get in without having to even study CS is simply unfair.
+
+How do you guys feel about this? I feel like CS should just be removed completely, feels like I wasted 4 years where someone who is in a completely irrelevant major can just switch into a top paying FAANG job in 6 months.
+
+&#x200B;",1620841427,t3_nauo77,/r/cscareerquestions/comments/nauo77/wealthy_noncs_candidates_getting_top_software/,1,61,0,1617650729,0,1,Professional_Ebb9382
+226,naqahw,arfgengraoi,Is it possible to find a job in the IT field if you don’t have a relevant degree?,"Hi guys! I’m studying business and marketing, and I’m in my final year. I know it might seem that it is a little bit late, but I suddenly realized that I don’t want to study business and marketing anymore. Besides, it will be hard to find a job in this field. However, there are a lot of job opportunities for those who have a degree in computer sciences.
+
+&#x200B;
+
+I realized that the employment market is quite competitive at the moment, and it’s hard to find a job with my degree. There is tough competition even for a place in an unpaid internship. I have no idea why did I choose this pathway. My parents don’t have their own business, compared to some of my classmates. I think back in time, I applied for something that might be easier for me. Now, I feel like I’ve wasted my time and money. Perhaps, I shouldn’t have studied economics, and maybe I wouldn’t have even noticed my epic mistake.
+
+&#x200B;
+
+I see that my mates from my dorm, that study IT, already found some part-time jobs in their field, and they are just in their 2nd year of study. They’ve learned everything at college, and now they can make some good money on what they’ve learned. While I’m struggling to find an unpaid internship with my degree, I will graduate with honors if I do good on my finals.
+
+&#x200B;
+
+When I look for some jobs online, I see that almost every company requires an IT specialist and pays good money. While there are no offers for business and marketing graduates. I’ve reached that point when everyone needs some work experience, but no one wants to hire me so I can get one. This situation became so ridiculous, so I even found a meme based on it.
+
+&#x200B;
+
+&#x200B;
+
+In the meantime, one of my friends sent me this link — [https://www.cardinaldigitalmarketing.com/services/seo/](https://www.cardinaldigitalmarketing.com/services/seo/) and told me that I can find myself doing SEO. I wonder what do you think about it? Is it possible to do something in the IT field with a business and marketing degree?",1620830447,t3_naqahw,/r/cscareerquestions/comments/naqahw/is_it_possible_to_find_a_job_in_the_it_field_if/,191,120,13,1610635141,1,1,arfgengraoi
+258,nacopg,renoreaper,Struggling to switch from tech consulting to software dev,"Hi All,
+
+First post here, apologies if anything isn't in order.
+
+I wanted to get some input/opinions on my situation from all the good folks here, as I've been trying to make this switch for a while now. Here's my situation:
+
+
+- background/backstory (feel free to skip)
+I'm in my early thirties, have worked almost a decade in tech consulting (implementing/configuring SQL-based tools for things like sales management and accounting). In that time I worked mostly as an individual contributor, with a few years as lead consultant for some bigger projects (switched back to single contributor after a mini-burn out and deciding that being in meetings/writing email all day wasn't for me).
+
+I studied computer science in college back in Europe (about a decade ago) and am currently living and working in Toronto, Canada in consulting for a large organization (I actually quite like the company, I started here about 2 years ago, they have decent benefits/pay, though lately things have been changing slightly for the worse I find).
+
+- challenge/goal:
+I would want to switch to software development, my degree focused on this moreso, but due to circumstances and emigrating I kind of ended up in consulting. I'm finding it particularly challenging to find time/motivation to do side projects and coding after a full day at work (and I probably have some covid fatigue I think, measures downtown toronto have long been quite strict). In terms of prior coding experience: I got a Java certification a few years back and I have played around with  variety of language (Python, Java, C#, Cobol, Javascript etc.), but I find I'm lacking in recent and real world experience (as well as some of the supporting tools and technologies, things like Kubernetes or getting fully up to speed with AWS/Azure and microservice architecture).
+
+I've spent the last few years thinking about making the switch, but have always come up lacking on the execution and I REALLY want to change that. However, I also know that doing this as a side project after work every day is quite likely to fail. For this reason I was thinking of enrolling in one of the coding bootcamps available here, they're quite pricey but I think it might be the fastest/surest way for me to get into a dev role sooner rather than later, which will ultimately help with me develop the required skills further (I like/enjoy studying and learning as part of a job and think I'm quite good at it). My question is what would you do in my situation? Any specific suggestions/ideas or any glaring oversights/flaws that you see with my approach? Also: any experience (attending or hiring from) any of the specific coding bootcamps in Toronto is also most welcome!
+
+Thanks all,
+
+R",1620781385,t3_nacopg,/r/cscareerquestions/comments/nacopg/struggling_to_switch_from_tech_consulting_to/,434,339,7,1440033191,0,1,renoreaper
+270,nabdks,myronsandee,What's the most attainment tech career to get into for a tech-savvy business person?,Aside from web/front-end developer.,1620777269,t3_nabdks,/r/cscareerquestions/comments/nabdks/whats_the_most_attainment_tech_career_to_get_into/,1301,358,1,1614437110,0,1,myronsandee
+293,na5rg4,Safe_Pomegranate1672,CS degree or foreign experience to get a dev job in USA?,"Hi, I searched through the FAQ before posting, but I don't think I have seen a question of this sorts. If I'm wrong please let me know. I appreciate your help!
+
+I am a 23 year old Russian-American with dual citizenship. I am considering a move to Russia for a web development bootcamp( HTML, CSS, JavaScript, React, Express, SQL, Node.js) and then working for a company in Russia for 6mo-1yr. 
+
+I majored in business from Rutgers in December 2020, and I have been working for over 2 years now as a finance/data entry worker for a reputable software company. I don't enjoy the work.
+
+I've been learning Java since last year and would like to learn web development to gain experience through a job and build my own personal projects. I also want to reconnect with my family/language so I feel this is a win win for me.
+
+ I'm confident I can get a job in Russia, but the salary is significantly smaller so I'd like to move back to USA **later** for financial security. 
+
+My question: Should I get a dev job in Russia and build experience there, or should I just head back to Rutgers for a CS degree.
+
+tldr; CS degree or foreign experience to get a job in USA?
+
+Thank you for reading and I appreciate your time.",1620762226,t3_na5rg4,/r/cscareerquestions/comments/na5rg4/cs_degree_or_foreign_experience_to_get_a_dev_job/,1,1,2,1620757275,0,1,Safe_Pomegranate1672
+297,na3z4d,Detroit3_1_3,Can you guys please help with whether I should accept or reject the current job offer?,"  
+
+Hello, I am a student Intern working part-time for the State government. I will be graduating with a BBA concentration in information technology management in November 2021. My internship ends when I graduate. I was looking around for jobs that will help me utilize skills that will help open up doors in getting a position related to my business degree, I applied for the position of Customer service representative II for a logistics company. I interviewed and a week later I received a verbal job offer. I am not ready to accept and asked them to give me a day or two to think about it. 
+
+   
+ 
+
+&#x200B;
+
+1. Can you guys please help me decide whether this      position will help add any value to my skills for someone who wants to      pursue a business-related career? 
+
+   
+ 
+
+2. The position will allow me to utilize Microsoft Power BI, Is this one of the software that will add to my skills as a business analyst in the future? 
+
+   
+ 
+
+3. If I choose to decline the offer will I be banned from applying to other positions in the same company in the future? 
+
+   
+ 
+
+4. What if I accept the offer and then get an offer from other jobs I have interviewed for, will it be unethical if I work for a week or so and leave if there is a better offer from another company? 
+
+   
+ 
+
+Thank you in advance!",1620757876,t3_na3z4d,/r/cscareerquestions/comments/na3z4d/can_you_guys_please_help_with_whether_i_should/,29,8,1,1620713373,0,1,Detroit3_1_3
+301,na292g,BEAT_LA,"Knowing the issues with Revature, are there any similar firms without the shady tactics? Moving to Houston TX soon.","A simple search of ""Revature"" here tells me all I need to know, of course I will avoid them. However, I'm moving to Houston TX soon and am looking for entry level positions there. I've worked IT/helpdesk/networking stuff for a few years now and have been learning some python/javascript in my spare time with one or two finished projects and a whole bunch of unfinished ones.",1620753645,t3_na292g,/r/cscareerquestions/comments/na292g/knowing_the_issues_with_revature_are_there_any/,7507,24673,1,1369284808,0,1,BEAT_LA
+311,n9zalr,Alicizations,Best way to catch-up as a non-traditional? Computational/ optimization problems,"My background is mech. engineering, but my new job is mostly programming for engineering purposes. There is a lot regarding computational problems with uncommon algorithms and optimization problems. 
+
+I have not taken any OOP or Data Structures/Algorithms courses. I have only taken analytical courses employing basic ML in R and Python (linear and functional programming). How can I prepare myself for what I may face in my new role? 
+
+My mentors send me research papers to understand the concept, but the coding is complex for me.",1620745993,t3_n9zalr,/r/cscareerquestions/comments/n9zalr/best_way_to_catchup_as_a_nontraditional/,1438,1954,3,1360898964,0,1,Alicizations
+313,n9yxjg,VegaGT-VZ,Sr Financial Analyst ---> ETL Developer growth potential?,"I get to do a good bit of VBA and SQL programming in my current role as well as some Power BI and Alteryx dashboard stuff. It looks like I'm getting to the top of the pay range for this role in my area (\~$90-100K). I don't really want to get into management. Is there more salary growth potential as an ETL developer?
+
+Also what roles and languages would line up well with my skills/interests? Again I enjoy working with data. I know for example I need to learn Perl for string manipulation. I will brush up on Python as well.",1620745075,t3_n9yxjg,/r/cscareerquestions/comments/n9yxjg/sr_financial_analyst_etl_developer_growth/,2928,41939,1,1559312454,0,1,VegaGT-VZ
+314,n9yk8n,Different_Property_3,Career Pivot Questions,"Hi everyone! Looking to make a career pivot into web development. Unhappy in my current career path - overworked in a toxic environment. Only 2 years out of school but web development and coding seems like a cool/rewarding career. Currently trying to find a role that affords a better work/life balance so I can teach myself HTML, CSS, and JavaScript in my spare time. 
+
+I understand that this will take 8-12 months with a full time job before I can reasonably make a pivot into web development. I’ve started learning through FreeCodeCamp. 
+
+I have a few questions:
+
+Will I be prepared for an entry level job in the industry after completing the courses through this program? 
+
+Do I need a portfolio of side projects I’ve done over these 12 months? 
+
+What is a reasonable starting salary for entry level web development in NYC? (I know I’ll probably be taking a decent pay cut here)
+
+How long is a typical tenure at an entry level position before moving on if internal advancement isn’t attainable?
+
+My goal is to gain experience in an entry level / junior role and eventually become a full stack dev (starting with Python after html, css, and JavaScript). New to the industry and looking to learn. 
+
+Any advice would be greatly appreciated!",1620744107,t3_n9yk8n,/r/cscareerquestions/comments/n9yk8n/career_pivot_questions/,20,18,9,1617671412,0,1,Different_Property_3
+317,n9xob5,23Boolin23,"How to transition from ""Shadow IT""?","I have been in Supply Chain for about 4 years now, doing very shadow IT type work - mainly solving business problems using a dedicated SQL server getting direct data refreshes directly from the ERP system.
+
+I'm very good with SQL scripts and have done a lot there. At my first company, I made an  order recommendations system which our inventory planning team was using instead of SAP APO. Also lots of reporting stuff in Tableau. Also did some data analytics stuff for forecasting using python and R. 
+
+At my current company I am doing similar stuff, also setting up data structures for Power BI reporting , creating forecasting solutions, automating reporting stuff using SSIS... 
+but I now have a Manager title and am making about 115k per year.
+
+The problem is that I don't know where to go from here.... I am not really a ""business side"" person, more of a keyboard warrior. But I'm not really an IT person either...and don't have the experience to qualify for an IT role make the same salary. 
+
+Thought about going the data science route as i have a background in statistics, but it's not really my thing. I was accepted to a master's program for data science at a very good school , but decided to drop out because I'm working full time and the lack of free time was very bad for my mental health.... But I do have the technical aptitude for the python and R programming that was involved.
+
+I'm really hoping to see if I can make the transition into IT but keep my salary at least close to what it currently is...I know I could get an entry level job but I can't afford the pay cut. 
+
+Does anyone have some advice on how i may leverage my current experience and position to make the career switch? Any recommendations for a good related discipline to study and pursue to maximize my chances?",1620741675,t3_n9xob5,/r/cscareerquestions/comments/n9xob5/how_to_transition_from_shadow_it/,91,162,3,1600174540,0,1,23Boolin23
+324,n9ux80,cehrj,"How true is ""No one cares about your degree after you got your foot in the door.""?","I know that there are lots of non-cs graduates working as a developer and doing fine but I'm starting to think that my non-cs/engineering degree would make me disadvantaged when searching for jobs even if I have couple years of work experince on my resume. 
+
+I'm going to start a math major next year. I'm sure that I want to work as a software engineer(not a data scientist) and I have opportunity to study cs and I'd like it but not as much as math and I really want to major in math instead of cs. And double major is not a choice in my uni(I don't live in US). Getting masters in cs after bachelors is a choice but it is very difficult to get a high gpa in math in my uni, on the contrary it is easy to get a high gpa in cs... 
+
+The rational choice here is to study cs, definitely, but really, how much do I need to choose the rational way to get what I want(having a stable and high-paying software engineering career)? 
+
+I'm aware that wasn't a clear text but my thoughts aren't too :/ 
+
+I'd like to hear your thoughts, please.",1620732799,t3_n9ux80,/r/cscareerquestions/comments/n9ux80/how_true_is_no_one_cares_about_your_degree_after/,20,49,34,1589461083,0,1,cehrj
+326,n9t540,Saiya_Cosem,What would my chances of getting a cs-related job with humanities major and c.s minor?,"I got accepted to a college as a transfer applicant for a history major and I don't think I'll be able to switch to a c.s major, which was my first choice. If I am able to have c.s be my minor and got experience, what would my chances of getting a c.s job be? How about for something specific like web development?",1620725726,t3_n9t540,/r/cscareerquestions/comments/n9t540/what_would_my_chances_of_getting_a_csrelated_job/,778,973,3,1586426784,1,1,Saiya_Cosem
+336,n9qbte,Strict_Meaning2944,Master's degree or job hunt?,"I'll get straight to the point. My background:
+
+* BS in non-CS, non-engineering major from public Ivy (with some programming coursework)
+* Accepted into MS in CS program at lower ranked but top 20 school for CS (cash cow)
+* 3+ years of hobby programming experience + impressive personal/group projects
+* 1 year unemployed (or in a ""gap year"" if I decide to do the MS)
+* No current job offers
+* No internships in undergrad
+* FAANG aspirations\*
+* Did I mention that the MS program is at a cash cow school?—typical cash cow tuition, to be paid out of pocket
+* I have until June 1st (next month) to accept the MS offer
+
+&#x200B;
+
+Should I do the MS program or just forget about it and start job hunting ASAP? The reason I didn't start earlier was because I actually *was* taking a legitimate gap year as I fully intended on doing the MS, but now I'm having second thoughts due to cost.
+
+If I do the MS, I'm pretty confident I'll be able to land a decent internship for the summer after the first year and, in turn, secure a job offer after graduation. I also *really* want to do the MS.
+
+The alternative is declining the MS offer, starting a hunt for full time positions now, and potentially spending another 6+ months unemployed just to end up settling with a company that I really don't like at all.
+
+Thoughts? Literally any opinions would greatly appreciated 🙏
+
+&#x200B;
+
+\*I know having ""FAANG aspirations"" in my current situation might come off as naive and arrogant, but for the sake of this discussion, let's just pretend that I actually am qualified to pass a full round of interviews if I was ever able to land one in the first place.",1620713459,t3_n9qbte,/r/cscareerquestions/comments/n9qbte/masters_degree_or_job_hunt/,1,0,3,1620705715,0,1,Strict_Meaning2944
+339,n9psii,yyuyuyu2012,At What Point Should I Start Looking for Jobs?,"Currently I am working at a bank (as a temp position but might get hired on) but After about 2 1/2 years in the industry I feel like I am taking 1 step forward and 2 steps back as when I will be hired on I will be paid less (I get health insurance but still). I have about 10 projects mostly written in Python on my Github (they are a bit hacky from what people have said but they do work for what they are intended), but I am trying to learn and program projects in Java more so lately. I also have been dabbling s bit with building some campaign software & a mobile app for political news from a particular political slant for Android ( I plan to publish them but I need to get approval for any outside activities). I also have hacked together a website in Wordpress for a friend's non-profit that is dedicated to criminal justice reform (I modified some of the PHP to show an article headline instead of just the title, made the mobile mode compatible with the main theme while still keeping the preview for the desktop enabled). I already have a Bachelors of Business Administration with a Minor in Marketing.
+
+&#x200B;
+
+I just signed up of a certificate program with my community college. I plan to take these classes part time, 2 per semester:
+
+\-SQL Programming
+
+\-Intro to Java
+
+\-Intro to Object Oriented Programming
+
+\-Algorithms & Data Structures
+
+\-Discrete Structures
+
+\-Computer Architecture
+
+\-HTML
+
+\-Web Programming (mostly PHP and Javascript)
+
+\-Discrete Structures
+
+\-Software Engineering
+
+&#x200B;
+
+Do you think this is enough and would the Algorithms & Data Structures be enough to plug the holes in my knowledge to apply to a job? I feel like writing tests and and Algorithms are the two things I need to work on and I fee like a certificate would show my knowledge without spending an arm and a leg for a bootcamp and I could transfer these to a nearby university if I need to level up so to speak. M only question is would this be enough and would it be possible to apply to jobs after Algorithms & Data Structures? Thanks.",1620711215,t3_n9psii,/r/cscareerquestions/comments/n9psii/at_what_point_should_i_start_looking_for_jobs/,1489,4049,1,1585962316,1,0,yyuyuyu2012
+350,n9loar,lu4414,What do look for beyond college?,"Hi everyone, what's up?
+
+So I decided to change from aerospace engineering to CS during my graduation (better job opportunities overseas).
+
+Questions:
+
+1. What kind of practice should I get outside school? Train interview questions, develop personal projects, go for some kind of certification? 
+2. My main interest is a Data Center environment, but that's kind limited, as a plan B what field in CS will give me the most opportunities to as hands-on as possible? 
+
+Thanks",1620696797,t3_n9loar,/r/cscareerquestions/comments/n9loar/what_do_look_for_beyond_college/,18,459,2,1585183009,0,1,lu4414
+353,n9ke1v,hillywho,Philosophy (modal & mathematical logic) major + stats + math double minor future in tech,"I don't want to ask another non-cs major breaking into tech question. I am currently a student finishing a bachelor of science in philosophy ( mathematical modal logic) + double minor in (math + stats). I was originally a CS major but because I did poorly in my freshman and sophomore years I couldn't get into the core CS program. 
+
+I have a full time swe offer lined up in June next year (good ecommerce company) and I have taken some of the core data structures courses in school. I want to work in the valley, in one of the big 4. It has been a dream for me but it breaks my heart everytime I see Amazon, FB or any other company that list MS, BS in CS as the basic requirement...
+
+What do I do guys? Do I need a masters in CS? What can I do to break into the valley companies ( currently in Canada)",1620692770,t3_n9ke1v,/r/cscareerquestions/comments/n9ke1v/philosophy_modal_mathematical_logic_major_stats/,246,764,2,1560370559,0,1,hillywho
+359,n9ikr9,bobjks1,Programming Career for Mechanical Engineer Major?,"I'm exploring career options in programming and was wondering if anyone has advice or stories about segueing careers from engineering to programming. I like my current job, but I love learning new skill sets and want to become more competitive for future advancement. 
+
+As part of my engineering curriculum, I took classes in C and MATLAB and felt that I picked up the basics pretty well. The projects were pretty fun and thought provoking. My favorite was a Tic Tac Toe game with full GUI in MATLAB where I had to make the computer never lose. Then my senior mechanical engineering project had me write C code for an Arduino to control a few motors on a pendulum robot. There were also many other minor projects smaller in scope used to solve various assignments.
+
+I'm reading the ""Different Types of Programming Positions/Jobs"" post and am having a difficult time deciding what I should start reading into. My issue is that I see and endless amount of resources to learn everything and I'm becoming overwhelmed just in deciding how to learn in a sensible way.
+
+Since I already know the basics of a couple languages should I just start by finding an interesting project and working to learn what I need to complete it? What is the best path to develop skills that are both useful and career oriented?",1620687425,t3_n9ikr9,/r/cscareerquestions/comments/n9ikr9/programming_career_for_mechanical_engineer_major/,80,85,4,1550961287,1,1,bobjks1
+372,n9en79,HardCor226,In-Progress Career Change - When should I start applying?,"I am currently in the process of changing my career into the CS field. I just completed a degree bridge program offered by my alma mater that then qualifies me for their CS Masters program.
+
+A close friend of mine, an engineer at Spotify, recommended that I start applying to job after my first year of the two year program with the intention that I would start post graduation. Do you all agree with that? Or does anyone else have any takes on the matter? I just want to be completely prepared for when the time comes.",1620677104,t3_n9en79,/r/cscareerquestions/comments/n9en79/inprogress_career_change_when_should_i_start/,17,15,1,1587483305,0,1,HardCor226
+377,n9dibo,periashu,What CS specialization should one learn to earn some extra money by freelancing?,"I have been thinking to learn some CS specialization. The reason is I want to do freelance work and earn money by working some extra hours apart from my 9-5 job. I plan to learn that area of work during weekends and over the next few years before I am ready to take freelance work. Ideally, I want the specialization to be:
+
+\- in demand in future
+
+\- Pay per hour should be good and there should be a steep increment as I become more skilled
+
+\- Should be interesting so that I look forward to learning that skill and do not back out in between, that's subjective but feel free to include your biases
+
+These are the ideal points, I realize that the fulfillment of all the conditions might not be practical. Regarding my background, I am 26, having 3 years of work experience, currently working in the financial services sector. I have university-level maths knowledge and have basic programming knowledge in Python and C++. I am willing to invest my time now to reap the gains in the future. I am sure that there would be many people like me here who are doing freelance work as a side gig or who want to do it.",1620674271,t3_n9dibo,/r/cscareerquestions/comments/n9dibo/what_cs_specialization_should_one_learn_to_earn/,439,1197,0,1596041984,0,1,periashu
+392,n99c59,SageTG,Non-CS Grad Seeking Guidance for Career Path,"I am looking to enter the Software Development scene. I have my BBA in Marketing, but originally wanted to get a degree in CS however this never happened due to my lack of knowledge of how college really worked (First Gen Graduate). I got my general undergrad coursework done at a local community college and then transferred to a state college, during this process I found out that if I wanted to get a degree in CS, that I would basically have to retake much of my general coursework as it was going to require that I get much of the foundational coursework done despite already having my associate degree. So essentially I was looking at going to school for another 3-4 years to get a CS degree vs continuing with a business degree in 2 years. Due to financial/time constraints, I went the BBA route (and highly regret this decision).
+
+Two years ago I graduated with my BBA and have been unable to find anything professionally in the field. I am about to turn 25 years old and am feeling like if I want to make a career/field change, now is the time to do it. It doesn't help I'm not really interested in Marketing, but I am interested in software dev as I feel that it would be much more in my spectrum of interests and fit me as a person better. I have a little self-taught knowledge of python/html/css/js, but nothing significant enough to gain employment. My hope would be to utilize something of my Marketing degree, potentially the UX/UI knowledge that I gained during my studies.
+
+Just some background info: I am married and my wife and I both have income, I would be able to work part-time and attend school/camp if the opportunity arose. She makes enough income to support us both if necessary for a period of time. I live in Arkansas, while there are not a vast amount of employment opportunities in my city, we live pretty close to Little Rock which has some SE jobs posted pretty regularly, though we would be willing to move if necessary. 
+
+My question is this, what would be the best route in my case to reach employment in the SE field?
+
+1.) I have been accepted to my local community college for pursuing a second bachelor in CS, my situation is similar to when I was in college the first go around, I will require all of the foundational classes and since this would be my second bachelor, I would be paying out of pocket/getting loans to pay. Either way, I assume it would be helpful to take some of the intro to CS classes there.
+
+2.) Should I seek a masters degree in CS? There is a college here that offers a ""Master of Computer and Information Science"" degree online and though it prefers students who have a CS background, it does allow for non-cs majors to apply after taking a couple of pre-req courses. This option seems like a good choice, but I get unsure when I consider the fact that I most likely will be lacking a lot of the core foundational knowledge of CS.
+
+3.) I've also considered attending a coding camp though I am a little weary of them. I've looked into Hack Reactor/App Academy/Coding Dojo. I like the idea of getting instant industry applicable skills, but I've also heard/seen some sort of shady stuff with some of the Bootcamps. I also wouldn't be able to lump sum pay for something like this so would need to consider the different financing options.
+
+Wow, this post ended up a lot longer than I had hoped for, my apologies, and thank you for your input!
+
+**tl:dr- Non-CS grad seeking SE career. Would the best route of entry be a second bachelor in CS? Master in CS/MCIS through potential online college or bridge program? Coding Bootcamp?**",1620664123,t3_n99c59,/r/cscareerquestions/comments/n99c59/noncs_grad_seeking_guidance_for_career_path/,1,12,3,1581921920,1,1,SageTG
+393,n98wco,mastraus,Getting started in software developing with a background in teaching,"Good morning! I'm sure questions regarding ""getting started"" have been asked ad-nauseum (and I've been reading several), but I am still feeling anxiety and confusion on what to do myself.
+
+I have a bachelor's in elementary education and am one course (my capstone) away from my master's in education (I realized that I can't see myself in education, which is why I have not finished.) I have 6 years of teaching experience but no experience in any other industry.
+
+Finding a new job in tech (specifically software engineering/developing) seems very interesting and lucrative, as I learned how to code in HTML and CSS back when I was in middle and high school to create websites. I don't know where to begin if I were to make this a profession, though.
+
+I live in Arizona and relocating is not an option as I have a family; how likely will I be able to find a job? Is it worthwhile for me to pursue a post-bacc in CS and possibly a master's to follow? Relying on being self-taught seems risky for job prospects and employers; I would imagine a bootcamp-type program would be better, but how marketable is it? Is it possible for someone to shadow or intern to learn and gain experience, or would I seem bizarre starting to ask companies for this opportunity?
+
+I'll also add that I have a good friend who earned his bachelor's degree in computer science and it took him a year to find a job. It makes me question if developers are actually in demand, or if the market is over-saturated already.",1620663064,t3_n98wco,/r/cscareerquestions/comments/n98wco/getting_started_in_software_developing_with_a/,43,7,4,1587017100,1,1,mastraus
+408,n9316s,jpotter3213,Should I return to college for computer science degree or rely on being self taught to become a software developer?,"Hi everyone, 
+
+I am so lost and would really appreciate any advice that you all can give me.
+
+Let's get the basics out of the way first. 
+
+I am now 28 years old and have not been in school for about 7 years now. I have only been working in dead end jobs like being a cashier at target and McDonald's for a long time now. I'm very depressed from the poor decisions I have made in life and am yearning to make a change for the better this time.
+
+So, fast forward to today. I've come to understand and believe that the tech industry will be the future and have some of the best paying jobs out there. I've been reading that there are three different paths to take in breaking into a career in this field. Getting a college degree in computer science, being self taught, or going by way of bootcamps. 
+
+The college route seems like it may be a safer route (correct me if I'm wrong, please), but it also seems like it will cost the most time and money to do so. I have completed some education at my community college many years ago. I mapped out a potential plan with a college counselor, and it would take me 3 years to finish my time at community college, then transfer to a university, which would take another 2 years to finally achieve my bachelor's degree in computer science. That's 5 years in total, PROVIDED that I am able to pass every single class that I take.
+
+For someone that is serious about making this a career path for themselves, which path would you recommend them to take?",1620648963,t3_n9316s,/r/cscareerquestions/comments/n9316s/should_i_return_to_college_for_computer_science/,275,80,11,1599019719,1,1,jpotter3213
+411,n92c2i,PreviousReaction1579,Changing Career to CS ?,"I am 27 years old, Completed BSc in Business Management (University of Wales) and Passed Finalist of Chartered Institute Of Management (UK). Almost 3 years experience in Finance and logistics. 
+
+I am thinking changing my career to software industry and want to do Computer Science degree in Netherlands ? I kindly appreciate from the community to give their opinion in the job market and a good university to enroll in Europe (less costly). 
+
+Thank you so much in Advance..",1620646570,t3_n92c2i,/r/cscareerquestions/comments/n92c2i/changing_career_to_cs/,1,-1,0,1617999822,1,1,PreviousReaction1579
+417,n8yvrf,changexd,Where should I go now as a backend Developer?,"Hello guys, I am a self-taught web developer, I started learning front-end at the end of last year, I've landed two jobs as a front-end dev with REACT, both of the jobs were really bad(on the company policy part, one of them was against my rights), after those two jobs, I soon realized I am more interested in the backend development, so after quitting, I studied a month of basic backend knowledge and then landed an internship as a backend engineer in a start-up.
+
+During the internship, though my position was called ""backend engineer"", but my duty was actually using AWS CDK to do IAC for our service, I had a great time learning cloud services and knowledge about internet, and the crew was really nice to me. But because of the company's lack of budget, they had to let go all the devs including me. After this short but awesome experience, I was almost certain that I want to be a backend Dev in the future, so I started to develop my own side project.  I am an admin in an English study group and we hold events every week, I decided to created a web app to optimize the registration process so I started develop it with something I haven't tried out yet. 
+
+Right now the first version of my app is done on the backend, but because of my friend (she's in charge of UI designing), my side project is not ready to be deployed yet, so I thought maybe I could demonstrate my backend code and get into the job market.
+
+After a week of browsing and applying some of the junior jobs, I feel a bit frustrated, I feel like I suit most of the junior job and still feel like I don't. I really don't know what should I do now, should I keep searching for the job? or should I learn something else? 
+
+If I should learn something else, where should I go? should I keep optimizing my backend service, or just keep learning new things? My friend always tells me to ""master"" one thing, and I honestly don't know where to start, I am currently learning data structures, CS knowledges and algorithms when I am not searching for jobs, is that sufficient? I've been considering maybe getting a AWS certificate, but I really don't know if it helps since $150 is quite expensive for me at the moment..
+
+I truly love this industry and the knowledge of everything about this, but I just feel so lost in this sea of tools, languages and knowledge.. 
+
+What do you guys suggest?",1620632872,t3_n8yvrf,/r/cscareerquestions/comments/n8yvrf/where_should_i_go_now_as_a_backend_developer/,116,330,2,1410148592,0,1,changexd
+420,n8ycqk,PlatinumClaws,Is it possible to get a SWE job with a Data science and Cog sci major with a computer science minor?,"Hello,
+
+I was unable to get into the computer science major in my university and I am planning on double majoring in Cog Sci and Data science and minoring in computer science. I am planning on doing some personal projects over the summer in order to spruce up my resume and make me more eligible for positions.
+
+My primary concern is would it still be possible to gain internships and hopefully a full time position with those two majors? How would employers see a candidate with those majors vs a candidate with an computer science degree? 
+
+Any input is appreciated. Thank you in advance!",1620630732,t3_n8ycqk,/r/cscareerquestions/comments/n8ycqk/is_it_possible_to_get_a_swe_job_with_a_data/,80,5173,0,1482988206,1,1,PlatinumClaws
+425,n8wk1g,iStegTato,Are internships with an unfinished degree enough work experience for entry-level role?,"I’m in a very fortunate position to have had two internships with top tech companies and one research position. I still have 1.5 years left of undergrad. 
+
+Would it make sense to apply to full-time roles and finish my undergrad part-time? Or, even crazier, apply to junior roles and stop school altogether?
+
+I’m mainly looking for data science roles, but my experience is in general software engineering.",1620623467,t3_n8wk1g,/r/cscareerquestions/comments/n8wk1g/are_internships_with_an_unfinished_degree_enough/,773,177,0,1376852410,0,1,iStegTato
+448,n8qzvn,cblakej,"Graduated a Bootcamp that taught c# mvc , asp.net , and MySQL. What can I do for a job or intern?",Hey just graduated a Bootcamp that teaches c# mvc with asp.net and MySQL. I know I got ripped off. What else can I do to not hinder myself.,1620604794,t3_n8qzvn,/r/cscareerquestions/comments/n8qzvn/graduated_a_bootcamp_that_taught_c_mvc_aspnet_and/,1,55,1,1474341633,0,1,cblakej
+453,n8prfz,smdntn,Regulatory roles in the Tech space? How to move from finance,"I'm currently working as a regulatory analyst /  junior reg project manager for a global Asset Manager in the UK. Been in the job just over 3 years, straight out of grad (law degree)
+
+Long term, I am hoping to make the jump into the tech world. 
+
+We've obviously seen a ton of regulatory developments on the financial side since the 07/08 crises. From an outsider looking in, there seemed to be some talk of how (and whether) there should be some form of greater intervention in big tech. Notwithstanding GDPR etc in the EU, a few questions for those in the industry: Are you seeing any movements/ trend towards thinking about, analysing and implementing these types of issues? Is government/regulatory intervention a likelihood and is this something you / your firms are concerned about? 
+
+Am I crazy in thinking that these roles may exist in the near future? 
+
+Ultimately, any advice on how best can I position myself to make a jump into a similar regulatory / compliance role in the tech space? 
+
+Sorry for multitude of questions. Thanks in advance",1620600795,t3_n8prfz,/r/cscareerquestions/comments/n8prfz/regulatory_roles_in_the_tech_space_how_to_move/,314,405,2,1525438757,0,1,smdntn
+455,n8pjru,Zach9559,Fantasy about learning to code and making some extra money,"I’m an accountant, and I’m very good with excel and can even write some basic macros. I’ve always been interesting in CS and have a fantasy of learning to code either on my own with books, or through a solid online degree program such as Georgia Techs and coding in addition to my main job. Is this possible or realistic at all? Do some people pick up programming work part time? Could I possibly bring in maybe another $15 or 20k doing this? I’m willing to put in any amount of effort and I have so many books at home on python that I plan on finishing. Anyone have any courses you’d recommend to do this? What type of programming would be my best shot? Thank you so much.",1620600123,t3_n8pjru,/r/cscareerquestions/comments/n8pjru/fantasy_about_learning_to_code_and_making_some/,430,160,1,1514137562,1,1,Zach9559
+457,n8p8r4,Sophia7X,Transitioning from non CS PhD to software engineering?,"Hi, I have a Bachelor's in chemistry from an Ivy League institution, and will be receiving my PhD in chemistry from another Ivy League institution next year. However, I doubt those degrees will mean much in computer fields 😄. I am primarily working in health sciences-related chemistry (ie therapeutics) so it's not like my math is exceptionally strong— though I have taken multivar calc and linear algebra in college. After spending so many years in the lab, I realized that I don't really want to be a chemist for the rest of my life, and I'm not at all interested in staying in labwork. I also strongly dislike academic culture. And I much prefer to work at a computer.
+
+
+Right now I'm working through The Odin Project, which gears you up for webdev. I'm not that entirely interested in webdev as a career, but from what I read, it is easier to get a job in as self-taught. As a chemist, I enjoy brainstorming solutions and thinking about troubleshooting issues but I don't actually enjoy the physical labor of chemistry (I'm not interested in working with statistics so thats why I have ruled out cheminformatics and data science related to health sciences).
+
+
+So,  I think I would be into software engineering but the barriers of entry seem much higher. And I have been in school so long, IDK if I want to go back just for a CS degree lol. I don't mind self learning at my own pace though. Or  online Master's are even worth it?  My plan is to finish The Odin Project (Ruby on Rails pathway), do some projects, then learn C/C++ and read a couple computer science books (like on DSA) but then what?  How to translate webdev projects into software engineering skills and demonstrate competence to land a job in software engineering? Or should I be pursuing a junior web dev job (with focus on backend) after, to get experience  and transition? Any thoughts appreciated",1620599185,t3_n8p8r4,/r/cscareerquestions/comments/n8p8r4/transitioning_from_non_cs_phd_to_software/,25663,3586,2,1379196017,1,1,Sophia7X
+462,n8n12i,ModsRTrash,Please give me some advice for my cousin,"My cousin has recently moved to America and would love to work in the tech industry. He holds an MBA from the UK and is considering furthering his education if it would help make him more employable. He specifically has an interest for cyber security, but is open to any high demand field within the computer science discipline. As professionals already in the industry, what is the best route for my cousin to take? Thanks.",1620592840,t3_n8n12i,/r/cscareerquestions/comments/n8n12i/please_give_me_some_advice_for_my_cousin/,304,877,1,1573670346,1,1,ModsRTrash
+471,n8h9np,lordzattosh,What next after learning python ? (I am interested to learn backend),"I have a solid understanding of python and OOPS concepts and solved many questions from hackerrank. 
+As I am a beginner in this tech career, please guide me to  choose what's next ? 
+What tech stack should I learn now ? 
+Note: I just completed my bachelors in arts and want to start my career in CS/IT",1620576353,t3_n8h9np,/r/cscareerquestions/comments/n8h9np/what_next_after_learning_python_i_am_interested/,219,86,2,1595659125,1,1,lordzattosh
+474,n8g4s0,ivory-ivie,Want to become a software engineer but don’t have a BA in CS??,So as the title suggests I went to school before realizing what I wanted to do with my life and have decided I want to become a software engineer. From my research I’ve seen people say the best way is to get a BA and a MS in Computer science/software engineering. I don’t know if I can scrap together enough loans for another bachelors. Is there another way?,1620572991,t3_n8g4s0,/r/cscareerquestions/comments/n8g4s0/want_to_become_a_software_engineer_but_dont_have/,121,17,1,1606232853,1,0,ivory-ivie
+479,n8e4l7,GalacticWafer,"Is an EE major qualified for any job a CS major has, but not vice versa?","Seeing as 40 years ago, every computer scientist was an electrical engineer. The CS major has some pretty deep roots in math and shares several concepts with EE, especially at the lower levels of programming. I don't think most developers/SWEs use any of the theoretical knowledge they learn, but I don't know that for sure. For these reasons, it seems highly likely that an EE could do pretty much anything a CS can do. But we know that doesn't go the other way around.
+
+&#x200B;
+
+I would like to disagree with my original question. I'd like to think that things have evolved in the CS realm, and there are positions that an EE major would never be qualified for. Is that the case, or is my question true?",1620566449,t3_n8e4l7,/r/cscareerquestions/comments/n8e4l7/is_an_ee_major_qualified_for_any_job_a_cs_major/,344,579,0,1548622791,0,1,GalacticWafer
+480,n8dyh7,foreigncoder,Chances of getting a SWE internship in a developed country as a foreigner (with referral),"Hey everyone,
+
+I am a mathematics student who is interested in becoming a SWE. However, there aren't many opportunities in my (developing) country so I want to go abroad to a developed country. The best way to find a job at a tech company is to do an internship there and convert to full time in the end, so I decided to look for SWE internships abroad. I am a competitive programmer and I think I have a pretty good chance of passing any coding interview if I am given the chance, but I am afraid that my country of origin will prevent me from getting interviews. Thankfully, I know some people in my CP circle who can give me referrals for several FAANG companies, but how much of a chance do I have even after getting a referral? Because I've heard that even if you have a referral, you might not get an interview if you are a foreigner. How true is that? If you are from a developing country and managed to get an internship abroad, can you share your experience?",1620565856,t3_n8dyh7,/r/cscareerquestions/comments/n8dyh7/chances_of_getting_a_swe_internship_in_a/,4,6,1,1620565070,0,1,foreigncoder
+487,n8bais,boxthrow101,Moving away from traditional engineering into tech.,"Hi everyone.
+
+I've just graduated from uni with a mech eng. degree and have just started my grad role at one of the top construction companies here in Australia.
+
+After the past 4 months or so I've come to realise that the work here is definitely not aligned to my skills, interests and passions. The work is more project management based and hasn't really allowed me to delve into technical/analysis work which has led to me looking into software/tech as a potential career change. That being said my salary is above average for a graduate engineer, given the workload will become more intense as I progress.
+
+After enrolling and making progress on a beginner Python course from Udemy (which I've been really enjoying) I've been heavily considering my options on how to make this potential transition.
+
+I've dm'd a few individuals within this community regarding this, and have gotten excellent advice, but I would like to hear a more general consensus (if possible) regarding my situation.
+
+At the moment I'm trying to spend my free-time both at work and at home to learn programming and any relevant skills.
+
+The biggest concern I have is how and when I can make the transition into working within the tech space, with software dev more specifically.
+
+My current plan is to do whatever I can on the side, and look out for any potential opportunities whilst continuing with this 2 year program for ATLEAST the next year.
+
+Some questions I have to the wider community more specifically:
+
+Will the next year be enough to learn programming, upskill and complete projects to a level enough for entry-level roles in the space?
+Would it be more important to go back to Uni and get a relevant comp sci degree (would be about 2 years given my free electives and such are eaten by my mech eng. courses) to help in my learning and garnering a formal qualification
+I've considered doing an online masters degree in something like data science or cyber security (which I can complete whilst working) but I'm not sure how relevant these could be for programming as a whole + it would require some prior knowledge I'd assume
+I do know that my current role will become more intense as I progress through the project lifecycle and become more involved with longer days/hours leaving less free-time for study which is why I'm considering a second degree.
+
+Apart from that, any advice on potential next steps and how to move forward would really help solidifying my plan for the future.
+
+If there's any more information I can provide please let me know.
+
+Thanks everyone in advance.",1620555248,t3_n8bais,/r/cscareerquestions/comments/n8bais/moving_away_from_traditional_engineering_into_tech/,14,0,2,1510478347,1,1,boxthrow101
+495,n87l5f,libradhd,Is there any possible path forward I can take?,"I am 22 years old, and after a couple miserably failed attempts at two different colleges, I’ve found myself finally finding a natural talent/interest in programming. I’ve been quite enjoying self teaching, and think I definitely have a lot of potential I could reach, but I’m restricted by a few things.    
+1) I am unsure what all I need to actually learn.    
+2) I have no degree of any kind, nor do I have the time or money to get one.    
+3) I have absolutely no  network, nor friends/family/colleagues needed to start building one.    
+So while I know this may come as a loaded question, I just feel I should ask if there’s literally *anything* I could posssibly do to actually set myself for a career in this space?    
+I’m willing to do whatever it takes, I just need some direction",1620538649,t3_n87l5f,/r/cscareerquestions/comments/n87l5f/is_there_any_possible_path_forward_i_can_take/,481,438,1,1619299921,1,1,libradhd
+504,n818k5,DigitalFire5000,Desperately Need Help With Plan of Action: Should I take a work break to build projects or to go to code bootcamp?,"I am a 22 year old who recently dropped out of college because being an accountant sounds god-awful to me. I started programming last year and racked up exactly 240 hours in JS and a little HTML & CSS before I stopped for my last semester of college. I spent 4-6 hours a day during last summer but now my parents are forcing me out and I'm working full time to support myself. Because of this, I can only find the energy to do about 2-3 hours of programming a day.
+
+My plan was to continue working and programming for about 2-3 hours per day (which would give me a max of 711 more programming hours by the end of the year assuming the unlikely that I'll both never miss a day and always do 3 hours instead of 2). Then, by either January 2022 or August 2022, I'm focusing ENTIRELY on programming. I will take a work break offer from my job for about 3 or 4 months. 
+
+My question is this: 
+
+Should I use that work break to just focus on self-study and finally getting around to building projects? Or should I use that time to go to code bootcamp? Or should I say forget the work break and just go to bootcamp part-time and do code part time?
+
+My fear is that without a bootcamp education and without a CS degree, I will never be able to compete with those who went to bootcamp and definitely not with those with a CS degree. But I also fear that by going to bootcamp, I could potentially be just wasting $20,000 on stuff that it is possible to learn on my own. But it just doesn't feel as safe or as stable being self taught. 
+
+PLEASE give me answers and encouragement!",1620516533,t3_n818k5,/r/cscareerquestions/comments/n818k5/desperately_need_help_with_plan_of_action_should/,122,195,3,1584302527,1,1,DigitalFire5000
+506,n7zwmt,Realistic_Bug_90,Change career,"Hi, I really need honest inputs in my career path change.
+
+I have BS in Chemical Engineering and been working as an engineer in oil and gas field for 4 years since graduating. I’ve realized that this field is very unstable since we have multiple layoffs in a couple years I’ve been there. Especially with Covid, things got worse. We had layoffs almost every week when it first started last year. Also there’s very little chance to move up. I’ve been working from home for almost a year now and really enjoy the flexibility and productivity it gives. I have to go back to the office in 2 weeks and will be sitting in a room with 4 other people. It’s so hard for me to just think about that...
+
+I started looking into remote jobs available for engineers and 99% are software/ full stack dev jobs. I then started to look into it and saw some people successfully got full time job after learning coding and going through code camp. I just started a HTML and CSS course and feel excited about this path.
+
+My question is do you think this is a right path? Do I need to go back to school and get a BS in Computer science since I really don’t want to. What is the best way/program to learn and  be ready for the job? How much time should I devote for this journey?
+I’m ready for it.
+
+Thanks very much for any honest advices!!",1620512278,t3_n7zwmt,/r/cscareerquestions/comments/n7zwmt/change_career/,1,1,1,1620119436,1,1,Realistic_Bug_90
+514,n7xici,Substantial-Habit-94,"As an ECE student interested in programming, hoping to become a self taught programmer. Confused as to how to approach things. Please guide me."," 
+
+What advice would you like to give to a beginner like me to focus on. Being an ECE student i have light programming experience on c and tried experimenting with a little bit python too. I am not seeing a clear path as to how should i approach learning stuff.
+
+(my future classes of ECE include JAVA, object oriented programming using C++ and machine learning too)
+
+I am reading some books like Learn python the hard way, C programing by K.N.KING.
+
+I have been learning data structure and algorithms as well.
+
+Do you think it is right way to approach my goals.(backend dev or embedded software dev)",1620504951,t3_n7xici,/r/cscareerquestions/comments/n7xici/as_an_ece_student_interested_in_programming/,6,11,6,1607255065,1,0,Substantial-Habit-94
+515,n7xedb,techindie,Need Career Guidance. Have 2 years of work Experience at a dead end job.,"Hello.
+
+I know this probably gets asked a lot, but I need some advice on my career progression.
+
+The thing is, I have been working as a database engineer for almost 2 years but most of the work is not very challenging. It is very repetitive and you don't require much cs knowledge to do it. As a result, I did not manage to gain any actual experience as I was doing the same thing day in and day out.
+
+In these 2 years, for almost 1 year I was free. I did not had any work to do and no calls to attend. So i started doing leetcode. Its been around 5 months of leetcode now and I think Iam OK at it now.
+
+ I know how to solve problems and I want to shift companies. The problem now is, I don't have any Skill or actual work experience to share with my future employer. All I know is how to leetcode and some basic select queries and creating stored procedures in database.
+
+I have been applying to many companies in this pandemic but none have reached out to me. I think the culprit is my lack lustre resume as I have nothing to to showcase as my actual work.
+
+Its just 2 years of bogus experience.
+
+So what do I do? I can't apply for a Backend engineer role since I haven't worked on it. I can apply for database roles but i only know the basics. 
+
+Shall i start leetcoding sql queries?
+
+
+Is there any role where I can utilise my leetcode skills and basic db skills to get a good job? 
+
+What should be my next step in order for me to get selected in any other company with a decent hike? 
+
+Iam at my wits end.
+
+**TLDR:**
+ Worked for 2 years. Most of the time, was free. Hence no actual work experience. Did leetcode practise in free time. Now i dont get any interview calls because I couldn't showcase my work in my resume and I have basic skills only.
+
+What should be my next step in order for me to get selected in any other company with a decent hike?",1620504620,t3_n7xedb,/r/cscareerquestions/comments/n7xedb/need_career_guidance_have_2_years_of_work/,221,995,3,1401600906,0,1,techindie
+516,n7xdap,Substantial-Habit-94,Advice for self learning programmer as an ECE student.,"What advice would you like to give to a beginner like me to focus on.  Being an ECE student i have light  programming experience on c and tried experimenting with a little bit python too. I am not seeing a clear path as to how should i approach learning stuff.
+
+(my future classes of ECE include JAVA, object oriented programming using C++ and machine learning too) 
+
+I am reading some books like Learn python the hard way, C programing by K.N.KING.
+
+I have been learning data structure and algorithms as well. 
+
+Do you think it is right way to approach my goals.(backend dev or embedded software dev)",1620504531,t3_n7xdap,/r/cscareerquestions/comments/n7xdap/advice_for_self_learning_programmer_as_an_ece/,6,11,1,1607255065,1,0,Substantial-Habit-94
+518,n7wy8x,Substantial-Habit-94,Career advice.,"I am an electronics(STEM) student. My course almost covers the most stuff of computer science programming as well.
+
+I am interested in the embedded systems programming but as the job market doesn\`t favour  it that much i am thinking of working as a software developer in a company.
+
+So basically, i would like to know that if i plan to move to Canada **which courses should i apply for** (given that i have completed my bachelors) so i would secure a good job.
+
+I have heard that doing a master\`s doesn\`t help much in getting a job in Canada and getting a job becomes difficult for students who did their bachelor\`s in home country and companies don\`t give a damn about masters.",1620503245,t3_n7wy8x,/r/cscareerquestions/comments/n7wy8x/career_advice/,6,11,1,1607255065,0,1,Substantial-Habit-94
+531,n7tzol,reddititsis,Can a BA become a SD?,"Can a BA become a SD?
+
+I’m currently enrolled in a bachelor in Information systems (I wanted to be a BA after graduating) but I just started my minor in comp science and found myself liking programming. Is it possible to become a SD for someone studying information systems? I almost done with my degree and have a lot of debts so changing my major is not an option. I was thinking of finding an internship as an SD to help my chances of landing a job.",1620494634,t3_n7tzol,/r/cscareerquestions/comments/n7tzol/can_a_ba_become_a_sd/,71,694,0,1606274881,0,1,reddititsis
+532,n7tyks,SheldonPlankerton,Entry level jobs in NYC,"Hello,
+
+Currently I’m still in high school, but in a couple of months I’ll be in college majoring in CS. I currently live in Georgia, and I’m going to a pretty average college in the Atlanta area.
+
+My family is telling me to stay here after college, but I’d really like to move back up to the NYC area. I’m not looking to explicitly work in the city (although that would be nice), I’d at least like to live in the nyc metro area. I wanted to know what steps I should take now to better my chances of getting a job up there.
+
+I feel like I’m sounding pretty vague, but is it possible that in 4 years there’ll still be entry jobs up there? From what I hear most people talk about there being less and less job opportunities up there than compared to atlanta or the west coast.
+
+I honestly don’t care who I work for, as long as I make enough money to afford a living space, food, and having enough to put away in savings. I don’t expect to be making 100k right off the bat, but I don’t want to be making so little I can barely get by but I think that’s everyone’s way of thinking. 
+
+So the main point of my post is:
+
+Is it still possible to have job opportunities up in NYC? And what steps can I take now to give myself a better chance of getting a job up there? I’m gonna be a college freshman in a few months.
+
+Thank you",1620494542,t3_n7tyks,/r/cscareerquestions/comments/n7tyks/entry_level_jobs_in_nyc/,770,8815,1,1599509133,0,1,SheldonPlankerton
+537,n7rnh1,mynameisanominus,Which jobs do you think I should go for? (Some experience),"Hi everyone,
+
+Here is my current situation:  
+
+* I work on a business intelligence team (title is business analyst) where I build solutions to minimize engineering overhead required for other business analysts to do their work. For example: Python wrappers around APIs/databases and machine learning tools.
+* I am able to work in and understand a ""cloud environment"": K8s on AWS, Artifactory, Docker, Spark
+* Good background in machine learning (math major, 2 medals in Kaggle competitions).
+* I would say ""good"" understanding of computer science fundamentals: data structures & algorithms and using these correctly in Python.
+* Some Java understanding (3 courses from college).
+
+My goals are pretty basic and probably common:
+
+* Land a job in Seattle.
+* Work with many other engineers in order to build a strong professional network.
+* Work as part of a larger system/software-base (basically have my work intertwined with other SD's work. Most of the stuff I build now is stand-alone).
+
+So now I'm wondering what sort of positions I should be applying for. I think I would be a good fit as a SD on a ML-engineering team, but these positions are scarce and seem to want people with more experience. That said, I'm definitely not set on staying in data analytics -- I think it would be great to learn new technologies as I can see myself working on a research/start-up team in the future.
+  
+  
+Anyways, what do you all think? What sort of positions should I be applying for? Can you recommend any services that will help me land a job?
+
+Thank you!",1620487913,t3_n7rnh1,/r/cscareerquestions/comments/n7rnh1/which_jobs_do_you_think_i_should_go_for_some/,6,45,2,1575029260,0,1,mynameisanominus
+544,n7nm09,latticeprep,Where to work to learn software well for newer dev?,"I'm a motivated developer with experience in front-end and Python (about 2YOE).
+
+I'd like to go to a top tech company but I don't feel that confident. I don't use OO style that much in my role and I don't have a CS degree. I'd like to work for 2-3 years somewhere and improve my skills and then transition. I have done a lot of leetcode but it feels silly to just practice leetcode. I want to actually learn to write good software.
+
+Are there specific places people recommend working? Where is good software engineering really valued? I know VMWare used to be great but I am not sure now.",1620474690,t3_n7nm09,/r/cscareerquestions/comments/n7nm09/where_to_work_to_learn_software_well_for_newer_dev/,14,368,0,1615403552,0,1,latticeprep
+547,n7mybs,Szabi90000,"I like Maths, and I'm interested in the tech field, but I'm not *completely* sold on software developement. What are my options?"," I'm going to major in Maths, with an intention to specialise in applied matematics down the line.  
+I'm kind of interested in data management, and also machine learning/AI in general.   
+
+
+I considered majoring in CS for a loong time, but it never felt right, and I don't think I could enjoy it.  From what I've seen, the types of jobs I mentioned usually require Python, and SQL knowledge, so I'll familiarise myself with those for a start. What kind of career could I imagine with these types of interests?",1620472054,t3_n7mybs,/r/cscareerquestions/comments/n7mybs/i_like_maths_and_im_interested_in_the_tech_field/,4003,1325,0,1436318332,0,1,Szabi90000
+552,n7lld1,Dry-City8766,Psych undergrad with minor in CSc,"Hello, Im a psychology major about to enter my fourth-year next fall. I've recently (last 5-6 months) gained a significant interest in programming which began with a intro to data science course I took last fall. I am currently in school for a bachelors in Psych with a minor in Computer science.  I feel like that might not be enough especially since applying for software engineering internships has been rough to say the least. 
+
+Should I consider applying for a masters in csc or data science? Im not too keen on working in the data science field due to many subreddits stating that many data science jobs today are not at all like the cool stuff you learn in school, also that many of these ""data science"" jobs are really more like data analytics and things of that sort. Machine Learning does seem very interesting but I am not sure if that field is dealing with the same things I have read online with data science. Can ML engineer be a similar work environment/field as a software engineer (assuming you work at similar tech companies). Idk much all I know is that I feel more challenged and more satisfied when I work on my csc projects. I'm also taking an aws cloud technical essentials course on coursera so maybe I could work with that to start my career and then transition into software engineering? 
+
+Any and all helpful input/information is gladly accepted.",1620466381,t3_n7lld1,/r/cscareerquestions/comments/n7lld1/psych_undergrad_with_minor_in_csc/,7,31,1,1609385094,0,1,Dry-City8766
+570,n7e8pe,ArianaWujt,NYIAD UX Design,"I'm currently looking for a career change, and have found an interest in UX Design. I have a bachelors degree in Cognitive Science, so do feel like some of my past knowledge could be relevant, as well as many many years of customer service, which I've found can be applied to the UX field. 
+
+I was beginning to look into UX design on my own, but came across the New York Institute of Art and Design. After researching many programs,  it seems this one is actually one of the more affordable ones. Does anyone have experience with their program and what job prospects might be after completing it? I'm also open to any advice you may have on getting into the field. Thank you.",1620437430,t3_n7e8pe,/r/cscareerquestions/comments/n7e8pe/nyiad_ux_design/,10187,634,1,1562542841,0,1,ArianaWujt
+571,n7e1ad,SquidwardTennispoles,Using a Military Deployment to Switch to CS from Physical Therapy?,"Hi all,
+
+So I am in a strange situation. I got accepted to go to PT school about a month ago and was supposed to start in the fall of this year. However, my national guard unit got surprised with a deployment that's going to be from Oct 2021 to around September of 2022. This means I won't be able to start PT school until Jan of 2023.  I will be honest and say it does have me down in the dumps since I applied specifically after being told this deployment wouldn't happen but now it is. 
+
+Now since I will be spending a year in Kuwait doing basically nothing (and will have internet access most likely) I have been looking at what I can do to not make that year a waste of time. Looking at CS vs PT I noticed how much more upward mobility and flexibility there is in the CS career field compared to PT. Also not to mention not having to go to PT school for 3 years which means no income at all and maybe some debt even with the military paying for schooling. 
+
+I have always liked computers and have built many systems, but I have zero experience with code. If I applied myself over the course of a year would I be able to become proficient enough in the an area of CS to possibly switch career fields and work my way up from an entry level position in the future? If so what path should I take to go from learning to applying what I learned to looking for a job? And of course is it even a good idea to think about changing careers when I have an acceptance letter in hand to PT?
+
+Any input is appreciated. Thanks everyone",1620436705,t3_n7e1ad,/r/cscareerquestions/comments/n7e1ad/using_a_military_deployment_to_switch_to_cs_from/,38,23,0,1492174126,1,1,SquidwardTennispoles
+572,n7dorl,StephVols,Computer Science Career,"I’m currently a junior in college pursuing my degree in finance. However after some consideration I’ve decided to drop out and start my CS career. That being said I’m looking for someone with vast knowledge in computer science to help me answer these questions. 
+
+- What different CS career routes are there and what are the pros and cons
+
+- What are the top three language to start learning
+
+As well as tips and tricks you wish you knew at the beginning of your career. 
+
+Thank you this will help me as I start the next chapter of my life!",1620435537,t3_n7dorl,/r/cscareerquestions/comments/n7dorl/computer_science_career/,1,0,0,1608516086,1,1,StephVols

@@ -1,6 +1,6 @@
 [
   {
-    "id":"nckzrq",
+    "id":"ncmcbe",
     "author_name":"_gainsville",
     "title":"A week into my first dev job and I already feel burnt out?",
     "body":"I just got my first dev job. The codebase is so large and there is so much to do, I feel really overwhelmed and if I don't understand it, I am afraid of underperforming but I need to prove myself useful in the first few weeks. I am still not up to speed.\n\n&#x200B;\n\nI don't even think I am cut out to be a dev. Is it better to save myself the embarrassment and see myself out?",
@@ -11,12 +11,12 @@
     "author_comment_karma":2271,
     "score":0,
     "author_created_utc":1586111815,
-    "rule_1":1,
+    "rule_1":0,
     "rule_2":0,
     "author":"_gainsville"
   },
   {
-    "id":"nci7bm",
+    "id":"ncm7sa",
     "author_name":"CyberneticVoodoo",
     "title":"Is it possible to land a real job as a programmer without phone calls or videochats? Or should I be more determined to be self-employed?",
     "body":"I feel extremely bad and uncomfortable talking with random people, so I prefer to never have interviews in my life. I would always choose text chat to communicate with people. Over the phone call? Nope, text. Real life meeting? Thanks, I'm good with texting.\n\nAnd I was happy to work that way. My last job was 100% texts and I loved it. But then I quit. Decided to change my specialty (from web development to mobile development). Now it's been 2 years of learning and getting experience. I'm not in a hurry and I have a pretty stiff mindset of rather being found than looking for a job. I'm constantly getting approached by recruiters, but they're all the same -- ask me to schedule a call (no, thanks). I'm pretty sure that no one is going to offer me a job this way.\n\nWhat's your suggestion to this? Is it time for me to consider going freelance and never waste time with recruiters? I feel like it should be a very special kind of freelancing (no phone calls and real interactions). I think it's important to create some kind of an image or a brand with such a rules, so the clients wouldn't be bummed by this weirdness.",
@@ -27,12 +27,12 @@
     "author_comment_karma":15,
     "score":0,
     "author_created_utc":1541121297,
-    "rule_1":1,
+    "rule_1":0,
     "rule_2":0,
     "author":"CyberneticVoodoo"
   },
   {
-    "id":"nci3mb",
+    "id":"ncm3pa",
     "author_name":"trowaway_0",
     "title":"Is it a red flag if a company has obviously fake reviews online and on Glassdoor?",
     "body":"Going through the interview process with a company and I\u2019m seeing that their Glassdoor is riddled with obvious fake positive reviews by current employees. And few of the negative reviews talked about cons and confirmed that they were asked to write positive reviews. \n\nThe G reviews on their company HQ is also poor, as most are unhappy customers. and then you notice some 5 star reviews by the staff and even the CEO. \n\nThe average tenure is kinda low 2-3 years. And little to no progress for most people who have been there. \n\nRed flags?",
@@ -43,12 +43,12 @@
     "author_comment_karma":47,
     "score":19,
     "author_created_utc":1560144935,
-    "rule_1":1,
+    "rule_1":0,
     "rule_2":0,
     "author":"trowaway_0"
   },
   {
-    "id":"ncgykz",
+    "id":"ncm0fu",
     "author_name":"diamond2lion",
     "title":"Which Option would you recommend?",
     "body":"I'm a first year student and  have been rejected for all SWE internships, so I got involved in some research for this summer and I figured some tech related experience might not be as good as a SWE internship, but it would be better than nothing. These are my two choices...\n\nSoftware Support Intern -  local software company.\n\n\\- $17 an hour, but it's basically helpdesk with no programming. However I was told that they do encourage internal promotions, and it's possible for me to get a software engineering internship afterwards. The only reason I would take this role, is because it gives me a golden ticket to try and get a SWE internship there in the fall.\n\nOr...\n\nStudent Tech Assistant - On campus job\n\n\\- $11 an hour part time job. This job has more programming related tasks such as using SQL, HTML and XML (UI\/UX stuff). I could possibly negotiate some more programming responsibilities into the job as well. \n\nI'm fairly certain that the second job will look better on a resume in the fall because it has at least a little programming experience.\n\nwould you play it safe and take the second option to get a minor boost on your resume to maybe get a good internship next spring or summer, or risk it for the first option and potentially get a SWE internship, with an ultimate goal being to become a software engineer after university.",
@@ -59,12 +59,12 @@
     "author_comment_karma":2347,
     "score":0,
     "author_created_utc":1543614055,
-    "rule_1":1,
+    "rule_1":0,
     "rule_2":0,
     "author":"diamond2lion"
   },
   {
-    "id":"nccj4b",
+    "id":"ncl4g5",
     "author_name":"12Eerc",
     "title":"Required to fulfil projects in order to recieve payrise",
     "body":"I had been presented with a new role this week along with the requirements both I and the line manager agreed that I already fulfil that role. However, I have to fulfil certain projects over the next twelve months before I have that title and any additional salary which at the moment hasn\u2019t been any clarity in it. Is it $1-$5000?\n\nAm I just holding a grudge on this for no good reason or should I look to move on ASAP?",
@@ -75,12 +75,12 @@
     "author_comment_karma":1720,
     "score":1,
     "author_created_utc":1392899389,
-    "rule_1":1,
+    "rule_1":0,
     "rule_2":0,
     "author":"12Eerc"
   },
   {
-    "id":"nc2vxl",
+    "id":"ncl0df",
     "author_name":"ryhaltswhiskey",
     "title":"Mobile dev: is React Native a viable option yet or am I better off learning Kotlin and Swift?",
     "body":"I think about switching over to mobile dev from time to time, mostly for monetary reasons. Plus I think I'd end up working on a cooler product than what I'm working on now (backend API in Go\/Node). \n\nI did some work in React Native a while back, it was decent. \n\nBut the zeitgeist seems to say that cross platform is always going to be crippled and Kotlin is close enough to Swift that it's much easier to switch languages than it used to be. \n\n15 YOE",
@@ -91,12 +91,12 @@
     "author_comment_karma":233476,
     "score":2,
     "author_created_utc":1593564491,
-    "rule_1":1,
+    "rule_1":0,
     "rule_2":0,
     "author":"ryhaltswhiskey"
   },
   {
-    "id":"nc0pqb",
+    "id":"nckzrq",
     "author_name":"imhypedforthisgame",
     "title":"I have an irrelevant degree (Not CS). Can I start as a web developer and transition to backend work down the line?",
     "body":"I essentially want to apply as a web dev first, work as a web developer for about two years before applying for backend work. The fact that my degree is not in the applied field scares me a little though. What do you guys think?",
@@ -112,7 +112,7 @@
     "author":"imhypedforthisgame"
   },
   {
-    "id":"nbzmnl",
+    "id":"nckqpp",
     "author_name":"Brent253",
     "title":"Why am I being asked DS&Algorithm questions for a UI Engineer role?",
     "body":"Today had an interview for a well established company, think I did pretty well regarding the UI portion (Mostly Javascript and CSS based questions) all of a sudden, write a function that finds the most repeated character in a string, followed by find the 30 closest objects in a file with matching coordinates. I think I did alright for the first question but the second completely threw me off my game. Figured it was map \/ tree related and to use breadth first search but just couldn't come up with the code so I had to pseudo code.\n\n&#x200B;\n\nWill find out if I get an offer or not by Monday but just honestly ranting and thought well that sucks because the job description didn't even mention Data Structures & Algorithms. I guess it's leetcode for breakfast again",
@@ -123,12 +123,12 @@
     "author_comment_karma":1548,
     "score":5,
     "author_created_utc":1401178325,
-    "rule_1":1,
+    "rule_1":0,
     "rule_2":0,
     "author":"Brent253"
   },
   {
-    "id":"nbndvk",
+    "id":"nck5gp",
     "author_name":"wegongetdisbread",
     "title":"female youtubers? or any in general you guys like",
     "body":"hi! i\u2019m 18 and interested in doing CS when i graduate college. i\u2019m majoring in marketing but i plan to do a boot camp over the summer one year or something similar to that\n\ni don\u2019t know much about CS and wanted some youtubers to watch to get a feel for what it\u2019s like in the industry and what exactly it is you do\n\ni\u2019m not sure what i want to be doing. i think UI\/UX is pretty interesting but i have to look into front and back end developing etc",
@@ -139,12 +139,12 @@
     "author_comment_karma":40,
     "score":0,
     "author_created_utc":1594074429,
-    "rule_1":1,
+    "rule_1":0,
     "rule_2":0,
     "author":"wegongetdisbread"
   },
   {
-    "id":"nbhjy2",
+    "id":"nck5dt",
     "author_name":"YungAnansi",
     "title":"What is the typical career progression for a web developer?",
     "body":"I'm applying to a web development bootcamp right now and one of the questions is about where I see myself 10 years in the future. I'm not sure how to answer this. I assume that I'd be a senior or lead developer at that point but I don't know enough about this field to elaborate about what I want to do in the future. What are the paths that you can take when you reach that point of your career?",
@@ -160,7 +160,7 @@
     "author":"YungAnansi"
   },
   {
-    "id":"nbhdse",
+    "id":"ncjpgt",
     "author_name":"kool_guy_345",
     "title":"Process of getting into Jane Street as a junior engineer",
     "body":"Long time lurker here\n\nMy dream company to work for is Jane Street Capital in the New York office. I'm intrigued by the fact that they primarily use OCaml for the sake of code clarity and from what I know the culture seems pretty good. I do also know, however, that it's notoriously hard to get into. I'd like to know if anyone has any insight on how to maximize chances of getting in like what to put on my resume, what things to study and practice before the interview, etc.\n\nA bit about me, I'm a math major with a CS minor with 3.7 GPA from an alright-to-decent school. My work experience consists of one data science internship where I didn't do much and I currently work at Amazon and approaching the 4 year mark so I want to switch to something else once I get all my stocks. I don't really have any side projects and wouldn't call myself a super good programmer, I am only particularly comfortable in Java and Python and don't know many software engineering tools other than tools internal to Amazon. To be honest I think I lucked out on my Amazon interview because my raw programming skill is kind of weak. However I am decently good at puzzles\/riddles and so I think I can understand complicated algorithms conceptually but I would need to practice a lot to be able to code them out. I never did competitive programming or anything like that but I did well in advanced algorithms courses which were based on pseudo code and proofs and diagrams. Also, as a math major, I found big O to be pretty easy compared to the kinds of math I did in my program. I don't think I would have any trouble analyzing the run time of programs and finding places where there could be optimizations.\n\nI'd be super interested in knowing what my chances of making it to the interview are and if anyone has any ideas for things I should practice or improve on to maximize my chance of getting in. I heard that Jane Street doesn't usually interview people who failed an interview with them before and so I'd like to get it right the first time. And while I went to a pretty good school I don't think it's a target school so that also hurts my chances, and I'm not sure what their GPA cutoff is or if there even is one. But I think my math background could be appealing to them. Any advice would be super appreciated, thanks!",
@@ -171,12 +171,12 @@
     "author_comment_karma":0,
     "score":0,
     "author_created_utc":1621026790,
-    "rule_1":1,
+    "rule_1":0,
     "rule_2":0,
     "author":"kool_guy_345"
   },
   {
-    "id":"nbdc3t",
+    "id":"ncjmhv",
     "author_name":"Accomplished-Song447",
     "title":"How much of mastery of operating systems concepts is needed in the industry?",
     "body":"I ended up getting a B in the class for Intro. To Operating Systems. I understood most of the high level concepts but have forgotten or struggled to understand the finer details or the algorithms dealing with processes. I was able to complete the projects after reviewing and studying content again. Would it be worth retaking the class? My point is not to retake it for higher GPA but to hopefully understand the material better or in more depth. My concern is about how much of a mastery is expected for an entry level position or later on over time for OS concepts in a real world job. I am worried because operating systems is an important subject to get a job in the software development world from what I have heard. Should I put in the effort to do the class again to make sure I am ready for any problems that a real world job would utilize it?",
@@ -187,12 +187,12 @@
     "author_comment_karma":1,
     "score":1,
     "author_created_utc":1621017533,
-    "rule_1":1,
+    "rule_1":0,
     "rule_2":0,
     "author":"Accomplished-Song447"
   },
   {
-    "id":"nbclsr",
+    "id":"ncjkrh",
     "author_name":"badboyzpwns",
     "title":"Student - How to know when big companies are hiring?",
     "body":"I'm in Toronto, Canada!\n\nBesides LinkedIn do you guys use a site to keep track on which big companies are hiring?\n\nFor example, blackberry posted their listing for  internships\n\n[https:\/\/bb.wd3.myworkdayjobs.com\/en-US\/Student\/job\/Ottawa-Ontario\/Software-Development-Student----Project-IVY---4-Month-Winter-Term\\_20210792](https:\/\/bb.wd3.myworkdayjobs.com\/en-US\/Student\/job\/Ottawa-Ontario\/Software-Development-Student----Project-IVY---4-Month-Winter-Term_20210792)\n\nBut it's not listed on Linkedin, 'm wondering if I'm missing other listings from big companies",
@@ -203,12 +203,12 @@
     "author_comment_karma":6433,
     "score":0,
     "author_created_utc":1416453136,
-    "rule_1":1,
+    "rule_1":0,
     "rule_2":0,
     "author":"badboyzpwns"
   },
   {
-    "id":"nb8ges",
+    "id":"ncj7zf",
     "author_name":"cfbovernfl",
     "title":"GPA for PM internships?",
     "body":"I'm in computer engineering and right now my GPA is just under a 2.9.  If I late withdraw from a course that I got a bad grade in (D), my GPA by the time apps are open should be just over a 3.0.  Of course the class was tough for me and would prefer not having to redo it.  \n\nHow important is GPA\/not having that letter grade for PM summer internships?  For example, at a place like Microsoft? \n\nThanks.",
@@ -219,12 +219,12 @@
     "author_comment_karma":6562,
     "score":0,
     "author_created_utc":1579817167,
-    "rule_1":1,
+    "rule_1":0,
     "rule_2":0,
     "author":"cfbovernfl"
   },
   {
-    "id":"nb7yhm",
+    "id":"ncihre",
     "author_name":"LonesomeCrowdedWhest",
     "title":"Trying to transition from a Junior to a Senior Software Engineer - efficient studying tips while working full time?",
     "body":"Hi,\n\nI wish to become a Senior Software Engineer focusing on serverside programming, APIs, databases etc.\n\nI wanted to discuss how I can practically improve myself through study \/ personal projects while working a dev job. I am willing to totally immerse myself in this and spend as much free time as I can on it. (easier said than done I know).\n\nI have a CS degree and have been working for about 3 years as a Serverside Software Engineer. I did 2 years of DevOps type work before that. I recently joined a new company just over 6 month ago.\n\nI have not really gotten beyond a Junior level so far in my career and I want to improve. I have peers from college \/ work who have gotten far ahead of me despite starting at the same time.\n\n&#x200B;\n\nHere is what I have done so far.\n\n\\-  I am starting from scratch building a new portfolio focusing on server side projects. (I had one from college that is no longer relevent)\n\n\\- I am trying to study some of the influential books in the field (Currently Martin Fowler's Patterns of Enterprise Architecture)\n\n\\- I am trying to become a deep expert in Python (open to ideas on doing that)\n\n&#x200B;\n\nDo you have any tips \/ advice for me? Thanks.",
@@ -235,12 +235,12 @@
     "author_comment_karma":2836,
     "score":1,
     "author_created_utc":1406457064,
-    "rule_1":1,
+    "rule_1":0,
     "rule_2":0,
     "author":"LonesomeCrowdedWhest"
   },
   {
-    "id":"nb65k0",
+    "id":"nci7bm",
     "author_name":"Shipwreck-Siren",
     "title":"Is there any way to find overlaps between non-IT\/CS experience and the experience required for IT\/CS jobs in order to qualify to apply for them?",
     "body":"I'm currently in a state government job that I'm miserable in and I'm reaching my breaking point. I have a B.S. in Economics. I've been considering a switch to tech and am working through CS50 and then want to move onto other certifications for Linux, Networking, Systems Admin, etc. Almost every entry-level job that I'm finding is negotiable on degree and certificates, but usually requires at least 1-2 years of experience in IT settings. I know that for many jobs you can find overlaps between experience and get interviewed and even hired without having direct experience. I'm wondering if this is true for IT\/CS? I saw this job posted with the state and I'm wondering if any of my experience can be applied. Is saying that I'm working through CS50 enough? What kind of non-IT\/CS experience can qualify for the information security field? I feel like a lot of my current experience as a labor market analyst can meet similarities with the other duties, but I don't have direct experience in an IT setting. I've tried writing scripts to make my tasks more efficient in the little time that I have and started learning Linux last year before the pandemic started. I would like to at least try to apply but asking if you have that experience is an initial qualifier\/disqualifier. I feel like I'm trapped because of how little I can devote to my certificates\/training around this full-time job and it is DRAINING me after 3 years. I'm trying to stay in some level of public sector work so that makes my options more limited.\n\n&#x200B;\n\nAnyway, this is the job posting:\n\n&#x200B;\n\nDESCRIPTION OF JOB:\n\nAs our Cyber Security Administrator you will take on a new environments, tools, or networks and address how to operationalize new and existing security policies, ensure new environments are compliant, you will automate scanning and logging in, and design how activities with be implemented. You will have the opportunity to work with existing tools as well as implement new tools. Additionally you will create standard controls and assist with other tasks as necessary.\n\nSome of the day to day duties include:\n\nMONITORING: \n\n* Monitor different levels of security.\n* Ensure IT environment domains are secure.\n* Address any issues, events, incidents, vulnerabilities, or weaknesses.\n* Review daily SIEM, event detection, and endpoint protection controls logs.\n* Review device configuration change logs for any unknown device modifications.\n\n&#x200B;\n\nIMPLEMENTATION: \n\n* Implement and follow cyber security policies, standard pools, and best practices.\n* Adjust to changing environments and ensure tools, controls, and monitoring are in place.\n* Implement best practice security controls for agency supported tools and devices.\n\n&#x200B;\n\nREMEDIATION: \n\n* With audit findings, assist with the remediation of compliance issues and vulnerabilities that have been found via analysis.\n* Provide technical risk assessments that will inform the customer and provide a path for a secure environment. \n* Conduct security research in keeping abreast of the latest security enclave.\n* Conduct security research in keeping abreast of latest security trends and\/or campaigns. \n\nDESIGN: \n\n&#x200B;\n\n* Apply new security design to major known threats.\n* Track documentation of the environment and ensure that documents are being reviewed and updated. \n* Plan, design, implement security tools, controls, and devices.\n* Review security design to ensure best security practices and department policies are being followed.\n\n&#x200B;\n\nMINIMUM QUALIFICATIONS, SUBSTITUTIONS, CONDITIONS OF EMPLOYMENT & APPEAL RIGHTS:\n\nSuccessful candidates for this position will possess the following skills\/experience:\n\n* Two years of increasingly challenging work experience in the information security field.\n* Associates Degree from an accredited college or university in business, management, information technology, computer science, or equivalent practical experience.\n* Additional appropriate education will substitute for the required experience on a year-for-year basis, but cannot completely substitute for these qualifications.\n* Additional, appropriate paid or unpaid experience will substitute for the required education on a year-for-year basis,.\n* Training or Certification related to the work assigned to the position will be assigned credit towards substitution for experience and\/or education, but cannot completely substitute for these qualifications.\n\n&#x200B;\n\nPreferred Qualifications:\n\n* Bachelors Degree from an accredited college or university in business management, information technology, computer science or related fields.\n* Strong organizational skills and the ability to handle many tasks simultaneously in a high pressure environment with rapidly changing priorities and deadlines.\n* Excellent relationship management and liaison skills, strong orientation toward collaboration and communication, ability to earn trust and respect from a challenging customer base.\n* Strong leadership, strategy and analysis skills.\n* Strong verbal and written communications skills with the ability to communicate succinctly and to specific audiences including the ability to draft clear and concise employee and customer communications as well as executive summaries.\n* Excellent customer service skills and attitude.\n* At least one professional certification to include: CISSP, CISA, CISM, GSEC, GIAC, etc. or the ability to acquire within 6 months of hire.",
@@ -256,7 +256,7 @@
     "author":"Shipwreck-Siren"
   },
   {
-    "id":"nb5qa8",
+    "id":"nci3mb",
     "author_name":"courtois26",
     "title":"Prospects for STEM PhD dropout going into Industry",
     "body":"I am currently pursuing a PhD in maths at a top school in the US. However, this might not be the correct path for me, since I don't have the passion for research and academic pursuit that my peers have. Therefore, dropping out and getting a CS (or Finance) job has become a serious consideration for me.\n\nI'm currently finishing up my 2nd year, so ideally I would apply for jobs and dropout before the end of my 3rd year, since I don't want to dropout without an offer already. What do you all think my prospects are? ***I'm specially worried*** that companies won't want me because they might think: \"this person has no perseverance since they committed to a PhD but ended up dropping it\" or \"this person is too dumb for us since they couldn't even exit their PhD program with a Masters\". Is there a standard way of saying you're planning to dropout (in your resum\u00e9 or during interviews) without sounding like a quitter?\n\nIf you are wondering, here is a bit more about my background. I did by undergrad in pure math at a top school in the US and went straight to my current PhD program after that. ***I have no internships*** or previous experience (in CS or finance) except for a quantitative trading internship this summer at a top firm. My coding is decent (Python and C++, I can do LeetCode or CodeForces problems) but I don't have any projects to prove it. Should I focus on doing some coding projects and posting them on my website, to prove that I have the basic hands-on skills required?\n\nThank you very much for your help!",
@@ -272,7 +272,7 @@
     "author":"courtois26"
   },
   {
-    "id":"nb51zy",
+    "id":"nchynj",
     "author_name":"GirthyConsequences",
     "title":"Raises and career progression as Junior Dev",
     "body":"I was hired as a new grad, \"Software Engineer I\" this past August. I was offered 60k (plus yearly profit share bonus that tends to be 20-30% of salary) in a Medium CoL area.  Because the pandemic was still pretty fresh at the time and jobs were scarce, I didn't negotiate my offer at all and took the 60k. At the yearly review in January I was given a \"prorated\" raise to 62k since I was only 4 months into the job.\n\nI absolutely love this job, but I do regret not negotiating my starting salary. It feels like I've lost out on a lot of compensation. Typical pay for entry level devs in my area 70k, and while this company gives out hefty bonuses that make my pay come close to average, those bonuses are highly variable and certainly not guaranteed, especially as the company grows.\n\nI'm coming up on 1 year of experience now and I'd like to ask for a raise. I would love 70k but I don't know if that's too much to expect, especially as Software Engineer I. And I have no idea when I could be promoted to Software Engineer II or what pay increase that would entail?\n\nIs 60k->70k after one year outlandish? If so, what's a more reasonable raise that I could expect\/ask for?",
@@ -288,7 +288,7 @@
     "author":"GirthyConsequences"
   },
   {
-    "id":"nb0sig",
+    "id":"nchr7f",
     "author_name":"bearLover23",
     "title":"Abysmally awkward and uncomfortable on camera. What can I do? Practice even doesn't seem to work.",
     "body":"I just flat out am ugly and I've been teased and berated for it all my life basically.\n\nBeing on camera I just had an interview where I was paralyzed with multiple people in it. I was just locked up and couldn't do it I felt so uncomfortable.\n\nWorst yet it seems all these companies want cameras on ALL DAY ON THE JOB. It's so intensely uncomfortable to me to imagine these sorts of roles. \n\nIdk what to even do. I got into software development and have held positions in the past but now there is this consistent expectation to have a camera on at all moments and even open mics. :\/",
@@ -299,12 +299,12 @@
     "author_comment_karma":43475,
     "score":0,
     "author_created_utc":1462142489,
-    "rule_1":1,
+    "rule_1":0,
     "rule_2":1,
     "author":"bearLover23"
   },
   {
-    "id":"naz3zg",
+    "id":"nchk1u",
     "author_name":"Aber2346",
     "title":"Is San Diego a weak market to be in for Software Engineering jobs?",
     "body":"I've been in San Diego all my life and I'm feeling like the market isn't great down here, I worked a low paying dev job where I got to write lots of code but the pay was way too low to be sustainable in this area. I bounced to a defense contractor and have been doing DoD work for the past 2 years the money has been great but there goes times where I go months without writing code or just doing docs and stuff. Its a great wfh gig as I am typically able to get by just coasting but its kinda unnerving thinking about what happens at the end of the contract plus I worry that my skills are beginning to go downhill. I do some leetcode off hours and I'm trying to get a masters but I just feel like I'm in a limbo at this point. I don't really care about FANNG or even a six figure salary but would just love a job where  I get to write code and not just deal with red tape and documentation. Does anything like this even exist in San Diego or should I be looking at the other tech cities? I don't want to relocate but it feels like the markets are so flooded with talented applicants and I don't really have much to show for over my past 3 years of experience, I've mostly just done some java\/javascript and old government stuff. Would be moving to a bigger defense contractor help me get more experience?",
@@ -320,7 +320,7 @@
     "author":"Aber2346"
   },
   {
-    "id":"nayudk",
+    "id":"nchjeq",
     "author_name":"Bananadan2016",
     "title":"Just got my first internship!",
     "body":"After five years at university and applying to tons of internships (and getting rejected a ton hehe) I finally got my first offer for an internship.  I don't know what to expect. Does anyone have any general tips for someone going into an internship for the first time? I'm really nervous.",
@@ -331,12 +331,12 @@
     "author_comment_karma":30,
     "score":0,
     "author_created_utc":1460815563,
-    "rule_1":1,
+    "rule_1":0,
     "rule_2":0,
     "author":"Bananadan2016"
   },
   {
-    "id":"naynr9",
+    "id":"nchje3",
     "author_name":"mr_sandmam",
     "title":"Software development or Artificial Inteligence? Help me decide",
     "body":"I know it's been asked a lot, but I'm in a hurry. In about two hours top I'll need to choose a path to specialize my career, and those are my two primary options. \n\nAbout me: I'm not a very motivated person, got into cs because I didn't like anything, so went for the money. AI is the hardest brach according to older students at my uni, however I've spoken with an experienced aquaintance that has worked 20+ years (in sales, I think), we've looked at the different subjects and he says the AI ones will teach me the most and will make my curriculum more attractive. It also looks interesting in youtube videos (like CodeBullet's). However, I am scared it's too much for me as I am already having motivation issues with the core subjects these two last years. I just want an option that lends me more time to decide while not fucking up my career options.\n\n Sorry for the horrible writing, non native english speaker. thanks ing advance to any answers.",
@@ -352,7 +352,7 @@
     "author":"mr_sandmam"
   },
   {
-    "id":"navbji",
+    "id":"nchhhw",
     "author_name":"POIS_hell",
     "title":"Would I benefit much from learning WebAssembly (Wasm)?",
     "body":"My dissertation project I chose is building a web app using wasm. Is there much chance this language will grow and be valued in the future career-wise?",
@@ -363,12 +363,12 @@
     "author_comment_karma":4863,
     "score":0,
     "author_created_utc":1590862474,
-    "rule_1":1,
+    "rule_1":0,
     "rule_2":0,
     "author":"POIS_hell"
   },
   {
-    "id":"nauo77",
+    "id":"nch7jc",
     "author_name":"Rhino_Juggler",
     "title":"Bootcamp opinions for web development in 2021 (is Hack Reactor still the best?)",
     "body":"Hi I'm currently considering trying to get into Hack Reactor. My main reasoning is it focuses on Javascript and not Ruby, which my web dev friend says is the right path. I am a little concerned on how long the hours are compared to other bootcamps though, is it truly beneficial to have 11 hour days (I also imagine you need to put in additional study hours too)? I feel this will lead to burn out and straight up unproductive hours. Is Hack Reactor still viewed as the best bootcamp for javascript?",
@@ -384,7 +384,7 @@
     "author":"Rhino_Juggler"
   },
   {
-    "id":"naqahw",
+    "id":"nch3qh",
     "author_name":"NattoKimchiPower",
     "title":"SWE at a Tech Company or at Prestigious Bank? Offer explodes in 3 days, IDK what's better for my career",
     "body":"Hi all,\n\nI have recently started working (2 weeks) as a software engineer at a reputable financial company. However, I have recently received a competitive offer from a tech company based in Seattle and their offer explodes in 3 days. (They are fully aware that I recently started at another company)\n\n&#x200B;\n\nThe team I am on at my current company (financial one) is not legacy or boring work. I am working on features for a new financial application that will be released in the coming months. However, my onboarding has been a shitshow but it's slowly getting better... I am not sure the team knew that I was joining LOL I would say this financial company would be considered the top bank\/investment institution in the world.\n\n&#x200B;\n\nThe team at the tech company is a customer data backend-focused team. Not the most exciting team but I got the chance to actually meet the team and the hiring manager during the interviews.  The company is a not FAANG tier, but it is a company most people have heard about before and is a company you would find in Silicon Valley. The culture and team seem awesome and seem like an awesome place to work.\n\n&#x200B;\n\nSo basically if I were to leave my current company, I would be blacklisted by the financial world possibly... my question is what is best for my career? (Salary, Learning, Career Progress, etc...) My goal is to learn as much as a developer as possible to eventually start my own startup and to earn as much as possible. \n\n&#x200B;\n\nWould greatly appreciate any advice or opinions from you guys!\n\n&#x200B;\n\nThanks!",
@@ -395,12 +395,12 @@
     "author_comment_karma":366,
     "score":1,
     "author_created_utc":1608643094,
-    "rule_1":1,
+    "rule_1":0,
     "rule_2":0,
     "author":"NattoKimchiPower"
   },
   {
-    "id":"nacopg",
+    "id":"ncgykz",
     "author_name":"JWIV06",
     "title":"I want to work while traveling.",
     "body":"I don't want to stay in the same place for an extended period of time. So to me a career in computer science looks like the solution to my problem. I don't really know where to start... at all. What should I know?",
@@ -411,12 +411,12 @@
     "author_comment_karma":2895,
     "score":0,
     "author_created_utc":1569457825,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"JWIV06"
   },
   {
-    "id":"nabdks",
+    "id":"ncgp5o",
     "author_name":"GrandExhange",
     "title":"How do you know you made it in this field?",
     "body":"Hello,\n\nI am studying computer science and I am not sure what my focus should be on, aside from the school curriculum.\n\nFor example, what would be the ultimate achievement in this field?\n\n  \nIs it to be a professional programmer in a handful of languages?  \nStart a company?  \nBe a professor?  \nIs there a need to pursue higher education, ie masters?\n\nI am just trying to plan my career out and would like to have a goal (Other than mastering a programming language)\n\nI hope I am making sense ...",
@@ -432,7 +432,7 @@
     "author":"GrandExhange"
   },
   {
-    "id":"na5rg4",
+    "id":"ncgfgb",
     "author_name":"Nasridosrs",
     "title":"Do people also apply for hundreds of jobs in other fields?",
     "body":"I regurlarly see posts here about people who say theyve applied to x amount of jobs and still havent gotten anything, is this the case for other fields too? Or just for programming related jobs?",
@@ -443,12 +443,12 @@
     "author_comment_karma":152,
     "score":0,
     "author_created_utc":1604869126,
-    "rule_1":1,
+    "rule_1":0,
     "rule_2":0,
     "author":"Nasridosrs"
   },
   {
-    "id":"na3z4d",
+    "id":"ncgeu8",
     "author_name":"old_news_forgotten",
     "title":"For those of you have have struggled with the leetcode grind, what has NOT worked out?",
     "body":"What are some strategies that have not worked in making you do better",
@@ -464,7 +464,7 @@
     "author":"old_news_forgotten"
   },
   {
-    "id":"na292g",
+    "id":"ncg7us",
     "author_name":"WTFranklin",
     "title":"Career advice for kind of experienced and kind of not developer",
     "body":"I graduated from college about 3 years ago and I've had four jobs since then. I've had a difficult time finding a the \"right fit\" and as far as I can tell it's everything to do with my level of experience and not as much my personality. My first job was a contract job that ended because the contract ended and they didn't renew due to the company having some internal issues. I ended up leaving my next job due to wanting to work in a different technology stack. The next place I worked put me in a position where they cut my pay massively hoping I would quit so they didn't have to pay me unemployment due to me underperforming in my position and I just got let go from my job yesterday where they claimed \"the company was going in a different direction\" and they wanted more senior level developers on the team. I assume that's true, but I still get the impression they thought I might have been underperforming based on other parts of that conversation. \n\nI'm job hunting now and am trying to figure out what I should be looking for in order to work at a place long term and grow as a developer in order to fill in any possibile gaps in knowledge I have so I can improve. I'm sticking to postings that specifically say entry level or junior to be on the safe side. I have a lot of experience mainly with web technologies like html\/css\/JavaScript and PHP\/MySQL. I just spent the last year and 8 months using codeigniter at my last job and got really familiar with it, but it seems like a lot of companies are moving away from these types of frameworks and  stacks in favor of AWS services and js frameworks. I have some exposure to AWS (completed an associate solutions architect course, but haven't passed the exam yet) and have been learning Vue but don't have any production experience with it and a lot of companies are looking for 2+ years even in junior positions. I assume this is a fairly common situation to be in in, how have others death with this and how have you found your groove?",
@@ -480,7 +480,7 @@
     "author":"WTFranklin"
   },
   {
-    "id":"n9zalr",
+    "id":"ncg13z",
     "author_name":"VoluminousCheeto",
     "title":"Is it easier or harder to get a job\/internship in California?",
     "body":"California is said to have the most tech jobs. Does that mean the supply is higher and therefore it\u2019s easier to land a job is higher? Or does the level of competition even it out?",
@@ -496,7 +496,7 @@
     "author":"VoluminousCheeto"
   },
   {
-    "id":"n9yxjg",
+    "id":"ncfx15",
     "author_name":"Content_Zombie_1257",
     "title":"I kind of hate my job but the company is great. Not sure if it\u2019s me or the job.",
     "body":"Long story short I used to work a variety of blue collar jobs before I got into making videogames as a hobby. I love game dev and i hope to release my own game in the near future. I decided I could escape blue collar life by learning to code more professionally and I did. I got a job at a healthcare company writing SQL and SSRS reports. 3 years later I got promoted to a new position working with MS Dynamics. \n\nThe company and culture, while corporate and corny at times, is anything but toxic. I feel valued and rewarded for my hard work. Management is supportive and it\u2019s a very collaborative atmosphere. Office politics exist I\u2019m sure but I don\u2019t have to worry about them. PTO is generous and so is the pay. \n\nBut I just can\u2019t focus. I\u2019m just not interested in any of this shit. It was the same with both the SQL and dynamics positions, which as tools are both fine and kind of fun to work with, but in the context of healthcare and the corporate world I just really have trouble staying on top of all the meetings, different projects, terminology, processes, ect. I\u2019m feeling overwhelmed. I swear to god sometimes a meeting will just land on my calander with zero context and people will talk to me as if I\u2019m an expert in whatever it is they\u2019re talking about but I literally have no clue. Sometimes I ask for context beforehand and it\u2019s just more shit I don\u2019t understand. I feel like I\u2019m low IQ and just managed to charm my way into this job.\n\nI have no idea what the hell is going on most of the time and I just kind of stumble my way through everything until it\u2019s \u201cdone\u201d and either deployed or forgotten about for 3 months until it randomly comes up again. I the meantime 6 other things will be piled onto my plate. Sometimes I finish shit without understanding what I did or what it\u2019s for.\n\nMy honest feelings are that I don\u2019t give a shit about my job. I just want to develop my games but I\u2019m not naive, I know putting it all on the line in the hopes my little indie game will take off is a dumb move... I just can\u2019t stand the office life. I feel like I\u2019m so stressed out for no reason. I exercise regularly and whatnot but I feel like my body is in worse shape than when I was landscaping lol\n\nPart of me wants to go back to blue collar life and just make my games on the side, but I would need to pick up an actual trade to support the house and kids. \n\nIdk how bad did I fuck up here in going down this path?",
@@ -507,12 +507,12 @@
     "author_comment_karma":-29,
     "score":2,
     "author_created_utc":1621003487,
-    "rule_1":1,
+    "rule_1":0,
     "rule_2":0,
     "author":"Content_Zombie_1257"
   },
   {
-    "id":"n9yk8n",
+    "id":"nceztr",
     "author_name":"No-External3221",
     "title":"How do tech salaries vary between tech hubs?",
     "body":"Before I begin, I'm aware of Glassdoor and levels.fyi, etc. These numbers online seem wildly all over the place and possibly inconsistent, which is why I'm coming here for opinions.\n\nI'm looking at starting my CS career, and salary vs cost of living is a big factor. I see that the SF bay area has many high paying opportunities, but it's also absurdly expensive and I would be able to afford a home. How does it compare to a place like, say, Chicago where I could buy a house in the suburbs for $300k. Would the salary be salary be close enough to where I'd make more, given the savings on real estate? \n\nThe same question goes for other tech hubs as well. I know that TX and WA state are popular as well for the lack of income taxes.",
@@ -523,12 +523,12 @@
     "author_comment_karma":333,
     "score":1,
     "author_created_utc":1617380711,
-    "rule_1":1,
+    "rule_1":0,
     "rule_2":0,
     "author":"No-External3221"
   },
   {
-    "id":"n9xob5",
+    "id":"nceyio",
     "author_name":"trashtierdev",
     "title":"Terminated from contract-to-hire position today",
     "body":"Earlier today I was notified by a recruiter from a contracting company I have been working with that my contract would not be continued after noon today. This is my first software engineering role post-graduation. I\u2019m not sure what my next steps should be at this point as I was only in the position for 3 months. If anyone can provide any advice or guidance that would be great. \n\nThank you in advance to anyone who responds.",
@@ -544,7 +544,7 @@
     "author":"trashtierdev"
   },
   {
-    "id":"n9ux80",
+    "id":"ncemy5",
     "author_name":"chamric",
     "title":"Got an email invite for a phone screen, which I accepted. Haven't gotten a reply to schedule it yet. It's been a week. Is this a normal time frame?",
     "body":"It's a big tech company.  In my prior experience, I've always received a scheduling email within the day.  Is a delay normal, or should I email a followup?",
@@ -555,12 +555,12 @@
     "author_comment_karma":10161,
     "score":1,
     "author_created_utc":1378346388,
-    "rule_1":1,
+    "rule_1":0,
     "rule_2":0,
     "author":"chamric"
   },
   {
-    "id":"n9t540",
+    "id":"ncemsk",
     "author_name":"ghostmansd",
     "title":"Any C work at kernel\/user space boundary?",
     "body":"I've been working in one of big companies developing custom OS for several years. My activities included developing userspace services, custom libc and some S\/W parts of the proprietary kernel. This was a job I really liked; the only reason I left it was a lack of understanding how tech processes should work. For several years, me and many my colleagues tried to change the situation, with little to no success; when most of talented colleagues left, I felt that the project stagnates, and also took an uneasy decision to leave.\n\nAnyway, even after some months passed, I feel that I really miss what I did there. I really liked the job, only political questions or absurd management made it less attractive. I would really like to find some project which is concentrated around the stuff I used to do. I'm particularly interested in concepts like capabilities, TCB, object-oriented; OSes and frameworks which attract me most include Fuchsia, Capsicum, Windows (not API-wise, though) and similar. I mostly dealt with C over these years; my C++ skills are rusty. Anyway, language is not a problem, I can learn new languages as well; I simply prefer C.\n\nAn ideal project would be:\n\n* An operating system which is aware of Orange Book and TCB, and tries to follow these principles to at least some extent.\n* Mostly userspace activities, like libc development, implementing miscellaneous services, perhaps even RPC to some degree.\n* It'd be perfect if I could operate on kernel\/userspace boundaries, e.g. implementing new system calls or other kernel<=>userspace interfaces.\n* Preferably the significant part is written in C, which I know much better than anything else; other languages are not a problem, the C is simply the favorite one.\n* The project has some space for an architect.\n* The job is remote.\n\nOf course, I realize that it's rather difficult to meet all these criteria; I mostly shown them for an illustration of what I like and prefer. I tried investigating many jobs available, but, given somewhat narrowed scope, it's difficult to find something. Most vacancies for C developer I checked deal with either firmware or hardware; whilst I'd really like to become proficient in these areas as well, I'd like to at least start with fields where I feel myself already proficient enough. That said, I'm OK to use languages other than C, and participate in projects which deal with other userspace parts; above is an ideal image of the world, I realize it's close to impossible to find something that specific.\n\nI'm struggling to find something which matches my interests, and would be glad for any tip. Finding a job which matches these criteria via search engines is difficult, if not impossible, but perhaps real people can give me an advice?\n\nUPD: I also should mention that quite a lot of my activities recently concerned taking architectural solutions, publishing designs on implementations and similar actions.",
@@ -571,12 +571,12 @@
     "author_comment_karma":31,
     "score":3,
     "author_created_utc":1335479932,
-    "rule_1":1,
+    "rule_1":0,
     "rule_2":0,
     "author":"ghostmansd"
   },
   {
-    "id":"n9qbte",
+    "id":"ncek4q",
     "author_name":"Chitlins222",
     "title":"Weighing options of possible offers, or holding out for dream company",
     "body":" \n\nI am a Jr. level developer and I have been applying to places like crazy the past month. In the past two weeks I have interviewed for 10 different positions at 9 different companies.\n\nThis past Wednesday I interviewed in person (weird, I know) with a small company about a 30 min drive from me. I really enjoyed the interview and they really enjoyed me as well. The CTO walked me out and told me she sincerely enjoyed the interview.\n\nFast forward to today where I am moving on to the second step of the interview process (out of 2 or 3 steps) with the company I have wanted to work with this entire time. They are one of the best companies to work for in the entire state. Not only that, but I am interviewing for two different jobs with this company.\n\nThe issue is that the small company said they move fast and will let me know mid next week if I get the job, and while I cannot be totally sure they will send me an offer, I do feel very good about it. At the same time, the bigger company I am interviewing with can move a little bit slower. I do not want to reject the small offer just in hopes that the larger company sends an offer. What is the best way to handle this situation?\n\nShould I inform the large company at the end of the interview that I am expecting an offer from the small company sometime next week? And that I would rather work for them, but do not want to screw up my chances with the smaller company? Do I let the small company know that I am waiting on results from the large company?\n\nI do not want to piss either off and have them send rejections. They are both great opportunities. What should I do?",
@@ -587,12 +587,12 @@
     "author_comment_karma":1964,
     "score":1,
     "author_created_utc":1577415376,
-    "rule_1":1,
+    "rule_1":0,
     "rule_2":0,
     "author":"Chitlins222"
   },
   {
-    "id":"n9psii",
+    "id":"nce542",
     "author_name":"thereisnoaddres",
     "title":"Has anyone heard about how Bytedance (China) wouldn't let an intern leave because she didn't find a replacement?",
     "body":"There is [this thread](https:\/\/bbs.pku.edu.cn\/v2\/post-read.php?bid=99&threadid=17984461) that has been popping up a lot in Chinese programmer forums \/ groups. My Chinese is getting a bit rusty so I might have missed a few details, but this seems to be what happened: \n\nThere's this intern from Peking University who worked Jan - Apr and told her leader that she wants to leave in April because they're busy with graduating. The leader said no because she didn't find a replacement for her position and told her to keep working. After May 1st, a junior of the leader's joined the team, so OP wrote a 10,000 character transitional document and asked to quit on May 11th again, but the leader said that OP still couldn't leave because the backup wasn't found by the OP. On top of that, the leader said to OP that their working skills are really bad and they have to find two backups (replacements) to fill the holes in her work and questioned OP why they couldn't find a replacement when everyone else could. \n\nOP's post then goes into detail about legality (no mention of needing to find a replacement before leaving), violence at the workplace (OP's roommate's leader told the roommate that \"leaving without finding a replacement is irresponsible\", and when OP brought this issue to HR, HR said that OP was arguing about semantics \/ denying that the leader had said such a thing), why they needed two backups (was she doing two people's work?), and double standards (a roommate of hers didn't need to find a backup to leave, so why would she need to?). \n\nHope we can have a discussion about this here.\n\nEDIT: Sorry about using \"she\" in the title. Not too sure about OP's gender.",
@@ -603,12 +603,12 @@
     "author_comment_karma":12025,
     "score":33,
     "author_created_utc":1584234214,
-    "rule_1":1,
+    "rule_1":0,
     "rule_2":0,
     "author":"thereisnoaddres"
   },
   {
-    "id":"n9loar",
+    "id":"nce0he",
     "author_name":"JuanGracia",
     "title":"Freelancing as a software engineer",
     "body":"Have anyone here tried freelancing as a software engineer? \n\nAnd if so, what tasks have you found companies want to outsource, how do you bring in leads and who is your ideal prospect? \n\nHope I'm not asking for too much or wanting people to reveal their secret sauce",
@@ -624,7 +624,7 @@
     "author":"JuanGracia"
   },
   {
-    "id":"n9ke1v",
+    "id":"ncdzs0",
     "author_name":"PuzzleheadedClue2929",
     "title":"I have a meeting about quantum cryptography and I work at a very small company... why is this scheduled?",
     "body":"I work at a very small company who does no research and barely keeps up with current industry standards. We still have an IBM i\/series; we aren't the pinnacle of technology. \n\nI am just a developer, but I have applied for a Security Engineer role and have been going through interviews for the past few weeks. The meeting was setup by our Security Director and they included only my supervisor and I. I have no context for the meeting other than the invitation title, \"Quantum Cryptography.\" Is this meeting a coverup for something else? I am slightly familiar with the concept and have been studying throughout the day just to be prepared.\n\n&#x200B;\n\nWhat should I expect?",
@@ -635,12 +635,12 @@
     "author_comment_karma":0,
     "score":0,
     "author_created_utc":1621012623,
-    "rule_1":1,
+    "rule_1":0,
     "rule_2":0,
     "author":"PuzzleheadedClue2929"
   },
   {
-    "id":"n9ikr9",
+    "id":"nccj4b",
     "author_name":"TerranToplaner",
     "title":"Any tips for selling myself to companies?",
     "body":"I don't have any formal education nor experience, but I know how to code. I'm going to go \"door by door\" asking companies to give me a chance, offering to work for free for one or two weeks or so while they test me out.\n\nAre there any more things I can do to maximize the possibilities of me getting a job? There's a limited number of companies in my town so I don't want to be wasting chances. Also should I have a big GitHub portfolio? And I don't know what type of companies to go to, I don't think Tires Waldo is going to need a programmer, but in case of a bigger company, I don't think the programmers are going to be here in this town. I could move though, that's not completely out of the question.\n\nI just need an lnterview and a few days to show that I have the skill set.\n\nFor reference I live in Spain, last time I asked something like this and I didn't say it one guy got very mad",
@@ -656,7 +656,7 @@
     "author":"TerranToplaner"
   },
   {
-    "id":"n9en79",
+    "id":"ncch8s",
     "author_name":"Synergy182",
     "title":"What would you choose: Fund vs Bank",
     "body":"Hello all,\n\nI'm based in Toronto and just got a Developer offer from CPP Investment Board while I'm currently working as an Analyst (not FTE) at one of the top 2 banks in Canada.\n\nNew offer:   \nBase Pay: 94K + 10% bonus + 5% RRSP matching\n\nCounter FTE offer from bank:  \nBase Pay: 90K + 10% bonus + 3% RRSP matching\n\nNow the compensation is similar but biggest thing is lack of development opportunities in my current role and after talking to my boss he said if you decide to stay - he wants me for at least 2 years at the minimum (so no flexibility to move laterally). On top, I have 1 on-call week every month which is draining as it ruins my sleep schedule.\n\nNow I was leaning towards taking the new offer and leaving, because Dev position, AWS is being onboarded, no on-call stuff as of now, the pros are looking good for the new position right? \n\nWell they were till I started looking at GlassDoor reviews for CPPIB, a lot of people are not liking the new CTO (hired in 2018) and now this is making me doubtful on my decision.\n\nSo what would you do as a 20 something year old starting their career? (I have 3 years of industry exp. with 1 of them being internships).",
@@ -672,7 +672,7 @@
     "author":"Synergy182"
   },
   {
-    "id":"n9dibo",
+    "id":"nccdrb",
     "author_name":"fahova",
     "title":"Cushy low paying SWE vs. High paying \"Demo Engineer\"",
     "body":"&#x200B;\n\nHey. I graduated from university a year ago and have been working for a year as a back-end engineer. I was applying during peak COVID so I took the first decent job I found. The work is ok for me (I like designing APIs), the people are great, the work-life balance is impeccable but for my experience and skillset, I'm being grossly underpaid ($72k\/y +8k bonus) (HCOL).\n\n I don't think there is much room for working on newer projects at my current company (cut and dry, develop this feature, fix this bug, etc).  I very much want to leave for a company that will pay me more, and allow me to work with engineers that I can learn from. The only redeeming quality about this company is that I only have to work like \\~15h a week MAX. No micromanaging.\n\nI know that I'm being underpaid, so I've been grinding LC for the past 3 months and I'm making steady progress. I've been taking all the SWE interviews I can get just for the practice and recently I've been offered a glorified Sales Engineer job. The comp is \\~120K + 15-20k bonuses. This is basically 50K more than I make now. The role doesn't sound very appealing, but from what I can gather they want someone to come to develop tools and scripts to automate their demo environment (so there would be some SWE). \n\nRegardless, I would still keep grinding LC if I took this job because I don't want to end up in the sales engineering world. **Will taking this job hurt my ability to pivot back to a pure SWE role?**  Would you give up insane WLB + vacation days for 50K for a temporary role as a sales engineer?\n\nRight now I'm still confused. An extra (50k \/ y) would be extremely great, I just don't want to hurt my ability to get back into an SWE role... \n\nAlso, this company I'm currently at is working at knows I want a raise, and I've been vocal about it but I'm met with nothing but lip service.\n\nTLDR: \n\noption A: stay at current company, maybe get a 10-15k raise within the year, continue to work on CRUD APIs but not work with newer tech stacks \/ develop my skills that much.\n\noption B: go to company B, make $50k more at least, and do something I also don't particularly enjoy, that moves outside of the SWE world, and continue to study.",
@@ -683,12 +683,12 @@
     "author_comment_karma":3553,
     "score":0,
     "author_created_utc":1446349236,
-    "rule_1":1,
+    "rule_1":0,
     "rule_2":1,
     "author":"fahova"
   },
   {
-    "id":"n99c59",
+    "id":"nccdon",
     "author_name":"Wandering_warlock",
     "title":"Is lowcode a good career path for a computer scientist?",
     "body":"I'm about to graduate and I was trying to choose a direction on what Im learning. I saw a company called cognito that works with lowcode platforms.\nSo my question is, is working on low-code a waste of my studies?",
@@ -699,12 +699,12 @@
     "author_comment_karma":1258,
     "score":0,
     "author_created_utc":1556469505,
-    "rule_1":1,
+    "rule_1":0,
     "rule_2":0,
     "author":"Wandering_warlock"
   },
   {
-    "id":"n98wco",
+    "id":"ncc74q",
     "author_name":"ProvocativeDipshit",
     "title":"Is this position worth it?",
     "body":"I recently received an offer from Cognizant for a Data Engineer role (entry-level). I know Cognizant is known for having bad practices, but this role doesn't seem to fit in that category at least from what I can tell. This is coming from someone with a minor in CS so I'd really take any position in this field that I can get. I'm planning on doing a Master's in CS in the meantime. Would taking this role be bad for my future with CS in anyway?",
@@ -715,12 +715,12 @@
     "author_comment_karma":2,
     "score":0,
     "author_created_utc":1547678261,
-    "rule_1":1,
+    "rule_1":0,
     "rule_2":0,
     "author":"ProvocativeDipshit"
   },
   {
-    "id":"n9316s",
+    "id":"ncbq99",
     "author_name":"MachHommy8",
     "title":"Junior SWE at Big Tech: this is not what I expected",
     "body":"Hi all, I was very fortunate to begin a new grad job eight months ago on a team that develops a popular cloud-based product. My manager and teammates are great and I get along very well with everyone. I use a modern, in-demand tech stack and am paid well above market rate. With that said, my time here has been extremely challenging. I work longs hours yet am doing much less coding than I anticipated. The breakdown is approximately:\n\n30% \u2014 Development. We do not have dedicated QA or ops teams, so a good portion of this time is spent either testing or handling build\/deployment issues.\n\n25% \u2014 Docs, investigations, proposals, etc. Every change at this company requires time-consuming processes and external approval.\n\n20% \u2014 On-call activities. We have frequent week-long stretches of 24 hour on-call where getting multiple pages per day is the norm. We are expected to work a backlog of on-call-related tasks when not actively working a page, so I do not touch code while on-call.\n\n15% \u2014 Monotonous, repetitive tasks. This includes enabling feature flags and manual testing for things that we cannot automate.\n\n10% \u2014 Meetings.\n\nI\u2019m not sure how normal this is for a junior, but I suspect it is not normal at all.\n\nI have discussed the issue with my manager multiple times. He pays lip service to correcting the imbalance but I feel that I am stuck in an endless cycle of activities that are not enriching my skill-set as a developer. I have some interesting projects lined up but they require many hours of investigation and proposals before I\u2019ll touch any code.\n\nMy biggest concern is that my experience looks good on paper but, in reality, is lacking. Future employers may expect more from me than I am capable of delivering, given my sub-par experience at my current job.\n\nI am not sure how long I will stay with this company; I am in my 30s and want something more laid back and without so much on-call. However, I worry about leaving my first job too soon and how this may be perceived by future employers.\n\nIs this what modern software development is like at big companies? Am I doing something wrong? Is there anything I can do to improve my situation?\n\nAny feedback is very much appreciated.\n\nEDIT: Thanks to everyone who has replied so far. The responses have helped me to shift my perspective and view my experience more positively.",
@@ -731,12 +731,12 @@
     "author_comment_karma":51,
     "score":77,
     "author_created_utc":1609008881,
-    "rule_1":1,
+    "rule_1":0,
     "rule_2":0,
     "author":"MachHommy8"
   },
   {
-    "id":"n92c2i",
+    "id":"ncbkvf",
     "author_name":"PassionateDeveloper_",
     "title":"Got my first high paid customer as freelancer - just wanted to share!",
     "body":"EDIT: Answered a lot of questions here: https:\/\/old.reddit.com\/r\/cscareerquestions\/comments\/ncs4m3\/got_my_first_high_paid_job_yesterday_here_is_a\/?\n\nHey guys,\n\nim Rene, living in Germany and 34 years old. I work as software dev since 15 years now, the most of the time I was an employee for companies, never got layed off and switched a lot because I got bored after a while.\n\nToday I got my first contract for as a high paid freelancer. I did freelancing before but on the money side it was just meh... sometimes I did it because I hoped to get a foot in the door, sometimes it was just \"I needed the money\", but in total I never got paid more then 20\u20ac after taxes .\n\nJust I don't have someone to share since my dad died and I got a midlife crises and moved across the country to start a new life here.\n\nThank you for reading this!",
@@ -747,12 +747,12 @@
     "author_comment_karma":2188,
     "score":1470,
     "author_created_utc":1608992666,
-    "rule_1":1,
+    "rule_1":0,
     "rule_2":0,
     "author":"PassionateDeveloper_"
   },
   {
-    "id":"n8yvrf",
+    "id":"ncbd37",
     "author_name":"Vnslover",
     "title":"We just switched from waterfall to agile at my company, as a junior Dev I'm a bit intimidated, any advice?",
     "body":"Hello guys, I guess I also have some additional questions too. \n\nSo I have been working at this financial firm as a contractor the past 2 years (first job) and recently they have extended me an offer to become a full time employee. \n\nWe had been using waterfall so basically we would have a bundle every 3 months, I got used to that and it worked fine, that gave me a lot of time to research and be able to code everything before the deadline comes up. \n\nA month ago we switched to agile, we have two weeks sprints now, and also I have switched to another team so the projects are all kinds new to me. \n\nI'm just feeling a bit overwhelmed and starting to feel \"guilty\" for not being fast enough, we have many meetings during the week and while I communicate fine and I'm very professional I feel bad that my whole team are way smarter than me, granted I am the only junior Dev and they are all seniors, but I feel like overall I'm slow and like 10 mins in during a technical meeting I get pretty lost, while the rest of the team keep talking very technical until the meeting is done, it doesn't help that I have ADHD too lol but I am taking meds and they are helping a bit. \n\nI would say overall, I have not received any negative feedback from either my managers or my colleagues, in fact both of them recommended me and spoke great things about me, but I have this crippling feeling that I just keep getting \"lucky\" and I will very soon be \"exposed\" and then crash and burn. \n\nAnd ever since I started working from home last year this feeling had been getting worse, I always feel like I'm deceiving everyone around me and I'm not smart or good as they think I am. I guess this is all caused by years of being in the engineering school and building the imposter syndrome, and having to be like that for all those job interviews. \n\nI also think ever since I started working from home I keep having the urge to log in to my work laptop again after work hours, I really don't feel \"done\" for the day if that makes sense. \n\nAnyone dealt with those issues before? And how did you overcome them? \n\nThanks !",
@@ -768,7 +768,7 @@
     "author":"Vnslover"
   },
   {
-    "id":"n8ycqk",
+    "id":"ncaxqu",
     "author_name":"Zestyclose-Ad6958",
     "title":"How do you manage your time while working on multiple projects simultaneously.",
     "body":"Trying to get myself comfortable with working on multiple projects. Also how do you estimate completion time in these situations?",
@@ -779,12 +779,12 @@
     "author_comment_karma":22,
     "score":6,
     "author_created_utc":1607444671,
-    "rule_1":1,
+    "rule_1":0,
     "rule_2":0,
     "author":"Zestyclose-Ad6958"
   },
   {
-    "id":"n8wk1g",
+    "id":"ncafu1",
     "author_name":"PuppyLand95",
     "title":"Can professional programmers study unrelated technical subjects in their spare time?",
     "body":"For those that might study technical subjects (science, math, etc.) unrelated to programming\/work in their spare time (for fun or whatever reason), are you able to balance it well with work, considering programming itself can be intellectually demanding?",
@@ -800,7 +800,7 @@
     "author":"PuppyLand95"
   },
   {
-    "id":"n8qzvn",
+    "id":"nca61u",
     "author_name":"interview_poo",
     "title":"Just started a remote job and rumors are we have to be back into the office.... which is in the other side of the country",
     "body":"I recently started a job as an Android dev for a mid size tech company that you likely haven't heard of working remote. I've only been there for 2 months and a little before that they hired a new CEO. The new CEO is highly unpopular from what I gather and is a very old school \"ass in seats\" type of guy. I kept seeing emails about the new \"DC office\" and how they were targeting that area.\n\nThe listings for their jobs that were remote shrank significantly and they are all targeted towards Washington, DC now. I didn't think much of this until I started seeing engineer after engineer leave. 4 people from my small team left in a month along with other big time departures like the president of the company. It was very hush hush as to why  they departed and they all \"left on good terms\". \n\nSo then I see some Glassdoor reviews pop up, and they keep saying the same thing: the new CEO wants people to move and work out of DC and that's why people are leaving. Well, I live in Phoenix so there is no fucking way I'm going to move my entire family to DC out of the blue. \n\nMy manager hasn't said a thing about this to me, but I keep getting emails talking about DC and people leaving. So at this point it's just a rumor, but seems to have some substance behind it. \n\nIf this does happen it will count as a lay off right? I am hesitant about looking for a new job right now because I don't want a 2-4 month stint on my resume and then having to explain why. This is just an overall potentially a very shitty situation and I'm not sure what to do.",
@@ -811,12 +811,12 @@
     "author_comment_karma":54,
     "score":31,
     "author_created_utc":1620058785,
-    "rule_1":1,
+    "rule_1":0,
     "rule_2":0,
     "author":"interview_poo"
   },
   {
-    "id":"n8prfz",
+    "id":"nc9rdd",
     "author_name":"javaFrappe",
     "title":"I need advice and help, 8 mos into the job and I am utterly lost",
     "body":"Im a new grad, started my FT job at a F500 company in October. Slowly but surely I was getting work but nothing intense. Only thing is, I was put on a project with a senior dev. I think I dropped the ball? The guidelines kept changing I was still trying to catch up and it was obvious he was frustrated with me. I doubt he would ever want to work with me again. One of my managers had an unofficial talk with me regarding where I think I might fit best in IT. As a developer, Business Analyst, Testing or Automation. I told her I don\u2019t have exposure to a lot. I would want to look into Testing. See if thats a good fit. The talk went okay  but I am lost and disheartened. I constantly feel like I shouldnt be in this field at all. \n\nOn a side note: I am thinking of switching industry to HR. Idk if that\u2019s possible without a degree though.",
@@ -832,7 +832,7 @@
     "author":"javaFrappe"
   },
   {
-    "id":"n8pjru",
+    "id":"nc81er",
     "author_name":"nummer31",
     "title":"Things to have in disposal as a Solution Architect?",
     "body":"I am an experienced engineer with some leading and system design experience. I am looking into applying for \"Solution Architect\" positions and was wondering what tools, tips or knowledge is required or you would suggest to hone or possess?\n\nFew things I am confused about:  \n\\- Explain stuff to non-tech people  \n\\- Budgeting and cost estimations",
@@ -843,12 +843,12 @@
     "author_comment_karma":472,
     "score":6,
     "author_created_utc":1442005909,
-    "rule_1":1,
+    "rule_1":0,
     "rule_2":0,
     "author":"nummer31"
   },
   {
-    "id":"n8p8r4",
+    "id":"nc7s3x",
     "author_name":"EatsShootsLeaves90",
     "title":"How do I handle two managers who need my full attention for a very critical work task at same time?",
     "body":"I work under multiple managers in different segments of the sector. Everything is fairly decentralized, management hardly talk to one another, which complicates things.\n\nThere is hardly an allocation plan and I just work on stuff that is needed. I have dealt with this in the past in previous job. I would just take my whoopings (so to speak). I didn't care because I was on my way out.\n\nBut this job I kind of want to keep and be good terms with management because it's one of very few (if not, the only) negative aspect of it. \n\nConversation like this:\n\nManager #1: We need this work done ASAP. Drop everything and work on it.\n\nManager #2: We need this work done ASAP. Drop everything and work on it.\n\nMe: I have critical task for manager #1. It may take me longer for this task.\n\nManager #2: No this is more important.\n\n&#x200B;\n\nBoth projects, I am the only contributor in the repo and me & manager are only one who are familiar with business rule so passing it off to someone else will be difficult. It's a fairly small shop.",
@@ -859,12 +859,12 @@
     "author_comment_karma":6918,
     "score":10,
     "author_created_utc":1587829558,
-    "rule_1":1,
+    "rule_1":0,
     "rule_2":0,
     "author":"EatsShootsLeaves90"
   },
   {
-    "id":"n8n12i",
+    "id":"nc7h49",
     "author_name":"GermanNarvaez",
     "title":"Why do people here hate outsourcing so much?",
     "body":"Is it an \"America First\" stuff or something else? Everytime someone mentions outsourcing here it seems like it is the worst think that a company can do, like it is the beginning of the end for a good place to work. \n\nI'm asking because I work for a consulting company in south America (imagine Accenture, but smaller) that offers its services to US companies, and honestly it seems to work quite well. They hire top talent here and it costs just 1\/3 or 1\/4 the price of the same developer in the US, in the same time zone and a good English level. So far our client is really happy, and they are expanding the number of projects with us. \n\nI know I may have a  biased perception because of my personal experience, so I would like to know how it looks like from the side of the client.",
@@ -875,12 +875,12 @@
     "author_comment_karma":74,
     "score":0,
     "author_created_utc":1499131994,
-    "rule_1":1,
+    "rule_1":0,
     "rule_2":0,
     "author":"GermanNarvaez"
   },
   {
-    "id":"n8h9np",
+    "id":"nc5tj1",
     "author_name":"Phobos_D3mos666",
     "title":"Graduated Dec 2019 and don\u2019t have a SWE job. Will the gap harm my future chances?",
     "body":"Like the title says, graduated Dec of 2019.  I was getting interviews and getting better at them until covid hit. Since March 2020 I get zero interest.\n\nI work in a non-technical job that I held all through college. I loathe my job, but it pays the bills.\n\nWill this gap start to look bad? I know what I need to work on as far as practicing and programming outside of work. I haven\u2019t given up and I\u2019m working on projects.\n\nI\u2019m just getting nervous that not having employment so far out from graduation is what\u2019s sinking me.",
@@ -891,12 +891,12 @@
     "author_comment_karma":313,
     "score":5,
     "author_created_utc":1601148462,
-    "rule_1":1,
+    "rule_1":0,
     "rule_2":1,
     "author":"Phobos_D3mos666"
   },
   {
-    "id":"n8g4s0",
+    "id":"nc5p6h",
     "author_name":"TheBenevolentTitan",
     "title":"Should I buy EPI book?",
     "body":"Let's just get this out there first. This community rocks!\n\nNow to my question, I have to prepare for technical interviews, I have some understanding of algorithms and can do the leetcode easy questions, some of the medium ones too but I mostly struggle with them. Leetcode medium is hard battle for me and I'm only doing this for the interviews. Now I've heard rave reviews about \"Elements of programming interviews\" and they say it's one of the best for interview preparation.\n\nHave any of you guys used it? Is it that good? More importantly, should I buy it?",
@@ -907,12 +907,12 @@
     "author_comment_karma":6439,
     "score":0,
     "author_created_utc":1564850788,
-    "rule_1":1,
+    "rule_1":0,
     "rule_2":0,
     "author":"TheBenevolentTitan"
   },
   {
-    "id":"n8e4l7",
+    "id":"nc525z",
     "author_name":"chirag9696",
     "title":"Burnout is real. Looking for a good mentor in Computer Science",
     "body":"Hello,\n\nI am currently working at one of the FAANG early in my career. The overall work culture is good given the fact that it's been just 1.5 years of professional work experience.\n\nI feel stuck with no sense of direction and progress towards making the next big move in my career. Looking for advice\/mentorship. \n\nPlease help me. Thank you.",
@@ -928,7 +928,7 @@
     "author":"chirag9696"
   },
   {
-    "id":"n8dyh7",
+    "id":"nc4t3w",
     "author_name":"Sky1337",
     "title":"Impostor syndrome after internship offer",
     "body":"I'm a 19 year old first year. I'm doing computer engineering, but I really want to get into web dev, so I've been doing courses on the side of uni. In the past I've worked on 2 hackathon projects (highschool) using Ionic and Angular, but my knowledge is pretty limited to the hackathon stuff(my main interest was C\/C++ until like 8 months ago.  \n\n\nGetting to the main point, I started learning and in the meantime sending out CVs to local companies for webdev internship positions. Now, I'm not a complete beginner, as I'm pretty comfortable with JS, and getting my way around HTML and CSS. After sending out 40 something applications, taking 12 technical tests, and participating in 5 interviews for 5 different companies, I finally landed a frontend internship position with React.   \n\n\nInitially, I was so happy. Getting a paid position in my first year means a lot to me, as all my work seems to have paid off, but right now I'm dealing with a lot of anxiety. I don't know react. The interview from this company was mostly them asking about my hackathon projects and about box model and flex box stuff. Nothing that I consider part of a \"technical interview\". I feel like I don't deserve my place there, and as the date of the internship is approaching, me receiving my work laptop , I'm feeling more and more as an intruder. I knew the company beforehand, and their techstack and projects are so appealing to me, but I just can't help feeling like this.  \n\n\nHow can I make this feeling go away? Or, at the very least, how do I approach diminishing it?",
@@ -939,12 +939,12 @@
     "author_comment_karma":1129,
     "score":1,
     "author_created_utc":1437513553,
-    "rule_1":1,
+    "rule_1":0,
     "rule_2":0,
     "author":"Sky1337"
   },
   {
-    "id":"n8bais",
+    "id":"nc4icp",
     "author_name":"Wildercard",
     "title":"What are your 90% \/ 50% \/ 10% predictons for the programming industry in 2021 and upward?",
     "body":"Examples:\n\nI think there's a 90% chance Java and its ecosystem (Kotlin, Scala, Maven, etc.) will still remain one of the best \"first language\" entry points for newcomers, and if you know Java you will not have trouble finding work - but it's more likely to be maintenance than greenfield kind of work.\n\nI think there's a 50% chance GCP outpaces Azure and takes 2nd place behind Amazon in market share sometime within this decade. \n\nI think there's a 10% chance COBOL gets a major resurgence   in popularity, as the current COBOL devs retire and the existing systems don't get migrated in time to avoid lack of personel with knowledge necessary to maintain them.",
@@ -955,12 +955,12 @@
     "author_comment_karma":175042,
     "score":221,
     "author_created_utc":1577984996,
-    "rule_1":1,
+    "rule_1":0,
     "rule_2":0,
     "author":"Wildercard"
   },
   {
-    "id":"n87l5f",
+    "id":"nc41ve",
     "author_name":"GalacticWafer",
     "title":"Boot Camp During Summer Break",
     "body":"I'm a CS major, but knowing React makes people immediately employable. The few students I've known that did this all have jobs and they aren't done with the degree yet. \n\nIt really rubs me the wrong way that my school teaches web dev with Ruby on Rails, which is not widely used compared to the ubiquitous React JS. So I'm thinking about doing a boot camp instead of summer courses.\n\nAre my friends just lucky, or do you think this is a legitimate path to shore up some employability weaknesses?",
@@ -971,12 +971,12 @@
     "author_comment_karma":579,
     "score":0,
     "author_created_utc":1548622791,
-    "rule_1":1,
+    "rule_1":0,
     "rule_2":0,
     "author":"GalacticWafer"
   },
   {
-    "id":"n818k5",
+    "id":"nc3ij1",
     "author_name":"Large_Butterfly",
     "title":"Problem faced while Moving from remote to full-time job.",
     "body":"Employee who are working as Independent Contractors with a company outside India, how do you deal with for 'salary slip' question asked by interviewer when moving from your remote job to a full-time job in India?\n\nThe Companies to which i am applying and clearing the interview rounds are asking for salary slip \n\nwhen I tell them that there current company does not provide salary slip , they said that we can't provide you the job , because any proof is not there .\n\nBecause of this i am losing out the opportunities because the recruiter chooses not to proceed!",
@@ -987,12 +987,12 @@
     "author_comment_karma":8,
     "score":2,
     "author_created_utc":1559322109,
-    "rule_1":1,
+    "rule_1":0,
     "rule_2":0,
     "author":"Large_Butterfly"
   },
   {
-    "id":"n7zwmt",
+    "id":"nc2vxl",
     "author_name":"komalmaheshwari",
     "title":"Can a commerce student become software developer?",
     "body":"Hi everyone!\n\nMy brother, who is pursuing his B. Com, is interested in become a front-end developer . He has good knowledge of HTML and CSS and have started with Javascript and React recently. Although, all of this can be learn online and via end to end projects, I was looking for some options available in getting a B. Tech equivalent CS degree as an education qualification as this is one of the mandatory requirements in many companies.\n\nIf anyone of you here is aware of the process\/path we should follow, please guide us.",
@@ -1008,7 +1008,7 @@
     "author":"komalmaheshwari"
   },
   {
-    "id":"n7xici",
+    "id":"nc2hh0",
     "author_name":"CSCQMods",
     "title":"Daily Chat Thread - May 14, 2021",
     "body":"Please use this thread to chat, have casual discussions, and ask casual questions. Moderation will be light, but don't be a jerk.\n\nThis thread is posted **every day at midnight PST**. Previous Daily Chat Threads can be found [here](https:\/\/www.reddit.com\/r\/cscareerquestions\/search?q=Daily+Chat+Thread&restrict_sr=on&sort=new&t=all).",
@@ -1024,7 +1024,7 @@
     "author":"CSCQMods"
   },
   {
-    "id":"n7xedb",
+    "id":"nc2g92",
     "author_name":"CSCQMods",
     "title":"DEAR PROFESSIONAL COMPUTER TOUCHERS -- FRIDAY RANT THREAD FOR May 14, 2021",
     "body":"AND NOW FOR SOMETHING ENTIRELY DIFFERENT.\n        \nTHE BUILDS I LOVE, THE SCRIPTS I DROP, TO BE PART OF, THE APP, CAN'T STOP\n        \nTHIS IS THE RANT THREAD. IT IS FOR RANTS.\n\nCAPS LOCK ON, DOWNVOTES OFF, FEEL FREE TO BREAK RULE 2 IF SOMEONE LIKES SOMETHING THAT YOU DON'T BUT IF YOU POST SOME RACIST\/HOMOPHOBIC\/SEXIST BULLSHIT IT'LL BE GONE FASTER THAN A NEW MESSAGING APP AT GOOGLE.\n\n(RANTING BEGINS AT MIDNIGHT EVERY FRIDAY, BEST COAST TIME. PREVIOUS FRIDAY RANT THREADS CAN BE FOUND [HERE](https:\/\/www.reddit.com\/r\/cscareerquestions\/search?q=Friday+Rant+Thread&restrict_sr=on&sort=new&t=all).)",
@@ -1040,7 +1040,7 @@
     "author":"CSCQMods"
   },
   {
-    "id":"n7xdap",
+    "id":"nc1v3i",
     "author_name":"johnson3232",
     "title":"Realistic to set expectations of getting level upped for an internal role?",
     "body":"My tech company is struggling to hire externally or not allowing external hires for some at least 6 months. One of the teams has been approaching me about a role and said I'm ideal for it. I asked the level and it's the same as what I'm currently at, but inquired about it being a level hire. The VP (who isn't the hiring manager) said it can't go higher. I know that isn't true. Also, on the internal hire portal there's some jobs with a level higher. \n\nIs it dickish of me to not want the job without the higher level? The team is a pet project of the business leader, but it's a shaky project that I'm not sure can succeed. With a level up, I'm a bit more protected in a severance situation with the company. The VP wants me to talk to the Hiring Manager some more and was going to discuss the levelling with him. Is it realistic?",
@@ -1056,7 +1056,7 @@
     "author":"johnson3232"
   },
   {
-    "id":"n7wy8x",
+    "id":"nc1jm8",
     "author_name":"SuccMyStrangerThings",
     "title":"Guys please help a confused senior year CS student",
     "body":" \n\nTitle. I don't have great Projects to put on my resume. I've always been that \"book worm\" student. Recently I've started gaining interested in Computer Vision. I was to pursue my MS CS (got an admit from USC) this intake but couldn't because of things going on at home.\n\nSo maybe I'll gain some work ex of 1-2 years before I pursue MS. I'm okayish at coding. I can code but couldn't in front of someone in an interview. I'll be flustered lol. However, I'm good at math.\n\nI always wondered what a typical day looks like for a PhD student (especially in ML\/DL).\n\nDo you have classes daily? Are they too complicated to understand? I sometimes feel I'll be too dumb to cstch upon and everyone knows everything except me.\n\nI wouldn't want to become a professor after doing a PhD, do CS PhDs (mostly Computer Vision or something related to Deep Learning) work in the industry? From what I know they mostly tend to stay in the academia. Personally, I don't want to.\n\nDo you get a chance to intern? Do internships pay well?\n\nHow hard it is to work in the industry (in terms of being selected)? Are there enough opportunities. Does the industry pay well?\n\n(I'm asking about the pay because I'll be taking a huge education loan to pursue MSCS. So I have to repay it in the given tenure).",
@@ -1072,7 +1072,7 @@
     "author":"SuccMyStrangerThings"
   },
   {
-    "id":"n7tzol",
+    "id":"nc0rgz",
     "author_name":"noob-newbie",
     "title":"Feel ashamed for giving wrong explanations on a issue",
     "body":"I am a junior, and I don't know why my seniors sent me to explain some issues to the clients face to face.\n\nAnd then I gave a wrong reason on why something not working, being so ashamed and embarrassed right now. \n\nOMG.",
@@ -1088,7 +1088,7 @@
     "author":"noob-newbie"
   },
   {
-    "id":"n7tyks",
+    "id":"nc0pqb",
     "author_name":"jeun_us",
     "title":"Breaking into CS after first job",
     "body":"Hello everyone,\n\nI am currently graduating undergrad with a double major in business administration and sustainability. I\u2019m going to work for a large financial institution doing real estate investing; but, this past year I have become extremely interested in comp sci after teaching myself some web dev material and taking a python class both at university and online.\n\nObviously, my job does not relate to computer science at all, but I am extremely interested in continuing my CS education. How common is it in the industry to enter the field after a few years of working in another, unrelated industry? Is it most common to find a grad school that accepts students without CS backgrounds, or is it best to teach yourself and apply from there?\n\nAny personal experience or advice you have is greatly appreciated! Btw, \nI am on mobile so please excuse any formatting errors.",
@@ -1099,12 +1099,12 @@
     "author_comment_karma":58,
     "score":2,
     "author_created_utc":1570311150,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"jeun_us"
   },
   {
-    "id":"n7rnh1",
+    "id":"nc0jni",
     "author_name":"Rcturbos",
     "title":"Setting Career up for Failure",
     "body":"Hello,\n\n&#x200B;\n\nI feel like I have made some mistakes in my career, luckily I think they have been early enough is isn't to late to try and salvage the situation. I am curious to hear everyone's take on what is going on.\n\n&#x200B;\n\nI was working at a fairly large military contractor for last part of my schooling, and worked full time for a year (graduated in April). So started in Jan of last year and left in Feb. This job was great actually really enjoyed it, there was those days where I hated it but for the most part everyone was super collaborative, interesting work, modern stack, and not much to complain about. Then they started doing restructuring they ended up selling my team   to another company, got put on a new team, then that new team started getting dissolved, and I basically was unsure about my job and what was really going on. In addition to every thing that was going on after talking to other friends I realized I was getting pretty underpaid compared to market value for the area, I was getting paid 72k, and most places were 80-90.\n\n&#x200B;\n\nFast forward to now, I took a new job that is fully remote (it's local but they gave me the option to work remote), the job paying a lot better $110, which honestly probably is way to much, but hey they offered it.  However that is where this drama just barely starts. So this job has a TON of technical debt, more so then what they originally told me.  They have a backlog of almost a year plus worth of bugs, angular 8, and what not.  With this technical debt there are lot of bugs (I would say 70% of backlog items), many of which aren't even fixable with current stack, or super hard to trouble shoot.   \n\n\nAs we fix issues there is no current process to really test against production environment, and QA testers also are stuck with half testing it. So with that we fix things and it introduces other small things, or maybe it wasn't possibly fixed. Which is fine, but it is difficult cause all of these come back to look like its my fault.. Which our team is really small its me and one other guys (which doesn't do a ton). But lately I feel like everything has been a complete mess, and everyone is playing the blame game, and complaining stuff is not getting done fast enough. Which is the furthest from the truth. Which I think my manager would back me up, but I can tell hes starting to get frustrated with everything that is going on.\n\n&#x200B;\n\nWith that I have started to document every single thing I'm working on, what I found, who I worked with, just if something was to hit the fan. But I  basically am worried that based off past stories I have heard one day I will just go in and they will let me go. (I guess they dont usually hire full time (as I am), looking at the company states 80% of work force is contracted employees) Which this was my worry all along because I know looking like a job hopper is not good. \n\n&#x200B;\n\nThere are plenty of other stuff going on with the company, which honestly is just shady (they've been lying to 3rd parties, and I have to say stuff particular way or they get stuck paying more money). Just to list a few..  I'm worried if I'm let go it basically sets me up for a super bad looking resume and 100% a job hopper.... Feel like it's a touch situation to be in.\n\n&#x200B;\n\nAppreciate any insights\/experiences you may have had.",
@@ -1120,7 +1120,7 @@
     "author":"Rcturbos"
   },
   {
-    "id":"n7nm09",
+    "id":"nc0gap",
     "author_name":"semicharmedliife",
     "title":"Wtf is going on with my recruiter???",
     "body":"Hi Redditors, I ran into the strangest situation this week and am looking for some thoughts and advice on what to do.\n\n**TL;DR:** As a contractor, I applied for an internal FTE position for the same role under my current manager that I was basically told I would for sure get. After my interviews and all positive feedback from them, recruiting won't move forward with my application. Could the recruiter have something against me or a vested interest to hire external candidates?\n\nDetails:\n\nI'm currently work as a contractor at a fairly large tech company via a consulting company. There's an opening for a full time position on my team for the same role that I'm working in now. (FYI, it's not SDE but similar.) I joined late last year and am doing well, so my manager (who's also the hiring manager for the position) recommended me to apply. Unfortunately, since it's a bigger company with a lot of rules, there's no simple conversion from contractor to FTE - I have to go through the full interview process. My manager basically told me this would just be a formality and my interviews would mostly be with people on our team whom I already work with.\n\nI finished all the interviews and got positive feedback during all of them. After a week, I asked my manager if there any updates and he said he hasn't heard from recruiting. So I reached out to recruiting asking when I can expect to hear and they said they're still debriefing other candidates and will get back to me when that's done.\n\nThe thing is, it's kind of strange but I was also asked to help out as interviewer for the same position that I am applying to since there are two FTE positions open for this role. Since I'm the only person doing this work right now on the team and whoever else we hire will be working closely with me, my manager wanted me to be an interviewer. So I interviewed a couple other candidates the same week I had my own interview. Recruiting held a debrief session with the interviewers - including me - and the candidates got the decisions within 3 days after their interviews. We didn't hire them. (Btw, I'm not involved as an interviewer anymore, because recruiting found out that I was a contractor and there is some rule that contractors can't be interviewers for FTE positions.)\n\nSo now it's been \\~2 weeks after my own interviews and I still haven't heard anything. I asked my manager about this again today. He said he's asked recruiting several times to move forward with setting up the debrief meeting for me, but that they \"seemed to be ignoring his requests.\" He told me that even though recruiting doesn't have a say in who gets hired, he is dependent on them to coordinate the process.\n\nI wonder why this recruiter assigned to me is refusing to move forward with my application? I haven't talked to them in person outside of a couple email exchanges, all very brief and polite from both sides. Even the initial \"recruiter screen\" and scheduling the interviews were done by other people. So I don't think they have anything against me personally, but perhaps they have a vested interest to hire the candidates that are sourced\/introduced by them? Has anyone heard of this happening?\n\nWhat should I do in this situation?? Can this recruiter actually block me from being hired? At this rate, they will continue delaying my application while they continue bringing in new candidates. And I'll be forced to extend my contract after it ends next month (and obviously, not guaranteed that I can continue extending in the future) and miss out on this FTE opening.",
@@ -1136,7 +1136,7 @@
     "author":"semicharmedliife"
   },
   {
-    "id":"n7mybs",
+    "id":"nbzq58",
     "author_name":"HeatLevel",
     "title":"what is the best mindset for developers?",
     "body":"Hello, I'm a junior dev at a start up company. I recently started questioning myself whether \"making things work first, then deal with issues later\" is a good mindset or not. From my little experience, I feel like my team tends to create things without deep analysis or designing\/architecting and without much consideration on what would potentially come up next. Just get things done first for customer, and deal with the rest later. For e.g. design a db in a way that it leverages the existing code as much as possible to get things done on time. Now a year later, it became a performance bottleneck, and the code is already coupled enough. It has grown a lot and become risky to make big changes. And fixing bugs\/issues from it is becoming really stressful for me. \n\n&#x200B;\n\nThis is where my question started. I wonder if this is the best way to deal with the things and if it's really true that we don't need to build \"future\" now. Can you guys share your experience? How is it handled in large organization?",
@@ -1152,7 +1152,7 @@
     "author":"HeatLevel"
   },
   {
-    "id":"n7lld1",
+    "id":"nbzojd",
     "author_name":"potallegta",
     "title":"People who've failed their probations, what were the reasons?",
     "body":"I'm just wondering what to avoid, what to expect, and what's the most common reason for companies to fail a new employee since I'm kinda nervous about not passing my probation.",
@@ -1163,12 +1163,12 @@
     "author_comment_karma":39340,
     "score":4,
     "author_created_utc":1366883605,
-    "rule_1":1,
+    "rule_1":0,
     "rule_2":0,
     "author":"potallegta"
   },
   {
-    "id":"n7e8pe",
+    "id":"nbzmnl",
     "author_name":"Single-Man",
     "title":"What does it take to be a quant developer at a company like Citadel And Two Sigma?",
     "body":"I'm switching from my sys ad job to a Python developer job soon. I figure if I build several years of dev experience under my belt, in a few years I can go back and get an MS in CS. (My bachelors is in economics btw). Down the road I'd love to work as quant developer at a firm like Citadel or Two Sigma. I plan on learning a lot more math along the way along with C++ and perhaps get a CFE as well.\n\nSome grad programs I was looking at :\n\nColumbia MS in CS or MFE (Doubt i can get into tbh), \n\nNYU MS in CS or MFE\n\nGeorge Washington MS in CS\n\nUT Austin MS in CS\n\nCornell MS in CS\n\nUVA MS in CS\n\n&#x200B;\n\nKind of just looking for CS career guidance from you lovely folk of reddit.",
@@ -1179,12 +1179,12 @@
     "author_comment_karma":0,
     "score":2,
     "author_created_utc":1584572080,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"Single-Man"
   },
   {
-    "id":"n7e1ad",
+    "id":"nbz2q5",
     "author_name":"mjeanbapti",
     "title":"What did you do when you couldn\u2019t land a job fresh out of college?",
     "body":"Hello, I just recently received my degree in computer science. I\u2019ve been in the job market for almost a year now. I\u2019ve constantly been applying, doing side projects, just trying to bulk my resume. I\u2019ve had a few interviews, but I was rejected. I\u2019m getting discouraged. I don\u2019t know what to do, should I keep applying and do what I\u2019m doing or should I go back to school? I\u2019m applying to every entry level position: software engineer, software developer, QA analyst etc. Am I applying to the wrong jobs? I do not have any work experience so that\u2019s why I\u2019ve been doing side projects. One side project I\u2019ve been doing was creating an e-commerce website using the MERN stack. I\u2019m literally lost at this point, I don\u2019t know what to do.",
@@ -1195,12 +1195,12 @@
     "author_comment_karma":18,
     "score":36,
     "author_created_utc":1557002045,
-    "rule_1":1,
+    "rule_1":0,
     "rule_2":0,
     "author":"mjeanbapti"
   },
   {
-    "id":"n7dorl",
+    "id":"nbymvs",
     "author_name":"mohamedelbadry",
     "title":"Any thoughts on FDM",
     "body":"I was wondering if there is any thoughts on FDM?\n\nI know you have to stay with them for 2 years and get paid low. \n\nI don't mind the 2 year commitment, I look at it that I am 2 year employed at least. And I don't mind the low pay it's just the start of the career.\n\nSo anyone been there can advise?\nThanks",
@@ -1211,7 +1211,7 @@
     "author_comment_karma":2,
     "score":2,
     "author_created_utc":1554161106,
-    "rule_1":1,
+    "rule_1":0,
     "rule_2":0,
     "author":"mohamedelbadry"
   },
@@ -1867,7 +1867,7 @@
     "author_comment_karma":12439,
     "score":2,
     "author_created_utc":1449246989,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"DrSomm"
   },
@@ -2187,7 +2187,7 @@
     "author_comment_karma":330,
     "score":3,
     "author_created_utc":1541194639,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":1,
     "author":"MrSirDuckDude"
   },
@@ -2219,7 +2219,7 @@
     "author_comment_karma":674,
     "score":3,
     "author_created_utc":1548167851,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"ougly"
   },
@@ -2331,7 +2331,7 @@
     "author_comment_karma":0,
     "score":1,
     "author_created_utc":1587931823,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"Shlingdill"
   },
@@ -2347,7 +2347,7 @@
     "author_comment_karma":2632,
     "score":0,
     "author_created_utc":1315078141,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"JM1210"
   },
@@ -2571,7 +2571,7 @@
     "author_comment_karma":15,
     "score":0,
     "author_created_utc":1613707394,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"Project-Pseudonym"
   },
@@ -2587,7 +2587,7 @@
     "author_comment_karma":6176,
     "score":0,
     "author_created_utc":1443203282,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"ScrapDraft"
   },
@@ -2715,7 +2715,7 @@
     "author_comment_karma":77,
     "score":1,
     "author_created_utc":1579378588,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"snowolf96"
   },
@@ -2731,7 +2731,7 @@
     "author_comment_karma":4617,
     "score":1,
     "author_created_utc":1508003244,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"Faceprint11"
   },
@@ -2763,7 +2763,7 @@
     "author_comment_karma":1,
     "score":2,
     "author_created_utc":1594688588,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"Froggin80"
   },
@@ -3051,7 +3051,7 @@
     "author_comment_karma":272,
     "score":0,
     "author_created_utc":1385841702,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"mindthetide"
   },
@@ -3163,7 +3163,7 @@
     "author_comment_karma":6,
     "score":3,
     "author_created_utc":1608483080,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"IllLog6452"
   },
@@ -3195,7 +3195,7 @@
     "author_comment_karma":7,
     "score":0,
     "author_created_utc":1593736066,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"haladri"
   },
@@ -3227,7 +3227,7 @@
     "author_comment_karma":11671,
     "score":0,
     "author_created_utc":1560979151,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"swisswatch97"
   },
@@ -3387,7 +3387,7 @@
     "author_comment_karma":17,
     "score":0,
     "author_created_utc":1620414257,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"micreme"
   },
@@ -3435,7 +3435,7 @@
     "author_comment_karma":61,
     "score":0,
     "author_created_utc":1617650729,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"Professional_Ebb9382"
   },
@@ -3627,7 +3627,7 @@
     "author_comment_karma":120,
     "score":13,
     "author_created_utc":1610635141,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"arfgengraoi"
   },
@@ -4139,7 +4139,7 @@
     "author_comment_karma":339,
     "score":7,
     "author_created_utc":1440033191,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":1,
     "author":"renoreaper"
   },
@@ -4331,7 +4331,7 @@
     "author_comment_karma":358,
     "score":1,
     "author_created_utc":1614437110,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"myronsandee"
   },
@@ -4699,7 +4699,7 @@
     "author_comment_karma":1,
     "score":2,
     "author_created_utc":1620757275,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"Safe_Pomegranate1672"
   },
@@ -4763,7 +4763,7 @@
     "author_comment_karma":8,
     "score":1,
     "author_created_utc":1620713373,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"Detroit3_1_3"
   },
@@ -4827,7 +4827,7 @@
     "author_comment_karma":24673,
     "score":1,
     "author_created_utc":1369284808,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"BEAT_LA"
   },
@@ -4987,7 +4987,7 @@
     "author_comment_karma":1954,
     "score":3,
     "author_created_utc":1360898964,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"Alicizations"
   },
@@ -5019,7 +5019,7 @@
     "author_comment_karma":41939,
     "score":1,
     "author_created_utc":1559312454,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"VegaGT-VZ"
   },
@@ -5035,7 +5035,7 @@
     "author_comment_karma":18,
     "score":9,
     "author_created_utc":1617671412,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"Different_Property_3"
   },
@@ -5083,7 +5083,7 @@
     "author_comment_karma":162,
     "score":3,
     "author_created_utc":1600174540,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"23Boolin23"
   },
@@ -5195,7 +5195,7 @@
     "author_comment_karma":49,
     "score":34,
     "author_created_utc":1589461083,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"cehrj"
   },
@@ -5227,7 +5227,7 @@
     "author_comment_karma":973,
     "score":3,
     "author_created_utc":1586426784,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"Saiya_Cosem"
   },
@@ -5387,7 +5387,7 @@
     "author_comment_karma":0,
     "score":3,
     "author_created_utc":1620705715,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"Strict_Meaning2944"
   },
@@ -5435,7 +5435,7 @@
     "author_comment_karma":4049,
     "score":1,
     "author_created_utc":1585962316,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"yyuyuyu2012"
   },
@@ -5611,7 +5611,7 @@
     "author_comment_karma":459,
     "score":2,
     "author_created_utc":1585183009,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"lu4414"
   },
@@ -5659,7 +5659,7 @@
     "author_comment_karma":764,
     "score":2,
     "author_created_utc":1560370559,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"hillywho"
   },
@@ -5755,7 +5755,7 @@
     "author_comment_karma":85,
     "score":4,
     "author_created_utc":1550961287,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"bobjks1"
   },
@@ -5963,7 +5963,7 @@
     "author_comment_karma":15,
     "score":1,
     "author_created_utc":1587483305,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"HardCor226"
   },
@@ -6043,7 +6043,7 @@
     "author_comment_karma":1197,
     "score":0,
     "author_created_utc":1596041984,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"periashu"
   },
@@ -6283,7 +6283,7 @@
     "author_comment_karma":12,
     "score":3,
     "author_created_utc":1581921920,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"SageTG"
   },
@@ -6299,7 +6299,7 @@
     "author_comment_karma":7,
     "score":4,
     "author_created_utc":1587017100,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"mastraus"
   },
@@ -6539,7 +6539,7 @@
     "author_comment_karma":80,
     "score":11,
     "author_created_utc":1599019719,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"jpotter3213"
   },
@@ -6587,7 +6587,7 @@
     "author_comment_karma":-1,
     "score":0,
     "author_created_utc":1617999822,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"PreviousReaction1579"
   },
@@ -6683,7 +6683,7 @@
     "author_comment_karma":330,
     "score":2,
     "author_created_utc":1410148592,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"changexd"
   },
@@ -6731,7 +6731,7 @@
     "author_comment_karma":5173,
     "score":0,
     "author_created_utc":1482988206,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"PlatinumClaws"
   },
@@ -6811,7 +6811,7 @@
     "author_comment_karma":177,
     "score":0,
     "author_created_utc":1376852410,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"iStegTato"
   },
@@ -7179,7 +7179,7 @@
     "author_comment_karma":55,
     "score":1,
     "author_created_utc":1474341633,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"cblakej"
   },
@@ -7259,7 +7259,7 @@
     "author_comment_karma":405,
     "score":2,
     "author_created_utc":1525438757,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"smdntn"
   },
@@ -7291,7 +7291,7 @@
     "author_comment_karma":160,
     "score":1,
     "author_created_utc":1514137562,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"Zach9559"
   },
@@ -7323,7 +7323,7 @@
     "author_comment_karma":3586,
     "score":2,
     "author_created_utc":1379196017,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"Sophia7X"
   },
@@ -7403,7 +7403,7 @@
     "author_comment_karma":877,
     "score":1,
     "author_created_utc":1573670346,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"ModsRTrash"
   },
@@ -7547,7 +7547,7 @@
     "author_comment_karma":86,
     "score":2,
     "author_created_utc":1595659125,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"lordzattosh"
   },
@@ -7595,7 +7595,7 @@
     "author_comment_karma":17,
     "score":1,
     "author_created_utc":1606232853,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"ivory-ivie"
   },
@@ -7675,7 +7675,7 @@
     "author_comment_karma":579,
     "score":0,
     "author_created_utc":1548622791,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"GalacticWafer"
   },
@@ -7691,7 +7691,7 @@
     "author_comment_karma":6,
     "score":1,
     "author_created_utc":1620565070,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"foreigncoder"
   },
@@ -7803,7 +7803,7 @@
     "author_comment_karma":0,
     "score":2,
     "author_created_utc":1510478347,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"boxthrow101"
   },
@@ -7931,7 +7931,7 @@
     "author_comment_karma":438,
     "score":1,
     "author_created_utc":1619299921,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"libradhd"
   },
@@ -8075,7 +8075,7 @@
     "author_comment_karma":195,
     "score":3,
     "author_created_utc":1584302527,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"DigitalFire5000"
   },
@@ -8107,7 +8107,7 @@
     "author_comment_karma":1,
     "score":1,
     "author_created_utc":1620119436,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":1,
     "author":"Realistic_Bug_90"
   },
@@ -8235,7 +8235,7 @@
     "author_comment_karma":11,
     "score":6,
     "author_created_utc":1607255065,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"Substantial-Habit-94"
   },
@@ -8251,7 +8251,7 @@
     "author_comment_karma":995,
     "score":3,
     "author_created_utc":1401600906,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":1,
     "author":"techindie"
   },
@@ -8267,7 +8267,7 @@
     "author_comment_karma":11,
     "score":1,
     "author_created_utc":1607255065,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"Substantial-Habit-94"
   },
@@ -8299,7 +8299,7 @@
     "author_comment_karma":11,
     "score":1,
     "author_created_utc":1607255065,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"Substantial-Habit-94"
   },
@@ -8507,7 +8507,7 @@
     "author_comment_karma":694,
     "score":0,
     "author_created_utc":1606274881,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"reddititsis"
   },
@@ -8523,7 +8523,7 @@
     "author_comment_karma":8815,
     "score":1,
     "author_created_utc":1599509133,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"SheldonPlankerton"
   },
@@ -8603,7 +8603,7 @@
     "author_comment_karma":45,
     "score":2,
     "author_created_utc":1575029260,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"mynameisanominus"
   },
@@ -8715,7 +8715,7 @@
     "author_comment_karma":368,
     "score":0,
     "author_created_utc":1615403552,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"latticeprep"
   },
@@ -8763,7 +8763,7 @@
     "author_comment_karma":1325,
     "score":0,
     "author_created_utc":1436318332,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"Szabi90000"
   },
@@ -8843,7 +8843,7 @@
     "author_comment_karma":31,
     "score":1,
     "author_created_utc":1609385094,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"Dry-City8766"
   },
@@ -9131,7 +9131,7 @@
     "author_comment_karma":634,
     "score":1,
     "author_created_utc":1562542841,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"ArianaWujt"
   },
@@ -9147,7 +9147,7 @@
     "author_comment_karma":23,
     "score":0,
     "author_created_utc":1492174126,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"SquidwardTennispoles"
   },
@@ -9163,7 +9163,7 @@
     "author_comment_karma":0,
     "score":0,
     "author_created_utc":1608516086,
-    "rule_1":0,
+    "rule_1":1,
     "rule_2":0,
     "author":"StephVols"
   },
