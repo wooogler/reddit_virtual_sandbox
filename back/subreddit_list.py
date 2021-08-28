@@ -2986,6 +2986,6 @@ Reddit Inc © 2021 . All rights reserved
 Back to Top
 '''
 
-subreddit_list = re.findall(r'\/r\/(.+)', page_raw)
+subreddit_list = re.findall(r'\/r\/(\S+).*', page_raw)
 
-print(len(subreddit_list))
+print(subreddit_list)

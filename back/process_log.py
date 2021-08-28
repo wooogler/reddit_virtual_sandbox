@@ -32,34 +32,14 @@ def to_simple_namespace(posts):
         for post in posts])
 
 
-# with open('modsandbox/test_data/submission_cscareerquestions_may_1st_labeled.json') as test_json:
-#     test_posts_raw = json.load(test_json)
-#     test_json.close()
-#
-# with open('modsandbox/test_data/submission_cscareerquestions_may_2nd_labeled.json') as eval_json:
-#     eval_posts_raw = json.load(eval_json)
-#     eval_json.close()
-
-(super_user, _) = User.objects.get_or_create(username='superuser')
-
-# create_test_posts(to_simple_namespace(test_posts_raw), super_user, 'normal')
-# create_test_posts(to_simple_namespace(eval_posts_raw), super_user, 'target')
-
-test_posts = Post.objects.filter(user=super_user, place='normal')
-eval_posts = Post.objects.filter(user=super_user, place='target')
-
-autosave_logs = Log.objects.filter(info='autosave config')
-print('autosave number: ', autosave_logs.count())
-
-for (count, log) in enumerate(autosave_logs):
-    print(count)
-    test_config = Config.objects.create(user=super_user, code=log.content, task='test')
-    eval_config = Config.objects.create(user=super_user, code=log.content, task='eval')
+def update_log(code):
+    test_config = Config.objects.create(user=super_user, code=code, task='test')
+    eval_config = Config.objects.create(user=super_user, code=code, task='eval')
     try:
         test_config = apply_dummy_config(test_config, test_posts, False)
         eval_config = apply_dummy_config(eval_config, eval_posts, False)
     except exceptions.ParseError:
-        continue
+        return
     if log.task.startswith('A'):
         log.test_tp = test_config.post_set.filter(place__in=['normal'], rule_1=1).count()
         log.test_fp = test_config.post_set.filter(place__in=['normal'], rule_1=0).count()
@@ -79,3 +59,37 @@ for (count, log) in enumerate(autosave_logs):
         log.eval_fn = eval_posts.filter(rule_2=1).count() - log.eval_tp
         log.eval_tn = eval_posts.filter(rule_2=0).count() - log.eval_fp
     log.save()
+    test_config.delete()
+    eval_config.delete()
+
+
+with open('modsandbox/test_data/submission_cscareerquestions_may_1st_labeled.json') as test_json:
+    test_posts_raw = json.load(test_json)
+    test_json.close()
+
+with open('modsandbox/test_data/submission_cscareerquestions_may_2nd_labeled.json') as eval_json:
+    eval_posts_raw = json.load(eval_json)
+    eval_json.close()
+
+(super_user, _) = User.objects.get_or_create(username='superuser')
+
+create_test_posts(to_simple_namespace(test_posts_raw), super_user, 'normal')
+create_test_posts(to_simple_namespace(eval_posts_raw), super_user, 'target')
+
+test_posts = Post.objects.filter(user=super_user, place='normal')
+eval_posts = Post.objects.filter(user=super_user, place='target')
+
+autosave_logs = Log.objects.filter(info='autosave config')
+apply_config_logs = Log.objects.filter(info='apply config')
+print('autosave number: ', autosave_logs.count())
+print('apply_config number: ', apply_config_logs.count())
+
+for (count, log) in enumerate(apply_config_logs):
+    print('apply_config_count', count)
+    if log.config is not None:
+        update_log(log.config.code)
+
+for (count, log) in enumerate(autosave_logs):
+    print('auto_save_count', count)
+    if log.content is not None:
+        update_log(log.content)
