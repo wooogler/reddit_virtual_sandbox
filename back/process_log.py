@@ -63,33 +63,40 @@ def update_log(code):
     eval_config.delete()
 
 
-with open('modsandbox/test_data/submission_cscareerquestions_may_1st_labeled.json') as test_json:
-    test_posts_raw = json.load(test_json)
-    test_json.close()
+# with open('modsandbox/test_data/submission_cscareerquestions_may_1st_labeled.json') as test_json:
+#     test_posts_raw = json.load(test_json)
+#     test_json.close()
 
-with open('modsandbox/test_data/submission_cscareerquestions_may_2nd_labeled.json') as eval_json:
-    eval_posts_raw = json.load(eval_json)
-    eval_json.close()
+# with open('modsandbox/test_data/submission_cscareerquestions_may_2nd_labeled.json') as eval_json:
+#     eval_posts_raw = json.load(eval_json)
+#     eval_json.close()
 
 (super_user, _) = User.objects.get_or_create(username='superuser')
 
-create_test_posts(to_simple_namespace(test_posts_raw), super_user, 'normal')
-create_test_posts(to_simple_namespace(eval_posts_raw), super_user, 'target')
+# create_test_posts(to_simple_namespace(test_posts_raw), super_user, 'normal')
+# create_test_posts(to_simple_namespace(eval_posts_raw), super_user, 'target')
 
 test_posts = Post.objects.filter(user=super_user, place='normal')
 eval_posts = Post.objects.filter(user=super_user, place='target')
 
 autosave_logs = Log.objects.filter(info='autosave config')
 apply_config_logs = Log.objects.filter(info='apply config')
+submit_config_logs = Log.objects.filter(info='submit config')
 print('autosave number: ', autosave_logs.count())
 print('apply_config number: ', apply_config_logs.count())
+print('submit_config number: ', submit_config_logs.count())
 
-for (count, log) in enumerate(apply_config_logs):
-    print('apply_config_count', count)
+# for (count, log) in enumerate(apply_config_logs):
+#     print('apply_config_count', count)
+#     if log.config is not None:
+#         update_log(log.config.code)
+
+# for (count, log) in enumerate(autosave_logs):
+#     print('auto_save_count', count)
+#     if log.content is not None:
+#         update_log(log.content)
+
+for (count, log) in enumerate(submit_config_logs):
+    print('submit_config_count', count)
     if log.config is not None:
         update_log(log.config.code)
-
-for (count, log) in enumerate(autosave_logs):
-    print('auto_save_count', count)
-    if log.content is not None:
-        update_log(log.content)
