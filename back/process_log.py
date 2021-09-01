@@ -40,24 +40,26 @@ def update_log(code):
         eval_config = apply_dummy_config(eval_config, eval_posts, False)
     except exceptions.ParseError:
         return
-    if log.task.startswith('A'):
-        log.test_tp = test_config.post_set.filter(place__in=['normal'], rule_1=1).count()
-        log.test_fp = test_config.post_set.filter(place__in=['normal'], rule_1=0).count()
-        log.test_fn = test_posts.filter(rule_1=1).count() - log.test_tp
-        log.test_tn = test_posts.filter(rule_1=0).count() - log.test_fp
-        log.eval_tp = eval_config.post_set.filter(place__in=['target'], rule_1=1).count()
-        log.eval_fp = eval_config.post_set.filter(place__in=['target'], rule_1=0).count()
-        log.eval_fn = eval_posts.filter(rule_1=1).count() - log.eval_tp
-        log.eval_tn = eval_posts.filter(rule_1=0).count() - log.eval_fp
-    elif log.task.startswith('B'):
-        log.test_tp = test_config.post_set.filter(place__in=['normal'], rule_2=1).count()
-        log.test_fp = test_config.post_set.filter(place__in=['normal'], rule_2=0).count()
-        log.test_fn = test_posts.filter(rule_2=1).count() - log.test_tp
-        log.test_tn = test_posts.filter(rule_2=0).count() - log.test_fp
-        log.eval_tp = eval_config.post_set.filter(place__in=['target'], rule_2=1).count()
-        log.eval_fp = eval_config.post_set.filter(place__in=['target'], rule_2=0).count()
-        log.eval_fn = eval_posts.filter(rule_2=1).count() - log.eval_tp
-        log.eval_tn = eval_posts.filter(rule_2=0).count() - log.eval_fp
+    log.test_range = test_config.post_set.filter(place__in=['normal']).count()
+    log.eval_range = eval_config.post_set.filter(place__in=['target']).count()
+    # if log.task.startswith('A'):
+    # log.test_tp = test_config.post_set.filter(place__in=['normal'], rule_1=1).count()
+    # log.test_fp = test_config.post_set.filter(place__in=['normal'], rule_1=0).count()
+    # log.test_fn = test_posts.filter(rule_1=1).count() - log.test_tp
+    # log.test_tn = test_posts.filter(rule_1=0).count() - log.test_fp
+    # log.eval_tp = eval_config.post_set.filter(place__in=['target'], rule_1=1).count()
+    # log.eval_fp = eval_config.post_set.filter(place__in=['target'], rule_1=0).count()
+    # log.eval_fn = eval_posts.filter(rule_1=1).count() - log.eval_tp
+    # log.eval_tn = eval_posts.filter(rule_1=0).count() - log.eval_fp
+    # elif log.task.startswith('B'):
+    # log.test_tp = test_config.post_set.filter(place__in=['normal'], rule_2=1).count()
+    # log.test_fp = test_config.post_set.filter(place__in=['normal'], rule_2=0).count()
+    # log.test_fn = test_posts.filter(rule_2=1).count() - log.test_tp
+    # log.test_tn = test_posts.filter(rule_2=0).count() - log.test_fp
+    # log.eval_tp = eval_config.post_set.filter(place__in=['target'], rule_2=1).count()
+    # log.eval_fp = eval_config.post_set.filter(place__in=['target'], rule_2=0).count()
+    # log.eval_fn = eval_posts.filter(rule_2=1).count() - log.eval_tp
+    # log.eval_tn = eval_posts.filter(rule_2=0).count() - log.eval_fp
     log.save()
     test_config.delete()
     eval_config.delete()
@@ -86,15 +88,15 @@ print('autosave number: ', autosave_logs.count())
 print('apply_config number: ', apply_config_logs.count())
 print('submit_config number: ', submit_config_logs.count())
 
-# for (count, log) in enumerate(apply_config_logs):
-#     print('apply_config_count', count)
-#     if log.config is not None:
-#         update_log(log.config.code)
+for (count, log) in enumerate(apply_config_logs):
+    print('apply_config_count', count)
+    if log.config is not None:
+        update_log(log.config.code)
 
-# for (count, log) in enumerate(autosave_logs):
-#     print('auto_save_count', count)
-#     if log.content is not None:
-#         update_log(log.content)
+for (count, log) in enumerate(autosave_logs):
+    print('auto_save_count', count)
+    if log.content is not None:
+        update_log(log.content)
 
 for (count, log) in enumerate(submit_config_logs):
     print('submit_config_count', count)

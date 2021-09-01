@@ -133,6 +133,8 @@ class Log(models.Model):
     eval_fn = models.IntegerField(null=True)
     eval_fp = models.IntegerField(null=True)
     eval_tn = models.IntegerField(null=True)
+    test_range = models.IntegerField(null=True)
+    eval_range = models.IntegerField(null=True)
 
 
 class Survey(models.Model):
