@@ -135,6 +135,10 @@ class Log(models.Model):
     eval_tn = models.IntegerField(null=True)
     test_range = models.IntegerField(null=True)
     eval_range = models.IntegerField(null=True)
+    string_count = models.IntegerField(null=True)
+    check_count = models.IntegerField(null=True)
+    rule_count = models.IntegerField(null=True)
+    mod_count = models.IntegerField(null=True)
 
 
 class Survey(models.Model):
