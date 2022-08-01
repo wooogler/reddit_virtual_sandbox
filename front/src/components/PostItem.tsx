@@ -434,11 +434,11 @@ function PostItem({
               Removed by {post.banned_by}
             </div>
           )}
-          {process.env.NODE_ENV === 'development' && (
+          {/* {process.env.NODE_ENV === 'development' && (
             <div className='ml-2'>
               sim: {post.sim.toFixed(2)} ({post.rule_1} , {post.rule_2})
             </div>
-          )}
+          )} */}
         </div>
       </div>
       <div>
