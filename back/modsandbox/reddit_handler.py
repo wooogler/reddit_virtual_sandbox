@@ -50,7 +50,7 @@ class RedditHandler:
                 user_agent=os.environ.get("user_agent"),
             )
         self.user = user
-        self.api = PushshiftAPI(self.reddit)
+        # self.api = PushshiftAPI(self.reddit)
         self.mod_subreddits = []
 
     def get_mod_subreddits(self):

@@ -19,7 +19,7 @@ import praw
 
 from modsandbox.filters import PostFilter, ConfigFilter
 from modsandbox.ml import process_embedding
-from modsandbox.pinecone_handler import create_index_pinecone, get_index_pinecone
+# from modsandbox.pinecone_handler import create_index_pinecone, get_index_pinecone
 from modsandbox.post_handler import create_posts, get_filtered_posts, get_unfiltered_posts, get_df_posts_vector, \
     get_average_vector, get_embedding_post, create_test_posts
 from modsandbox.models import Post, User, Rule, Config, Log, Line, Check, Survey, Demo
@@ -67,7 +67,7 @@ class RedditViewSet(viewsets.ViewSet):
         user.reddit_token = token
         user.save()
 
-        return redirect('http://modsandbox.s3-website.ap-northeast-2.amazonaws.com/')
+        return redirect('https://sangwooklee.info/modsandbox/')
         # return redirect('http://localhost:3000/')
 
     @action(methods=['get'], detail=False)
@@ -135,16 +135,16 @@ class PostViewSet(viewsets.ModelViewSet):
 
         r = RedditHandler(request.user)
 
-        if where == 'Subreddit':
-            pushshift_posts = r.get_posts_from_pushshift(subreddit, after, type)
-            posts = create_posts(pushshift_posts, request.user, "normal", use_author)
+        # if where == 'Subreddit':
+        #     pushshift_posts = r.get_posts_from_pushshift(subreddit, after, type)
+        #     posts = create_posts(pushshift_posts, request.user, "normal", use_author)
 
-        elif where == 'Spam':
-            r.get_mod_subreddits()
-            praw_spams = r.get_spams_from_praw(subreddit, after, type)
-            posts = create_posts(praw_spams, request.user, "normal", use_author)
+        # elif where == 'Spam':
+        #     r.get_mod_subreddits()
+        #     praw_spams = r.get_spams_from_praw(subreddit, after, type)
+        #     posts = create_posts(praw_spams, request.user, "normal", use_author)
 
-        elif where == 'Test':  # for lab study
+        if where == 'Test':  # for lab study
             with open(os.path.join(os.path.dirname(__file__),
                                    'test_data/submission_cscareerquestions_may_1st_labeled.json')) as normal_json:
                 normal = json.load(normal_json)
@@ -187,25 +187,25 @@ class PostViewSet(viewsets.ModelViewSet):
 
         posts = create_test_posts(normal_posts, request.user, 'normal')
         posts.update(task=task)
-        target_example_ids = ["mkwaep", "mkq1j8", "mkvzs5"]
-        target_taskA_ids = ['n58oqh', 'n3p158', 'n3u029']
-        target_taskB_ids = ['n5flxe', 'n56vae', 'n623n5']
-        if task == 'e':
-            posts.filter(post_id__in=target_example_ids).update(place='normal-target')
-        elif task == 'A':
-            posts.filter(post_id__in=target_taskA_ids).update(place='normal-target')
-            # posts.filter(rule_1=1).update(place='normal-target')
-        elif task == 'B':
-            posts.filter(post_id__in=target_taskB_ids).update(place='normal-target')
-            # posts.filter(rule_2=1).update(place='normal-target')
+        # target_example_ids = ["mkwaep", "mkq1j8", "mkvzs5"]
+        # target_taskA_ids = ['n58oqh', 'n3p158', 'n3u029']
+        # target_taskB_ids = ['n5flxe', 'n56vae', 'n623n5']
+        # if task == 'e':
+        #     posts.filter(post_id__in=target_example_ids).update(place='normal-target')
+        # elif task == 'A':
+        #     posts.filter(post_id__in=target_taskA_ids).update(place='normal-target')
+        #     # posts.filter(rule_1=1).update(place='normal-target')
+        # elif task == 'B':
+        #     posts.filter(post_id__in=target_taskB_ids).update(place='normal-target')
+        #     # posts.filter(rule_2=1).update(place='normal-target')
         configs = Config.objects.filter(user=request.user, task=task)
         for config in configs:
             apply_config(config, posts, False)
 
-        df_posts_vector = get_df_posts_vector(posts)
-        vector_path = os.path.join(os.path.dirname(__file__), 'vector_db',
-                                   'post_vectors_' + request.user.username + '.pkl')
-        df_posts_vector.to_pickle(vector_path)
+        # df_posts_vector = get_df_posts_vector(posts)
+        # vector_path = os.path.join(os.path.dirname(__file__), 'vector_db',
+        #                            'post_vectors_' + request.user.username + '.pkl')
+        # df_posts_vector.to_pickle(vector_path)
         # create_index_pinecone(request.user.username)
         # index = get_index_pinecone(request.user.username)
         # index.upsert(items=zip(df_posts_vector.id, df_posts_vector.vector), namespace='fn', batch_size=1000)
@@ -245,8 +245,10 @@ class PostViewSet(viewsets.ModelViewSet):
         normal_posts = posts.filter(place__startswith='normal')
         target_posts = posts.filter(place__in=['target', 'normal-target'])
         target_vector = get_average_vector([get_embedding_post(post) for post in target_posts])
+        # vector_path = os.path.join(os.path.dirname(__file__), 'vector_db',
+        #                            'post_vectors_' + request.user.username + '.pkl')
         vector_path = os.path.join(os.path.dirname(__file__), 'vector_db',
-                                   'post_vectors_' + request.user.username + '.pkl')
+                                   'post_vectors_' + 'test' + '.pkl')
         post_vectors = pd.read_pickle(vector_path)
         if target_vector is not None:
             for post in normal_posts:

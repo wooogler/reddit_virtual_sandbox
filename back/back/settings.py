@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-&8rc@iy&3+qbyvhq$pi(0oun6rqkrmm^&z$n29s-951z6g5#s!
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-# CORS_ORIGIN_WHITELIST=['http://localhost:3000']
+CORS_ORIGIN_WHITELIST=['http://localhost:3000']
 
 # Application definition
 
@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'rest_auth.registration',
     'django_filters',
     'django.contrib.postgres',
+    'sslserver'
 ]
 
 SITE_ID = 1
